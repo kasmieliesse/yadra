@@ -1,0 +1,1775 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>yadra! — Marketplace immobilier premium en Algérie</title>
+<meta name="description" content="yadra! met en relation acquéreurs et promoteurs immobiliers en Algérie. Recherchez un projet par ville, budget et typologie, consultez les fiches détaillées et contactez directement le promoteur.">
+<link rel="canonical" href="https://yadra.fr/">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<meta name="theme-color" content="#0A0A0A">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="yadra!">
+<meta property="og:title" content="yadra! — Votre prochain projet commence ici.">
+<meta property="og:description" content="Découvrez les projets immobiliers des promoteurs en Algérie : recherchez, consultez, sauvegardez et contactez, sans détour.">
+<meta property="og:image" content="https://yadra.fr/og-image.png">
+<meta property="og:url" content="https://yadra.fr/">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="yadra! — Votre prochain projet commence ici.">
+<meta name="twitter:description" content="Découvrez les projets immobiliers des promoteurs en Algérie : recherchez, consultez, sauvegardez et contactez, sans détour.">
+<meta name="twitter:image" content="https://yadra.fr/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* ============================================================
+   YADRA! by qbm — Design tokens
+   Committed dark luxury world (matches provided brand board):
+   noir profond ground, argent + or rose accents. Single theme
+   by deliberate brand choice — background/colors always explicit.
+   ============================================================ */
+:root{
+  --noir:#0A0A0A;
+  --gris-fonce:#121212;
+  --anthracite:#1E1E1E;
+  --anthracite-2:#242424;
+  --argent:#E6E6E6;
+  --argent-dim:#9C9C9C;
+  --argent-hair:rgba(230,230,230,0.14);
+  --or-rose:#B76E4D;
+  --or-rose-light:#D89A78;
+  --or-rose-dim:#8F5236;
+  --ok:#6FCF97;
+  --warn:#E0A458;
+  --danger:#E0645A;
+
+  --bg:var(--noir);
+  --surface:var(--gris-fonce);
+  --surface-2:var(--anthracite);
+  --surface-3:var(--anthracite-2);
+  --text:var(--argent);
+  --text-dim:var(--argent-dim);
+  --border:var(--argent-hair);
+  --accent:var(--or-rose);
+  --accent-2:var(--or-rose-light);
+
+  --font-display:'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --font-body:'Manrope', -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-s:6px;
+  --radius-m:12px;
+  --radius-l:20px;
+  --container:1280px;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;margin:0;text-wrap:balance;}
+p{margin:0;}
+:focus-visible{outline:2px solid var(--or-rose-light);outline-offset:2px;border-radius:4px;}
+::selection{background:var(--or-rose);color:#fff;}
+.tabular{font-variant-numeric:tabular-nums;}
+.i-def{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;flex-shrink:0;}
+
+.wrap{max-width:var(--container);margin:0 auto;padding-inline:24px;}
+@media (min-width:900px){.wrap{padding-inline:40px;}}
+
+.eyebrow{
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent-2);font-weight:700;
+}
+.hairline{height:1px;background:var(--border);border:0;margin:0;}
+
+/* ---------------- Logo ---------------- */
+.logo{display:inline-flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-icon{width:30px;height:30px;flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(183,110,77,.25));}
+.logo-word{display:flex;flex-direction:column;line-height:1;}
+.logo-yadra{
+  position:relative;display:inline-block;
+  font-family:var(--font-display);font-style:italic;font-weight:600;
+  font-size:26px;letter-spacing:.5px;
+  background:linear-gradient(115deg,#fff 0%,#f4f4f4 18%,var(--argent) 38%,#fff 52%,var(--argent-dim) 72%,#fdfdfd 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.logo-yadra::after{
+  content:"";position:absolute;left:38%;right:2%;bottom:-2px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--or-rose) 35%,var(--or-rose-light) 65%,transparent);
+  opacity:.8;
+}
+.logo-bang{
+  background:linear-gradient(160deg,var(--or-rose-light),var(--or-rose) 55%,var(--or-rose-dim));
+  -webkit-background-clip:text;background-clip:text;margin-left:1px;
+}
+.logo-byqbm{
+  font-family:var(--font-body);font-size:9px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--text-dim);margin-top:3px;font-weight:600;
+}
+.logo.sm .logo-yadra{font-size:20px;}
+.logo.sm .logo-icon{width:24px;height:24px;}
+.logo.lg .logo-icon{width:52px;height:52px;}
+.logo.lg .logo-yadra{font-size:46px;}
+.logo.lg .logo-byqbm{font-size:12px;margin-top:6px;}
+
+/* ---------------- Buttons ---------------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:999px;font-size:13px;font-weight:700;
+  letter-spacing:.03em;border:1px solid transparent;cursor:pointer;
+  transition:transform .15s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));color:#fff;box-shadow:0 6px 20px -6px rgba(183,110,77,.55);}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--text);}
+.btn-ghost:hover{border-color:var(--accent-2);color:#fff;}
+.btn-light{background:var(--argent);color:var(--noir);}
+.btn-light:hover{background:#fff;}
+.btn-wa{background:#1e2b23;border-color:rgba(111,207,151,.35);color:#eafff3;}
+.btn-wa:hover{border-color:#6FCF97;}
+.btn-block{width:100%;}
+.btn-sm{padding:8px 16px;font-size:12px;}
+.btn[disabled]{opacity:.45;cursor:not-allowed;}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;color:var(--text);
+  transition:border-color .2s ease, background .2s ease;
+}
+.icon-btn:hover{border-color:var(--accent-2);}
+.icon-btn.active{background:rgba(183,110,77,.18);border-color:var(--or-rose);color:var(--or-rose-light);}
+
+/* ---------------- Header / Nav ---------------- */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(10,10,10,.82);backdrop-filter:blur(14px) saturate(140%);
+  border-bottom:1px solid var(--border);
+}
+.nav-row{display:flex;align-items:center;justify-content:space-between;height:76px;gap:20px;}
+.nav-links{display:none;align-items:center;gap:30px;font-size:13px;font-weight:600;color:var(--text-dim);}
+.nav-links a{padding:6px 2px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s;}
+.nav-links a:hover,.nav-links a.is-active{color:#fff;border-color:var(--or-rose);}
+@media (min-width:960px){.nav-links{display:flex;}}
+.nav-actions{display:flex;align-items:center;gap:10px;}
+.nav-actions .btn{display:none;}
+@media (min-width:640px){.nav-actions .btn{display:inline-flex;}}
+.burger{display:inline-flex;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);align-items:center;justify-content:center;background:transparent;color:var(--text);}
+@media (min-width:960px){.burger{display:none;}}
+.mobile-menu{
+  position:fixed;inset:76px 0 0 0;background:var(--noir);z-index:49;padding:28px 24px;
+  display:flex;flex-direction:column;gap:4px;transform:translateY(-8px);opacity:0;pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;overflow:auto;
+}
+.mobile-menu.open{opacity:1;transform:none;pointer-events:auto;}
+.mobile-menu a{padding:16px 4px;font-family:var(--font-display);font-size:22px;border-bottom:1px solid var(--border);}
+.mobile-menu .mm-actions{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
+
+/* ---------------- Hero ---------------- */
+.hero{position:relative;overflow:hidden;padding:64px 0 56px;border-bottom:1px solid var(--border);}
+.hero-bg{position:absolute;inset:0;z-index:0;}
+.hero-content{position:relative;z-index:1;max-width:760px;}
+.hero h1{font-size:clamp(2.2rem,5.4vw,4rem);font-style:italic;font-weight:600;color:#fff;}
+.hero h1 em{font-style:italic;color:var(--or-rose-light);}
+.hero .sub{margin-top:18px;font-size:16px;color:var(--text-dim);max-width:520px;}
+@media (min-width:700px){.hero .sub{font-size:18px;}}
+
+.search-card{
+  margin-top:36px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);
+  padding:14px;display:grid;gap:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.7);
+}
+@media (min-width:760px){
+  .search-card{grid-template-columns:1.2fr 1fr 1fr auto;align-items:stretch;padding:10px;}
+}
+.search-field{display:flex;flex-direction:column;gap:4px;padding:10px 16px;border-radius:var(--radius-m);}
+@media (min-width:760px){.search-field{border-right:1px solid var(--border);}}
+.search-field label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);font-weight:700;}
+.search-field select,.search-field input{
+  background:transparent;border:0;color:#fff;font-size:14px;font-weight:600;padding:2px 0;font-family:inherit;
+}
+.search-field select:focus,.search-field input:focus{outline:0;}
+.search-card .btn-primary{margin:4px;}
+
+/* ---------------- Sections / layout ---------------- */
+.section{padding:64px 0;}
+.section.tight{padding:44px 0;}
+.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;}
+.section-head h2{font-size:clamp(1.6rem,3vw,2.2rem);font-style:italic;color:#fff;}
+.section-head .desc{color:var(--text-dim);max-width:520px;margin-top:8px;font-size:14px;}
+.see-all{font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--accent-2);border-bottom:1px solid var(--or-rose-dim);padding-bottom:2px;white-space:nowrap;}
+
+.grid{display:grid;gap:20px;}
+.grid-cards{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+.grid-3{grid-template-columns:repeat(1,1fr);}
+@media (min-width:720px){.grid-3{grid-template-columns:repeat(3,1fr);}}
+.grid-2{grid-template-columns:repeat(1,1fr);}
+@media (min-width:720px){.grid-2{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------------- Project Card ---------------- */
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .2s ease, transform .2s ease;position:relative;
+}
+.card:hover{border-color:rgba(183,110,77,.45);transform:translateY(-3px);}
+.card-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--surface-2);}
+.card-media > svg{width:100%;height:100%;display:block;}
+.card-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;}
+.badge{
+  font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;
+  background:rgba(10,10,10,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);color:var(--argent);
+}
+.badge.verified{color:#fff;border-color:rgba(183,110,77,.6);background:rgba(183,110,77,.28);}
+.badge.status-livre{color:#daffe9;border-color:rgba(111,207,151,.5);background:rgba(111,207,151,.18);}
+.badge.status-construction{color:#ffe6c2;border-color:rgba(224,164,88,.5);background:rgba(224,164,88,.18);}
+.badge.status-plan{color:#dbe6ff;border-color:rgba(160,180,255,.4);background:rgba(140,160,255,.16);}
+.fav-btn{
+  position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;
+  background:rgba(10,10,10,.55);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.14);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;z-index:2;
+}
+.fav-btn svg{width:17px;height:17px;}
+.fav-btn.active{color:var(--or-rose-light);}
+.fav-btn.active svg{fill:var(--or-rose-light);}
+.card-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.card-loc{font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;letter-spacing:.03em;}
+.card-title{font-family:var(--font-display);font-size:20px;font-weight:600;color:#fff;}
+.card-promoter{font-size:12px;color:var(--accent-2);display:flex;align-items:center;gap:5px;}
+.card-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--text-dim);margin-top:2px;}
+.card-meta span{display:flex;align-items:center;gap:5px;}
+.card-foot{margin-top:auto;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-price{font-family:var(--font-display);font-weight:600;color:#fff;font-size:17px;}
+.card-price small{display:block;font-family:var(--font-body);font-size:10px;color:var(--text-dim);font-weight:600;}
+.card-cta{font-size:11.5px;font-weight:800;letter-spacing:.05em;color:var(--noir);background:var(--argent);padding:9px 14px;border-radius:999px;}
+.card:hover .card-cta{background:var(--or-rose-light);}
+
+/* ---------------- Icons row / value props ---------------- */
+.value-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:26px;}
+.value-card .ic{width:38px;height:38px;color:var(--or-rose-light);margin-bottom:14px;}
+.value-card h3{color:#fff;font-size:18px;margin-bottom:8px;}
+.value-card p{color:var(--text-dim);font-size:13.5px;}
+
+/* ---------------- City tiles ---------------- */
+.city-tile{
+  position:relative;border-radius:var(--radius-l);overflow:hidden;aspect-ratio:3/2;border:1px solid var(--border);
+  display:flex;align-items:flex-end;padding:18px;background:var(--surface-2);
+}
+.city-tile svg{position:absolute;inset:0;width:100%;height:100%;}
+.city-tile .ct-label{position:relative;z-index:1;}
+.city-tile .ct-label b{font-family:var(--font-display);font-style:italic;font-size:22px;color:#fff;display:block;}
+.city-tile .ct-label span{font-size:11px;color:var(--argent-hair);color:var(--argent);opacity:.8;}
+
+/* ---------------- Split (acquéreur / promoteur) ---------------- */
+.split-card{
+  border-radius:var(--radius-l);border:1px solid var(--border);padding:34px 28px;position:relative;overflow:hidden;
+  background:var(--surface);display:flex;flex-direction:column;gap:14px;
+}
+.split-card.accent{background:linear-gradient(160deg,#1b120d,#120a07 70%);border-color:rgba(183,110,77,.35);}
+.split-card h3{color:#fff;font-size:24px;font-style:italic;}
+.split-card p{color:var(--text-dim);font-size:14px;}
+.split-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+.split-card li{display:flex;gap:10px;font-size:13.5px;color:var(--text);align-items:flex-start;}
+.split-card li svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px;color:var(--or-rose-light);}
+
+/* ---------------- Footer ---------------- */
+.site-footer{border-top:1px solid var(--border);padding:56px 0 28px;background:var(--gris-fonce);position:relative;}
+.foot-grid{display:grid;gap:36px;grid-template-columns:1fr;}
+@media (min-width:800px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;}}
+.foot-col h4{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:14px;}
+.foot-col a{display:block;font-size:13.5px;color:var(--text);padding:6px 0;}
+.foot-col a:hover{color:var(--or-rose-light);}
+.foot-bottom{margin-top:44px;padding-top:22px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--text-dim);}
+.foot-disclaimer{font-size:11px;color:var(--text-dim);opacity:.75;max-width:640px;line-height:1.6;margin-top:14px;}
+
+/* ---------------- WhatsApp floating ---------------- */
+.wa-float{
+  position:fixed;right:18px;bottom:18px;z-index:60;width:56px;height:56px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px -8px rgba(37,211,102,.6);
+  color:#08150d;cursor:pointer;
+}
+.wa-float svg{width:28px;height:28px;}
+@media (min-width:960px){.wa-float{right:28px;bottom:28px;}}
+
+/* ---------------- Filters / marketplace ---------------- */
+.market-head{padding:30px 0 18px;border-bottom:1px solid var(--border);}
+.market-layout{display:grid;gap:28px;padding:28px 0 80px;grid-template-columns:1fr;}
+@media (min-width:980px){.market-layout{grid-template-columns:280px 1fr;}}
+.filters{position:sticky;top:92px;align-self:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 120px);overflow:auto;}
+.filters h3{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:#fff;}
+.f-group{display:flex;flex-direction:column;gap:8px;}
+.f-group label.f-title{font-size:11.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
+.f-group select,.f-group input[type=text],.f-group input[type=number]{
+  width:100%;background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-s);
+  padding:9px 10px;font-size:13px;font-family:inherit;
+}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{padding:7px 12px;border-radius:999px;border:1px solid var(--border);font-size:12px;color:var(--text-dim);cursor:pointer;background:transparent;}
+.chip.active{border-color:var(--or-rose);color:#fff;background:rgba(183,110,77,.16);}
+.range-row{display:flex;gap:8px;align-items:center;}
+.range-row input{flex:1;min-width:0;}
+.check-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);}
+.results-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+.results-count{font-size:13px;color:var(--text-dim);}
+.results-count b{color:#fff;}
+.sort-select{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-s);padding:9px 12px;font-size:12.5px;font-family:inherit;}
+.active-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.active-filters .chip{background:rgba(183,110,77,.12);border-color:rgba(183,110,77,.4);color:#fff;display:flex;gap:6px;align-items:center;}
+.mobile-filter-btn{display:flex;}
+@media (min-width:980px){.mobile-filter-btn{display:none;}}
+.empty-state{padding:70px 20px;text-align:center;border:1px dashed var(--border);border-radius:var(--radius-l);}
+.empty-state h3{color:#fff;font-size:20px;margin-bottom:8px;}
+.empty-state p{color:var(--text-dim);font-size:13.5px;}
+
+/* ---------------- Detail page ---------------- */
+.detail-gallery{display:grid;gap:8px;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,160px);border-radius:var(--radius-l);overflow:hidden;}
+@media (min-width:760px){.detail-gallery{grid-template-rows:repeat(2,220px);}}
+.detail-gallery > div:nth-child(1){grid-column:span 4;grid-row:span 2;}
+@media (min-width:760px){.detail-gallery > div:nth-child(1){grid-column:span 2;}}
+.detail-gallery > div{overflow:hidden;cursor:pointer;position:relative;}
+.detail-gallery > div > svg{width:100%;height:100%;}
+.detail-header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;padding:26px 0;}
+.detail-title h1{font-size:clamp(1.8rem,3.4vw,2.6rem);color:#fff;font-style:italic;}
+.detail-title .loc{color:var(--text-dim);font-size:13.5px;margin-top:6px;display:flex;align-items:center;gap:6px;}
+.detail-promoter-chip{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px 6px 6px;margin-top:14px;}
+.pchip-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;}
+.price-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px 22px;min-width:230px;}
+.price-box .amount{font-family:var(--font-display);font-size:28px;color:#fff;}
+.price-box .amount small{font-size:12px;color:var(--text-dim);font-family:var(--font-body);}
+.price-box .cta-row{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.detail-grid{display:grid;gap:40px;grid-template-columns:1fr;padding-bottom:70px;}
+@media (min-width:960px){.detail-grid{grid-template-columns:1fr 320px;}}
+.detail-main{display:flex;flex-direction:column;gap:40px;min-width:0;}
+.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media (min-width:560px){.stat-row{grid-template-columns:repeat(4,1fr);}}
+.stat-tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);padding:16px;text-align:left;}
+.stat-tile .k{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);font-weight:700;}
+.stat-tile .v{font-family:var(--font-display);font-size:19px;color:#fff;margin-top:6px;}
+.prose{color:var(--text);font-size:14.5px;line-height:1.85;max-width:66ch;}
+.prose + .prose{margin-top:10px;}
+.chips-plain{display:flex;flex-wrap:wrap;gap:10px;}
+.chip-plain{padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;color:var(--argent);display:flex;align-items:center;gap:7px;}
+.chip-plain svg{width:14px;height:14px;color:var(--or-rose-light);}
+.typo-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.typo-table th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);padding:0 14px 10px 0;font-weight:700;}
+.typo-table td{padding:14px 14px 14px 0;border-top:1px solid var(--border);color:var(--text);}
+.typo-table td:first-child{color:#fff;font-weight:700;font-family:var(--font-display);font-size:15px;}
+.doc-list{display:flex;flex-direction:column;gap:10px;}
+.doc-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-m);background:var(--surface);font-size:13px;}
+.doc-item svg{width:20px;height:20px;color:var(--or-rose-light);flex:0 0 auto;}
+.doc-item .fname{flex:1;color:var(--text);}
+.doc-item .fsize{color:var(--text-dim);font-size:11.5px;}
+.map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:260px;background:var(--surface-2);}
+.map-box .pin-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);text-align:center;}
+.side-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px;}
+.side-block + .side-block{margin-top:20px;}
+.mobile-cta-bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(10,10,10,.94);backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:10px;
+}
+@media (min-width:960px){.mobile-cta-bar{display:none;}}
+
+/* ---------------- Promoter page ---------------- */
+.promo-hero{padding:50px 0 30px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.promo-id{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.promo-logo{width:78px;height:78px;border-radius:20px;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-display);font-size:26px;font-weight:700;flex:0 0 auto;}
+.promo-name{font-size:clamp(1.6rem,3vw,2.4rem);color:#fff;font-style:italic;}
+.promo-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--text-dim);font-size:12.5px;margin-top:8px;}
+
+/* ---------------- Forms / Auth ---------------- */
+.auth-shell{min-height:calc(100vh - 76px);display:flex;align-items:center;justify-content:center;padding:60px 20px;}
+.auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:36px 30px;}
+.auth-card h1{font-size:26px;color:#fff;font-style:italic;text-align:center;}
+.auth-card .sub{text-align:center;color:var(--text-dim);font-size:13px;margin-top:8px;}
+.field{display:flex;flex-direction:column;gap:6px;margin-top:16px;}
+.field label{font-size:11.5px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.field input,.field textarea,.field select{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-s);color:#fff;
+  padding:11px 13px;font-size:14px;font-family:inherit;width:100%;
+}
+.field textarea{resize:vertical;min-height:90px;}
+.field input:focus,.field textarea:focus,.field select:focus{outline:0;border-color:var(--or-rose);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-note{font-size:11px;color:var(--text-dim);margin-top:14px;line-height:1.6;}
+.form-error{font-size:12.5px;color:var(--danger);margin-top:6px;}
+.switcher{display:flex;gap:8px;background:var(--surface-2);padding:4px;border-radius:999px;margin-top:18px;}
+.switcher button{flex:1;padding:9px;border-radius:999px;border:0;background:transparent;color:var(--text-dim);font-weight:700;font-size:12.5px;cursor:pointer;}
+.switcher button.active{background:var(--or-rose);color:#fff;}
+
+/* ---------------- Dashboards (compte / promoteur / admin) ---------------- */
+.dash-shell{padding:36px 0 80px;}
+.dash-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;margin-bottom:28px;}
+.dash-head h1{font-size:28px;color:#fff;font-style:italic;}
+.tab-row{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);margin-bottom:26px;padding-bottom:0;}
+.tab-btn{padding:11px 18px;font-size:13px;font-weight:700;color:var(--text-dim);background:transparent;border:0;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab-btn.active{color:#fff;border-color:var(--or-rose);}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:30px;}
+@media (min-width:760px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);padding:18px;}
+.stat-card .k{font-size:10.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.stat-card .v{font-family:var(--font-display);font-size:26px;color:#fff;margin-top:8px;}
+.stat-card .d{font-size:11px;color:var(--ok);margin-top:4px;}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-l);background:var(--surface);}
+table.data{width:100%;border-collapse:collapse;font-size:13px;min-width:640px;}
+table.data th{text-align:left;padding:13px 16px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);border-bottom:1px solid var(--border);white-space:nowrap;}
+table.data td{padding:13px 16px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+table.data tr:last-child td{border-bottom:0;}
+table.data tr:hover td{background:rgba(255,255,255,.02);}
+.status-pill{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em;display:inline-block;}
+.status-pill.nouveau{background:rgba(140,160,255,.16);color:#c7d3ff;}
+.status-pill.contacte{background:rgba(224,164,88,.18);color:#ffe6c2;}
+.status-pill.encours{background:rgba(183,110,77,.2);color:#ffd9c2;}
+.status-pill.termine{background:rgba(111,207,151,.18);color:#dafee9;}
+.status-pill.attente{background:rgba(224,164,88,.18);color:#ffe6c2;}
+.status-pill.valide{background:rgba(111,207,151,.18);color:#dafee9;}
+.status-pill.refuse{background:rgba(224,101,90,.18);color:#ffd7d3;}
+.row-actions{display:flex;gap:6px;}
+.mini-btn{padding:6px 12px;font-size:11px;font-weight:700;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;}
+.mini-btn:hover{border-color:var(--accent-2);color:#fff;}
+.mini-btn.danger:hover{border-color:var(--danger);color:#ffb4ac;}
+.mini-select{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-s);padding:6px 8px;font-size:11.5px;}
+
+/* wizard */
+.wizard-steps{display:flex;gap:4px;overflow-x:auto;margin-bottom:30px;}
+.wiz-step{flex:1;min-width:88px;text-align:center;padding-bottom:12px;border-bottom:3px solid var(--border);}
+.wiz-step .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wiz-step .n{font-size:10px;color:var(--text-dim);letter-spacing:.08em;}
+.wiz-step .t{font-size:11.5px;color:var(--text-dim);font-weight:700;margin-top:4px;}
+.wiz-step.active{border-color:var(--or-rose);}
+.wiz-step.active .t{color:#fff;}
+.wiz-step.done{border-color:var(--ok);}
+.wizard-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:26px;}
+.wizard-nav{display:flex;justify-content:space-between;margin-top:24px;}
+.photo-tile{aspect-ratio:4/3;border-radius:var(--radius-m);overflow:hidden;border:1px solid var(--border);position:relative;}
+.photo-tile > svg{width:100%;height:100%;}
+.photo-add{border:1px dashed var(--border);border-radius:var(--radius-m);aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text-dim);cursor:pointer;background:transparent;font-size:11.5px;font-weight:700;}
+.photo-add:hover{border-color:var(--or-rose);color:var(--accent-2);}
+
+/* ---------------- Modal / Toast ---------------- */
+.modal-overlay{position:fixed;inset:0;background:rgba(5,5,5,.72);backdrop-filter:blur(4px);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);max-width:460px;width:100%;padding:28px;max-height:88vh;overflow:auto;position:relative;}
+.modal-x{position:absolute;top:16px;right:16px;}
+.modal-card h2{color:#fff;font-size:22px;font-style:italic;}
+.modal-close{position:absolute;}
+.toast-wrap{position:fixed;top:90px;right:18px;z-index:90;display:flex;flex-direction:column;gap:10px;}
+.toast{background:var(--surface-2);border:1px solid rgba(111,207,151,.4);color:#eafff3;padding:14px 18px;border-radius:var(--radius-m);font-size:13px;display:flex;gap:10px;align-items:center;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);animation:toastin .25s ease;max-width:320px;}
+.toast svg{width:18px;height:18px;color:var(--ok);flex:0 0 auto;}
+@keyframes toastin{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+
+/* ---------------- Misc ---------------- */
+.zellige-corner{position:absolute;opacity:.5;pointer-events:none;}
+.pagebar{padding:22px 0;}
+.breadcrumb{font-size:12px;color:var(--text-dim);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.breadcrumb a:hover{color:var(--accent-2);}
+.demo-banner{background:linear-gradient(90deg,#1b120d,#12100c);border-bottom:1px solid rgba(183,110,77,.3);font-size:11.5px;text-align:center;padding:8px 14px;color:var(--text-dim);}
+.demo-banner b{color:var(--accent-2);}
+.section-cta{border-radius:var(--radius-l);border:1px solid var(--border);background:linear-gradient(140deg,#171310,#0d0b09);padding:44px 30px;text-align:center;}
+.empty-fav{padding:90px 20px;text-align:center;}
+.skip-link{position:absolute;left:-999px;top:0;background:#fff;color:#000;padding:10px;z-index:999;}
+.skip-link:focus{left:10px;top:10px;}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+
+
+<a class="skip-link" href="#main">Aller au contenu</a>
+<div id="toastWrap" class="toast-wrap"></div>
+<div id="modalRoot"></div>
+<div id="demoBanner"></div>
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a href="/" class="logo" id="navLogo"></a>
+    <nav class="nav-links">
+      <a href="/projets" data-route="/projets">Projets</a>
+      <a href="/projets" data-route="villes">Villes</a>
+      <a href="/promoteur" data-route="/promoteur">Espace promoteur</a>
+      <a href="/favoris" data-route="/favoris">Favoris</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="navFavBtn" title="Favoris" aria-label="Favoris"></button>
+      <button class="btn btn-ghost btn-sm" id="navAccountBtn">Compte</button>
+      <button class="btn btn-primary btn-sm" id="navCtaBtn">Espace promoteur</button>
+      <button class="burger" id="burgerBtn" aria-label="Menu"></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/projets">Projets</a>
+  <a href="/favoris">Favoris</a>
+  <a href="/promoteur">Espace promoteur</a>
+  <a href="/compte">Mon compte</a>
+  <div class="mm-actions">
+    <button class="btn btn-primary btn-block" id="mmAuthBtn">Connexion</button>
+  </div>
+</div>
+
+<main id="main"></main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <a href="/" class="logo sm" id="footLogo"></a>
+        <p class="foot-disclaimer">yadra! met en relation les acquéreurs et les promoteurs immobiliers en Algérie. Découvrez, comparez vos envies et contactez directement le bon interlocuteur — sans surcharge, sans détour.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Explorer</h4>
+        <a href="/projets">Tous les projets</a>
+        <a href="/projets?ville=alger">Projets à Alger</a>
+        <a href="/projets?ville=oran">Projets à Oran</a>
+        <a href="/favoris">Mes favoris</a>
+      </div>
+      <div class="foot-col">
+        <h4>Promoteurs</h4>
+        <a href="/promoteur">Espace promoteur</a>
+        <a href="/promoteur">Publier un projet</a>
+        <a href="/admin">Administration</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="https://wa.me/33670131501" target="_blank" rel="noopener">WhatsApp — +33 6 70 13 15 01</a>
+        <a href="mailto:contact@yadra.dz">contact@yadra.dz</a>
+        <a href="/">Alger, Algérie</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 yadra! by qbm — tous droits réservés.</span>
+      <span>Fait avec soin en Algérie 🇩🇿</span>
+    </div>
+    <p class="foot-disclaimer">Version de démonstration : les projets, promoteurs et avis présentés sur ce site sont fictifs et servent uniquement à illustrer le fonctionnement de la plateforme. Aucun de ces promoteurs n'est un partenaire réel de yadra!.</p>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/33670131501?text=Bonjour%20YADRA!%2C%20je%20souhaite%20obtenir%20plus%20d'informations." target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp" id="waFloat"></a>
+
+<script>
+/* ==========================================================
+   YADRA! by qbm — client application
+   Single-file demo build: routing, data, rendering, local
+   state (favorites, comptes, leads, promoteur, admin) all
+   run in the browser. See footer disclaimer for scope.
+   ========================================================== */
+(function(){
+"use strict";
+
+/* ---------------- Icons ---------------- */
+var ICONS = {
+  search:'<path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="m21 21-4.3-4.3"/>',
+  pin:'<path d="M12 22s7-7.58 7-12.5A7 7 0 0 0 5 9.5C5 14.42 12 22 12 22Z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  heart:'<path d="M12 20.5s-7.7-4.6-10-9.3C.4 8 1.8 4.6 5.2 3.7c2-.5 4 .3 5.3 2 .5.6.5.6 1 0 1.3-1.7 3.3-2.5 5.3-2 3.4.9 4.8 4.3 3.2 7.5-2.3 4.7-10 9.3-10 9.3Z"/>',
+  home:'<path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"/>',
+  building:'<rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/>',
+  buildings:'<rect x="3" y="9" width="7" height="12" rx="1"/><rect x="12" y="3" width="9" height="18" rx="1"/><path d="M6 12h1M6 15h1M6 18h1M15 6h1M18 6h1M15 10h1M18 10h1M15 14h1M18 14h1"/>',
+  chart:'<path d="M4 20V10M11 20V4M18 20v-7"/><path d="M2 20h20"/>',
+  shield:'<path d="M12 3 4.5 6v6c0 5 3.4 8.4 7.5 9 4.1-.6 7.5-4 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/>',
+  handshake:'<path d="m8 12 2.5 2.5c.6.6 1.6.6 2.2 0l.1-.1c.6-.6.6-1.6 0-2.2L11 10.4"/><path d="m11 10.4 1.8-1.8c.7-.7 1.9-.7 2.7-.1l3.5 2.7"/><path d="M2 10.5 6 7l4.3 3.6"/><path d="m22 10.5-4-3.5-2.2 1.8"/><path d="M2 10.5v3l3 3 2-1.5"/><path d="M22 10.5v3l-4.5 4-2-1.5"/>',
+  whatsapp:'<path d="M17.5 14.4c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10 9 9.5 7.8 9.3 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 21a9 9 0 1 0-7.8-4.5L3 21l4.6-1.2A9 9 0 0 0 12 21Z"/>',
+  chevronRight:'<path d="m9 6 6 6-6 6"/>',
+  chevronLeft:'<path d="m15 6-6 6 6 6"/>',
+  chevronDown:'<path d="m6 9 6 6 6-6"/>',
+  close:'<path d="M6 6l12 12M18 6 6 18"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  check:'<path d="m5 13 4 4 10-10"/>',
+  checkCircle:'<circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>',
+  upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+  doc:'<path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6M9 9h2"/>',
+  bed:'<path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 18v2M21 18v2"/><path d="M3 12V7a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v3"/><path d="M13 10h6a2 2 0 0 1 2 2"/>',
+  area:'<path d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+  phone:'<path d="M6.6 10.8a15.6 15.6 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.2c1.1.4 2.3.6 3.6.6a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.4a1 1 0 0 1 1 1c0 1.3.2 2.5.6 3.6a1 1 0 0 1-.2 1l-2.2 2.2Z"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/>',
+  users:'<circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c1.2-3.4 3.8-5 6.5-5s5.3 1.6 6.5 5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15.5 12.3c2.3.2 4.3 1.7 5.2 4.2"/>',
+  grid:'<rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  edit:'<path d="M4 20h4L20 8l-4-4L4 16v4Z"/><path d="M13 7l4 4"/>',
+  trash:'<path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+  eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+  star:'<path d="m12 3 2.6 5.8 6.4.6-4.8 4.3 1.4 6.3L12 16.9 6.4 20l1.4-6.3-4.8-4.3 6.4-.6L12 3Z"/>',
+  filter:'<path d="M4 5h16M7 12h10M10 19h4"/>',
+  gauge:'<circle cx="12" cy="13" r="8"/><path d="M12 13 15.5 9M8 6l1-2M16 6l-1-2M4 10l-2-1M20 10l2-1"/>',
+  sparkle:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  logout:'<path d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 4h4v4"/>'
+};
+function ic(name,cls){ return '<svg class="'+(cls||'i-def')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[name]||'')+'</svg>'; }
+
+/* ---------------- Logo ---------------- */
+function logoIconSVG(){
+  return '<svg viewBox="0 0 64 64" class="logo-icon" aria-hidden="true">'
+    +'<defs>'
+    +'<linearGradient id="lgSilverA" x1="0" y1="0" x2="1" y2="1">'
+    +'<stop offset="0" stop-color="#fdfdfd"/><stop offset=".45" stop-color="#c9c9c9"/><stop offset="1" stop-color="#8f8f8f"/>'
+    +'</linearGradient>'
+    +'<linearGradient id="lgSilverB" x1="0" y1="0" x2="1" y2="1">'
+    +'<stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#e6e6e6"/><stop offset="1" stop-color="#a8a8a8"/>'
+    +'</linearGradient>'
+    +'<linearGradient id="lgCopper" x1="0" y1="0" x2="1" y2="1">'
+    +'<stop offset="0" stop-color="#e3a77f"/><stop offset=".5" stop-color="#b76e4d"/><stop offset="1" stop-color="#7c4830"/>'
+    +'</linearGradient>'
+    +'</defs>'
+    +'<path d="M20 5 L31 5 L21 57 L11 52 Z" fill="url(#lgSilverA)"/>'
+    +'<path d="M29 3 L40 3 L27 55 L17 51 Z" fill="url(#lgCopper)"/>'
+    +'<path d="M39 2 L50 2 L33 45 Q29 55 17 57 L15 49 Q26 47 30 39 Z" fill="url(#lgSilverB)"/>'
+    +'</svg>';
+}
+function logoHTML(size){
+  return '<span class="logo'+(size?(' '+size):'')+'">'+logoIconSVG()
+    +'<span class="logo-word"><span class="logo-yadra">yadra<span class="logo-bang">!</span></span><span class="logo-byqbm">by qbm</span></span></span>';
+}
+
+/* ---------------- PRNG / hashing (deterministic art + sampling) ---------------- */
+function hashStr(s){ var h=1779033703^s.length; for(var i=0;i<s.length;i++){ h=Math.imul(h^s.charCodeAt(i),3432918353); h=h<<13|h>>>19; } return (h^h>>>16)>>>0; }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function pickN(seed,pool,n){
+  var rnd=mulberry32(seed), copy=pool.map(function(_,i){return i;});
+  for(var i=copy.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var tmp=copy[i]; copy[i]=copy[j]; copy[j]=tmp; }
+  return copy.slice(0,n).map(function(i){return pool[i];});
+}
+
+/* ---------------- Generative "signature" art (stands in for photography) ---------------- */
+function artSVG(seedStr, w, h){
+  var seed = hashStr(seedStr);
+  var rnd = mulberry32(seed);
+  w = w||400; h = h||300;
+  var uid = 'art'+seed;
+  var bars = [];
+  var n = 7 + Math.floor(rnd()*5);
+  var x = -10;
+  var baseY = h*0.82;
+  for(var i=0;i<n;i++){
+    var bw = w/n * (0.55 + rnd()*0.5);
+    var bh = h*(0.12 + rnd()*0.55);
+    var lit = rnd() > 0.55;
+    bars.push('<rect x="'+x.toFixed(1)+'" y="'+(baseY-bh).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(bh+40).toFixed(1)+'" fill="'+(lit? 'url(#'+uid+'lit)':'#171515')+'" stroke="rgba(230,230,230,.08)" stroke-width="1"/>');
+    var wx = x+6;
+    while(wx < x+bw-8){
+      var wy = baseY-bh+8;
+      while(wy < baseY-6){
+        if(rnd()>0.62){ bars.push('<rect x="'+wx.toFixed(1)+'" y="'+wy.toFixed(1)+'" width="4" height="6" fill="'+(rnd()>0.5?'rgba(216,154,120,.55)':'rgba(230,230,230,.28)')+'"/>'); }
+        wy += 12;
+      }
+      wx += 10;
+    }
+    x += bw*(0.72);
+  }
+  var streakY = h*(0.2+rnd()*0.3);
+  return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs>'
+    +'<linearGradient id="'+uid+'bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#242424"/><stop offset="1" stop-color="#0a0a0a"/></linearGradient>'
+    +'<linearGradient id="'+uid+'lit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2620"/><stop offset="1" stop-color="#161311"/></linearGradient>'
+    +'<radialGradient id="'+uid+'glow" cx="0.5" cy="1" r="0.7"><stop offset="0" stop-color="#B76E4D" stop-opacity=".38"/><stop offset="1" stop-color="#B76E4D" stop-opacity="0"/></radialGradient>'
+    +'<linearGradient id="'+uid+'streak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+    +'</defs>'
+    +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'bg)"/>'
+    +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'glow)"/>'
+    +'<g>'+bars.join('')+'</g>'
+    +'<rect x="0" y="'+streakY+'" width="'+w+'" height="'+(h*0.18)+'" fill="url(#'+uid+'streak)" transform="skewY(-6)"/>'
+    +'<rect width="'+w+'" height="'+h+'" fill="none" stroke="rgba(230,230,230,.06)"/>'
+    +'</svg>';
+}
+function cityArtSVG(seedStr,w,h){
+  var seed=hashStr(seedStr), rnd=mulberry32(seed); w=w||300;h=h||200;
+  var uid='city'+seed; var pts=[]; var x=0; var baseY=h*0.86;
+  var n=10+Math.floor(rnd()*6);
+  for(var i=0;i<n;i++){ var bw=w/n; var bh=h*(0.1+rnd()*0.6); pts.push('<rect x="'+x.toFixed(1)+'" y="'+(baseY-bh).toFixed(1)+'" width="'+(bw*0.8).toFixed(1)+'" height="'+(bh+30).toFixed(1)+'" fill="#171515" stroke="rgba(230,230,230,.06)"/>'); x+=bw; }
+  return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E1E1E"/><stop offset="1" stop-color="#0A0A0A"/></linearGradient>'
+    +'<radialGradient id="'+uid+'g" cx=".5" cy="1" r=".8"><stop offset="0" stop-color="#B76E4D" stop-opacity=".3"/><stop offset="1" stop-color="#B76E4D" stop-opacity="0"/></radialGradient></defs>'
+    +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+')"/><rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'g)"/>'+pts.join('')
+    +'<rect width="'+w+'" height="'+h+'" fill="none" stroke="rgba(230,230,230,.08)"/></svg>';
+}
+function zelligePattern(id,opacity,color){
+  color = color || '#B76E4D';
+  return '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:'+(opacity||0.08)+'">'
+    +'<defs><pattern id="'+id+'" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">'
+    +'<path d="M23 2 L44 23 L23 44 L2 23 Z M23 12 L34 23 L23 34 L12 23 Z" fill="none" stroke="'+color+'" stroke-width="1"/>'
+    +'</pattern></defs><rect width="100%" height="100%" fill="url(#'+id+')"/></svg>';
+}
+
+/* ---------------- Data ---------------- */
+var WILAYAS = {
+  'alger': {label:'Alger', communes:['Hydra','Bab Ezzouar','Dely Ibrahim','Bir Mourad Raïs','El Achour','Ouled Fayet']},
+  'oran': {label:'Oran', communes:['Bir El Djir','Es Sénia','Canastel','Oran Centre']},
+  'blida': {label:'Blida', communes:['Blida Centre','Boufarik','Ouled Yaïch']},
+  'constantine': {label:'Constantine', communes:['Ali Mendjeli','Constantine Centre','El Khroub']},
+  'setif': {label:'Sétif', communes:['Sétif Centre','El Eulma']},
+  'annaba': {label:'Annaba', communes:['Annaba Centre','Seraïdi','El Bouni']},
+  'tizi-ouzou': {label:'Tizi Ouzou', communes:['Tizi Ouzou Centre','Draâ Ben Khedda','Boukhalfa']}
+};
+var WILAYA_ORDER = ['alger','oran','blida','constantine','setif','annaba','tizi-ouzou'];
+
+var PROMOTERS_BASE = [
+  {id:'pr-atlas', name:'Atlas Promotion', slug:'atlas-promotion', wilaya:'alger', verified:true, founded:2011,
+    desc:"Atlas Promotion conçoit des résidences contemporaines à Alger depuis plus de dix ans, avec une attention particulière portée aux espaces communs et à la qualité des finitions."},
+  {id:'pr-marina', name:'Marina Développement', slug:'marina-developpement', wilaya:'oran', verified:true, founded:2014,
+    desc:"Marina Développement façonne le littoral oranais avec des programmes résidentiels pensés pour la vue mer et la vie de quartier."},
+  {id:'pr-numidia', name:'Numidia Immobilier', slug:'numidia-immobilier', wilaya:'constantine', verified:true, founded:2009,
+    desc:"Numidia Immobilier accompagne l'essor de Constantine avec des ensembles résidentiels et mixtes à taille humaine."},
+  {id:'pr-kahina', name:'Kahina Résidences', slug:'kahina-residences', wilaya:'tizi-ouzou', verified:false, founded:2018,
+    desc:"Jeune promoteur implanté en Kabylie, Kahina Résidences développe des projets à échelle humaine, proches de la nature."},
+  {id:'pr-djazair', name:'El Djazaïr Capital', slug:'el-djazair-capital', wilaya:'alger', verified:true, founded:2006,
+    desc:"El Djazaïr Capital est l'un des acteurs historiques de la promotion immobilière à Alger, reconnu pour ses programmes haut de gamme."},
+  {id:'pr-aures', name:'Aurès Habitat', slug:'aures-habitat', wilaya:'setif', verified:true, founded:2016,
+    desc:"Aurès Habitat construit des résidences familiales dans les Hauts Plateaux, avec un fort ancrage local à Sétif et sa région."},
+  {id:'pr-zianide', name:'Zianide Properties', slug:'zianide-properties', wilaya:'annaba', verified:false, founded:2019,
+    desc:"Zianide Properties propose des programmes résidentiels et des villas sur le littoral est du pays."},
+  {id:'pr-cirta', name:'Cirta Urbanisme', slug:'cirta-urbanisme', wilaya:'blida', verified:true, founded:2012,
+    desc:"Cirta Urbanisme aménage des quartiers résidentiels complets à Blida, entre vergers et nouvelles infrastructures."}
+];
+
+var PRESTATIONS_POOL = ['Ascenseur panoramique','Parking sous-sol sécurisé','Espaces verts paysagers','Sécurité 24h/24','Salle de sport','Piscine résidentielle','Aire de jeux enfants','Mosquée de proximité','Commerces en rez-de-chaussée','Fibre optique','Vidéosurveillance','Groupe électrogène','Conciergerie','Terrasses aménagées'];
+var PRESTATION_ICON = {'Ascenseur panoramique':'building','Parking sous-sol sécurisé':'shield','Espaces verts paysagers':'sparkle','Sécurité 24h/24':'shield','Salle de sport':'gauge','Piscine résidentielle':'sparkle','Aire de jeux enfants':'sparkle','Mosquée de proximité':'building','Commerces en rez-de-chaussée':'buildings','Fibre optique':'sparkle','Vidéosurveillance':'shield','Groupe électrogène':'gauge','Conciergerie':'users','Terrasses aménagées':'home'};
+var POINTSFORTS_POOL = ['Vue dégagée','Proche des axes principaux','Quartier calme et résidentiel','Finitions haut de gamme','Livraison clé en main','Proche écoles et commerces','Exposition ensoleillée','Accès sécurisé 24h/24','Cadre architectural contemporain','Proximité transports en commun'];
+
+var RAW_PROJECTS = [
+  {slug:'jnane-el-bahdja', nom:'Jnane El Bahdja', wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'sur-plan', livraison:'T4 2028', prixBase:15800000, featured:true,
+    description:"Un ensemble résidentiel signé Atlas Promotion au cœur d'Hydra, pensé autour d'un jardin central et de commerces de proximité en rez-de-chaussée. Les appartements profitent d'une double orientation et de larges balcons filants."},
+  {slug:'terrasses-el-achour', nom:"Les Terrasses d'El Achour", wilaya:'alger', commune:'El Achour', quartier:'El Achour', promoterId:'pr-djazair', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:12600000, featured:false,
+    description:"Face aux collines d'El Achour, cette résidence en cours de construction propose des appartements du F2 au F4 avec terrasses aménagées et vue dégagée sur la baie d'Alger."},
+  {slug:'panorama-bab-ezzouar', nom:'Panorama Bab Ezzouar', wilaya:'alger', commune:'Bab Ezzouar', quartier:'Bab Ezzouar', promoterId:'pr-atlas', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:10900000, featured:true,
+    description:"Déjà livrée et habitée, cette résidence proche du pôle universitaire et de la nouvelle gare offre un accès rapide aux transports et aux commerces."},
+  {slug:'villa-oliviers-dely-ibrahim', nom:'Villa des Oliviers', wilaya:'alger', commune:'Dely Ibrahim', quartier:'Dely Ibrahim', promoterId:'pr-djazair', type:'Villa', statut:'sur-plan', livraison:'T1 2029', prixBase:48000000, featured:true,
+    description:"Un programme de villas individuelles avec jardin privatif, dans un lotissement fermé et sécurisé à deux pas des grands axes vers Alger et Chéraga."},
+  {slug:'jardins-canastel', nom:'Les Jardins de Canastel', wilaya:'oran', commune:'Canastel', quartier:'Canastel', promoterId:'pr-marina', type:'Résidence mixte', statut:'construction', livraison:'T3 2027', prixBase:13400000, featured:true,
+    description:"Sur les hauteurs de Canastel, ce programme mêle résidentiel et commerces de proximité avec une vue imprenable sur la baie d'Oran."},
+  {slug:'oran-sky-residence', nom:'Oran Sky Résidence', wilaya:'oran', commune:'Bir El Djir', quartier:'Bir El Djir', promoterId:'pr-marina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:11200000, featured:false,
+    description:"Proche du nouveau pôle urbain de Bir El Djir, cette résidence propose des typologies du F2 au F5 avec parking sous-sol et espaces verts."},
+  {slug:'villa-corniche-es-senia', nom:'Villa Corniche', wilaya:'oran', commune:'Es Sénia', quartier:'Es Sénia', promoterId:'pr-marina', type:'Villa', statut:'livre', livraison:'Livré — 2024', prixBase:39500000, featured:false,
+    description:"Villas mitoyennes déjà livrées, à quelques minutes de l'aéroport et des axes reliant le centre-ville d'Oran."},
+  {slug:'vergers-boufarik', nom:'Les Vergers de Boufarik', wilaya:'blida', commune:'Boufarik', quartier:'Boufarik Centre', promoterId:'pr-cirta', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:9200000, featured:true,
+    description:"Un quartier résidentiel complet aux portes de Boufarik, entouré d'espaces verts, avec école et commerces intégrés au programme."},
+  {slug:'residence-chrea-view', nom:'Résidence Chréa View', wilaya:'blida', commune:'Blida Centre', quartier:'Blida Centre', promoterId:'pr-cirta', type:'Duplex', statut:'sur-plan', livraison:'T1 2028', prixBase:14700000, featured:false,
+    description:"Des duplex avec vue sur les montagnes de Chréa, dans un cadre résidentiel calme à proximité immédiate du centre-ville de Blida."},
+  {slug:'cirta-panorama', nom:'Cirta Panorama', wilaya:'constantine', commune:'Ali Mendjeli', quartier:'Ali Mendjeli', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'T4 2027', prixBase:10400000, featured:true,
+    description:"Dans la nouvelle ville d'Ali Mendjeli, un programme mixte associant logements et commerces, à proximité des grands équipements universitaires."},
+  {slug:'ponts-constantine', nom:'Les Ponts de Constantine', wilaya:'constantine', commune:'Constantine Centre', quartier:'Constantine Centre', promoterId:'pr-numidia', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:11800000, featured:false,
+    description:"Une résidence livrée au cœur de Constantine, à distance de marche des ponts emblématiques de la ville et de ses commerces."},
+  {slug:'aures-al-baraka', nom:'Aurès Résidence Al Baraka', wilaya:'setif', commune:'Sétif Centre', quartier:'Sétif Centre', promoterId:'pr-aures', type:'Appartement', statut:'sur-plan', livraison:'T3 2028', prixBase:8600000, featured:false,
+    description:"Un programme familial au centre de Sétif, avec mosquée de proximité et aire de jeux pour enfants intégrées à la résidence."},
+  {slug:'terrasses-el-eulma', nom:"Les Terrasses d'El Eulma", wilaya:'setif', commune:'El Eulma', quartier:'El Eulma', promoterId:'pr-aures', type:'Duplex', statut:'construction', livraison:'T1 2027', prixBase:9800000, featured:true,
+    description:"Des duplex spacieux à El Eulma, pensés pour les familles, avec terrasses privatives et parking dédié."},
+  {slug:'seraidi-bay-view', nom:'Seraïdi Bay View', wilaya:'annaba', commune:'Seraïdi', quartier:'Seraïdi', promoterId:'pr-zianide', type:'Villa', statut:'sur-plan', livraison:'T2 2029', prixBase:44000000, featured:false,
+    description:"Sur les hauteurs boisées de Seraïdi, ces villas offrent une vue plongeante sur le golfe d'Annaba, au calme absolu."},
+  {slug:'residence-cap-rosa', nom:'Résidence Cap Rosa', wilaya:'annaba', commune:'Annaba Centre', quartier:'Annaba Centre', promoterId:'pr-zianide', type:'Appartement', statut:'construction', livraison:'T3 2027', prixBase:10200000, featured:false,
+    description:"Proche du centre-ville et du front de mer d'Annaba, cette résidence propose des appartements lumineux du F2 au F4."},
+  {slug:'kahina-djurdjura', nom:'Kahina Résidence Djurdjura', wilaya:'tizi-ouzou', commune:'Tizi Ouzou Centre', quartier:'Tizi Ouzou Centre', promoterId:'pr-kahina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:8900000, featured:false,
+    description:"Face aux sommets du Djurdjura, cette résidence à taille humaine mêle tradition kabyle et confort contemporain."},
+  {slug:'villa-boukhalfa-hills', nom:'Villa Boukhalfa Hills', wilaya:'tizi-ouzou', commune:'Boukhalfa', quartier:'Boukhalfa', promoterId:'pr-kahina', type:'Villa', statut:'construction', livraison:'T2 2027', prixBase:31000000, featured:true,
+    description:"Un petit programme de villas sur les hauteurs de Boukhalfa, entre verdure et vue sur la vallée du Sébaou."}
+];
+
+function mkTypologies(seedStr,type,prixBase){
+  var rnd = mulberry32(hashStr(seedStr+'-typo'));
+  if(type==='Villa'){
+    var surf = 260+Math.floor(rnd()*140);
+    return [{label:'Villa', surface:surf, prix:prixBase, dispo:1+Math.floor(rnd()*3)}];
+  }
+  var defs = [['F2',58,0.62],['F3',78,0.8],['F4',98,1.0],['F5',118,1.22]];
+  var count = type==='Duplex' ? 2 : (2+Math.floor(rnd()*3));
+  var chosen = defs.slice(0, Math.min(defs.length, count));
+  return chosen.map(function(d){
+    var surf = d[1] + Math.floor(rnd()*8) - 4;
+    var prix = Math.round((prixBase*d[2])/50000)*50000;
+    return {label:d[0], surface:surf, prix:prix, dispo: 2+Math.floor(rnd()*10)};
+  });
+}
+function enrichProject(raw, idx){
+  var promoter = PROMOTERS_BASE.filter(function(p){return p.id===raw.promoterId;})[0];
+  var seed = hashStr(raw.slug);
+  var typologies = mkTypologies(raw.slug, raw.type, raw.prixBase);
+  var prices = typologies.map(function(t){return t.prix;});
+  var surfaces = typologies.map(function(t){return t.surface;});
+  return Object.assign({}, raw, {
+    id:'proj-'+raw.slug,
+    idx:idx,
+    promoter:promoter,
+    verified: promoter ? promoter.verified : false,
+    typologies: typologies,
+    prixMin: Math.min.apply(null,prices),
+    prixMax: Math.max.apply(null,prices),
+    surfaceMin: Math.min.apply(null,surfaces),
+    surfaceMax: Math.max.apply(null,surfaces),
+    prestations: pickN(seed+1, PRESTATIONS_POOL, 5+Math.floor(mulberry32(seed+2)()*4)),
+    pointsForts: pickN(seed+3, POINTSFORTS_POOL, 4),
+    adresse: raw.quartier+', '+raw.commune+', '+WILAYAS[raw.wilaya].label
+  });
+}
+var PROJECTS = RAW_PROJECTS.map(enrichProject);
+
+/* ---------------- Local persistence ---------------- */
+var LS = {
+  get:function(k,fallback){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } },
+  set:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+function uid(prefix){ return prefix+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+function getFavorites(){ return LS.get('yadra_favorites',[]); }
+function isFavorite(id){ return getFavorites().indexOf(id) !== -1; }
+function toggleFavorite(id){
+  var f = getFavorites();
+  var i = f.indexOf(id);
+  if(i===-1){ f.push(id); } else { f.splice(i,1); }
+  LS.set('yadra_favorites',f);
+  return f.indexOf(id)!==-1;
+}
+function getExtraPromoters(){ return LS.get('yadra_extra_promoters',[]); }
+function addExtraPromoter(p){ var l=getExtraPromoters(); l.push(p); LS.set('yadra_extra_promoters',l); return p; }
+function getAllPromoters(){
+  var overrides = LS.get('yadra_promoter_overrides',{});
+  return PROMOTERS_BASE.concat(getExtraPromoters()).map(function(p){
+    var o = overrides[p.id];
+    return o ? Object.assign({},p,o) : p;
+  });
+}
+function getPromoterById(id){ return getAllPromoters().filter(function(p){return p.id===id;})[0]; }
+function getPromoterBySlug(slug){ return getAllPromoters().filter(function(p){return p.slug===slug;})[0]; }
+function setPromoterOverride(id,patch){ var o=LS.get('yadra_promoter_overrides',{}); o[id]=Object.assign({},o[id],patch); LS.set('yadra_promoter_overrides',o); }
+
+function getDrafts(){ return LS.get('yadra_promoter_drafts',[]); }
+function saveDrafts(d){ LS.set('yadra_promoter_drafts',d); }
+function getDisabled(){ return LS.get('yadra_disabled_projects',[]); }
+function toggleDisabled(id){ var d=getDisabled(); var i=d.indexOf(id); if(i===-1)d.push(id); else d.splice(i,1); LS.set('yadra_disabled_projects',d); }
+
+function draftToProject(d,idx){
+  var promoter = getPromoterById(d.promoterId);
+  var prices = d.typologies.map(function(t){return t.prix;});
+  var surfaces = d.typologies.map(function(t){return t.surface;});
+  return {
+    id:d.id, idx:1000+idx, slug:d.slug, nom:d.nom, wilaya:d.wilaya, commune:d.commune, quartier:d.quartier,
+    promoterId:d.promoterId, promoter:promoter, verified: promoter?promoter.verified:false,
+    type:d.type, statut:d.statut, livraison:d.livraison, description:d.description,
+    typologies:d.typologies, prixMin:Math.min.apply(null,prices), prixMax:Math.max.apply(null,prices),
+    surfaceMin:Math.min.apply(null,surfaces), surfaceMax:Math.max.apply(null,surfaces),
+    prestations:d.prestations||[], pointsForts:d.pointsForts||[], adresse:d.quartier+', '+d.commune+', '+(WILAYAS[d.wilaya]?WILAYAS[d.wilaya].label:d.wilaya),
+    featured:false, isDraft:true, draftStatus:d.status
+  };
+}
+function getAllProjects(){
+  var disabled = getDisabled();
+  var validated = getDrafts().filter(function(d){return d.status==='valide';}).map(draftToProject);
+  return PROJECTS.concat(validated).filter(function(p){ return disabled.indexOf(p.id)===-1; });
+}
+function getProjectBySlug(wilaya,slug){ return getAllProjects().filter(function(p){return p.wilaya===wilaya && p.slug===slug;})[0]; }
+function getProjectById(id){ return getAllProjects().filter(function(p){return p.id===id;})[0]; }
+
+function getUsers(){ return LS.get('yadra_users',[]); }
+function saveUsers(u){ LS.set('yadra_users',u); }
+function getSession(){ return LS.get('yadra_session',null); }
+function setSession(s){ LS.set('yadra_session',s); }
+function currentUser(){ var s=getSession(); if(!s) return null; return getUsers().filter(function(u){return u.id===s.userId;})[0]||null; }
+function logout(){ setSession(null); go('/'); }
+
+function getLeads(){ return LS.get('yadra_leads',[]); }
+function saveLeads(l){ LS.set('yadra_leads',l); }
+function addLead(data){
+  var leads = getLeads();
+  var lead = Object.assign({id:uid('lead'), date:new Date().toISOString(), status:'Nouveau'}, data);
+  leads.unshift(lead);
+  saveLeads(leads);
+  return lead;
+}
+
+/* ---------------- Helpers ---------------- */
+function money(n){ if(n==null) return '—'; return Math.round(n).toLocaleString('fr-FR')+' DA'; }
+function moneyShort(n){
+  if(n>=1000000){ return (n/1000000).toFixed(n%1000000===0?0:1).replace('.',',')+' M DA'; }
+  return money(n);
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function surfRange(p){ return p.surfaceMin===p.surfaceMax ? (p.surfaceMin+' m²') : (p.surfaceMin+'–'+p.surfaceMax+' m²'); }
+function qs(obj){
+  var p = new URLSearchParams();
+  Object.keys(obj).forEach(function(k){ if(obj[k]!==undefined && obj[k]!==null && obj[k]!=='') p.set(k,obj[k]); });
+  var s = p.toString();
+  return s?('?'+s):'';
+}
+function statutLabel(s){ return s==='sur-plan'?'Sur plan': s==='construction'?'En construction': s==='livre'?'Livré':s; }
+function statutClass(s){ return s==='sur-plan'?'status-plan': s==='construction'?'status-construction':'status-livre'; }
+function waLink(text){ return 'https://wa.me/33670131501?text='+encodeURIComponent(text); }
+function waLinkForProject(p){ return waLink('Bonjour YADRA!, je suis intéressé(e) par le projet '+p.nom+'. Je souhaite obtenir plus d\'informations.'); }
+
+function toast(msg, kind){
+  var wrap = document.getElementById('toastWrap');
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = ic('checkCircle')+'<span>'+esc(msg)+'</span>';
+  wrap.appendChild(el);
+  setTimeout(function(){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.remove(); },320); }, 3400);
+}
+function openModal(innerHtml){
+  var root = document.getElementById('modalRoot');
+  root.innerHTML = '<div class="modal-overlay" id="modalOverlay"><div class="modal-card" role="dialog" aria-modal="true"><button class="icon-btn modal-x" id="modalXBtn" aria-label="Fermer">'+ic('close')+'</button>'+innerHtml+'</div></div>';
+  document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target.id==='modalOverlay') closeModal(); });
+  document.getElementById('modalXBtn').addEventListener('click', closeModal);
+}
+function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+/* ================================================================
+   ROUTER
+   ================================================================ */
+function parseHash(){
+  var path = location.pathname || '/';
+  var params = new URLSearchParams(location.search || '');
+  return {path:path, segs:path.split('/').filter(Boolean), params:params};
+}
+function go(path){
+  var parts = String(path).split('?');
+  history.pushState(null,'',parts[0]+(parts[1]?('?'+parts[1]):''));
+  render();
+}
+
+function render(){
+  closeModal();
+  var r = parseHash();
+  var main = document.getElementById('main');
+  var segs = r.segs;
+  updateHeader();
+  document.getElementById('mobileMenu').classList.remove('open');
+
+  if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); }
+  else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params); }
+  else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); }
+  else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); }
+  else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); }
+  else if(segs[0]==='inscription'){ main.innerHTML = pageRegister(); afterAuth(); }
+  else if(segs[0]==='compte'){ main.innerHTML = pageAccount(); afterAccount(); }
+  else if(segs[0]==='favoris'){ main.innerHTML = pageFavorites(); afterFavorites(); }
+  else if(segs[0]==='promoteur'){ main.innerHTML = pagePromoterDash(); afterPromoterDash(); }
+  else if(segs[0]==='admin'){ main.innerHTML = pageAdmin(); afterAdmin(); }
+  else { main.innerHTML = page404(); }
+
+  window.scrollTo(0,0);
+}
+window.addEventListener('popstate', render);
+document.addEventListener('click', function(e){
+  var a = e.target.closest('a');
+  if(!a) return;
+  var href = a.getAttribute('href');
+  if(!href || href.charAt(0)!=='/') return;
+  if(a.target === '_blank' || a.hasAttribute('download') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  go(href);
+});
+(function(){
+  // GitHub Pages SPA fallback: 404.html stashes the intended path, we restore it here.
+  var redirect = sessionStorage.getItem('yadra_redirect');
+  if(redirect){ sessionStorage.removeItem('yadra_redirect'); history.replaceState(null,'',redirect); }
+})();
+
+/* ---------------- Header ---------------- */
+function updateHeader(){
+  document.getElementById('navLogo').innerHTML = logoHTML();
+  document.getElementById('footLogo').innerHTML = logoHTML('sm');
+  document.getElementById('waFloat').innerHTML = ic('whatsapp');
+  document.getElementById('burgerBtn').innerHTML = ic('menu');
+  var favCount = getFavorites().length;
+  document.getElementById('navFavBtn').innerHTML = ic('heart')+(favCount?'<span style="position:absolute;top:-2px;right:-2px;background:#B76E4D;color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;">'+favCount+'</span>':'');
+  document.getElementById('navFavBtn').style.position='relative';
+  document.getElementById('navFavBtn').onclick = function(){ go('/favoris'); };
+  var user = currentUser();
+  var accBtn = document.getElementById('navAccountBtn');
+  accBtn.textContent = user ? (user.name.split(' ')[0]) : 'Connexion';
+  accBtn.onclick = function(){ go(user? '/compte':'/connexion'); };
+  var ctaBtn = document.getElementById('navCtaBtn');
+  ctaBtn.textContent = (user && user.type==='promoteur') ? 'Mon espace' : 'Espace promoteur';
+  ctaBtn.onclick = function(){ go('/promoteur'); };
+  document.getElementById('burgerBtn').onclick = function(){ document.getElementById('mobileMenu').classList.toggle('open'); };
+  document.getElementById('mmAuthBtn').textContent = user ? 'Déconnexion' : 'Connexion';
+  document.getElementById('mmAuthBtn').onclick = function(){ if(user){ logout(); } else { go('/connexion'); } document.getElementById('mobileMenu').classList.remove('open'); };
+  Array.prototype.forEach.call(document.querySelectorAll('.mobile-menu a'), function(a){ a.onclick=function(){ document.getElementById('mobileMenu').classList.remove('open'); }; });
+  document.getElementById('demoBanner').innerHTML = '';
+}
+
+/* ================================================================
+   PAGE: HOME
+   ================================================================ */
+function pageHome(){
+  var featured = PROJECTS.filter(function(p){return p.featured;}).slice(0,6);
+  var latest = PROJECTS.slice().reverse().slice(0,6);
+  return ''
+  +'<section class="hero">'
+    +'<div class="hero-bg" aria-hidden="true">'+zelligePattern('zHero',0.07)+'</div>'
+    +'<div class="wrap hero-content">'
+      +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
+      +'<h1>Votre prochain projet <em>commence ici.</em></h1>'
+      +'<p class="sub">Découvrez les projets immobiliers des promoteurs en Algérie — recherchez, consultez, sauvegardez et contactez, sans détour.</p>'
+      +'<form class="search-card" id="heroSearch">'
+        +'<div class="search-field"><label>Où</label>'
+          +'<select name="ville"><option value="">Toute l\'Algérie</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
+        +'<div class="search-field"><label>Type de bien</label>'
+          +'<select name="type"><option value="">Tous types</option><option>Appartement</option><option>Duplex</option><option>Villa</option><option>Résidence mixte</option></select></div>'
+        +'<div class="search-field"><label>Budget</label>'
+          +'<select name="budgetMax"><option value="">Indifférent</option><option value="10000000">Jusqu\'à 10 M DA</option><option value="15000000">Jusqu\'à 15 M DA</option><option value="25000000">Jusqu\'à 25 M DA</option><option value="50000000">Jusqu\'à 50 M DA</option></select></div>'
+        +'<button class="btn btn-primary" type="submit">'+ic('search')+' Rechercher</button>'
+      +'</form>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section">'
+    +'<div class="wrap">'
+      +'<div class="section-head"><div><h2>Projets à la une</h2><p class="desc">Une sélection de programmes suivis de près par notre équipe, pour leur emplacement ou la qualité de leur conception.</p></div>'
+        +'<a class="see-all" href="/projets">Voir tous les projets '+ic('chevronRight')+'</a></div>'
+      +'<div class="grid grid-cards">'+featured.map(projectCardHTML).join('')+'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
+    +'<div class="wrap">'
+      +'<div class="section-head"><div><h2>Explorer par ville</h2><p class="desc">Sept wilayas, des dizaines de programmes suivis en continu.</p></div></div>'
+      +'<div class="grid" style="grid-template-columns:repeat(2,1fr);">'
+        +WILAYA_ORDER.map(function(w){
+          var count = PROJECTS.filter(function(p){return p.wilaya===w;}).length;
+          return '<a class="city-tile" href="/projets?ville='+w+'">'+cityArtSVG('city-'+w)+'<div class="ct-label"><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div></a>';
+        }).join('')
+      +'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section">'
+    +'<div class="wrap">'
+      +'<div class="section-head"><div><h2>Pourquoi yadra!</h2><p class="desc">Une nouvelle façon, plus directe, de découvrir un projet immobilier en Algérie.</p></div></div>'
+      +'<div class="grid grid-3">'
+        +valueCard('shield','Promoteurs vérifiés','Chaque promoteur mis en avant passe par une vérification avant publication de ses projets sur la plateforme.')
+        +valueCard('search','Recherche directe','Où, quel type de bien, quel budget : une recherche simple, sans détour, pour trouver ce qui vous correspond.')
+        +valueCard('handshake','Contact immédiat','Contactez le promoteur en un clic, par formulaire ou WhatsApp, sans intermédiaire superflu.')
+      +'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section tight">'
+    +'<div class="wrap">'
+      +'<div class="grid grid-2">'
+        +'<div class="split-card">'
+          +'<span class="eyebrow">Acquéreurs</span><h3>Trouvez le projet qui vous ressemble</h3>'
+          +'<p>Parcourez les programmes par ville, budget et typologie, sauvegardez vos favoris et contactez directement le promoteur.</p>'
+          +'<ul>'
+            +'<li>'+ic('check')+'Recherche par wilaya, budget et typologie</li>'
+            +'<li>'+ic('check')+'Favoris sauvegardés, avant même de créer un compte</li>'
+            +'<li>'+ic('check')+'Contact direct — formulaire ou WhatsApp</li>'
+          +'</ul>'
+          +'<div><a class="btn btn-light" href="/projets">Explorer les projets</a></div>'
+        +'</div>'
+        +'<div class="split-card accent">'
+          +'<span class="eyebrow">Promoteurs</span><h3>Présentez vos programmes, générez des prospects</h3>'
+          +'<p>Publiez vos projets avec une présentation premium et recevez des demandes qualifiées d\'acquéreurs réellement intéressés.</p>'
+          +'<ul>'
+            +'<li>'+ic('check')+'Fiche projet complète : typologies, prix, plans, prestations</li>'
+            +'<li>'+ic('check')+'Suivi des demandes reçues, statut par statut</li>'
+            +'<li>'+ic('check')+'Statistiques de vos publications</li>'
+          +'</ul>'
+          +'<div><a class="btn btn-primary" href="/promoteur">Publier un projet</a></div>'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section">'
+    +'<div class="wrap">'
+      +'<div class="section-head"><div><h2>Derniers projets</h2><p class="desc">Les publications les plus récentes sur la plateforme.</p></div>'
+        +'<a class="see-all" href="/projets">Tout voir '+ic('chevronRight')+'</a></div>'
+      +'<div class="grid grid-cards">'+latest.map(projectCardHTML).join('')+'</div>'
+    +'</div>'
+  +'</section>';
+}
+function valueCard(icon,title,desc){ return '<div class="value-card">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+function afterHome(){
+  document.getElementById('heroSearch').addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = new FormData(e.target);
+    go('/projets'+qs({ville:f.get('ville'),type:f.get('type'),budgetMax:f.get('budgetMax')}));
+  });
+}
+
+/* ---------------- Project card (shared) ---------------- */
+function projectCardHTML(p){
+  var fav = isFavorite(p.id);
+  return '<div class="card" tabindex="0" role="link" onclick="App.go(\'/projets/'+p.wilaya+'/'+p.slug+'\')">'
+    +'<div class="card-media">'+artSVG(p.slug,400,300)
+      +'<div class="card-badges">'+(p.verified?'<span class="badge verified">'+ic('shield')+' Vérifié</span>':'')+'<span class="badge '+statutClass(p.statut)+'">'+statutLabel(p.statut)+'</span></div>'
+      +'<button class="fav-btn'+(fav?' active':'')+'" onclick="event.stopPropagation();App.toggleFav(\''+p.id+'\',this)" aria-label="Ajouter aux favoris">'+ic('heart')+'</button>'
+    +'</div>'
+    +'<div class="card-body">'
+      +'<div class="card-loc">'+ic('pin')+' '+p.commune+', '+WILAYAS[p.wilaya].label+'</div>'
+      +'<div class="card-title">'+esc(p.nom)+'</div>'
+      +'<div class="card-promoter">'+ic('shield')+' '+esc(p.promoter?p.promoter.name:'')+'</div>'
+      +'<div class="card-meta"><span>'+ic('bed')+' '+p.typologies.map(function(t){return t.label;}).join(', ')+'</span><span>'+ic('area')+' '+surfRange(p)+'</span></div>'
+      +'<div class="card-foot"><div class="card-price"><small>à partir de</small>'+moneyShort(p.prixMin)+'</div><span class="card-cta">Voir le projet</span></div>'
+    +'</div></div>';
+}
+
+/* ================================================================
+   PAGE: MARKETPLACE
+   ================================================================ */
+var marketState = null;
+function pageMarketplace(params){
+  marketState = {
+    ville: params.get('ville')||'', commune:'', type: params.get('type')||'', budgetMax: params.get('budgetMax')||'',
+    surfaceMin:'', pieces:'', livraison:'', statut:'', verifie: params.get('verifie')==='1', sort:'pertinence', q: params.get('q')||''
+  };
+  return ''
+  +'<div class="market-head wrap">'
+    +'<div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:#fff;">Projets</span></div>'
+    +'<div class="section-head" style="margin-top:10px;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Recherchez et filtrez les programmes immobiliers publiés par nos promoteurs.</p></div></div>'
+  +'</div>'
+  +'<div class="wrap market-layout">'
+    +'<aside class="filters" id="filtersPanel">'+filtersInnerHTML()+'</aside>'
+    +'<div>'
+      +'<div class="results-bar">'
+        +'<div class="results-count" id="resultsCount"></div>'
+        +'<div style="display:flex;gap:10px;align-items:center;">'
+          +'<button class="btn btn-ghost btn-sm mobile-filter-btn" id="mobileFilterBtn">'+ic('filter')+' Filtres</button>'
+          +'<select class="sort-select" id="sortSelect"><option value="pertinence">Pertinence</option><option value="prix-asc">Prix croissant</option><option value="prix-desc">Prix décroissant</option><option value="livraison">Livraison la plus proche</option></select>'
+        +'</div>'
+      +'</div>'
+      +'<div class="active-filters" id="activeFilters"></div>'
+      +'<div class="grid grid-cards" id="resultsGrid"></div>'
+    +'</div>'
+  +'</div>';
+}
+function filtersInnerHTML(){
+  return '<div style="display:flex;justify-content:space-between;align-items:center;"><h3>Filtres</h3><button class="mini-btn" id="resetFilters">Réinitialiser</button></div>'
+  +'<div class="f-group"><label class="f-title">Recherche</label><input type="text" id="fQ" placeholder="Nom du projet, quartier…"/></div>'
+  +'<div class="f-group"><label class="f-title">Wilaya</label><select id="fVille"><option value="">Toutes</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
+  +'<div class="f-group"><label class="f-title">Commune</label><select id="fCommune"><option value="">Toutes</option></select></div>'
+  +'<div class="f-group"><label class="f-title">Type de bien</label><div class="chip-row" id="fType">'+['Appartement','Duplex','Villa','Résidence mixte'].map(function(t){return '<button type="button" class="chip" data-val="'+t+'">'+t+'</button>';}).join('')+'</div></div>'
+  +'<div class="f-group"><label class="f-title">Budget max (DA)</label><select id="fBudget"><option value="">Indifférent</option><option value="10000000">10 M DA</option><option value="15000000">15 M DA</option><option value="25000000">25 M DA</option><option value="50000000">50 M DA</option><option value="999999999">50 M DA +</option></select></div>'
+  +'<div class="f-group"><label class="f-title">Surface min (m²)</label><input type="number" id="fSurface" placeholder="ex. 70"/></div>'
+  +'<div class="f-group"><label class="f-title">Pièces</label><div class="chip-row" id="fPieces">'+['F2','F3','F4','F5'].map(function(t){return '<button type="button" class="chip" data-val="'+t+'">'+t+'</button>';}).join('')+'</div></div>'
+  +'<div class="f-group"><label class="f-title">Statut</label><div class="chip-row" id="fStatut">'
+    +['sur-plan|Sur plan','construction|En construction','livre|Livré'].map(function(t){var a=t.split('|');return '<button type="button" class="chip" data-val="'+a[0]+'">'+a[1]+'</button>';}).join('')+'</div></div>'
+  +'<div class="f-group"><label class="f-title">Livraison</label><select id="fLivraison"><option value="">Toutes</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option></select></div>'
+  +'<div class="f-group"><label class="check-row"><input type="checkbox" id="fVerifie"/> Promoteur vérifié uniquement</label></div>';
+}
+function afterMarketplace(params){
+  var els = {
+    q: document.getElementById('fQ'), ville: document.getElementById('fVille'), commune: document.getElementById('fCommune'),
+    budget: document.getElementById('fBudget'), surface: document.getElementById('fSurface'), livraison: document.getElementById('fLivraison'), verifie: document.getElementById('fVerifie')
+  };
+  els.ville.value = marketState.ville;
+  refreshCommunes();
+  els.q.value = marketState.q;
+  function refreshCommunes(){
+    var w = els.ville.value;
+    var communes = w ? WILAYAS[w].communes : [];
+    els.commune.innerHTML = '<option value="">Toutes</option>'+communes.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
+  }
+  els.ville.addEventListener('change', function(){ marketState.ville=els.ville.value; refreshCommunes(); marketState.commune=''; applyFilters(); });
+  els.commune.addEventListener('change', function(){ marketState.commune=els.commune.value; applyFilters(); });
+  els.q.addEventListener('input', debounce(function(){ marketState.q=els.q.value; applyFilters(); },220));
+  els.budget.addEventListener('change', function(){ marketState.budgetMax=els.budget.value; applyFilters(); });
+  els.surface.addEventListener('input', debounce(function(){ marketState.surfaceMin=els.surface.value; applyFilters(); },220));
+  els.livraison.addEventListener('change', function(){ marketState.livraison=els.livraison.value; applyFilters(); });
+  els.verifie.addEventListener('change', function(){ marketState.verifie=els.verifie.checked; applyFilters(); });
+  Array.prototype.forEach.call(document.querySelectorAll('#fType .chip'), function(chip){
+    chip.addEventListener('click', function(){ marketState.type = marketState.type===chip.dataset.val?'':chip.dataset.val; applyFilters(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#fStatut .chip'), function(chip){
+    chip.addEventListener('click', function(){ marketState.statut = marketState.statut===chip.dataset.val?'':chip.dataset.val; applyFilters(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#fPieces .chip'), function(chip){
+    chip.addEventListener('click', function(){ marketState.pieces = marketState.pieces===chip.dataset.val?'':chip.dataset.val; applyFilters(); });
+  });
+  document.getElementById('sortSelect').addEventListener('change', function(e){ marketState.sort=e.target.value; applyFilters(); });
+  document.getElementById('resetFilters').addEventListener('click', function(){
+    marketState = {ville:'',commune:'',type:'',budgetMax:'',surfaceMin:'',pieces:'',livraison:'',statut:'',verifie:false,sort:'pertinence',q:''};
+    document.getElementById('filtersPanel').innerHTML = filtersInnerHTML();
+    afterMarketplace(new URLSearchParams());
+    applyFilters();
+  });
+  var mfb = document.getElementById('mobileFilterBtn');
+  if(mfb) mfb.addEventListener('click', function(){
+    var panel = document.getElementById('filtersPanel');
+    panel.style.position='fixed'; panel.style.inset='76px 12px 12px 12px'; panel.style.zIndex='58'; panel.style.maxHeight='calc(100vh - 100px)';
+    var closeBtn = document.createElement('button');
+    closeBtn.className='btn btn-primary btn-block'; closeBtn.textContent='Voir les résultats'; closeBtn.style.marginTop='10px';
+    closeBtn.onclick = function(){ panel.style.position=''; panel.style.inset=''; panel.style.zIndex=''; };
+    panel.appendChild(closeBtn);
+  });
+  applyFilters();
+}
+function debounce(fn,ms){ var t; return function(){ var a=arguments; clearTimeout(t); t=setTimeout(function(){ fn.apply(null,a); },ms); }; }
+function applyFilters(){
+  var s = marketState;
+  var results = getAllProjects().filter(function(p){
+    if(s.ville && p.wilaya!==s.ville) return false;
+    if(s.commune && p.commune!==s.commune) return false;
+    if(s.type && p.type!==s.type) return false;
+    if(s.budgetMax && p.prixMin > Number(s.budgetMax)) return false;
+    if(s.surfaceMin && p.surfaceMax < Number(s.surfaceMin)) return false;
+    if(s.pieces && !p.typologies.some(function(t){return t.label===s.pieces;})) return false;
+    if(s.statut && p.statut!==s.statut) return false;
+    if(s.livraison && p.livraison.indexOf(s.livraison)===-1) return false;
+    if(s.verifie && !p.verified) return false;
+    if(s.q){ var hay=(p.nom+' '+p.quartier+' '+p.commune).toLowerCase(); if(hay.indexOf(s.q.toLowerCase())===-1) return false; }
+    return true;
+  });
+  if(s.sort==='prix-asc') results.sort(function(a,b){return a.prixMin-b.prixMin;});
+  else if(s.sort==='prix-desc') results.sort(function(a,b){return b.prixMin-a.prixMin;});
+  else if(s.sort==='livraison') results.sort(function(a,b){return a.livraison.localeCompare(b.livraison);});
+
+  document.getElementById('resultsCount').innerHTML = '<b>'+results.length+'</b> projet'+(results.length>1?'s':'')+' trouvé'+(results.length>1?'s':'');
+  var grid = document.getElementById('resultsGrid');
+  grid.innerHTML = results.length ? results.map(projectCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1;">'+ic('search','ic')+'<h3>Aucun projet ne correspond</h3><p>Essayez d\'élargir votre recherche ou de réinitialiser les filtres.</p></div>';
+
+  var chips = [];
+  if(s.ville) chips.push(['Ville: '+WILAYAS[s.ville].label, function(){ marketState.ville=''; document.getElementById('fVille').value=''; applyFilters(); }]);
+  if(s.type) chips.push(['Type: '+s.type, function(){ marketState.type=''; applyFilters(); document.querySelectorAll('#fType .chip').forEach(function(c){c.classList.remove('active');}); }]);
+  if(s.budgetMax) chips.push(['Budget ≤ '+moneyShort(Number(s.budgetMax)), function(){ marketState.budgetMax=''; document.getElementById('fBudget').value=''; applyFilters(); }]);
+  if(s.verifie) chips.push(['Vérifié', function(){ marketState.verifie=false; document.getElementById('fVerifie').checked=false; applyFilters(); }]);
+  document.getElementById('activeFilters').innerHTML = chips.map(function(c,i){ return '<button class="chip active" data-i="'+i+'">'+esc(c[0])+' '+ic('close')+'</button>'; }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('#activeFilters .chip'), function(btn,i){ btn.addEventListener('click', function(){ chips[i][1](); }); });
+
+  Array.prototype.forEach.call(document.querySelectorAll('#fType .chip'), function(c){ c.classList.toggle('active', c.dataset.val===s.type); });
+  Array.prototype.forEach.call(document.querySelectorAll('#fStatut .chip'), function(c){ c.classList.toggle('active', c.dataset.val===s.statut); });
+  Array.prototype.forEach.call(document.querySelectorAll('#fPieces .chip'), function(c){ c.classList.toggle('active', c.dataset.val===s.pieces); });
+}
+
+/* ================================================================
+   PAGE: PROJECT DETAIL
+   ================================================================ */
+function pageDetail(wilaya,slug){
+  var p = getProjectBySlug(wilaya,slug);
+  if(!p) return page404();
+  var similar = getAllProjects().filter(function(x){return x.id!==p.id && (x.wilaya===p.wilaya || x.type===p.type);}).slice(0,3);
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/projets">Projets</a> '+ic('chevronRight')+' <a href="/projets?ville='+p.wilaya+'">'+WILAYAS[p.wilaya].label+'</a> '+ic('chevronRight')+' <span style="color:#fff;">'+esc(p.nom)+'</span></div></div>'
+  +'<div class="wrap"><div class="detail-gallery" id="detailGallery">'
+    +[0,1,2,3].map(function(i){ return '<div>'+artSVG(p.slug+'-g'+i,500,400)+'</div>'; }).join('')
+  +'</div></div>'
+  +'<div class="wrap"><div class="detail-header">'
+    +'<div class="detail-title"><h1>'+esc(p.nom)+'</h1><div class="loc">'+ic('pin')+' '+esc(p.adresse)+'</div>'
+      +'<a class="detail-promoter-chip" href="/promoteurs/'+(p.promoter?p.promoter.slug:'')+'"><span class="pchip-avatar">'+(p.promoter?p.promoter.name.charAt(0):'?')+'</span><span>'+esc(p.promoter?p.promoter.name:'Promoteur')+(p.verified?(' '+ic('shield')):'')+'</span></a>'
+    +'</div>'
+    +'<div class="price-box"><div class="amount tabular">'+moneyShort(p.prixMin)+' <small>à partir de</small></div>'
+      +'<div class="cta-row">'
+        +'<button class="btn btn-primary btn-block" onclick="App.contactModal(\''+p.id+'\')">Contacter le promoteur</button>'
+        +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' WhatsApp</a>'
+        +'<button class="btn btn-ghost btn-block" id="favBtnDetail" onclick="App.toggleFav(\''+p.id+'\',this,true)">'+ic('heart')+' '+(isFavorite(p.id)?'Retiré des favoris':'Ajouter aux favoris')+'</button>'
+      +'</div>'
+    +'</div>'
+  +'</div></div>'
+  +'<div class="wrap detail-grid"><div class="detail-main">'
+    +'<div class="stat-row">'
+      +'<div class="stat-tile"><div class="k">Type</div><div class="v" style="font-size:15px;">'+esc(p.type)+'</div></div>'
+      +'<div class="stat-tile"><div class="k">Surface</div><div class="v" style="font-size:15px;">'+surfRange(p)+'</div></div>'
+      +'<div class="stat-tile"><div class="k">Livraison</div><div class="v" style="font-size:15px;">'+esc(p.livraison)+'</div></div>'
+      +'<div class="stat-tile"><div class="k">Statut</div><div class="v" style="font-size:15px;"><span class="badge '+statutClass(p.statut)+'" style="position:static;">'+statutLabel(p.statut)+'</span></div></div>'
+    +'</div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Présentation</h2><div class="prose">'+esc(p.description)+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Points forts</h2><div class="chips-plain">'+p.pointsForts.map(function(x){return '<span class="chip-plain">'+ic('check')+esc(x)+'</span>';}).join('')+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Typologies &amp; disponibilités</h2>'
+      +'<div class="table-wrap"><table class="data typo-table"><thead><tr><th>Typologie</th><th>Surface</th><th>Prix à partir de</th><th>Disponibilité</th></tr></thead><tbody>'
+        +p.typologies.map(function(t){ return '<tr><td>'+t.label+'</td><td>'+t.surface+' m²</td><td class="tabular">'+money(t.prix)+'</td><td>'+t.dispo+' lot'+(t.dispo>1?'s':'')+'</td></tr>'; }).join('')
+      +'</tbody></table></div>'
+    +'</div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Prestations</h2><div class="chips-plain">'+p.prestations.map(function(x){return '<span class="chip-plain">'+ic(PRESTATION_ICON[x]||'sparkle')+esc(x)+'</span>';}).join('')+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Plans &amp; documents</h2><div class="doc-list">'
+      +'<div class="doc-item">'+ic('doc')+'<span class="fname">Plan de masse — '+esc(p.nom)+'.pdf</span><span class="fsize">2,4 Mo</span></div>'
+      +'<div class="doc-item">'+ic('doc')+'<span class="fname">Notice descriptive.pdf</span><span class="fsize">1,1 Mo</span></div>'
+      +'<div class="doc-item">'+ic('doc')+'<span class="fname">Plan '+p.typologies[0].label+' type.pdf</span><span class="fsize">640 Ko</span></div>'
+    +'</div><p class="form-note">Documents fournis à titre indicatif pour cette démonstration.</p></div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Localisation</h2>'
+      +'<div class="map-box">'+zelligePattern('zMap'+p.id,0.06)+'<div class="pin-center">'+ic('pin')+'<div style="margin-top:6px;color:#fff;font-weight:700;font-size:13px;">'+esc(p.adresse)+'</div></div></div>'
+    +'</div>'
+    +(p.promoter?('<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">À propos du promoteur</h2>'
+      +'<a class="split-card" style="flex-direction:row;align-items:center;gap:18px;" href="/promoteurs/'+p.promoter.slug+'">'
+      +'<span class="promo-logo" style="width:56px;height:56px;font-size:20px;">'+p.promoter.name.charAt(0)+'</span>'
+      +'<span><b style="display:block;color:#fff;font-family:var(--font-display);font-size:18px;">'+esc(p.promoter.name)+(p.verified?(' '+ic('shield')):'')+'</b><span style="color:var(--text-dim);font-size:13px;">'+esc(p.promoter.desc.slice(0,110))+'…</span></span>'
+      +'</a></div>'):'')
+    +(similar.length?('<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Projets similaires</h2><div class="grid grid-cards">'+similar.map(projectCardHTML).join('')+'</div></div>'):'')
+  +'</div>'
+  +'<aside><div class="side-block"><h3 style="color:#fff;font-size:15px;margin-bottom:12px;">Une question sur ce projet ?</h3>'
+    +'<p style="color:var(--text-dim);font-size:13px;margin-bottom:14px;">'+esc(p.promoter?p.promoter.name:'Le promoteur')+' vous répond directement.</p>'
+    +'<button class="btn btn-primary btn-block" onclick="App.contactModal(\''+p.id+'\')">Contacter le promoteur</button>'
+    +'<a class="btn btn-wa btn-block" style="margin-top:10px;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a>'
+  +'</div></aside>'
+  +'</div>'
+  +'<div class="mobile-cta-bar"><button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button><a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a></div>';
+}
+function afterDetail(){ /* interactions wired via inline handlers */ }
+
+/* ---------------- Contact modal ---------------- */
+window.App = window.App || {};
+App.go = go;
+App.toggleFav = function(id, btn, detailMode){
+  var active = toggleFavorite(id);
+  if(btn){
+    btn.classList.toggle('active', active);
+    if(detailMode){ btn.innerHTML = ic('heart')+' '+(active?'Retiré des favoris':'Ajouter aux favoris'); }
+  }
+  updateHeader();
+  toast(active ? 'Ajouté à vos favoris' : 'Retiré de vos favoris');
+};
+App.contactModal = function(projectId){
+  var p = getProjectById(projectId);
+  if(!p) return;
+  var user = currentUser();
+  openModal(
+    '<h2>Contacter '+esc(p.promoter?p.promoter.name:'le promoteur')+'</h2>'
+    +'<p style="color:var(--text-dim);font-size:13px;margin-top:6px;">à propos de <b style="color:#fff;">'+esc(p.nom)+'</b></p>'
+    +'<form id="contactForm">'
+      +'<div class="field"><label>Nom complet</label><input required name="name" value="'+(user?esc(user.name):'')+'"/></div>'
+      +'<div class="field-row"><div class="field"><label>Téléphone</label><input required name="phone" value="'+(user?esc(user.phone||''):'')+'" placeholder="05 55 12 34 56"/></div>'
+      +'<div class="field"><label>Email</label><input type="email" name="email" value="'+(user?esc(user.email):'')+'"/></div></div>'
+      +'<div class="field"><label>Message</label><textarea name="message">Bonjour, je suis intéressé(e) par le projet '+esc(p.nom)+'. Pouvez-vous me communiquer plus d\'informations ?</textarea></div>'
+      +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:18px;">Envoyer la demande</button>'
+      +'<a class="btn btn-wa btn-block" style="margin-top:10px;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' Ou écrire directement sur WhatsApp</a>'
+      +'<p class="form-note">En envoyant cette demande, vos coordonnées sont transmises à '+esc(p.promoter?p.promoter.name:'ce promoteur')+' via yadra!.</p>'
+    +'</form>'
+  );
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = new FormData(e.target);
+    addLead({projectId:p.id, projectName:p.nom, promoterId:p.promoterId, name:f.get('name'), phone:f.get('phone'), email:f.get('email'), message:f.get('message')});
+    closeModal();
+    toast('Votre demande a été envoyée à '+(p.promoter?p.promoter.name:'le promoteur'));
+  });
+};
+
+/* ================================================================
+   PAGE: PROMOTER PROFILE
+   ================================================================ */
+function pagePromoter(slug){
+  var pr = getPromoterBySlug(slug);
+  if(!pr) return page404();
+  var projects = getAllProjects().filter(function(p){return p.promoterId===pr.id;});
+  return ''
+  +'<section class="promo-hero"><div class="hero-bg">'+zelligePattern('zPromo'+pr.id,0.06)+'</div>'
+    +'<div class="wrap" style="position:relative;">'
+      +'<div class="breadcrumb" style="margin-bottom:20px;"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/projets">Projets</a> '+ic('chevronRight')+' <span style="color:#fff;">'+esc(pr.name)+'</span></div>'
+      +'<div class="promo-id"><span class="promo-logo">'+pr.name.charAt(0)+'</span>'
+        +'<div><div class="promo-name">'+esc(pr.name)+(pr.verified?(' '+ic('shield')):'')+'</div>'
+        +'<div class="promo-meta"><span>'+ic('pin')+' '+WILAYAS[pr.wilaya].label+'</span><span>'+ic('calendar')+' Depuis '+pr.founded+'</span><span>'+ic('buildings')+' '+projects.length+' projet'+(projects.length>1?'s':'')+'</span>'+(pr.verified?'<span class="badge verified" style="position:static;">'+ic('shield')+' Promoteur vérifié</span>':'<span class="badge" style="position:static;">Vérification en cours</span>')+'</div></div>'
+      +'</div>'
+    +'</div>'
+  +'</section>'
+  +'<div class="wrap detail-grid" style="padding-top:40px;"><div class="detail-main">'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">À propos</h2><div class="prose">'+esc(pr.desc)+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Projets de '+esc(pr.name)+'</h2>'
+      +(projects.length? '<div class="grid grid-cards">'+projects.map(projectCardHTML).join('')+'</div>' : '<div class="empty-state">'+ic('buildings','ic')+'<h3>Aucun projet publié pour le moment</h3><p>Revenez bientôt pour découvrir les prochains programmes de ce promoteur.</p></div>')
+    +'</div>'
+  +'</div>'
+  +'<aside><div class="side-block"><h3 style="color:#fff;font-size:15px;margin-bottom:12px;">Contacter '+esc(pr.name)+'</h3>'
+    +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLink('Bonjour '+pr.name+', je vous contacte via YADRA! au sujet de vos projets immobiliers.')+'">'+ic('whatsapp')+' WhatsApp</a>'
+    +'<a class="btn btn-ghost btn-block" style="margin-top:10px;" href="mailto:contact@yadra.dz">'+ic('mail')+' Email</a>'
+  +'</div></aside></div>';
+}
+function afterPromoter(){}
+
+/* ================================================================
+   PAGE: AUTH
+   ================================================================ */
+function pageLogin(){
+  return '<div class="auth-shell"><div class="auth-card">'
+    +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
+    +'<h1>Bon retour</h1><p class="sub">Connectez-vous pour retrouver vos favoris et vos demandes.</p>'
+    +'<form id="loginForm">'
+      +'<div class="field"><label>Email</label><input required type="email" name="email"/></div>'
+      +'<div class="field"><label>Mot de passe</label><input required type="password" name="password"/></div>'
+      +'<div id="loginError" class="form-error" style="display:none;"></div>'
+      +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Se connecter</button>'
+    +'</form>'
+    +'<p class="form-note" style="text-align:center;margin-top:18px;">Pas encore de compte ? <a href="/inscription" style="color:var(--accent-2);font-weight:700;">Créer un compte</a></p>'
+    +'<p class="form-note">Ceci est un compte de démonstration : n\'utilisez pas un mot de passe que vous utilisez ailleurs.</p>'
+  +'</div></div>';
+}
+function pageRegister(){
+  return '<div class="auth-shell"><div class="auth-card">'
+    +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
+    +'<h1>Créer un compte</h1><p class="sub">Rejoignez yadra! en tant qu\'acquéreur ou promoteur.</p>'
+    +'<div class="switcher" id="typeSwitch"><button type="button" class="active" data-val="acquereur">Acquéreur</button><button type="button" data-val="promoteur">Promoteur</button></div>'
+    +'<form id="registerForm">'
+      +'<div class="field"><label>Nom complet</label><input required name="name"/></div>'
+      +'<div id="companyField" style="display:none;" class="field"><label>Nom de l\'entreprise</label><input name="company"/></div>'
+      +'<div class="field-row"><div class="field"><label>Email</label><input required type="email" name="email"/></div><div class="field"><label>Téléphone</label><input required name="phone" placeholder="05 55 12 34 56"/></div></div>'
+      +'<div class="field"><label>Mot de passe</label><input required type="password" name="password" minlength="4"/></div>'
+      +'<div id="registerError" class="form-error" style="display:none;"></div>'
+      +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Créer mon compte</button>'
+    +'</form>'
+    +'<p class="form-note" style="text-align:center;margin-top:18px;">Déjà inscrit ? <a href="/connexion" style="color:var(--accent-2);font-weight:700;">Se connecter</a></p>'
+  +'</div></div>';
+}
+function afterAuth(){
+  var loginForm = document.getElementById('loginForm');
+  if(loginForm){
+    loginForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var f = new FormData(e.target);
+      var email = f.get('email').trim().toLowerCase();
+      var user = getUsers().filter(function(u){return u.email.toLowerCase()===email;})[0];
+      var err = document.getElementById('loginError');
+      if(!user || user.password!==f.get('password')){ err.textContent='Email ou mot de passe incorrect.'; err.style.display='block'; return; }
+      setSession({userId:user.id});
+      toast('Bienvenue, '+user.name.split(' ')[0]+' !');
+      go(user.type==='promoteur' ? '/promoteur' : '/compte');
+    });
+  }
+  var regForm = document.getElementById('registerForm');
+  if(regForm){
+    var type = 'acquereur';
+    var sw = document.getElementById('typeSwitch');
+    sw.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      type = btn.dataset.val;
+      Array.prototype.forEach.call(sw.children, function(b){ b.classList.toggle('active', b===btn); });
+      document.getElementById('companyField').style.display = type==='promoteur' ? 'flex':'none';
+    });
+    regForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var f = new FormData(e.target);
+      var email = f.get('email').trim().toLowerCase();
+      var err = document.getElementById('registerError');
+      if(getUsers().some(function(u){return u.email.toLowerCase()===email;})){ err.textContent='Un compte existe déjà avec cet email.'; err.style.display='block'; return; }
+      var users = getUsers();
+      var newUser = {id:uid('user'), name:f.get('name'), email:f.get('email'), phone:f.get('phone'), password:f.get('password'), type:type, createdAt:new Date().toISOString()};
+      if(type==='promoteur'){
+        var company = f.get('company') || (f.get('name')+' Immobilier');
+        var promoter = {id:uid('pr'), name:company, slug:company.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''), wilaya:'alger', verified:false, founded:new Date().getFullYear(), desc:'Nouveau promoteur inscrit sur yadra!.'};
+        addExtraPromoter(promoter);
+        newUser.promoterId = promoter.id;
+      }
+      users.push(newUser); saveUsers(users);
+      setSession({userId:newUser.id});
+      toast('Compte créé, bienvenue '+newUser.name.split(' ')[0]+' !');
+      go(type==='promoteur' ? '/promoteur' : '/compte');
+    });
+  }
+}
+
+/* ================================================================
+   PAGE: ACCOUNT
+   ================================================================ */
+function pageAccount(){
+  var user = currentUser();
+  if(!user) return authGate('Connectez-vous pour accéder à votre compte.');
+  var leads = getLeads().filter(function(l){ return l.email===user.email || l.phone===user.phone; });
+  return '<div class="wrap dash-shell">'
+    +'<div class="dash-head"><h1>Bonjour, '+esc(user.name.split(' ')[0])+'</h1><button class="btn btn-ghost btn-sm" id="logoutBtn">'+ic('logout')+' Déconnexion</button></div>'
+    +'<div class="tab-row" id="accTabs"><button class="tab-btn active" data-t="infos">Mes informations</button><button class="tab-btn" data-t="demandes">Mes demandes</button><button class="tab-btn" data-t="favoris">Mes favoris</button></div>'
+    +'<div id="accBody"></div>'
+  +'</div>';
+}
+function afterAccount(){
+  var user = currentUser(); if(!user) return;
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  var tabs = document.getElementById('accTabs');
+  function renderTab(t){
+    var body = document.getElementById('accBody');
+    if(t==='infos'){
+      body.innerHTML = '<div class="side-block" style="max-width:480px;">'
+        +'<div class="field"><label>Nom</label><input value="'+esc(user.name)+'" readonly/></div>'
+        +'<div class="field"><label>Email</label><input value="'+esc(user.email)+'" readonly/></div>'
+        +'<div class="field"><label>Téléphone</label><input value="'+esc(user.phone||'')+'" readonly/></div>'
+        +'<div class="field"><label>Type de compte</label><input value="'+(user.type==='promoteur'?'Promoteur':'Acquéreur')+'" readonly/></div>'
+        +'<p class="form-note">Les informations de ce compte de démonstration sont stockées uniquement dans ce navigateur.</p>'
+      +'</div>';
+    } else if(t==='demandes'){
+      var leads = getLeads().filter(function(l){ return l.email===user.email || l.phone===user.phone; });
+      body.innerHTML = leads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
+        +leads.map(function(l){ return '<tr><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
+        +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande envoyée</h3><p>Contactez un promoteur depuis une fiche projet pour la voir apparaître ici.</p></div>';
+    } else {
+      var favs = getFavorites().map(getProjectById).filter(Boolean);
+      body.innerHTML = favs.length ? ('<div class="grid grid-cards">'+favs.map(projectCardHTML).join('')+'</div>') : '<div class="empty-state">'+ic('heart','ic')+'<h3>Aucun favori</h3><p>Ajoutez des projets à vos favoris pour les retrouver ici.</p></div>';
+    }
+  }
+  tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
+  renderTab('infos');
+}
+function statusPillClass(s){ return s==='Nouveau'?'nouveau': s==='Contacté'?'contacte': s==='En cours'?'encours':'termine'; }
+
+/* ================================================================
+   PAGE: FAVORITES
+   ================================================================ */
+function pageFavorites(){
+  var favs = getFavorites().map(getProjectById).filter(Boolean);
+  return '<div class="wrap dash-shell">'
+    +'<div class="dash-head"><h1>Mes favoris</h1></div>'
+    +(favs.length ? '<div class="grid grid-cards">'+favs.map(projectCardHTML).join('')+'</div>'
+      : '<div class="empty-fav">'+ic('heart','ic')+'<h3 style="color:#fff;font-size:20px;margin:14px 0 8px;">Vous n\'avez pas encore de favoris</h3><p style="color:var(--text-dim);font-size:13.5px;margin-bottom:22px;">Vos favoris sont sauvegardés localement, dès maintenant — pas besoin de créer un compte pour commencer.</p><a class="btn btn-primary" href="/projets">Explorer les projets</a></div>')
+  +'</div>';
+}
+function afterFavorites(){}
+
+/* ================================================================
+   PAGE: PROMOTER DASHBOARD
+   ================================================================ */
+function pagePromoterDash(){
+  var user = currentUser();
+  if(!user) return authGate('Connectez-vous avec un compte promoteur pour gérer vos projets.');
+  if(user.type!=='promoteur') return authGate('Cet espace est réservé aux comptes promoteur. Votre compte est un compte acquéreur.');
+  var pr = getPromoterById(user.promoterId);
+  var myProjects = getAllProjects().filter(function(p){return p.promoterId===user.promoterId;});
+  var myLeads = getLeads().filter(function(l){return l.promoterId===user.promoterId;});
+  return '<div class="wrap dash-shell">'
+    +'<div class="dash-head"><div><h1>Espace promoteur</h1><p style="color:var(--text-dim);font-size:13px;margin-top:4px;">'+esc(pr?pr.name:'')+(pr&&pr.verified?(' '+ic('shield')):' — vérification en attente')+'</p></div>'
+      +'<button class="btn btn-primary btn-sm" id="newProjectBtn">'+ic('plus')+' Ajouter un projet</button></div>'
+    +'<div class="stat-grid">'
+      +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v">'+myProjects.length+'</div></div>'
+      +'<div class="stat-card"><div class="k">Demandes reçues</div><div class="v">'+myLeads.length+'</div></div>'
+      +'<div class="stat-card"><div class="k">Nouvelles demandes</div><div class="v">'+myLeads.filter(function(l){return l.status==='Nouveau';}).length+'</div><div class="d">à traiter</div></div>'
+      +'<div class="stat-card"><div class="k">Brouillons</div><div class="v">'+getDrafts().filter(function(d){return d.promoterId===user.promoterId && d.status==='brouillon';}).length+'</div></div>'
+    +'</div>'
+    +'<div class="tab-row" id="prTabs"><button class="tab-btn active" data-t="projets">Mes projets</button><button class="tab-btn" data-t="demandes">Demandes</button><button class="tab-btn" data-t="stats">Statistiques</button></div>'
+    +'<div id="prBody"></div>'
+  +'</div>';
+}
+function afterPromoterDash(){
+  var user = currentUser(); if(!user || user.type!=='promoteur') return;
+  document.getElementById('newProjectBtn').addEventListener('click', function(){ openWizard(); });
+  var tabs = document.getElementById('prTabs');
+  function renderTab(t){
+    var body = document.getElementById('prBody');
+    if(t==='projets'){
+      var live = getAllProjects().filter(function(p){return p.promoterId===user.promoterId;});
+      var drafts = getDrafts().filter(function(d){return d.promoterId===user.promoterId;});
+      var rows = live.map(function(p){ return {label:p.nom, statusHtml:'<span class="status-pill valide">Publié</span>', extra:p}; })
+        .concat(drafts.map(function(d){ var cls = d.status==='attente'?'attente':d.status==='refuse'?'refuse':d.status==='valide'?'valide':'attente'; var lbl = d.status==='brouillon'?'Brouillon':d.status==='attente'?'En attente':d.status==='refuse'?'Refusé':'Publié'; return {label:d.nom||'(sans titre)', statusHtml:'<span class="status-pill '+(d.status==='brouillon'?'attente':cls)+'">'+lbl+'</span>', draft:d}; }));
+      body.innerHTML = rows.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Statut</th><th></th></tr></thead><tbody>'
+        +rows.map(function(r,i){ return '<tr><td>'+esc(r.label)+'</td><td>'+r.statusHtml+'</td><td class="row-actions">'+(r.draft?('<button class="mini-btn" data-edit="'+i+'">Modifier</button><button class="mini-btn danger" data-del="'+i+'">Supprimer</button>'):'<button class="mini-btn" data-view="'+(r.extra?r.extra.id:'')+'">Voir</button>')+'</td></tr>'; }).join('')
+        +'</tbody></table></div>') : '<div class="empty-state">'+ic('buildings','ic')+'<h3>Aucun projet pour le moment</h3><p>Ajoutez votre premier projet pour le présenter aux acquéreurs.</p></div>';
+      Array.prototype.forEach.call(body.querySelectorAll('[data-view]'), function(b){ b.addEventListener('click', function(){ var p=getProjectById(b.dataset.view); if(p) go('/projets/'+p.wilaya+'/'+p.slug); }); });
+      Array.prototype.forEach.call(body.querySelectorAll('[data-edit]'), function(b){ b.addEventListener('click', function(){ openWizard(rows[Number(b.dataset.edit)].draft); }); });
+      Array.prototype.forEach.call(body.querySelectorAll('[data-del]'), function(b){ b.addEventListener('click', function(){
+        var d = rows[Number(b.dataset.del)].draft;
+        saveDrafts(getDrafts().filter(function(x){return x.id!==d.id;}));
+        toast('Brouillon supprimé'); renderTab('projets');
+      }); });
+    } else if(t==='demandes'){
+      var myLeads = getLeads().filter(function(l){return l.promoterId===user.promoterId;});
+      body.innerHTML = myLeads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Contact</th><th>Projet</th><th>Date</th><th>Statut</th><th></th></tr></thead><tbody>'
+        +myLeads.map(function(l){ return '<tr><td>'+esc(l.name)+'<br><span style="color:var(--text-dim);font-size:11.5px;">'+esc(l.phone)+'</span></td><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td><td><select class="mini-select" data-lead="'+l.id+'"><option'+(l.status==='Nouveau'?' selected':'')+'>Nouveau</option><option'+(l.status==='Contacté'?' selected':'')+'>Contacté</option><option'+(l.status==='En cours'?' selected':'')+'>En cours</option><option'+(l.status==='Terminé'?' selected':'')+'>Terminé</option></select></td></tr>'; }).join('')
+        +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande reçue</h3><p>Les demandes des acquéreurs intéressés par vos projets apparaîtront ici.</p></div>';
+      Array.prototype.forEach.call(body.querySelectorAll('[data-lead]'), function(sel){ sel.addEventListener('change', function(){
+        var leads = getLeads(); var lead = leads.filter(function(x){return x.id===sel.dataset.lead;})[0]; if(lead){ lead.status=sel.value; saveLeads(leads); toast('Statut mis à jour'); }
+      }); });
+    } else {
+      var live = getAllProjects().filter(function(p){return p.promoterId===user.promoterId;});
+      var myLeads = getLeads().filter(function(l){return l.promoterId===user.promoterId;});
+      var byStatus = {};
+      myLeads.forEach(function(l){ byStatus[l.status]=(byStatus[l.status]||0)+1; });
+      body.innerHTML = '<div class="side-block"><h3 style="color:#fff;font-size:15px;margin-bottom:16px;">Demandes par statut</h3>'
+        +['Nouveau','Contacté','En cours','Terminé'].map(function(s){ var n=byStatus[s]||0; var max=Math.max(1,myLeads.length); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+s+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
+        +'<p class="form-note">'+live.length+' projet'+(live.length>1?'s publiés':' publié')+' au total.</p>'
+      +'</div>';
+    }
+  }
+  tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
+  renderTab('projets');
+}
+
+/* ---------------- Wizard (add / edit project) ---------------- */
+var WIZ_STEPS = ['Informations','Localisation','Typologies & prix','Photos','Prestations','Livraison','Prévisualisation'];
+function openWizard(existingDraft){
+  var user = currentUser();
+  var state = existingDraft ? JSON.parse(JSON.stringify(existingDraft)) : {
+    id: uid('draft'), promoterId:user.promoterId, nom:'', type:'Appartement', description:'',
+    wilaya:'alger', commune:'', quartier:'', typologies:[{label:'F2',surface:60,prix:9000000,dispo:5}],
+    photos:[0,1,2], prestations:[], pointsForts:[], statut:'sur-plan', livraison:'T4 2028', status:'brouillon'
+  };
+  var step = 0;
+  renderWizard();
+  function renderWizard(){
+    document.getElementById('main').insertAdjacentHTML('afterbegin', '');
+    var overlayHtml = '<div class="modal-overlay" id="wizOverlay" style="align-items:flex-start;padding:40px 16px;">'
+      +'<div class="modal-card" style="max-width:760px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h2>Ajouter un projet</h2><button class="icon-btn" id="wizClose">'+ic('close')+'</button></div>'
+      +'<div class="wizard-steps">'+WIZ_STEPS.map(function(s,i){ return '<div class="wiz-step'+(i===step?' active':'')+(i<step?' done':'')+'"><div class="n">Étape '+(i+1)+'</div><div class="t">'+s+'</div></div>'; }).join('')+'</div>'
+      +'<div class="wizard-panel" id="wizPanel"></div>'
+      +'<div class="wizard-nav">'
+        +'<div style="display:flex;gap:8px;"><button class="btn btn-ghost btn-sm" id="wizPrev"'+(step===0?' disabled':'')+'>Précédent</button><button class="btn btn-ghost btn-sm" id="wizDraft">Enregistrer comme brouillon</button></div>'
+        +(step<WIZ_STEPS.length-1 ? '<button class="btn btn-primary btn-sm" id="wizNext">Suivant</button>' : '<button class="btn btn-primary btn-sm" id="wizSubmit">Soumettre à validation</button>')
+      +'</div></div></div>';
+    document.getElementById('modalRoot').innerHTML = overlayHtml;
+    document.getElementById('wizClose').onclick = closeModal;
+    document.getElementById('wizPrev').onclick = function(){ if(step>0){ step--; renderWizard(); } };
+    var nextBtn = document.getElementById('wizNext'); if(nextBtn) nextBtn.onclick = function(){ if(step<WIZ_STEPS.length-1){ step++; renderWizard(); } };
+    document.getElementById('wizDraft').onclick = function(){ persist('brouillon'); closeModal(); toast('Brouillon enregistré'); render(); };
+    var submitBtn = document.getElementById('wizSubmit'); if(submitBtn) submitBtn.onclick = function(){ persist('attente'); closeModal(); toast('Projet soumis pour validation'); render(); };
+    renderStep();
+  }
+  function persist(status){
+    state.status = status;
+    state.slug = (state.slug) || (state.nom||'projet').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')+'-'+state.id.slice(-4);
+    var d = getDrafts();
+    var i = d.findIndex(function(x){return x.id===state.id;});
+    if(i===-1) d.push(state); else d[i]=state;
+    saveDrafts(d);
+  }
+  function renderStep(){
+    var panel = document.getElementById('wizPanel');
+    if(step===0){
+      panel.innerHTML = '<div class="field"><label>Nom du projet</label><input id="wNom" value="'+esc(state.nom)+'"/></div>'
+        +'<div class="field"><label>Type de bien</label><select id="wType">'+['Appartement','Duplex','Villa','Résidence mixte'].map(function(t){return '<option'+(t===state.type?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div>'
+        +'<div class="field"><label>Description</label><textarea id="wDesc">'+esc(state.description)+'</textarea></div>';
+      byId('wNom').oninput = function(e){ state.nom=e.target.value; };
+      byId('wType').onchange = function(e){ state.type=e.target.value; };
+      byId('wDesc').oninput = function(e){ state.description=e.target.value; };
+    } else if(step===1){
+      panel.innerHTML = '<div class="field"><label>Wilaya</label><select id="wWilaya">'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'"'+(w===state.wilaya?' selected':'')+'>'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
+        +'<div class="field"><label>Commune</label><select id="wCommune">'+WILAYAS[state.wilaya].communes.map(function(c){return '<option'+(c===state.commune?' selected':'')+'>'+c+'</option>';}).join('')+'</select></div>'
+        +'<div class="field"><label>Quartier / adresse</label><input id="wQuartier" value="'+esc(state.quartier)+'"/></div>';
+      byId('wWilaya').onchange = function(e){ state.wilaya=e.target.value; renderStep(); };
+      byId('wCommune').onchange = function(e){ state.commune=e.target.value; };
+      byId('wQuartier').oninput = function(e){ state.quartier=e.target.value; };
+      if(!state.commune) state.commune = WILAYAS[state.wilaya].communes[0];
+    } else if(step===2){
+      panel.innerHTML = '<div id="wTypoRows"></div><button class="mini-btn" id="wAddTypo" type="button">'+ic('plus')+' Ajouter une ligne</button>';
+      function drawRows(){
+        var rowsEl = byId('wTypoRows');
+        rowsEl.innerHTML = state.typologies.map(function(t,i){
+          return '<div class="field-row" style="grid-template-columns:1fr 1fr 1fr 1fr auto;align-items:end;margin-bottom:10px;">'
+            +'<div class="field" style="margin-top:0;"><label>Typologie</label><input data-i="'+i+'" data-k="label" value="'+esc(t.label)+'"/></div>'
+            +'<div class="field" style="margin-top:0;"><label>Surface m²</label><input data-i="'+i+'" data-k="surface" type="number" value="'+t.surface+'"/></div>'
+            +'<div class="field" style="margin-top:0;"><label>Prix DA</label><input data-i="'+i+'" data-k="prix" type="number" value="'+t.prix+'"/></div>'
+            +'<div class="field" style="margin-top:0;"><label>Disponibles</label><input data-i="'+i+'" data-k="dispo" type="number" value="'+t.dispo+'"/></div>'
+            +'<button class="mini-btn danger" data-rm="'+i+'" type="button" style="margin-bottom:16px;">'+ic('trash')+'</button>'
+          +'</div>';
+        }).join('');
+        Array.prototype.forEach.call(rowsEl.querySelectorAll('input'), function(inp){ inp.oninput=function(){ var i=Number(inp.dataset.i),k=inp.dataset.k; state.typologies[i][k] = (k==='label')?inp.value:Number(inp.value); }; });
+        Array.prototype.forEach.call(rowsEl.querySelectorAll('[data-rm]'), function(b){ b.onclick=function(){ state.typologies.splice(Number(b.dataset.rm),1); drawRows(); }; });
+      }
+      drawRows();
+      byId('wAddTypo').onclick = function(){ state.typologies.push({label:'F3',surface:78,prix:10000000,dispo:3}); drawRows(); };
+    } else if(step===3){
+      panel.innerHTML = '<p class="form-note" style="margin-bottom:14px;">Ajoutez des visuels pour votre projet (démonstration — génère un rendu signature).</p>'
+        +'<div class="grid" style="grid-template-columns:repeat(3,1fr);" id="wPhotos"></div>';
+      function drawPhotos(){
+        var wrap = byId('wPhotos');
+        wrap.innerHTML = state.photos.map(function(seed,i){ return '<div class="photo-tile">'+artSVG(state.id+'-'+seed,300,225)+'<button class="mini-btn danger" data-rmp="'+i+'" style="position:absolute;top:8px;right:8px;">'+ic('trash')+'</button></div>'; }).join('')
+          + (state.photos.length<6 ? '<button class="photo-add" id="wAddPhoto" type="button">'+ic('upload')+' Ajouter</button>' : '');
+        var addBtn = byId('wAddPhoto'); if(addBtn) addBtn.onclick = function(){ state.photos.push(Date.now()%9999); drawPhotos(); };
+        Array.prototype.forEach.call(wrap.querySelectorAll('[data-rmp]'), function(b){ b.onclick=function(){ state.photos.splice(Number(b.dataset.rmp),1); drawPhotos(); }; });
+      }
+      drawPhotos();
+    } else if(step===4){
+      panel.innerHTML = '<div class="f-group"><label class="f-title">Prestations</label><div class="chip-row" id="wPrest">'+PRESTATIONS_POOL.map(function(p){ return '<button type="button" class="chip'+(state.prestations.indexOf(p)!==-1?' active':'')+'" data-v="'+esc(p)+'">'+p+'</button>'; }).join('')+'</div></div>'
+        +'<div class="f-group" style="margin-top:16px;"><label class="f-title">Points forts</label><div class="chip-row" id="wPF">'+POINTSFORTS_POOL.map(function(p){ return '<button type="button" class="chip'+(state.pointsForts.indexOf(p)!==-1?' active':'')+'" data-v="'+esc(p)+'">'+p+'</button>'; }).join('')+'</div></div>';
+      byId('wPrest').addEventListener('click', function(e){ var b=e.target.closest('.chip'); if(!b) return; var v=b.dataset.v; var i=state.prestations.indexOf(v); if(i===-1) state.prestations.push(v); else state.prestations.splice(i,1); b.classList.toggle('active'); });
+      byId('wPF').addEventListener('click', function(e){ var b=e.target.closest('.chip'); if(!b) return; var v=b.dataset.v; var i=state.pointsForts.indexOf(v); if(i===-1) state.pointsForts.push(v); else state.pointsForts.splice(i,1); b.classList.toggle('active'); });
+    } else if(step===5){
+      panel.innerHTML = '<div class="f-group"><label class="f-title">Statut</label><div class="chip-row" id="wStatut">'
+        +[['sur-plan','Sur plan'],['construction','En construction'],['livre','Livré']].map(function(s){ return '<button type="button" class="chip'+(state.statut===s[0]?' active':'')+'" data-v="'+s[0]+'">'+s[1]+'</button>'; }).join('')+'</div></div>'
+        +'<div class="field"><label>Livraison estimée</label><input id="wLivraison" value="'+esc(state.livraison)+'" placeholder="ex. T3 2028"/></div>';
+      byId('wStatut').addEventListener('click', function(e){ var b=e.target.closest('.chip'); if(!b) return; state.statut=b.dataset.v; Array.prototype.forEach.call(byId('wStatut').children,function(c){c.classList.toggle('active',c===b);}); });
+      byId('wLivraison').oninput = function(e){ state.livraison=e.target.value; };
+    } else if(step===6){
+      var prices = state.typologies.map(function(t){return Number(t.prix)||0;});
+      var preview = {id:'preview', wilaya:state.wilaya, slug:'apercu', nom:state.nom||'(Nom du projet)', commune:state.commune, promoter:getPromoterById(state.promoterId), verified:false, statut:state.statut, typologies:state.typologies, surfaceMin:Math.min.apply(null,state.typologies.map(function(t){return Number(t.surface)||0;})), surfaceMax:Math.max.apply(null,state.typologies.map(function(t){return Number(t.surface)||0;})), prixMin:Math.min.apply(null,prices), slugSafe:true};
+      panel.innerHTML = '<p class="form-note" style="margin-bottom:14px;">Aperçu de la carte telle qu\'elle apparaîtra dans la marketplace.</p>'
+        +'<div style="max-width:340px;">'+'<div class="card">'
+          +'<div class="card-media">'+artSVG(state.id,400,300)+'<div class="card-badges"><span class="badge '+statutClass(state.statut)+'">'+statutLabel(state.statut)+'</span></div></div>'
+          +'<div class="card-body"><div class="card-loc">'+ic('pin')+' '+esc(state.commune)+', '+WILAYAS[state.wilaya].label+'</div><div class="card-title">'+esc(state.nom||'(Nom du projet)')+'</div>'
+          +'<div class="card-meta"><span>'+ic('bed')+' '+state.typologies.map(function(t){return t.label;}).join(', ')+'</span></div>'
+          +'<div class="card-foot"><div class="card-price">'+moneyShort(preview.prixMin||0)+'</div><span class="card-cta">Voir le projet</span></div></div></div></div>'
+        +'<p class="form-note">En soumettant, votre projet passe en statut « en attente » et sera revu avant publication (page Administration).</p>';
+    }
+  }
+  function byId(id){ return document.getElementById(id); }
+}
+function authGate(msg){
+  return '<div class="auth-shell"><div class="auth-card" style="text-align:center;">'
+    +ic('lock','ic')+'<h1 style="margin-top:14px;">Connexion requise</h1><p class="sub">'+esc(msg)+'</p>'
+    +'<a class="btn btn-primary btn-block" href="/connexion" style="margin-top:20px;">Se connecter</a>'
+    +'<a class="btn btn-ghost btn-block" href="/inscription" style="margin-top:10px;">Créer un compte</a>'
+  +'</div></div>';
+}
+
+/* ================================================================
+   PAGE: ADMIN
+   ================================================================ */
+function pageAdmin(){
+  return '<div class="wrap dash-shell">'
+    +'<div class="dash-head"><div><h1>Administration</h1><p style="color:var(--text-dim);font-size:13px;">Mode démonstration — cette console serait protégée côté serveur en production.</p></div></div>'
+    +'<div class="tab-row" id="adminTabs">'
+      +'<button class="tab-btn active" data-t="projets">Projets</button>'
+      +'<button class="tab-btn" data-t="promoteurs">Promoteurs</button>'
+      +'<button class="tab-btn" data-t="utilisateurs">Utilisateurs</button>'
+      +'<button class="tab-btn" data-t="demandes">Demandes</button>'
+      +'<button class="tab-btn" data-t="signalements">Signalements</button>'
+      +'<button class="tab-btn" data-t="stats">Statistiques</button>'
+    +'</div>'
+    +'<div id="adminBody"></div>'
+  +'</div>';
+}
+function afterAdmin(){
+  var tabs = document.getElementById('adminTabs');
+  function renderTab(t){
+    var body = document.getElementById('adminBody');
+    if(t==='projets'){
+      var drafts = getDrafts();
+      var disabled = getDisabled();
+      var rows = PROJECTS.map(function(p){ return {id:p.id,nom:p.nom,promoter:p.promoter?p.promoter.name:'',status:disabled.indexOf(p.id)!==-1?'refuse':'valide',isDraft:false}; })
+        .concat(drafts.map(function(d){ var pr=getPromoterById(d.promoterId); return {id:d.id,nom:d.nom||'(sans titre)',promoter:pr?pr.name:'',status:d.status,isDraft:true}; }));
+      body.innerHTML = '<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Promoteur</th><th>Statut</th><th></th></tr></thead><tbody>'
+        +rows.map(function(r){ return '<tr><td>'+esc(r.nom)+'</td><td>'+esc(r.promoter)+'</td><td><span class="status-pill '+(r.status==='attente'?'attente':r.status==='refuse'?'refuse':r.status==='brouillon'?'attente':'valide')+'">'+(r.status==='attente'?'En attente':r.status==='refuse'?'Refusé/Désactivé':r.status==='brouillon'?'Brouillon':'Publié')+'</span></td>'
+          +'<td class="row-actions">'+(r.isDraft?('<button class="mini-btn" data-approve="'+r.id+'">Valider</button><button class="mini-btn danger" data-reject="'+r.id+'">Refuser</button>'):('<button class="mini-btn" data-toggle="'+r.id+'">'+(r.status==='refuse'?'Réactiver':'Désactiver')+'</button>'))+'</td></tr>'; }).join('')
+        +'</tbody></table></div>';
+      Array.prototype.forEach.call(body.querySelectorAll('[data-approve]'), function(b){ b.onclick=function(){ var d=getDrafts(); var x=d.filter(function(z){return z.id===b.dataset.approve;})[0]; if(x){x.status='valide'; saveDrafts(d); toast('Projet validé et publié'); renderTab('projets');} }; });
+      Array.prototype.forEach.call(body.querySelectorAll('[data-reject]'), function(b){ b.onclick=function(){ var d=getDrafts(); var x=d.filter(function(z){return z.id===b.dataset.reject;})[0]; if(x){x.status='refuse'; saveDrafts(d); toast('Projet refusé'); renderTab('projets');} }; });
+      Array.prototype.forEach.call(body.querySelectorAll('[data-toggle]'), function(b){ b.onclick=function(){ toggleDisabled(b.dataset.toggle); toast('Statut mis à jour'); renderTab('projets'); }; });
+    } else if(t==='promoteurs'){
+      var proms = getAllPromoters();
+      body.innerHTML = '<div class="table-wrap"><table class="data"><thead><tr><th>Promoteur</th><th>Wilaya</th><th>Statut</th><th></th></tr></thead><tbody>'
+        +proms.map(function(p){ return '<tr><td>'+esc(p.name)+'</td><td>'+WILAYAS[p.wilaya].label+'</td><td><span class="status-pill '+(p.verified?'valide':'attente')+'">'+(p.verified?'Vérifié':'Non vérifié')+'</span></td><td class="row-actions"><button class="mini-btn" data-verify="'+p.id+'">'+(p.verified?'Retirer vérif.':'Vérifier')+'</button></td></tr>'; }).join('')
+        +'</tbody></table></div>';
+      Array.prototype.forEach.call(body.querySelectorAll('[data-verify]'), function(b){ b.onclick=function(){ var p=getPromoterById(b.dataset.verify); setPromoterOverride(p.id,{verified:!p.verified}); toast('Promoteur mis à jour'); renderTab('promoteurs'); }; });
+    } else if(t==='utilisateurs'){
+      var users = getUsers();
+      body.innerHTML = users.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Nom</th><th>Email</th><th>Type</th><th>Inscrit le</th></tr></thead><tbody>'
+        +users.map(function(u){ return '<tr><td>'+esc(u.name)+'</td><td>'+esc(u.email)+'</td><td>'+(u.type==='promoteur'?'Promoteur':'Acquéreur')+'</td><td>'+new Date(u.createdAt).toLocaleDateString('fr-FR')+'</td></tr>'; }).join('')
+        +'</tbody></table></div>') : '<div class="empty-state">'+ic('users','ic')+'<h3>Aucun utilisateur inscrit</h3><p>Les comptes créés depuis ce navigateur apparaîtront ici.</p></div>';
+    } else if(t==='demandes'){
+      var leads = getLeads();
+      body.innerHTML = leads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Contact</th><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
+        +leads.map(function(l){ return '<tr><td>'+esc(l.name)+'</td><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
+        +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande</h3><p>Les demandes envoyées par les acquéreurs apparaîtront ici.</p></div>';
+    } else if(t==='signalements'){
+      body.innerHTML = '<div class="empty-state">'+ic('shield','ic')+'<h3>Aucun signalement</h3><p>Les projets ou promoteurs signalés par les utilisateurs apparaîtraient ici.</p></div>';
+    } else {
+      var all = getAllProjects();
+      var byW = {}; all.forEach(function(p){ byW[p.wilaya]=(byW[p.wilaya]||0)+1; });
+      body.innerHTML = '<div class="stat-grid">'
+        +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v">'+all.length+'</div></div>'
+        +'<div class="stat-card"><div class="k">Promoteurs</div><div class="v">'+getAllPromoters().length+'</div></div>'
+        +'<div class="stat-card"><div class="k">Utilisateurs</div><div class="v">'+getUsers().length+'</div></div>'
+        +'<div class="stat-card"><div class="k">Demandes totales</div><div class="v">'+getLeads().length+'</div></div>'
+      +'</div>'
+      +'<div class="side-block"><h3 style="color:#fff;font-size:15px;margin-bottom:16px;">Projets par wilaya</h3>'
+        +WILAYA_ORDER.map(function(w){ var n=byW[w]||0; var max=Math.max.apply(null,WILAYA_ORDER.map(function(x){return byW[x]||0;}).concat([1])); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+WILAYAS[w].label+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
+      +'</div>';
+    }
+  }
+  tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
+  renderTab('projets');
+}
+
+function page404(){
+  return '<div class="auth-shell"><div class="auth-card" style="text-align:center;"><h1>404</h1><p class="sub">Cette page n\'existe pas.</p><a class="btn btn-primary btn-block" href="/" style="margin-top:20px;">Retour à l\'accueil</a></div></div>';
+}
+
+/* ---------------- Init ---------------- */
+document.addEventListener('DOMContentLoaded', render);
+if(document.readyState!=='loading') render();
+})();
+
+</script>
+
+</body>
+</html>
