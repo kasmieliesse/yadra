@@ -184,6 +184,9 @@ p{margin:0;}
 /* Hero visual: rotating 3D gem ornament */
 .hero-visual{position:relative;display:none;height:340px;align-items:center;justify-content:center;}
 @media (min-width:980px){.hero-visual{display:flex;}}
+.hero-emblem-inline{display:flex;justify-content:center;margin-bottom:14px;}
+@media (min-width:980px){.hero-emblem-inline{display:none;}}
+.hero-emblem-inline .hero-gem-wrap{width:118px;height:130px;}
 .hero-ring{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(230,230,230,.16);animation:ringSpin 22s linear infinite;}
 .hero-ring.r2{width:230px;height:230px;border-color:rgba(183,110,77,.28);animation-duration:16s;animation-direction:reverse;}
 .hero-ring::before{content:'';position:absolute;top:-5px;left:calc(50% - 5px);width:10px;height:10px;border-radius:50%;background:var(--or-rose-light);box-shadow:0 0 16px 3px rgba(216,154,120,.9);}
@@ -1150,6 +1153,10 @@ function pageHome(){
     +'<div class="hero-orb hero-orb-1"></div><div class="hero-orb hero-orb-2"></div>'
     +'<div class="wrap hero-grid">'
       +'<div class="hero-content">'
+        +'<div class="hero-emblem-inline"><div class="hero-gem-wrap hero-gem-float"><div class="hero-gem">'
+          +'<div class="face front"><img src="/assets/logo-icon.png" alt="Emblème yadra!"></div>'
+          +'<div class="face back"><img src="/assets/logo-icon-back.png" alt=""></div>'
+        +'</div></div></div>'
         +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
         +'<h1>L’immobilier <em>autrement.</em></h1>'
         +'<p class="sub">Trouvez le projet qui vous correspond.</p>'
