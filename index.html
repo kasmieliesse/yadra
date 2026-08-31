@@ -216,6 +216,9 @@ p{margin:0;}
 .hero-gem .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-mask-image:radial-gradient(ellipse 56% 60% at 50% 45%,#000 60%,transparent 85%);mask-image:radial-gradient(ellipse 56% 60% at 50% 45%,#000 60%,transparent 85%);}
 .hero-gem .face img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 22px 38px rgba(183,110,77,.55));}
 .hero-gem .face.back{transform:rotateY(180deg);}
+.hero-gem .face.back img.mirrored{transform:scaleX(-1);filter:brightness(.55) saturate(.7);}
+.hero-symbol-canvas-wrap{position:absolute;inset:0;}
+.hero-symbol-canvas-wrap canvas{width:100%;height:100%;display:block;}
 @keyframes gemSpin{from{transform:rotateY(0deg) rotateX(6deg);}to{transform:rotateY(360deg) rotateX(6deg);}}
 .hero-gem-float{animation:gemFloat 4.5s ease-in-out infinite;}
 @keyframes gemFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
@@ -1171,8 +1174,8 @@ function pageHome(){
     +'<div class="wrap hero-grid">'
       +'<div class="hero-content">'
         +'<div class="hero-emblem-inline"><div class="hero-gem-wrap hero-gem-float"><div class="hero-gem">'
-          +'<div class="face front"><img src="/assets/logo-icon.png" alt="Emblème yadra!"></div>'
-          +'<div class="face back"><img src="/assets/logo-icon-back.png" alt=""></div>'
+          +'<div class="face front"><img src="/assets/symbol.svg" alt="Symbole yadra!"></div>'
+          +'<div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>'
         +'</div></div></div>'
         +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
         +'<h1>L’immobilier <em>autrement.</em></h1>'
@@ -1193,9 +1196,9 @@ function pageHome(){
       +'</div>'
       +'<div class="hero-visual">'
         +'<div class="hero-ring"></div><div class="hero-ring r2"></div>'
-        +'<div class="hero-gem-wrap hero-gem-float"><div class="hero-emblem-pedestal"></div><div class="hero-gem">'
-          +'<div class="face front"><img src="/assets/logo-icon.png" alt="Emblème yadra!"></div>'
-          +'<div class="face back"><img src="/assets/logo-icon-back.png" alt=""></div>'
+        +'<div class="hero-gem-wrap hero-gem-float" id="heroSymbolMount"><div class="hero-emblem-pedestal"></div><div class="hero-gem">'
+          +'<div class="face front"><img src="/assets/symbol.svg" alt="Symbole yadra!"></div>'
+          +'<div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>'
         +'</div></div>'
         +[[10,18,'0s'],[85,30,'.8s'],[70,80,'1.6s'],[18,70,'2.4s'],[92,66,'.4s']].map(function(s){return '<span class="sparkle" style="left:'+s[0]+'%;top:'+s[1]+'%;animation-delay:'+s[2]+';width:4px;height:4px;"></span>';}).join('')
       +'</div>'
@@ -1284,6 +1287,7 @@ function afterHome(){
     var f = new FormData(e.target);
     go('/projets'+qs({ville:f.get('ville'),type:f.get('type'),budgetMax:f.get('budgetMax')}));
   });
+  if(window.mountHeroSymbol3D) window.mountHeroSymbol3D();
 }
 
 /* ---------------- Project card (shared) ---------------- */
@@ -2111,6 +2115,137 @@ document.addEventListener('DOMContentLoaded', render);
 if(document.readyState!=='loading') render();
 })();
 
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+/* ==========================================================
+   YADRA! — symbole 3D (vraie géométrie extrudée, Three.js)
+   Chargé uniquement sur le hero desktop (≥980px). Le mobile
+   garde l'emblème CSS 2D (fallback léger, déjà élégant).
+   En cas d'échec réseau/CDN, le HTML statique existant
+   (faces front/back CSS) reste affiché tel quel.
+   ========================================================== */
+import * as THREE from 'three';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+var current = null; // {renderer, raf}
+
+function disposeCurrent(){
+  if(!current) return;
+  if(current.raf) cancelAnimationFrame(current.raf);
+  current.renderer.dispose();
+  current = null;
+}
+
+function mountHeroSymbol3D(){
+  var mount = document.getElementById('heroSymbolMount');
+  if(!mount) return;
+  if(window.innerWidth < 980) return; // mobile: keep CSS fallback, save bandwidth/CPU
+  if(!window.WebGLRenderingContext) return;
+  if(mount.dataset.symbol3d) return; // already mounted on this exact node
+  disposeCurrent();
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var w = mount.clientWidth || 230, h = mount.clientHeight || 270;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(30, w/h, 0.1, 100);
+  camera.position.set(0, 0, 15);
+  camera.lookAt(0,0,0);
+
+  var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  var pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.035).texture;
+
+  var key = new THREE.DirectionalLight(0xffd9b8, 2.4);
+  key.position.set(4,6,7);
+  scene.add(key);
+  var rim = new THREE.DirectionalLight(0xbcd7ff, 1.2);
+  rim.position.set(-6,1,-4);
+  scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+
+  var silverMat = new THREE.MeshPhysicalMaterial({color:0xd9dadb, metalness:1, roughness:0.27, clearcoat:0.35, clearcoatRoughness:0.25});
+  var copperMat = new THREE.MeshPhysicalMaterial({color:0xb76e4d, metalness:1, roughness:0.32, clearcoat:0.3, clearcoatRoughness:0.3});
+  var group = new THREE.Group();
+
+  var loader = new SVGLoader();
+  loader.load('/assets/symbol.svg', function(data){
+    var extrudeSettings = {depth:14, bevelEnabled:true, bevelThickness:2, bevelSize:1.3, bevelSegments:3, curveSegments:24};
+    data.paths.forEach(function(path){
+      var id = (path.userData && path.userData.node && path.userData.node.getAttribute('id')) || '';
+      if(id.indexOf('Fold') !== -1) return; // flat shading hints for the 2D SVG only; real lighting replaces them in 3D
+      var mat = id === 'symArmCopper' ? copperMat : silverMat;
+      SVGLoader.createShapes(path).forEach(function(shape){
+        var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        group.add(new THREE.Mesh(geo, mat));
+      });
+    });
+    if(!group.children.length) return; // parsing failed: leave CSS fallback untouched
+
+    var box = new THREE.Box3().setFromObject(group);
+    var size = box.getSize(new THREE.Vector3());
+    var scale = 8.6 / Math.max(size.x, size.y);
+    group.scale.set(scale, -scale, scale);
+    box.setFromObject(group);
+    var center = box.getCenter(new THREE.Vector3());
+    group.position.sub(center);
+    scene.add(group);
+
+    // swap in the canvas only once the geometry is actually ready
+    var wrap = document.createElement('div');
+    wrap.className = 'hero-symbol-canvas-wrap';
+    wrap.appendChild(renderer.domElement);
+    var gemEl = mount.querySelector('.hero-gem');
+    if(gemEl) gemEl.style.display = 'none';
+    mount.appendChild(wrap);
+    mount.dataset.symbol3d = '1';
+
+    var start = performance.now();
+    var PERIOD = 26000; // ms — one slow face→3/4→profile→3/4→face cycle
+    var MAX_YAW = 1.05; // rad, ~60° — reads as "profile" without the blades vanishing edge-on
+    function frame(now){
+      if(!reduceMotion){
+        var t = (now - start) / PERIOD;
+        group.rotation.y = Math.sin(t * Math.PI * 2) * MAX_YAW;
+        current.raf = requestAnimationFrame(frame);
+      }
+      renderer.render(scene, camera);
+    }
+    current = {renderer:renderer, camera:camera, raf:null};
+    current.raf = reduceMotion ? null : requestAnimationFrame(frame);
+    if(reduceMotion) renderer.render(scene, camera);
+  }, undefined, function(){
+    /* network/CDN failure: static CSS front/back faces stay visible, nothing to clean up */
+  });
+}
+
+window.mountHeroSymbol3D = mountHeroSymbol3D;
+window.addEventListener('resize', function(){
+  var mount = document.getElementById('heroSymbolMount');
+  if(!mount || !current) return;
+  var w = mount.clientWidth, h = mount.clientHeight;
+  if(!w || !h) return;
+  current.renderer.setSize(w,h);
+  current.camera.aspect = w/h;
+  current.camera.updateProjectionMatrix();
+});
+mountHeroSymbol3D();
 </script>
 
 </body>

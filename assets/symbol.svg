@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280" role="img" aria-labelledby="yadraSymbolTitle">
+<title id="yadraSymbolTitle">Symbole YADRA!</title>
+<defs>
+<linearGradient id="symSilverTail" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#F5F5F3"/>
+  <stop offset=".45" stop-color="#C9CBCC"/>
+  <stop offset=".55" stop-color="#8E9092"/>
+  <stop offset="1" stop-color="#E9EAEA"/>
+</linearGradient>
+<linearGradient id="symSilverArm" x1="1" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#FFFFFF"/>
+  <stop offset=".5" stop-color="#B7B9BA"/>
+  <stop offset="1" stop-color="#D8D9D9"/>
+</linearGradient>
+<linearGradient id="symCopper" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#F0C9A6"/>
+  <stop offset=".4" stop-color="#C97F52"/>
+  <stop offset=".65" stop-color="#8F5236"/>
+  <stop offset="1" stop-color="#D89A78"/>
+</linearGradient>
+</defs>
+<path id="symTail" d="M3,118
+  C 3,106 12,98 26,96
+  C 52,92 82,96 104,113
+  C 122,127 130,148 128,175
+  C 124,220 96,258 60,281
+  C 46,289 28,293 12,289
+  C 28,278 42,262 52,244
+  C 64,222 68,196 58,176
+  C 48,158 26,146 3,142
+  Z" fill="url(#symSilverTail)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
+<path id="symArmCopper" d="M90,168
+  L108,8
+  C 109,2 116,1 120,7
+  L 148,140
+  C 150,147 147,154 140,158
+  L 112,192
+  C 100,198 90,190 90,178
+  Z" fill="url(#symCopper)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
+<path id="symArmCopperFold" d="M108,8 L120,7 L138,120 L118,60 Z" fill="#7A4429" opacity="0.55"/>
+<path id="symArmSilver" d="M130,184
+  L158,42
+  C 160,35 168,34 171,41
+  L 192,150
+  C 194,157 191,164 184,168
+  L 152,205
+  C 140,211 130,203 130,191
+  Z" fill="url(#symSilverArm)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
+<path id="symArmSilverFold" d="M158,42 L171,41 L186,130 L168,75 Z" fill="#7C7D7E" opacity="0.5"/>
+</svg>
