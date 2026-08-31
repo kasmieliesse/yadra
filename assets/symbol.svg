@@ -2,21 +2,25 @@
 <title id="yadraSymbolTitle">Symbole YADRA!</title>
 <defs>
 <linearGradient id="symSilverTail" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#F5F5F3"/>
-  <stop offset=".45" stop-color="#C9CBCC"/>
-  <stop offset=".55" stop-color="#8E9092"/>
-  <stop offset="1" stop-color="#E9EAEA"/>
+  <stop offset="0" stop-color="#FFFFFF"/>
+  <stop offset=".4" stop-color="#D3D4D5"/>
+  <stop offset=".55" stop-color="#6E7173"/>
+  <stop offset=".72" stop-color="#EDEDED"/>
+  <stop offset="1" stop-color="#B9BABB"/>
 </linearGradient>
 <linearGradient id="symSilverArm" x1="1" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#FFFFFF"/>
-  <stop offset=".5" stop-color="#B7B9BA"/>
-  <stop offset="1" stop-color="#D8D9D9"/>
+  <stop offset=".28" stop-color="#F4F4F4"/>
+  <stop offset=".47" stop-color="#75787A"/>
+  <stop offset=".64" stop-color="#F7F7F7"/>
+  <stop offset="1" stop-color="#C3C4C5"/>
 </linearGradient>
 <linearGradient id="symCopper" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#F0C9A6"/>
-  <stop offset=".4" stop-color="#C97F52"/>
-  <stop offset=".65" stop-color="#8F5236"/>
-  <stop offset="1" stop-color="#D89A78"/>
+  <stop offset="0" stop-color="#FBE3C8"/>
+  <stop offset=".3" stop-color="#E2A06C"/>
+  <stop offset=".5" stop-color="#6E3A22"/>
+  <stop offset=".68" stop-color="#F0C9A6"/>
+  <stop offset="1" stop-color="#C08454"/>
 </linearGradient>
 </defs>
 <path id="symTail" d="M3,118
@@ -29,22 +33,20 @@
   C 64,222 68,196 58,176
   C 48,158 26,146 3,142
   Z" fill="url(#symSilverTail)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
-<path id="symArmCopper" d="M90,168
-  L108,8
-  C 109,2 116,1 120,7
-  L 148,140
-  C 150,147 147,154 140,158
-  L 112,192
-  C 100,198 90,190 90,178
+<path id="symArmCopper" d="M91,167
+  L105,6
+  L147,139
+  C 149,146 146,153 139,158
+  L 112,191
+  C 100,198 91,190 91,177
   Z" fill="url(#symCopper)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
-<path id="symArmCopperFold" d="M108,8 L120,7 L138,120 L118,60 Z" fill="#7A4429" opacity="0.55"/>
-<path id="symArmSilver" d="M130,184
-  L158,42
-  C 160,35 168,34 171,41
-  L 192,150
-  C 194,157 191,164 184,168
-  L 152,205
-  C 140,211 130,203 130,191
+<path id="symArmCopperFold" d="M105,6 L118,10 L138,120 L117,58 Z" fill="#6E3A22" opacity="0.6"/>
+<path id="symArmSilver" d="M130,183
+  L168,39
+  L192,149
+  C 194,156 191,163 184,168
+  L 152,204
+  C 140,210 130,202 130,190
   Z" fill="url(#symSilverArm)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
-<path id="symArmSilverFold" d="M158,42 L171,41 L186,130 L168,75 Z" fill="#7C7D7E" opacity="0.5"/>
+<path id="symArmSilverFold" d="M168,39 L180,44 L186,130 L167,73 Z" fill="#75787A" opacity="0.55"/>
 </svg>
