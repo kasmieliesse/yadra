@@ -96,10 +96,19 @@ p{margin:0;}
 .hairline{height:1px;background:var(--border);border:0;margin:0;}
 
 /* ---------------- Logo ---------------- */
-.logo{display:inline-flex;align-items:center;cursor:pointer;}
-.logo-img{height:36px;width:auto;display:block;filter:drop-shadow(0 2px 10px rgba(183,110,77,.28));}
-.logo.sm .logo-img{height:27px;}
-.logo.lg .logo-img{height:68px;}
+.logo{display:inline-flex;align-items:center;cursor:pointer;position:relative;overflow:hidden;}
+.logo-img{height:50px;width:auto;display:block;filter:drop-shadow(0 2px 14px rgba(183,110,77,.38));transition:filter .25s ease, transform .3s ease;}
+.logo.sm .logo-img{height:34px;}
+.logo.lg .logo-img{height:88px;}
+.logo::after{
+  content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+  background:linear-gradient(115deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-20deg);pointer-events:none;opacity:0;
+}
+.logo:hover .logo-img{transform:scale(1.04);filter:drop-shadow(0 2px 18px rgba(183,110,77,.55));}
+.logo:hover::after{opacity:1;animation:logoShine 1.1s ease;}
+@keyframes logoShine{from{left:-60%;}to{left:130%;}}
+@media (min-width:960px){.logo-img{height:54px;}}
 
 /* ---------------- Buttons ---------------- */
 .btn{
@@ -155,13 +164,63 @@ p{margin:0;}
 .mobile-menu .mm-actions{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
 
 /* ---------------- Hero ---------------- */
-.hero{position:relative;overflow:hidden;padding:64px 0 56px;border-bottom:1px solid var(--border);}
+.hero{position:relative;overflow:hidden;padding:56px 0 0;border-bottom:1px solid var(--border);background:radial-gradient(120% 100% at 85% 0%,#1c1310 0%,var(--noir) 55%);}
 .hero-bg{position:absolute;inset:0;z-index:0;}
+.hero-bg .sky-grad{position:absolute;inset:0;background:linear-gradient(120deg,#0A0A0A 10%,#140d0a 45%,#1a1310 65%,#0A0A0A 100%);}
+.hero-bg .sky-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.9;}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;opacity:.55;z-index:0;}
+.hero-orb-1{width:420px;height:420px;background:radial-gradient(circle,rgba(183,110,77,.55),transparent 70%);top:-140px;right:-80px;animation:orbDrift1 16s ease-in-out infinite;}
+.hero-orb-2{width:320px;height:320px;background:radial-gradient(circle,rgba(216,154,120,.32),transparent 70%);bottom:-120px;left:10%;animation:orbDrift2 20s ease-in-out infinite;}
+@keyframes orbDrift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-30px,30px) scale(1.12);}}
+@keyframes orbDrift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(24px,-20px) scale(1.08);}}
+.hero-grid{position:relative;z-index:1;display:grid;gap:20px;padding-bottom:36px;}
+@media (min-width:980px){.hero-grid{grid-template-columns:1.1fr 0.9fr;align-items:center;padding-bottom:44px;}}
 .hero-content{position:relative;z-index:1;max-width:760px;}
-.hero h1{font-size:clamp(2.2rem,5.4vw,4rem);font-style:italic;font-weight:600;color:#fff;}
-.hero h1 em{font-style:italic;color:var(--or-rose-light);}
+.hero h1{font-size:clamp(2.3rem,5.6vw,4.2rem);font-style:italic;font-weight:600;color:#fff;letter-spacing:-.01em;}
+.hero h1 em{font-style:italic;color:var(--or-rose-light);position:relative;}
 .hero .sub{margin-top:18px;font-size:16px;color:var(--text-dim);max-width:520px;}
 @media (min-width:700px){.hero .sub{font-size:18px;}}
+
+/* Hero visual: rotating 3D gem ornament */
+.hero-visual{position:relative;display:none;height:340px;align-items:center;justify-content:center;}
+@media (min-width:980px){.hero-visual{display:flex;}}
+.hero-ring{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(230,230,230,.16);animation:ringSpin 22s linear infinite;}
+.hero-ring.r2{width:230px;height:230px;border-color:rgba(183,110,77,.28);animation-duration:16s;animation-direction:reverse;}
+.hero-ring::before{content:'';position:absolute;top:-5px;left:calc(50% - 5px);width:10px;height:10px;border-radius:50%;background:var(--or-rose-light);box-shadow:0 0 16px 3px rgba(216,154,120,.9);}
+.hero-ring.r2::before{background:#fff;box-shadow:0 0 10px 2px rgba(255,255,255,.8);top:auto;bottom:-4px;left:20%;}
+@keyframes ringSpin{to{transform:rotate(360deg);}}
+.hero-gem-wrap{position:relative;width:190px;height:190px;perspective:1200px;}
+.hero-gem{position:absolute;inset:0;transform-style:preserve-3d;animation:gemSpin 10s linear infinite;}
+.hero-gem svg{width:100%;height:100%;filter:drop-shadow(0 18px 34px rgba(183,110,77,.55));}
+@keyframes gemSpin{from{transform:rotateY(0deg) rotateX(10deg);}to{transform:rotateY(360deg) rotateX(10deg);}}
+.hero-gem-float{animation:gemFloat 4.5s ease-in-out infinite;}
+@keyframes gemFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.hero-visual .sparkle{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:sparkle 3.6s ease-in-out infinite;}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(.4);}50%{opacity:.9;transform:scale(1);}}
+
+/* Popular searches */
+.popular-searches{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:12.5px;color:var(--text-dim);}
+.popular-searches .ps-chip{color:var(--text);padding:5px 13px;border:1px solid var(--border);border-radius:999px;font-weight:600;transition:border-color .2s ease, color .2s ease, transform .2s ease;}
+.popular-searches .ps-chip:hover{border-color:var(--or-rose);color:var(--or-rose-light);transform:translateY(-2px);}
+
+/* Stats bar */
+.stats-bar{position:relative;z-index:1;margin-top:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l) var(--radius-l) 0 0;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:0;overflow:hidden;}
+@media (min-width:700px){.stats-bar{grid-template-columns:repeat(4,1fr);border-radius:var(--radius-l);margin-bottom:-1px;}}
+.stat-item{display:flex;align-items:center;gap:12px;padding:20px 22px;border-top:1px solid var(--border);}
+.stat-item:nth-child(odd){border-right:1px solid var(--border);}
+@media (min-width:700px){.stat-item{border-top:0;border-right:1px solid var(--border);}.stat-item:last-child{border-right:0;}}
+.stat-item .ic-wrap{width:38px;height:38px;border-radius:50%;background:rgba(183,110,77,.14);display:flex;align-items:center;justify-content:center;color:var(--or-rose-light);flex:0 0 auto;}
+.stat-item .ic-wrap svg{width:18px;height:18px;}
+.stat-item .num{font-family:var(--font-display);font-size:24px;font-weight:700;color:#fff;line-height:1;}
+.stat-item .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-top:4px;}
+.stat-item.spin-badge .ic-wrap{background:transparent;perspective:200px;}
+.coin{width:38px;height:38px;position:relative;transform-style:preserve-3d;animation:coinSpin 5s linear infinite;}
+.coin .face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;}
+.coin .face.front{background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));color:#fff;}
+.coin .face.back{background:linear-gradient(135deg,var(--argent),#bdbdbd);color:#0A0A0A;transform:rotateY(180deg);}
+.coin .face svg{width:17px;height:17px;}
+@keyframes coinSpin{to{transform:rotateY(360deg);}}
 
 .search-card{
   margin-top:36px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);
@@ -202,12 +261,18 @@ p{margin:0;}
 .card:hover{border-color:rgba(183,110,77,.45);transform:translateY(-3px);}
 .card-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--surface-2);}
 .card-media > svg{width:100%;height:100%;display:block;}
-.card-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;}
+.card-media > img.card-photo{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1);}
+.card:hover .card-photo{transform:scale(1.08);}
+.card-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(10,10,10,.55) 100%);pointer-events:none;}
+.card-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:2;}
 .badge{
   font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;
   background:rgba(10,10,10,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);color:var(--argent);
+  display:inline-flex;align-items:center;gap:4px;
 }
+.badge svg{width:10px;height:10px;}
 .badge.verified{color:#fff;border-color:rgba(183,110,77,.6);background:rgba(183,110,77,.28);}
+.badge.badge-feature{color:#2b1710;border-color:rgba(255,255,255,.5);background:linear-gradient(135deg,#EFC49B,#B76E4D);box-shadow:0 4px 14px -4px rgba(183,110,77,.7);}
 .badge.status-livre{color:#daffe9;border-color:rgba(111,207,151,.5);background:rgba(111,207,151,.18);}
 .badge.status-construction{color:#ffe6c2;border-color:rgba(224,164,88,.5);background:rgba(224,164,88,.18);}
 .badge.status-plan{color:#dbe6ff;border-color:rgba(160,180,255,.4);background:rgba(140,160,255,.16);}
@@ -315,6 +380,7 @@ p{margin:0;}
 @media (min-width:760px){.detail-gallery > div:nth-child(1){grid-column:span 2;}}
 .detail-gallery > div{overflow:hidden;cursor:pointer;position:relative;}
 .detail-gallery > div > svg{width:100%;height:100%;}
+.detail-gallery > div > img{width:100%;height:100%;object-fit:cover;display:block;}
 .detail-header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;padding:26px 0;}
 .detail-title h1{font-size:clamp(1.8rem,3.4vw,2.6rem);color:#fff;font-style:italic;}
 .detail-title .loc{color:var(--text-dim);font-size:13.5px;margin-top:6px;display:flex;align-items:center;gap:6px;}
@@ -456,6 +522,41 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .skip-link{position:absolute;left:-999px;top:0;background:#fff;color:#000;padding:10px;z-index:999;}
 .skip-link:focus{left:10px;top:10px;}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+/* ---------------- Motion system: reveal / tilt / rotating accents ---------------- */
+.grid-cards{perspective:1600px;}
+.tilt-card{transition:transform .5s cubic-bezier(.2,.8,.2,1), border-color .2s ease;will-change:transform;}
+.tilt-card.tilting{transition:transform .06s linear;}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);}
+.reveal.is-in{opacity:1;transform:none;}
+.reveal-stagger .reveal:nth-child(1){transition-delay:.02s;}
+.reveal-stagger .reveal:nth-child(2){transition-delay:.09s;}
+.reveal-stagger .reveal:nth-child(3){transition-delay:.16s;}
+.reveal-stagger .reveal:nth-child(4){transition-delay:.23s;}
+.reveal-stagger .reveal:nth-child(5){transition-delay:.30s;}
+.reveal-stagger .reveal:nth-child(6){transition-delay:.37s;}
+
+.value-card{transition:transform .35s ease, border-color .2s ease;}
+.value-card:hover{transform:translateY(-4px);border-color:rgba(183,110,77,.4);}
+.value-card .ic{transition:transform .5s cubic-bezier(.3,1.4,.4,1);}
+.value-card:hover .ic{transform:rotate(-14deg) scale(1.12);}
+
+.badge-feature{position:relative;overflow:hidden;}
+.badge-feature::after{
+  content:'';position:absolute;top:0;left:-80%;width:40%;height:100%;
+  background:linear-gradient(115deg,transparent,rgba(255,255,255,.8),transparent);
+  transform:skewX(-20deg);animation:badgeShine 3.2s ease-in-out infinite;
+}
+@keyframes badgeShine{0%{left:-80%;}35%{left:130%;}100%{left:130%;}}
+
+.city-tile{transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .2s ease;}
+.city-tile:hover{transform:translateY(-5px) scale(1.015);border-color:rgba(183,110,77,.45);}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-gem,.hero-ring,.hero-orb-1,.hero-orb-2,.coin,.hero-gem-float,.sparkle,.badge-feature::after{animation:none!important;}
+  .reveal{opacity:1;transform:none;}
+}
 </style>
 </head>
 <body>
@@ -650,6 +751,55 @@ function cityArtSVG(seedStr,w,h){
     +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+')"/><rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'g)"/>'+pts.join('')
     +'<rect width="'+w+'" height="'+h+'" fill="none" stroke="rgba(230,230,230,.08)"/></svg>';
 }
+function mediaHTML(p,w,h,seedSuffix){
+  if(p.photo && !seedSuffix){ return '<img class="card-photo" src="'+p.photo+'" alt="'+esc(p.nom)+'" loading="lazy">'; }
+  return artSVG(p.slug+(seedSuffix||''),w,h);
+}
+function heroGemSVG(){
+  return '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs>'
+    +'<linearGradient id="gemA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0C9AC"/><stop offset="1" stop-color="#B76E4D"/></linearGradient>'
+    +'<linearGradient id="gemB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D89A78"/><stop offset="1" stop-color="#8F5236"/></linearGradient>'
+    +'<linearGradient id="gemC" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#8F5236"/><stop offset="1" stop-color="#4a2a1a"/></linearGradient>'
+    +'<linearGradient id="gemD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#E6E6E6" stop-opacity=".2"/></linearGradient>'
+    +'</defs>'
+    +'<polygon points="100,6 150,55 100,96 50,55" fill="url(#gemD)"/>'
+    +'<polygon points="100,6 150,55 178,60 122,20" fill="url(#gemA)"/>'
+    +'<polygon points="100,6 50,55 22,60 78,20" fill="url(#gemB)"/>'
+    +'<polygon points="50,55 100,96 60,100 18,66" fill="url(#gemC)"/>'
+    +'<polygon points="150,55 100,96 140,100 182,66" fill="url(#gemB)"/>'
+    +'<polygon points="18,66 60,100 100,190 40,96" fill="url(#gemC)"/>'
+    +'<polygon points="182,66 140,100 100,190 160,96" fill="url(#gemA)"/>'
+    +'<polygon points="60,100 140,100 100,190" fill="url(#gemD)"/>'
+    +'<polygon points="100,6 122,20 100,50 78,20" fill="url(#gemD)" opacity=".7"/>'
+    +'</svg>';
+}
+function heroSkylineSVG(){
+  var rnd = mulberry32(7);
+  var n = 26; var w=1400,h=560; var baseY=h*0.86; var x=0; var bars=[];
+  for(var i=0;i<n;i++){
+    var bw = w/n; var bh = h*(0.12+rnd()*0.55);
+    var lit = [];
+    var rows = 3+Math.floor(rnd()*5), cols=2+Math.floor(rnd()*2);
+    for(var r=0;r<rows;r++){ for(var c=0;c<cols;c++){
+      if(rnd()>0.45){
+        var wx = x+6+c*((bw*0.7)/cols); var wy=(baseY-bh)+10+r*(bh/rows);
+        lit.push('<rect x="'+wx.toFixed(1)+'" y="'+wy.toFixed(1)+'" width="4" height="6" fill="#F0C9A0" opacity="0" class="win"><animate attributeName="opacity" values="0;.9;.9;0" dur="'+(4+rnd()*5).toFixed(1)+'s" begin="'+(rnd()*6).toFixed(1)+'s" repeatCount="indefinite"/></rect>');
+      }
+    }}
+    bars.push('<rect x="'+x.toFixed(1)+'" y="'+(baseY-bh).toFixed(1)+'" width="'+(bw*0.72).toFixed(1)+'" height="'+(bh+40).toFixed(1)+'" fill="#141010"/>'+lit.join(''));
+    x+=bw;
+  }
+  var monument = '<g opacity=".85" transform="translate('+(w*0.78)+',0)">'
+    +'<path d="M0 '+baseY+' L -6 '+(baseY-90)+' L 0 '+(baseY-150)+' L 6 '+(baseY-90)+' Z" fill="#1c1613"/>'
+    +'<path d="M-40 '+baseY+' Q -20 '+(baseY-70)+' 0 '+(baseY-150)+'" fill="none" stroke="#241b16" stroke-width="7"/>'
+    +'<path d="M40 '+baseY+' Q 20 '+(baseY-70)+' 0 '+(baseY-150)+'" fill="none" stroke="#241b16" stroke-width="7"/>'
+    +'</g>';
+  return '<svg class="sky-svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#120d0a" stop-opacity="0"/><stop offset="1" stop-color="#0A0A0A" stop-opacity=".9"/></linearGradient></defs>'
+    +monument+bars.join('')+'<rect width="'+w+'" height="'+h+'" fill="url(#skyG)"/>'
+    +'</svg>';
+}
 function zelligePattern(id,opacity,color){
   color = color || '#B76E4D';
   return '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:'+(opacity||0.08)+'">'
@@ -694,31 +844,43 @@ var PRESTATION_ICON = {'Ascenseur panoramique':'building','Parking sous-sol séc
 var POINTSFORTS_POOL = ['Vue dégagée','Proche des axes principaux','Quartier calme et résidentiel','Finitions haut de gamme','Livraison clé en main','Proche écoles et commerces','Exposition ensoleillée','Accès sécurisé 24h/24','Cadre architectural contemporain','Proximité transports en commun'];
 
 var RAW_PROJECTS = [
-  {slug:'jnane-el-bahdja', nom:'Jnane El Bahdja', wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'sur-plan', livraison:'T4 2028', prixBase:15800000, featured:true,
+  {slug:'residence-elegance', nom:"Résidence L'Élégance", wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'construction', livraison:'2025', prixBase:3200000, featured:true, badge:'Nouveau', photo:'/assets/projects/elegance.jpg',
+    typologiesOverride:[{label:'F3',surface:90,prix:3200000,dispo:6},{label:'F4',surface:135,prix:4300000,dispo:4},{label:'F5',surface:180,prix:5600000,dispo:2}],
+    description:"Résidence L'Élégance déploie ses immeubles blancs à ossature contemporaine autour d'un grand bassin paysager, palmiers et allées piétonnes, au cœur d'Hydra. Un programme pensé pour une vie de quartier haut de gamme, à deux pas des ambassades et des meilleures écoles de la capitale."},
+  {slug:'terrasses-oran-akid-lotfi', nom:"Les Terrasses d'Oran", wilaya:'oran', commune:'Akid Lotfi', quartier:'Akid Lotfi Nord', promoterId:'pr-marina', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:2800000, featured:true, badge:'Coup de cœur', photo:'/assets/projects/terrasses_oran.jpg',
+    typologiesOverride:[{label:'F2',surface:60,prix:2800000,dispo:5},{label:'F3',surface:95,prix:3600000,dispo:7},{label:'F4',surface:150,prix:4900000,dispo:3}],
+    description:"Un ensemble résidentiel livré autour d'un grand bassin central, entre tours d'habitation modernes et jardins suspendus, dans le quartier prisé d'Akid Lotfi à Oran. Piscine, espaces verts et commerces de proximité en font une adresse très recherchée."},
+  {slug:'diamond-tower-constantine', nom:'Diamond Tower', wilaya:'constantine', commune:'Cité Zirout Youcef', quartier:'Zirout Youcef Sud', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'2026', prixBase:4500000, featured:true, badge:'Nouveau', photo:'/assets/projects/diamond_tower.jpg',
+    typologiesOverride:[{label:'F2',surface:100,prix:4500000,dispo:8},{label:'F3',surface:140,prix:5600000,dispo:6},{label:'F4',surface:175,prix:6800000,dispo:5},{label:'F5',surface:210,prix:8200000,dispo:3},{label:'F6',surface:250,prix:9600000,dispo:1}],
+    description:"Deux tours jumelles signées Numidia Immobilier, repères du nouveau skyline de Constantine à Cité Zirout Youcef. Larges baies vitrées, terrasses filantes et vue panoramique sur les gorges du Rhummel pour un programme résolument vertical."},
+  {slug:'parc-des-pins-bouinan', nom:'Le Parc des Pins', wilaya:'blida', commune:'Bouinan', quartier:'Bouinan Centre', promoterId:'pr-cirta', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:2600000, featured:true, badge:'Prestige', photo:'/assets/projects/parc_des_pins.jpg',
+    typologiesOverride:[{label:'F2',surface:70,prix:2600000,dispo:4},{label:'F3',surface:100,prix:3400000,dispo:6},{label:'F4',surface:140,prix:4500000,dispo:2}],
+    description:"Villas et appartements en bande organisés autour d'un long bassin miroir, entre pins et terrasses privatives, à Bouinan. Le Parc des Pins mise sur l'intimité et le prestige discret, à mi-chemin entre Blida et Alger."},
+  {slug:'jnane-el-bahdja', nom:'Jnane El Bahdja', wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'sur-plan', livraison:'T4 2028', prixBase:15800000, featured:false,
     description:"Un ensemble résidentiel signé Atlas Promotion au cœur d'Hydra, pensé autour d'un jardin central et de commerces de proximité en rez-de-chaussée. Les appartements profitent d'une double orientation et de larges balcons filants."},
   {slug:'terrasses-el-achour', nom:"Les Terrasses d'El Achour", wilaya:'alger', commune:'El Achour', quartier:'El Achour', promoterId:'pr-djazair', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:12600000, featured:false,
     description:"Face aux collines d'El Achour, cette résidence en cours de construction propose des appartements du F2 au F4 avec terrasses aménagées et vue dégagée sur la baie d'Alger."},
-  {slug:'panorama-bab-ezzouar', nom:'Panorama Bab Ezzouar', wilaya:'alger', commune:'Bab Ezzouar', quartier:'Bab Ezzouar', promoterId:'pr-atlas', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:10900000, featured:true,
+  {slug:'panorama-bab-ezzouar', nom:'Panorama Bab Ezzouar', wilaya:'alger', commune:'Bab Ezzouar', quartier:'Bab Ezzouar', promoterId:'pr-atlas', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:10900000, featured:false,
     description:"Déjà livrée et habitée, cette résidence proche du pôle universitaire et de la nouvelle gare offre un accès rapide aux transports et aux commerces."},
-  {slug:'villa-oliviers-dely-ibrahim', nom:'Villa des Oliviers', wilaya:'alger', commune:'Dely Ibrahim', quartier:'Dely Ibrahim', promoterId:'pr-djazair', type:'Villa', statut:'sur-plan', livraison:'T1 2029', prixBase:48000000, featured:true,
+  {slug:'villa-oliviers-dely-ibrahim', nom:'Villa des Oliviers', wilaya:'alger', commune:'Dely Ibrahim', quartier:'Dely Ibrahim', promoterId:'pr-djazair', type:'Villa', statut:'sur-plan', livraison:'T1 2029', prixBase:48000000, featured:false,
     description:"Un programme de villas individuelles avec jardin privatif, dans un lotissement fermé et sécurisé à deux pas des grands axes vers Alger et Chéraga."},
-  {slug:'jardins-canastel', nom:'Les Jardins de Canastel', wilaya:'oran', commune:'Canastel', quartier:'Canastel', promoterId:'pr-marina', type:'Résidence mixte', statut:'construction', livraison:'T3 2027', prixBase:13400000, featured:true,
+  {slug:'jardins-canastel', nom:'Les Jardins de Canastel', wilaya:'oran', commune:'Canastel', quartier:'Canastel', promoterId:'pr-marina', type:'Résidence mixte', statut:'construction', livraison:'T3 2027', prixBase:13400000, featured:false,
     description:"Sur les hauteurs de Canastel, ce programme mêle résidentiel et commerces de proximité avec une vue imprenable sur la baie d'Oran."},
   {slug:'oran-sky-residence', nom:'Oran Sky Résidence', wilaya:'oran', commune:'Bir El Djir', quartier:'Bir El Djir', promoterId:'pr-marina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:11200000, featured:false,
     description:"Proche du nouveau pôle urbain de Bir El Djir, cette résidence propose des typologies du F2 au F5 avec parking sous-sol et espaces verts."},
   {slug:'villa-corniche-es-senia', nom:'Villa Corniche', wilaya:'oran', commune:'Es Sénia', quartier:'Es Sénia', promoterId:'pr-marina', type:'Villa', statut:'livre', livraison:'Livré — 2024', prixBase:39500000, featured:false,
     description:"Villas mitoyennes déjà livrées, à quelques minutes de l'aéroport et des axes reliant le centre-ville d'Oran."},
-  {slug:'vergers-boufarik', nom:'Les Vergers de Boufarik', wilaya:'blida', commune:'Boufarik', quartier:'Boufarik Centre', promoterId:'pr-cirta', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:9200000, featured:true,
+  {slug:'vergers-boufarik', nom:'Les Vergers de Boufarik', wilaya:'blida', commune:'Boufarik', quartier:'Boufarik Centre', promoterId:'pr-cirta', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:9200000, featured:false,
     description:"Un quartier résidentiel complet aux portes de Boufarik, entouré d'espaces verts, avec école et commerces intégrés au programme."},
   {slug:'residence-chrea-view', nom:'Résidence Chréa View', wilaya:'blida', commune:'Blida Centre', quartier:'Blida Centre', promoterId:'pr-cirta', type:'Duplex', statut:'sur-plan', livraison:'T1 2028', prixBase:14700000, featured:false,
     description:"Des duplex avec vue sur les montagnes de Chréa, dans un cadre résidentiel calme à proximité immédiate du centre-ville de Blida."},
-  {slug:'cirta-panorama', nom:'Cirta Panorama', wilaya:'constantine', commune:'Ali Mendjeli', quartier:'Ali Mendjeli', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'T4 2027', prixBase:10400000, featured:true,
+  {slug:'cirta-panorama', nom:'Cirta Panorama', wilaya:'constantine', commune:'Ali Mendjeli', quartier:'Ali Mendjeli', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'T4 2027', prixBase:10400000, featured:false,
     description:"Dans la nouvelle ville d'Ali Mendjeli, un programme mixte associant logements et commerces, à proximité des grands équipements universitaires."},
   {slug:'ponts-constantine', nom:'Les Ponts de Constantine', wilaya:'constantine', commune:'Constantine Centre', quartier:'Constantine Centre', promoterId:'pr-numidia', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:11800000, featured:false,
     description:"Une résidence livrée au cœur de Constantine, à distance de marche des ponts emblématiques de la ville et de ses commerces."},
   {slug:'aures-al-baraka', nom:'Aurès Résidence Al Baraka', wilaya:'setif', commune:'Sétif Centre', quartier:'Sétif Centre', promoterId:'pr-aures', type:'Appartement', statut:'sur-plan', livraison:'T3 2028', prixBase:8600000, featured:false,
     description:"Un programme familial au centre de Sétif, avec mosquée de proximité et aire de jeux pour enfants intégrées à la résidence."},
-  {slug:'terrasses-el-eulma', nom:"Les Terrasses d'El Eulma", wilaya:'setif', commune:'El Eulma', quartier:'El Eulma', promoterId:'pr-aures', type:'Duplex', statut:'construction', livraison:'T1 2027', prixBase:9800000, featured:true,
+  {slug:'terrasses-el-eulma', nom:"Les Terrasses d'El Eulma", wilaya:'setif', commune:'El Eulma', quartier:'El Eulma', promoterId:'pr-aures', type:'Duplex', statut:'construction', livraison:'T1 2027', prixBase:9800000, featured:false,
     description:"Des duplex spacieux à El Eulma, pensés pour les familles, avec terrasses privatives et parking dédié."},
   {slug:'seraidi-bay-view', nom:'Seraïdi Bay View', wilaya:'annaba', commune:'Seraïdi', quartier:'Seraïdi', promoterId:'pr-zianide', type:'Villa', statut:'sur-plan', livraison:'T2 2029', prixBase:44000000, featured:false,
     description:"Sur les hauteurs boisées de Seraïdi, ces villas offrent une vue plongeante sur le golfe d'Annaba, au calme absolu."},
@@ -726,7 +888,7 @@ var RAW_PROJECTS = [
     description:"Proche du centre-ville et du front de mer d'Annaba, cette résidence propose des appartements lumineux du F2 au F4."},
   {slug:'kahina-djurdjura', nom:'Kahina Résidence Djurdjura', wilaya:'tizi-ouzou', commune:'Tizi Ouzou Centre', quartier:'Tizi Ouzou Centre', promoterId:'pr-kahina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:8900000, featured:false,
     description:"Face aux sommets du Djurdjura, cette résidence à taille humaine mêle tradition kabyle et confort contemporain."},
-  {slug:'villa-boukhalfa-hills', nom:'Villa Boukhalfa Hills', wilaya:'tizi-ouzou', commune:'Boukhalfa', quartier:'Boukhalfa', promoterId:'pr-kahina', type:'Villa', statut:'construction', livraison:'T2 2027', prixBase:31000000, featured:true,
+  {slug:'villa-boukhalfa-hills', nom:'Villa Boukhalfa Hills', wilaya:'tizi-ouzou', commune:'Boukhalfa', quartier:'Boukhalfa', promoterId:'pr-kahina', type:'Villa', statut:'construction', livraison:'T2 2027', prixBase:31000000, featured:false,
     description:"Un petit programme de villas sur les hauteurs de Boukhalfa, entre verdure et vue sur la vallée du Sébaou."}
 ];
 
@@ -748,7 +910,7 @@ function mkTypologies(seedStr,type,prixBase){
 function enrichProject(raw, idx){
   var promoter = PROMOTERS_BASE.filter(function(p){return p.id===raw.promoterId;})[0];
   var seed = hashStr(raw.slug);
-  var typologies = mkTypologies(raw.slug, raw.type, raw.prixBase);
+  var typologies = raw.typologiesOverride || mkTypologies(raw.slug, raw.type, raw.prixBase);
   var prices = typologies.map(function(t){return t.prix;});
   var surfaces = typologies.map(function(t){return t.surface;});
   return Object.assign({}, raw, {
@@ -912,6 +1074,7 @@ function render(){
   else { main.innerHTML = page404(); }
 
   window.scrollTo(0,0);
+  if(typeof initFX==='function') initFX();
 }
 window.addEventListener('popstate', render);
 document.addEventListener('click', function(e){
@@ -959,40 +1122,56 @@ function updateHeader(){
 function pageHome(){
   var featured = PROJECTS.filter(function(p){return p.featured;}).slice(0,6);
   var latest = PROJECTS.slice().reverse().slice(0,6);
+  var villesPop = ['alger','oran','blida','constantine','setif'];
   return ''
   +'<section class="hero">'
-    +'<div class="hero-bg" aria-hidden="true">'+zelligePattern('zHero',0.07)+'</div>'
-    +'<div class="wrap hero-content">'
-      +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
-      +'<h1>Votre prochain projet <em>commence ici.</em></h1>'
-      +'<p class="sub">Découvrez les projets immobiliers des promoteurs en Algérie — recherchez, consultez, sauvegardez et contactez, sans détour.</p>'
-      +'<form class="search-card" id="heroSearch">'
-        +'<div class="search-field"><label>Où</label>'
-          +'<select name="ville"><option value="">Toute l\'Algérie</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
-        +'<div class="search-field"><label>Type de bien</label>'
-          +'<select name="type"><option value="">Tous types</option><option>Appartement</option><option>Duplex</option><option>Villa</option><option>Résidence mixte</option></select></div>'
-        +'<div class="search-field"><label>Budget</label>'
-          +'<select name="budgetMax"><option value="">Indifférent</option><option value="10000000">Jusqu\'à 10 M DA</option><option value="15000000">Jusqu\'à 15 M DA</option><option value="25000000">Jusqu\'à 25 M DA</option><option value="50000000">Jusqu\'à 50 M DA</option></select></div>'
-        +'<button class="btn btn-primary" type="submit">'+ic('search')+' Rechercher</button>'
-      +'</form>'
+    +'<div class="hero-bg" aria-hidden="true"><div class="sky-grad"></div>'+heroSkylineSVG()+zelligePattern('zHero',0.05)+'</div>'
+    +'<div class="hero-orb hero-orb-1"></div><div class="hero-orb hero-orb-2"></div>'
+    +'<div class="wrap hero-grid">'
+      +'<div class="hero-content">'
+        +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
+        +'<h1>Votre prochain projet <em>commence ici.</em></h1>'
+        +'<p class="sub">Découvrez les projets immobiliers des meilleurs promoteurs en Algérie — recherchez, consultez, sauvegardez et contactez, sans détour.</p>'
+        +'<form class="search-card" id="heroSearch">'
+          +'<div class="search-field"><label>Où</label>'
+            +'<select name="ville"><option value="">Ville, commune, quartier</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
+          +'<div class="search-field"><label>Type de bien</label>'
+            +'<select name="type"><option value="">Tous types</option><option>Appartement</option><option>Duplex</option><option>Villa</option><option>Résidence mixte</option></select></div>'
+          +'<div class="search-field"><label>Budget</label>'
+            +'<select name="budgetMax"><option value="">Budget max</option><option value="10000000">Jusqu\'à 10 M DA</option><option value="15000000">Jusqu\'à 15 M DA</option><option value="25000000">Jusqu\'à 25 M DA</option><option value="50000000">Jusqu\'à 50 M DA</option></select></div>'
+          +'<button class="btn btn-primary" type="submit">'+ic('search')+' Rechercher</button>'
+        +'</form>'
+        +'<div class="popular-searches">Recherches populaires : '+villesPop.map(function(w){return '<a class="ps-chip" href="/projets?ville='+w+'">'+WILAYAS[w].label+'</a>';}).join('')+'</div>'
+      +'</div>'
+      +'<div class="hero-visual">'
+        +'<div class="hero-ring"></div><div class="hero-ring r2"></div>'
+        +'<div class="hero-gem-wrap hero-gem-float"><div class="hero-gem">'+heroGemSVG()+'</div></div>'
+        +[[10,18,'0s'],[85,30,'.8s'],[70,80,'1.6s'],[18,70,'2.4s'],[92,66,'.4s']].map(function(s){return '<span class="sparkle" style="left:'+s[0]+'%;top:'+s[1]+'%;animation-delay:'+s[2]+';width:4px;height:4px;"></span>';}).join('')
+      +'</div>'
     +'</div>'
+    +'<div class="wrap"><div class="stats-bar" id="statsBar">'
+      +statItem('buildings','120','+','Projets')
+      +statItem('users','60','+','Promoteurs')
+      +statItem('pin','7','','Villes')
+      +'<div class="stat-item spin-badge"><div class="coin"><div class="face front">'+ic('check')+'</div><div class="face back">'+ic('shield')+'</div></div><div><div class="num">100%</div><div class="lbl">Vérifiés</div></div></div>'
+    +'</div></div>'
   +'</section>'
 
   +'<section class="section">'
     +'<div class="wrap">'
-      +'<div class="section-head"><div><h2>Projets à la une</h2><p class="desc">Une sélection de programmes suivis de près par notre équipe, pour leur emplacement ou la qualité de leur conception.</p></div>'
+      +'<div class="section-head reveal"><div><h2>Projets à la une</h2><p class="desc">Une sélection de programmes suivis de près par notre équipe, pour leur emplacement ou la qualité de leur conception.</p></div>'
         +'<a class="see-all" href="/projets">Voir tous les projets '+ic('chevronRight')+'</a></div>'
-      +'<div class="grid grid-cards">'+featured.map(projectCardHTML).join('')+'</div>'
+      +'<div class="grid grid-cards reveal-stagger">'+featured.map(function(p){return '<div class="reveal">'+projectCardHTML(p)+'</div>';}).join('')+'</div>'
     +'</div>'
   +'</section>'
 
   +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
     +'<div class="wrap">'
-      +'<div class="section-head"><div><h2>Explorer par ville</h2><p class="desc">Sept wilayas, des dizaines de programmes suivis en continu.</p></div></div>'
-      +'<div class="grid" style="grid-template-columns:repeat(2,1fr);">'
+      +'<div class="section-head reveal"><div><h2>Explorer par ville</h2><p class="desc">Sept wilayas, des dizaines de programmes suivis en continu.</p></div></div>'
+      +'<div class="grid reveal-stagger" style="grid-template-columns:repeat(2,1fr);">'
         +WILAYA_ORDER.map(function(w){
           var count = PROJECTS.filter(function(p){return p.wilaya===w;}).length;
-          return '<a class="city-tile" href="/projets?ville='+w+'">'+cityArtSVG('city-'+w)+'<div class="ct-label"><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div></a>';
+          return '<a class="city-tile reveal" href="/projets?ville='+w+'">'+cityArtSVG('city-'+w)+'<div class="ct-label"><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div></a>';
         }).join('')
       +'</div>'
     +'</div>'
@@ -1000,11 +1179,11 @@ function pageHome(){
 
   +'<section class="section">'
     +'<div class="wrap">'
-      +'<div class="section-head"><div><h2>Pourquoi yadra!</h2><p class="desc">Une nouvelle façon, plus directe, de découvrir un projet immobilier en Algérie.</p></div></div>'
-      +'<div class="grid grid-3">'
-        +valueCard('shield','Promoteurs vérifiés','Chaque promoteur mis en avant passe par une vérification avant publication de ses projets sur la plateforme.')
-        +valueCard('search','Recherche directe','Où, quel type de bien, quel budget : une recherche simple, sans détour, pour trouver ce qui vous correspond.')
-        +valueCard('handshake','Contact immédiat','Contactez le promoteur en un clic, par formulaire ou WhatsApp, sans intermédiaire superflu.')
+      +'<div class="section-head reveal"><div><h2>Pourquoi yadra!</h2><p class="desc">Une nouvelle façon, plus directe, de découvrir un projet immobilier en Algérie.</p></div></div>'
+      +'<div class="grid grid-3 reveal-stagger">'
+        +'<div class="reveal">'+valueCard('shield','Promoteurs vérifiés','Chaque promoteur mis en avant passe par une vérification avant publication de ses projets sur la plateforme.')+'</div>'
+        +'<div class="reveal">'+valueCard('search','Recherche directe','Où, quel type de bien, quel budget : une recherche simple, sans détour, pour trouver ce qui vous correspond.')+'</div>'
+        +'<div class="reveal">'+valueCard('handshake','Contact immédiat','Contactez le promoteur en un clic, par formulaire ou WhatsApp, sans intermédiaire superflu.')+'</div>'
       +'</div>'
     +'</div>'
   +'</section>'
@@ -1045,6 +1224,9 @@ function pageHome(){
   +'</section>';
 }
 function valueCard(icon,title,desc){ return '<div class="value-card">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+function statItem(icon,num,suffix,label){
+  return '<div class="stat-item"><div class="ic-wrap">'+ic(icon)+'</div><div><div class="num"><span class="count-up" data-target="'+num+'">0</span>'+(suffix||'')+'</div><div class="lbl">'+label+'</div></div></div>';
+}
 function afterHome(){
   document.getElementById('heroSearch').addEventListener('submit', function(e){
     e.preventDefault();
@@ -1056,9 +1238,9 @@ function afterHome(){
 /* ---------------- Project card (shared) ---------------- */
 function projectCardHTML(p){
   var fav = isFavorite(p.id);
-  return '<div class="card" tabindex="0" role="link" onclick="App.go(\'/projets/'+p.wilaya+'/'+p.slug+'\')">'
-    +'<div class="card-media">'+artSVG(p.slug,400,300)
-      +'<div class="card-badges">'+(p.verified?'<span class="badge verified">'+ic('shield')+' Vérifié</span>':'')+'<span class="badge '+statutClass(p.statut)+'">'+statutLabel(p.statut)+'</span></div>'
+  return '<div class="card tilt-card" tabindex="0" role="link" onclick="App.go(\'/projets/'+p.wilaya+'/'+p.slug+'\')">'
+    +'<div class="card-media">'+mediaHTML(p,400,300)
+      +'<div class="card-badges">'+(p.badge?'<span class="badge badge-feature">'+ic('sparkle')+' '+esc(p.badge)+'</span>':'')+(p.verified?'<span class="badge verified">'+ic('shield')+' Vérifié</span>':'')+'<span class="badge '+statutClass(p.statut)+'">'+statutLabel(p.statut)+'</span></div>'
       +'<button class="fav-btn'+(fav?' active':'')+'" onclick="event.stopPropagation();App.toggleFav(\''+p.id+'\',this)" aria-label="Ajouter aux favoris">'+ic('heart')+'</button>'
     +'</div>'
     +'<div class="card-body">'
@@ -1207,7 +1389,7 @@ function pageDetail(wilaya,slug){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/projets">Projets</a> '+ic('chevronRight')+' <a href="/projets?ville='+p.wilaya+'">'+WILAYAS[p.wilaya].label+'</a> '+ic('chevronRight')+' <span style="color:#fff;">'+esc(p.nom)+'</span></div></div>'
   +'<div class="wrap"><div class="detail-gallery" id="detailGallery">'
-    +[0,1,2,3].map(function(i){ return '<div>'+artSVG(p.slug+'-g'+i,500,400)+'</div>'; }).join('')
+    +[0,1,2,3].map(function(i){ return '<div>'+(i===0?mediaHTML(p,500,400):artSVG(p.slug+'-g'+i,500,400))+'</div>'; }).join('')
   +'</div></div>'
   +'<div class="wrap"><div class="detail-header">'
     +'<div class="detail-title"><h1>'+esc(p.nom)+'</h1><div class="loc">'+ic('pin')+' '+esc(p.adresse)+'</div>'
@@ -1719,6 +1901,57 @@ function afterAdmin(){
 
 function page404(){
   return '<div class="auth-shell"><div class="auth-card" style="text-align:center;"><h1>404</h1><p class="sub">Cette page n\'existe pas.</p><a class="btn btn-primary btn-block" href="/" style="margin-top:20px;">Retour à l\'accueil</a></div></div>';
+}
+
+/* ---------------- Motion engine: tilt cards, scroll reveal, count-up ---------------- */
+var REDUCE_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if(!REDUCE_MOTION){
+  document.addEventListener('mousemove', function(e){
+    var card = e.target.closest && e.target.closest('.tilt-card');
+    if(!card){ return; }
+    var r = card.getBoundingClientRect();
+    var px = (e.clientX - r.left)/r.width, py = (e.clientY - r.top)/r.height;
+    var rx = (0.5-py)*9, ry = (px-0.5)*11;
+    card.classList.add('tilting');
+    card.style.transform = 'perspective(1000px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) translateY(-4px) scale(1.015)';
+  });
+  document.addEventListener('mouseout', function(e){
+    var card = e.target.closest && e.target.closest('.tilt-card');
+    if(!card) return;
+    if(e.relatedTarget && card.contains(e.relatedTarget)) return;
+    card.classList.remove('tilting');
+    card.style.transform='';
+  });
+}
+
+var revealObserver = (typeof IntersectionObserver!=='undefined') ? new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){ en.target.classList.add('is-in'); revealObserver.unobserve(en.target); }
+  });
+},{threshold:0.12, rootMargin:'0px 0px -40px 0px'}) : null;
+
+var countObserver = (typeof IntersectionObserver!=='undefined') ? new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(!en.isIntersecting) return;
+    var el = en.target, target = parseFloat(el.dataset.target);
+    countObserver.unobserve(el);
+    if(REDUCE_MOTION){ el.textContent = target; return; }
+    var start = null, dur = 1400;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min(1,(ts-start)/dur);
+      var eased = 1-Math.pow(1-p,3);
+      el.textContent = Math.round(target*eased);
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+},{threshold:0.4}) : null;
+
+function initFX(){
+  if(revealObserver){ Array.prototype.forEach.call(document.querySelectorAll('.reveal:not(.is-in)'), function(el){ revealObserver.observe(el); }); }
+  if(countObserver){ Array.prototype.forEach.call(document.querySelectorAll('.count-up'), function(el){ countObserver.observe(el); }); }
 }
 
 /* ---------------- Init ---------------- */
