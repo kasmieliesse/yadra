@@ -23,7 +23,7 @@
 <meta name="twitter:image" content="https://yadra.fr/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800;9..144,900&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ============================================================
@@ -60,6 +60,7 @@
 
   --font-display:'Geist', -apple-system, 'Segoe UI', sans-serif;
   --font-body:'Geist', -apple-system, 'Segoe UI', sans-serif;
+  --font-serif:'Fraunces', Georgia, serif;
 
   --radius-s:6px;
   --radius-m:12px;
@@ -153,7 +154,7 @@ p{margin:0;}
   white-space:nowrap;
 }
 .btn:active{transform:scale(.97);}
-.btn-primary{background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));color:#fff;box-shadow:0 6px 20px -6px rgba(183,110,77,.55);}
+.btn-primary{background:linear-gradient(135deg,#A85E3E,#8F4D2E);color:#fff;box-shadow:0 6px 20px -6px rgba(183,110,77,.55);}
 .btn-primary:hover{filter:brightness(1.08);}
 .btn-ghost{background:transparent;border-color:var(--border);color:var(--text);}
 .btn-ghost:hover{border-color:var(--accent-2);color:var(--heading);}
@@ -218,7 +219,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .hero-grid{position:relative;z-index:1;display:grid;gap:20px;padding-bottom:36px;}
 @media (min-width:980px){.hero-grid{grid-template-columns:1.1fr 0.9fr;align-items:center;padding-bottom:44px;}}
 .hero-content{position:relative;z-index:1;max-width:760px;}
-.hero h1{font-size:clamp(2.6rem,6.4vw,4.6rem);font-style:normal;font-weight:600;letter-spacing:-.01em;text-transform:uppercase;line-height:.98;}
+.hero h1{font-family:var(--font-serif);font-size:clamp(2.6rem,6.4vw,4.6rem);font-style:normal;font-weight:700;letter-spacing:-.005em;text-transform:uppercase;line-height:.98;}
 .hero h1 .hw-line{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em;}
 .hero h1 .hw-in{display:block;transform:translateY(112%);opacity:0;animation:heroWordUp .9s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(.15s + var(--wi) * .12s);
   background:linear-gradient(100deg,#fff,var(--argent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
@@ -283,6 +284,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .trust-item .ti-label{font-size:12.5px;font-weight:700;color:#fff;letter-spacing:.01em;}
 .trust-item .ti-desc{font-size:12px;color:var(--text-dim);margin-top:3px;line-height:1.35;}
 .trust-cta{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:16px 24px;border-top:1px solid var(--border);white-space:nowrap;}
+.trust-cta svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1);}
+.trust-cta:hover svg{transform:translateX(5px);}
 @media (min-width:1000px){
   .trust-item{border-top:0;border-right:1px solid var(--border);}
   .trust-cta{border-top:0;border-left:1px solid var(--border);margin-left:auto;}
@@ -311,6 +314,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
   background:transparent;border:0;color:#fff;font-size:14px;font-weight:600;padding:2px 0;font-family:inherit;
 }
 .search-field select:focus,.search-field input:focus{outline:0;}
+.search-field select:focus-visible,.search-field input:focus-visible{outline:2px solid var(--or-rose-light);outline-offset:3px;border-radius:4px;}
+.search-field:has(select:focus-visible),.search-field:has(input:focus-visible){background:rgba(255,255,255,.06);}
 .search-card .search-submit{
   margin:4px;width:52px;height:52px;min-width:52px;border-radius:50%;padding:0;
   display:flex;align-items:center;justify-content:center;flex:0 0 auto;
@@ -324,7 +329,9 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .section-head h2{position:relative;padding-left:24px;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--heading);}
 .section-head h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:14px;height:2px;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));}
 .section-head .desc{color:var(--text-dim);max-width:520px;margin-top:8px;font-size:14px;}
-.see-all{font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--accent-2);border-bottom:1px solid var(--or-rose-dim);padding-bottom:2px;white-space:nowrap;}
+.see-all{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--accent-2);border-bottom:1px solid var(--or-rose-dim);padding-bottom:2px;white-space:nowrap;}
+.see-all svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1);}
+.see-all:hover svg{transform:translateX(5px);}
 
 .grid{display:grid;gap:20px;}
 .grid-cards{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
@@ -408,6 +415,10 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
   background:var(--surface);display:flex;flex-direction:column;gap:14px;
 }
 .split-card.accent{background:linear-gradient(160deg,#1b120d,#120a07 70%);border-color:rgba(183,110,77,.35);}
+a.split-card{transition:transform .35s cubic-bezier(.2,.8,.2,1), border-color .25s ease, box-shadow .35s ease;}
+a.split-card:hover{transform:translateY(-4px);border-color:rgba(183,110,77,.4);box-shadow:0 20px 40px -24px rgba(0,0,0,.35);}
+a.split-card .promo-logo{transition:transform .4s cubic-bezier(.34,1.56,.64,1);}
+a.split-card:hover .promo-logo{transform:scale(1.08) rotate(-4deg);}
 .split-card h3{color:var(--heading);font-size:21px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;}
 .split-card p{color:var(--text-dim);font-size:14px;}
 .split-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
@@ -421,8 +432,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .foot-grid .foot-col:first-child{grid-column:1 / -1;}
 @media (min-width:800px){.foot-grid{grid-template-columns:1.5fr .8fr .9fr .8fr .8fr;gap:36px;}.foot-grid .foot-col:first-child{grid-column:auto;}}
 .foot-col h4{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:14px;}
-.foot-col a{display:block;font-size:13.5px;color:var(--text);padding:6px 0;}
-.foot-col a:hover{color:var(--or-rose-light);}
+.foot-col a{display:block;font-size:13.5px;color:var(--text);padding:6px 0;transition:color .2s ease, transform .35s cubic-bezier(.34,1.56,.64,1);}
+.foot-col a:hover{color:var(--or-rose-light);transform:translateX(4px);}
 .foot-brand-desc{color:var(--text-dim);font-size:13px;line-height:1.7;max-width:280px;margin-top:14px;}
 .foot-social{display:flex;gap:10px;margin-top:4px;}
 .foot-social a{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text);padding:0;transition:border-color .2s ease,color .2s ease,transform .2s ease;}
@@ -481,7 +492,7 @@ body:has(.mobile-cta-bar) .wa-float{display:none;}
 .detail-gallery > div > svg{width:100%;height:100%;}
 .detail-gallery > div > img{width:100%;height:100%;object-fit:cover;display:block;}
 .detail-header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;padding:26px 0;}
-.detail-title h1{font-size:clamp(1.5rem,2.8vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.015em;}
+.detail-title h1{font-family:var(--font-serif);font-size:clamp(1.5rem,2.8vw,2.2rem);color:var(--heading);font-weight:700;text-transform:uppercase;letter-spacing:.01em;}
 .detail-title .loc{color:var(--text-dim);font-size:13.5px;margin-top:6px;display:flex;align-items:center;gap:6px;}
 .detail-promoter-chip{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px 6px 6px;margin-top:14px;}
 .pchip-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;}
@@ -564,7 +575,7 @@ body:has(.mobile-cta-bar) .wa-float{display:none;}
 .promo-hero{padding:50px 0 30px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
 .promo-id{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
 .promo-logo{width:78px;height:78px;border-radius:20px;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-display);font-size:26px;font-weight:700;flex:0 0 auto;}
-.promo-name{font-size:clamp(1.4rem,2.6vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.02em;}
+.promo-name{font-family:var(--font-serif);font-size:clamp(1.4rem,2.6vw,2.1rem);color:var(--heading);font-weight:700;text-transform:uppercase;letter-spacing:.015em;}
 .promo-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--text-dim);font-size:12.5px;margin-top:8px;}
 
 /* ---------------- Forms / Auth ---------------- */
@@ -679,6 +690,15 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .value-card:hover{transform:translateY(-4px);border-color:rgba(183,110,77,.4);}
 .value-card .ic{transition:transform .5s cubic-bezier(.3,1.4,.4,1);}
 .value-card:hover .ic{transform:rotate(-14deg) scale(1.12);}
+
+.spotlight{position:relative;isolation:isolate;}
+.spotlight::before{
+  content:'';position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(183,110,77,.16), transparent 72%);
+  opacity:0;transition:opacity .5s ease;
+}
+.spotlight:hover::before{opacity:1;}
+.spotlight > *{position:relative;z-index:1;}
 
 .badge-feature{position:relative;overflow:hidden;}
 .badge-feature::after{
@@ -1312,6 +1332,13 @@ document.addEventListener('click', function(e){
   e.preventDefault();
   go(href);
 });
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  var el = e.target.closest('[role="link"][tabindex], [role="button"][tabindex]');
+  if(!el) return;
+  e.preventDefault();
+  el.click();
+});
 (function(){
   // GitHub Pages SPA fallback: 404.html stashes the intended path, we restore it here.
   var redirect = sessionStorage.getItem('yadra_redirect');
@@ -1429,7 +1456,7 @@ function pageHome(){
   +'<section class="section tight">'
     +'<div class="wrap">'
       +'<div class="grid grid-2">'
-        +'<div class="split-card">'
+        +'<div class="split-card spotlight">'
           +'<span class="eyebrow">Acquéreurs</span><h3>Trouvez le projet qui vous ressemble</h3>'
           +'<p>Parcourez les programmes par ville, budget et typologie, sauvegardez vos favoris et contactez directement le promoteur.</p>'
           +'<ul>'
@@ -1439,7 +1466,7 @@ function pageHome(){
           +'</ul>'
           +'<div><a class="btn btn-light" href="/projets">Explorer les projets</a></div>'
         +'</div>'
-        +'<div class="split-card accent theme-dark">'
+        +'<div class="split-card spotlight accent theme-dark">'
           +'<span class="eyebrow">Promoteurs</span><h3>Vous avez un projet ?</h3>'
           +'<p>Présentez vos programmes avec une mise en scène premium et recevez des demandes qualifiées d\'acquéreurs réellement intéressés — sans intermédiaire superflu.</p>'
           +'<ul>'
@@ -1461,7 +1488,7 @@ function pageHome(){
     +'</div>'
   +'</section>';
 }
-function valueCard(icon,title,desc){ return '<div class="value-card">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+function valueCard(icon,title,desc){ return '<div class="value-card spotlight">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
 var MARQUEE_EXTRA_CITIES = ['Tlemcen','Béjaïa','Batna','Mostaganem','Skikda','Ghardaïa','Tipaza','Boumerdès'];
 function cityMarqueeItems(hidden){
   var items = WILAYA_ORDER.map(function(w){
@@ -1693,7 +1720,7 @@ function pageDetail(wilaya,slug){
       +'<div class="map-box" id="detailMap"></div>'
     +'</div>'
     +(p.promoter?('<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">À propos du promoteur</h2>'
-      +'<a class="split-card" style="flex-direction:row;align-items:center;gap:18px;" href="/promoteurs/'+p.promoter.slug+'">'
+      +'<a class="split-card spotlight" style="flex-direction:row;align-items:center;gap:18px;" href="/promoteurs/'+p.promoter.slug+'">'
       +'<span class="promo-logo" style="width:56px;height:56px;font-size:20px;">'+p.promoter.name.charAt(0)+'</span>'
       +'<span><b style="display:block;color:var(--heading);font-family:var(--font-display);font-size:18px;">'+esc(p.promoter.name)+(p.verified?(' '+ic('shield')):'')+'</b><span style="color:var(--text-dim);font-size:13px;">'+esc(p.promoter.desc.slice(0,110))+'…</span></span>'
       +'</a></div>'):'')
@@ -2216,7 +2243,7 @@ function pagePromotersList(){
     +'<div class="grid grid-3">'
       +promoters.map(function(pr){
         var n = getAllProjects().filter(function(p){return p.promoterId===pr.id;}).length;
-        return '<a class="split-card" href="/promoteurs/'+pr.slug+'" style="flex-direction:row;align-items:center;gap:16px;">'
+        return '<a class="split-card spotlight" href="/promoteurs/'+pr.slug+'" style="flex-direction:row;align-items:center;gap:16px;">'
           +'<span class="promo-logo" style="width:54px;height:54px;font-size:19px;">'+pr.name.charAt(0)+'</span>'
           +'<span><b style="display:block;color:var(--heading);font-family:var(--font-display);font-size:17px;">'+esc(pr.name)+(pr.verified?(' '+ic('shield')):'')+'</b><span style="color:var(--text-dim);font-size:12.5px;">'+WILAYAS[pr.wilaya].label+' · '+n+' projet'+(n>1?'s':'')+'</span></span>'
         +'</a>';
@@ -2274,7 +2301,7 @@ function pageInvest(){
     +'<div class="stat-tile"><div class="k">Promoteurs vérifiés</div><div class="v">100%</div></div>'
   +'</div></div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
-    +'<div class="split-card accent theme-dark">'
+    +'<div class="split-card spotlight accent theme-dark">'
       +'<span class="eyebrow">Investisseurs</span><h3>Un accompagnement dédié</h3>'
       +'<p>Vous souhaitez investir dans un ou plusieurs programmes ? Notre équipe vous met en relation avec les promoteurs adaptés à votre budget et à vos objectifs.</p>'
       +'<div><a class="btn btn-primary" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, je souhaite être accompagné(e) pour un projet d\'investissement immobilier.')+'">'+ic('whatsapp')+' Être accompagné(e)</a></div>'
@@ -2427,6 +2454,13 @@ if(!REDUCE_MOTION){
     if(e.relatedTarget && card.contains(e.relatedTarget)) return;
     card.classList.remove('tilting');
     card.style.transform='';
+  });
+  document.addEventListener('mousemove', function(e){
+    var el = e.target.closest && e.target.closest('.spotlight');
+    if(!el) return;
+    var r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+    el.style.setProperty('--my', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
   });
 }
 
