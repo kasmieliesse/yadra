@@ -211,13 +211,15 @@ p{margin:0;}
 .hero-grid{position:relative;z-index:1;display:grid;gap:20px;padding-bottom:36px;}
 @media (min-width:980px){.hero-grid{grid-template-columns:1.1fr 0.9fr;align-items:center;padding-bottom:44px;}}
 .hero-content{position:relative;z-index:1;max-width:760px;}
-.hero h1{font-size:clamp(2.3rem,5.6vw,4.2rem);font-style:italic;font-weight:600;color:#fff;letter-spacing:-.01em;}
-.hero h1 em{font-style:italic;color:var(--or-rose-light);position:relative;}
-.hero h1 .hw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em;}
-.hero h1 .hw-in{display:inline-block;transform:translateY(112%);opacity:0;animation:heroWordUp .9s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(.15s + var(--wi) * .1s);}
+.hero h1{font-size:clamp(2.6rem,6.4vw,4.6rem);font-style:normal;font-weight:600;letter-spacing:-.01em;text-transform:uppercase;line-height:.98;}
+.hero h1 .hw-line{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em;}
+.hero h1 .hw-in{display:block;transform:translateY(112%);opacity:0;animation:heroWordUp .9s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(.15s + var(--wi) * .12s);
+  background:linear-gradient(100deg,#fff,var(--argent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero h1 .hw-line.accent .hw-in{background:linear-gradient(100deg,var(--or-rose-light),var(--or-rose) 55%,var(--or-rose-light));-webkit-background-clip:text;background-clip:text;color:transparent;}
 @keyframes heroWordUp{to{transform:translateY(0);opacity:1;}}
 .hero .eyebrow{opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;}
 .hero .sub{margin-top:18px;font-size:16px;color:var(--text-dim);max-width:520px;opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.5s;}
+.hero .hero-divider{width:46px;height:2px;border-radius:2px;margin:20px 0 0;background:linear-gradient(90deg,var(--or-rose-light),var(--or-rose));opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.55s;}
 .hero .search-card{opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.6s;}
 .hero .hero-contact-row{opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.7s;}
 @keyframes heroFadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
@@ -263,40 +265,40 @@ p{margin:0;}
 .hero-phone b{font-family:var(--font-display);font-size:16px;font-weight:600;color:#fff;letter-spacing:.01em;}
 .hero-phone:hover b{color:var(--or-rose-light);}
 
-/* Stats bar */
-.stats-bar{position:relative;z-index:1;margin-top:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l) var(--radius-l) 0 0;
-  display:grid;grid-template-columns:repeat(2,1fr);gap:0;overflow:hidden;}
-@media (min-width:700px){.stats-bar{grid-template-columns:repeat(4,1fr);border-radius:var(--radius-l);margin-bottom:-1px;}}
-.stat-item{display:flex;align-items:center;gap:12px;padding:20px 22px;border-top:1px solid var(--border);}
-.stat-item:nth-child(odd){border-right:1px solid var(--border);}
-@media (min-width:700px){.stat-item{border-top:0;border-right:1px solid var(--border);}.stat-item:last-child{border-right:0;}}
-.stat-item .ic-wrap{width:38px;height:38px;border-radius:50%;background:rgba(183,110,77,.14);display:flex;align-items:center;justify-content:center;color:var(--or-rose-light);flex:0 0 auto;}
-.stat-item .ic-wrap svg{width:18px;height:18px;}
-.stat-item .num{font-family:var(--font-display);font-size:24px;font-weight:700;color:#fff;line-height:1;}
-.stat-item .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-top:4px;}
-.stat-item.spin-badge .ic-wrap{background:transparent;perspective:200px;}
-.coin{width:38px;height:38px;position:relative;transform-style:preserve-3d;animation:coinSpin 5s linear infinite;}
-.coin .face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;}
-.coin .face.front{background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));color:#fff;}
-.coin .face.back{background:linear-gradient(135deg,var(--argent),#bdbdbd);color:#0A0A0A;transform:rotateY(180deg);}
-.coin .face svg{width:17px;height:17px;}
-@keyframes coinSpin{to{transform:rotateY(360deg);}}
+/* Trust strip */
+.trust-strip{position:relative;z-index:1;margin-top:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);
+  display:flex;flex-wrap:wrap;overflow:hidden;}
+.trust-item{display:flex;align-items:flex-start;gap:11px;padding:20px 22px;flex:1 1 190px;border-top:1px solid var(--border);}
+.trust-item .ic-wrap{width:34px;height:34px;border-radius:50%;background:rgba(183,110,77,.14);display:flex;align-items:center;justify-content:center;color:var(--or-rose-light);flex:0 0 auto;}
+.trust-item .ic-wrap svg{width:16px;height:16px;}
+.trust-item .ti-label{font-size:12.5px;font-weight:700;color:#fff;letter-spacing:.01em;}
+.trust-item .ti-desc{font-size:12px;color:var(--text-dim);margin-top:3px;line-height:1.35;}
+.trust-cta{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:16px 24px;border-top:1px solid var(--border);white-space:nowrap;}
+@media (min-width:1000px){
+  .trust-item{border-top:0;border-right:1px solid var(--border);}
+  .trust-cta{border-top:0;border-left:1px solid var(--border);margin-left:auto;}
+}
 
 .search-card{
-  margin-top:36px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);
+  margin-top:36px;background:rgba(30,28,26,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.14);border-radius:var(--radius-l);
   padding:14px;display:grid;gap:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.7);
 }
 @media (min-width:760px){
-  .search-card{grid-template-columns:1.2fr 1fr 1fr auto;align-items:stretch;padding:10px;}
+  .search-card{grid-template-columns:1.2fr 1fr 1fr auto;align-items:center;padding:8px 8px 8px 10px;border-radius:999px;}
 }
 .search-field{display:flex;flex-direction:column;gap:4px;padding:10px 16px;border-radius:var(--radius-m);}
-@media (min-width:760px){.search-field{border-right:1px solid var(--border);}}
+@media (min-width:760px){.search-field{border-right:1px solid rgba(255,255,255,.12);}}
 .search-field label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);font-weight:700;}
 .search-field select,.search-field input{
   background:transparent;border:0;color:#fff;font-size:14px;font-weight:600;padding:2px 0;font-family:inherit;
 }
 .search-field select:focus,.search-field input:focus{outline:0;}
-.search-card .btn-primary{margin:4px;}
+.search-card .search-submit{
+  margin:4px;width:52px;height:52px;min-width:52px;border-radius:50%;padding:0;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.search-card .search-submit svg{width:19px;height:19px;}
 
 /* ---------------- Sections / layout ---------------- */
 .section{padding:64px 0;}
@@ -640,9 +642,11 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .city-tile:hover{transform:translateY(-5px) scale(1.015);border-color:rgba(183,110,77,.45);}
 
 @media (prefers-reduced-motion:reduce){
-  .hero-gem,.hero-ring,.hero-orb-1,.hero-orb-2,.coin,.hero-gem-float,.sparkle,.badge-feature::after{animation:none!important;}
+  .hero-gem,.hero-ring,.hero-orb-1,.hero-orb-2,.hero-gem-float,.sparkle,.badge-feature::after{animation:none!important;}
   .reveal{opacity:1;transform:none;}
-  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .search-card,.hero .hero-contact-row{opacity:1;transform:none;}
+  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .hero-divider,.hero .search-card,.hero .hero-contact-row{opacity:1;transform:none;}
+  .hero h1 .hw-in{background:linear-gradient(100deg,#fff,var(--argent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero h1 .hw-line.accent .hw-in{background:linear-gradient(100deg,var(--or-rose-light),var(--or-rose) 55%,var(--or-rose-light));-webkit-background-clip:text;background-clip:text;}
 }
 </style>
 </head>
@@ -660,8 +664,8 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
       <a href="/projets" data-route="/projets">Projets</a>
       <a href="/villes" data-route="/villes">Villes</a>
       <a href="/promoteurs" data-route="/promoteurs">Promoteurs</a>
-      <a href="/a-propos" data-route="/a-propos">À propos</a>
       <a href="/investir" data-route="/investir">Investir</a>
+      <a href="/a-propos" data-route="/a-propos">À propos</a>
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" id="navFavBtn" title="Favoris" aria-label="Favoris"></button>
@@ -675,8 +679,8 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   <a href="/projets">Projets</a>
   <a href="/villes">Villes</a>
   <a href="/promoteurs">Promoteurs</a>
-  <a href="/a-propos">À propos</a>
   <a href="/investir">Investir</a>
+  <a href="/a-propos">À propos</a>
   <a href="/favoris">Favoris</a>
   <a href="/promoteur">Espace promoteur</a>
   <div class="mm-actions">
@@ -910,11 +914,6 @@ function renderProjectsMap(containerId, projects, opts){
     else { map.fitBounds(bounds, {padding:[36,36], maxZoom:13}); }
     return map;
   }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
-}
-function heroWordsHTML(words){
-  return words.map(function(w,i){
-    return '<span class="hw" style="--wi:'+i+'"><span class="hw-in">'+w+'</span></span>';
-  }).join(' ');
 }
 function heroSkylineSVG(){
   var rnd = mulberry32(7);
@@ -1302,16 +1301,20 @@ function pageHome(){
           +'<div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>'
         +'</div></div></div>'
         +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
-        +'<h1>'+heroWordsHTML(['L’immobilier','<em>autrement.</em>'])+'</h1>'
-        +'<p class="sub">Des résidences d’exception pour une vie sans égal.</p>'
+        +'<h1>'
+          +'<span class="hw-line" style="--wi:0"><span class="hw-in">L’immobilier</span></span>'
+          +'<span class="hw-line accent" style="--wi:1"><span class="hw-in">autrement.</span></span>'
+        +'</h1>'
+        +'<p class="sub">Des résidences d’exception<br>pour une vie sans égal.</p>'
+        +'<div class="hero-divider" aria-hidden="true"></div>'
         +'<form class="search-card" id="heroSearch">'
-          +'<div class="search-field"><label>Où</label>'
+          +'<div class="search-field"><label>Où ?</label>'
             +'<select name="ville"><option value="">Ville, commune, quartier</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
-          +'<div class="search-field"><label>Type de bien</label>'
+          +'<div class="search-field"><label>Type</label>'
             +'<select name="type"><option value="">Tous types</option><option>Appartement</option><option>Duplex</option><option>Villa</option><option>Résidence mixte</option></select></div>'
           +'<div class="search-field"><label>Budget</label>'
             +'<select name="budgetMax"><option value="">Budget max</option><option value="10000000">Jusqu\'à 10 M DA</option><option value="15000000">Jusqu\'à 15 M DA</option><option value="25000000">Jusqu\'à 25 M DA</option><option value="50000000">Jusqu\'à 50 M DA</option></select></div>'
-          +'<button class="btn btn-primary" type="submit">'+ic('search')+' Rechercher</button>'
+          +'<button class="btn btn-primary search-submit" type="submit" aria-label="Rechercher">'+ic('search')+'</button>'
         +'</form>'
         +'<div class="hero-contact-row">'
           +'<a class="hero-phone" href="tel:+33670131501">'+ic('phone')+'<span>Nous contacter<b>+33 6 70 13 15 01</b></span></a>'
@@ -1327,11 +1330,13 @@ function pageHome(){
         +[[10,18,'0s'],[85,30,'.8s'],[70,80,'1.6s'],[18,70,'2.4s'],[92,66,'.4s']].map(function(s){return '<span class="sparkle" style="left:'+s[0]+'%;top:'+s[1]+'%;animation-delay:'+s[2]+';width:4px;height:4px;"></span>';}).join('')
       +'</div>'
     +'</div>'
-    +'<div class="wrap"><div class="stats-bar" id="statsBar">'
-      +statItem('buildings','120','+','Projets')
-      +statItem('users','60','+','Promoteurs')
-      +statItem('pin','7','','Villes')
-      +'<div class="stat-item spin-badge"><div class="coin"><div class="face front">'+ic('check')+'</div><div class="face back">'+ic('shield')+'</div></div><div><div class="num">100%</div><div class="lbl">Vérifiés</div></div></div>'
+    +'<div class="wrap"><div class="trust-strip reveal" id="heroTrust" style="transition-delay:.85s">'
+      +trustItem('star','Sélection exclusive','Des projets triés sur le volet')
+      +trustItem('handshake','Accompagnement sur mesure','De la recherche à l’acquisition')
+      +trustItem('pin','Expertise locale','Une connaissance approfondie du marché algérien')
+      +trustItem('shield','Transparence & confiance','Informations vérifiées et garanties')
+      +trustItem('eye','Vue d’ensemble','Carte interactive & recherche multi-critères')
+      +'<a class="btn btn-primary trust-cta" href="/projets">Découvrir nos projets '+ic('chevronRight')+'</a>'
     +'</div></div>'
   +'</section>'
 
@@ -1402,8 +1407,8 @@ function pageHome(){
   +'</section>';
 }
 function valueCard(icon,title,desc){ return '<div class="value-card">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
-function statItem(icon,num,suffix,label){
-  return '<div class="stat-item"><div class="ic-wrap">'+ic(icon)+'</div><div><div class="num"><span class="count-up" data-target="'+num+'">0</span>'+(suffix||'')+'</div><div class="lbl">'+label+'</div></div></div>';
+function trustItem(icon,label,desc){
+  return '<div class="trust-item"><div class="ic-wrap">'+ic(icon)+'</div><div><div class="ti-label">'+label+'</div><div class="ti-desc">'+desc+'</div></div></div>';
 }
 function afterHome(){
   document.getElementById('heroSearch').addEventListener('submit', function(e){
