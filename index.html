@@ -133,6 +133,7 @@ p{margin:0;}
 .logo-img{height:50px;width:auto;display:block;filter:drop-shadow(0 2px 14px rgba(183,110,77,.38));transition:filter .25s ease, transform .3s ease;}
 .logo.sm .logo-img{height:34px;}
 .logo.lg .logo-img{height:88px;}
+.auth-card .logo{background:var(--noir);padding:14px 22px;border-radius:14px;}
 .logo::after{
   content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
   background:linear-gradient(115deg,transparent,rgba(255,255,255,.55),transparent);
@@ -264,7 +265,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
   mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
   opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.7s;}
-.city-marquee-track{display:flex;width:max-content;animation:cityScroll 30s linear infinite;}
+.city-marquee-track{display:flex;width:max-content;animation:cityScroll 52s linear infinite;}
 .city-marquee:hover .city-marquee-track{animation-play-state:paused;}
 .city-marquee a{display:inline-flex;align-items:center;gap:9px;padding:0 30px;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;transition:color .2s ease;}
 .city-marquee a:hover{color:#fff;}
@@ -312,7 +313,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .section{padding:64px 0;}
 .section.tight{padding:44px 0;}
 .section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;}
-.section-head h2{font-size:clamp(1.6rem,3vw,2.2rem);font-style:italic;color:var(--heading);}
+.section-head h2{position:relative;padding-left:24px;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--heading);}
+.section-head h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:14px;height:2px;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));}
 .section-head .desc{color:var(--text-dim);max-width:520px;margin-top:8px;font-size:14px;}
 .see-all{font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--accent-2);border-bottom:1px solid var(--or-rose-dim);padding-bottom:2px;white-space:nowrap;}
 
@@ -379,12 +381,18 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 /* ---------------- City tiles ---------------- */
 .city-tile{
   position:relative;border-radius:var(--radius-l);overflow:hidden;aspect-ratio:3/2;border:1px solid var(--border);
-  display:flex;align-items:flex-end;padding:18px;background:var(--surface-2);
+  display:flex;align-items:flex-end;padding:20px;background:var(--surface-2);
 }
-.city-tile svg{position:absolute;inset:0;width:100%;height:100%;}
-.city-tile .ct-label{position:relative;z-index:1;}
-.city-tile .ct-label b{font-family:var(--font-display);font-style:italic;font-size:22px;color:#fff;display:block;}
-.city-tile .ct-label span{font-size:11px;color:var(--argent-hair);color:var(--argent);opacity:.8;}
+.city-tile .ct-art{position:absolute;inset:0;width:100%;height:100%;transition:transform .9s cubic-bezier(.16,1,.3,1);}
+.city-tile .ct-art svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.city-tile:hover .ct-art{transform:scale(1.16) translate(-1.5%,-2%);}
+.city-tile::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.78) 100%);pointer-events:none;}
+.city-tile .ct-label{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;width:100%;gap:10px;}
+.city-tile .ct-label b{font-size:17px;font-weight:800;color:#fff;display:block;text-transform:uppercase;letter-spacing:.03em;}
+.city-tile .ct-label span{font-size:11px;color:var(--argent);opacity:.75;text-transform:uppercase;letter-spacing:.05em;}
+.city-tile .ct-arrow{position:relative;z-index:1;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto;opacity:0;transform:translateX(-6px);transition:opacity .3s ease,transform .3s ease,background .2s ease;}
+.city-tile .ct-arrow svg{width:15px;height:15px;}
+.city-tile:hover .ct-arrow{opacity:1;transform:translateX(0);background:var(--or-rose);border-color:var(--or-rose);}
 
 /* ---------------- Split (acquéreur / promoteur) ---------------- */
 .split-card{
@@ -392,7 +400,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
   background:var(--surface);display:flex;flex-direction:column;gap:14px;
 }
 .split-card.accent{background:linear-gradient(160deg,#1b120d,#120a07 70%);border-color:rgba(183,110,77,.35);}
-.split-card h3{color:var(--heading);font-size:24px;font-style:italic;}
+.split-card h3{color:var(--heading);font-size:21px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;}
 .split-card p{color:var(--text-dim);font-size:14px;}
 .split-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
 .split-card li{display:flex;gap:10px;font-size:13.5px;color:var(--text);align-items:flex-start;}
@@ -459,7 +467,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .detail-gallery > div > svg{width:100%;height:100%;}
 .detail-gallery > div > img{width:100%;height:100%;object-fit:cover;display:block;}
 .detail-header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;padding:26px 0;}
-.detail-title h1{font-size:clamp(1.8rem,3.4vw,2.6rem);color:var(--heading);font-style:italic;}
+.detail-title h1{font-size:clamp(1.5rem,2.8vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.015em;}
 .detail-title .loc{color:var(--text-dim);font-size:13.5px;margin-top:6px;display:flex;align-items:center;gap:6px;}
 .detail-promoter-chip{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px 6px 6px;margin-top:14px;}
 .pchip-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;}
@@ -477,6 +485,19 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .stat-tile .v{font-family:var(--font-display);font-size:19px;color:var(--heading);margin-top:6px;}
 .prose{color:var(--text);font-size:14.5px;line-height:1.85;max-width:66ch;}
 .prose + .prose{margin-top:10px;}
+.legal-doc{max-width:720px;}
+.legal-doc .legal-updated{font-size:12px;color:var(--text-dim);margin-bottom:26px;}
+.legal-doc .legal-toc{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border);}
+.legal-doc .legal-toc a{font-size:12px;padding:7px 14px;border:1px solid var(--border);border-radius:999px;color:var(--text-dim);}
+.legal-doc .legal-toc a:hover{color:var(--heading);border-color:var(--or-rose);}
+.legal-doc section{margin-bottom:30px;}
+.legal-doc h2{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--heading);margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.legal-doc h3{font-size:13.5px;font-weight:700;color:var(--heading);margin:18px 0 6px;}
+.legal-doc p{color:var(--text);font-size:14px;line-height:1.8;max-width:68ch;margin:0 0 10px;}
+.legal-doc ul{margin:10px 0 10px 20px;padding:0;color:var(--text);font-size:14px;line-height:1.75;}
+.legal-doc li{margin-bottom:7px;}
+.legal-doc strong{color:var(--heading);}
+.legal-placeholder{display:inline-block;background:rgba(183,110,77,.1);border:1px dashed var(--or-rose-dim);border-radius:6px;padding:1px 7px;color:var(--accent-2);font-weight:700;font-size:.95em;}
 .chips-plain{display:flex;flex-wrap:wrap;gap:10px;}
 .chip-plain{padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;color:var(--argent);display:flex;align-items:center;gap:7px;}
 .chip-plain svg{width:14px;height:14px;color:var(--or-rose-light);}
@@ -522,13 +543,13 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .promo-hero{padding:50px 0 30px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
 .promo-id{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
 .promo-logo{width:78px;height:78px;border-radius:20px;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-display);font-size:26px;font-weight:700;flex:0 0 auto;}
-.promo-name{font-size:clamp(1.6rem,3vw,2.4rem);color:var(--heading);font-style:italic;}
+.promo-name{font-size:clamp(1.4rem,2.6vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.02em;}
 .promo-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--text-dim);font-size:12.5px;margin-top:8px;}
 
 /* ---------------- Forms / Auth ---------------- */
 .auth-shell{min-height:calc(100vh - 76px);display:flex;align-items:center;justify-content:center;padding:60px 20px;}
 .auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:36px 30px;}
-.auth-card h1{font-size:26px;color:var(--heading);font-style:italic;text-align:center;}
+.auth-card h1{font-size:22px;color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:center;}
 .auth-card .sub{text-align:center;color:var(--text-dim);font-size:13px;margin-top:8px;}
 .field{display:flex;flex-direction:column;gap:6px;margin-top:16px;}
 .field label{font-size:11.5px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
@@ -548,7 +569,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 /* ---------------- Dashboards (compte / promoteur / admin) ---------------- */
 .dash-shell{padding:36px 0 80px;}
 .dash-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;margin-bottom:28px;}
-.dash-head h1{font-size:28px;color:var(--heading);font-style:italic;}
+.dash-head h1{font-size:24px;color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.02em;}
 .tab-row{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);margin-bottom:26px;padding-bottom:0;}
 .tab-btn{padding:11px 18px;font-size:13px;font-weight:700;color:var(--text-dim);background:transparent;border:0;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .tab-btn.active{color:var(--heading);border-color:var(--or-rose);}
@@ -599,7 +620,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .modal-overlay{position:fixed;inset:0;background:rgba(5,5,5,.72);backdrop-filter:blur(4px);z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;}
 .modal-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);max-width:460px;width:100%;padding:28px;max-height:88vh;overflow:auto;position:relative;}
 .modal-x{position:absolute;top:16px;right:16px;}
-.modal-card h2{color:var(--heading);font-size:22px;font-style:italic;}
+.modal-card h2{color:var(--heading);font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;}
 .modal-close{position:absolute;}
 .toast-wrap{position:fixed;top:90px;right:18px;z-index:90;display:flex;flex-direction:column;gap:10px;}
 .toast{background:var(--surface-2);border:1px solid rgba(111,207,151,.4);color:#eafff3;padding:14px 18px;border-radius:var(--radius-m);font-size:13px;display:flex;gap:10px;align-items:center;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);animation:toastin .25s ease;max-width:320px;}
@@ -858,14 +879,39 @@ function artSVG(seedStr, w, h){
 }
 function cityArtSVG(seedStr,w,h){
   var seed=hashStr(seedStr), rnd=mulberry32(seed); w=w||300;h=h||200;
-  var uid='city'+seed; var pts=[]; var x=0; var baseY=h*0.86;
-  var n=10+Math.floor(rnd()*6);
-  for(var i=0;i<n;i++){ var bw=w/n; var bh=h*(0.1+rnd()*0.6); pts.push('<rect x="'+x.toFixed(1)+'" y="'+(baseY-bh).toFixed(1)+'" width="'+(bw*0.8).toFixed(1)+'" height="'+(bh+30).toFixed(1)+'" fill="#171515" stroke="rgba(230,230,230,.06)"/>'); x+=bw; }
+  var uid='city'+seed; var baseY=h*0.86; var x=0;
+  var n=9+Math.floor(rnd()*5);
+  var bars=[], glows=[];
+  for(var i=0;i<n;i++){
+    var bw=w/n; var bh=h*(0.16+rnd()*0.62);
+    var bx=x+bw*0.08, bwid=bw*0.8;
+    bars.push('<rect x="'+bx.toFixed(1)+'" y="'+(baseY-bh).toFixed(1)+'" width="'+bwid.toFixed(1)+'" height="'+(bh+40).toFixed(1)+'" fill="url(#'+uid+'b)" stroke="rgba(255,255,255,.05)"/>');
+    var rows=2+Math.floor(rnd()*4), cols=1+Math.floor(rnd()*2);
+    for(var r=0;r<rows;r++){ for(var c=0;c<cols;c++){
+      if(rnd()>0.4){
+        var wx=bx+4+c*((bwid-8)/Math.max(cols,1)), wy=(baseY-bh)+8+r*(bh/rows);
+        glows.push('<rect x="'+wx.toFixed(1)+'" y="'+wy.toFixed(1)+'" width="3.4" height="5" fill="#F0C9A0" opacity="'+(0.35+rnd()*0.55).toFixed(2)+'"/>');
+      }
+    }}
+    x+=bw;
+  }
   return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">'
-    +'<defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E1E1E"/><stop offset="1" stop-color="#0A0A0A"/></linearGradient>'
-    +'<radialGradient id="'+uid+'g" cx=".5" cy="1" r=".8"><stop offset="0" stop-color="#B76E4D" stop-opacity=".3"/><stop offset="1" stop-color="#B76E4D" stop-opacity="0"/></radialGradient></defs>'
-    +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+')"/><rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'g)"/>'+pts.join('')
+    +'<defs>'
+    +'<linearGradient id="'+uid+'sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#191029"/><stop offset=".45" stop-color="#2c1a22"/><stop offset=".78" stop-color="#4a2418"/><stop offset="1" stop-color="#c97b45"/></linearGradient>'
+    +'<linearGradient id="'+uid+'b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#221a17"/><stop offset="1" stop-color="#100c0a"/></linearGradient>'
+    +'<radialGradient id="'+uid+'g" cx=".5" cy="1" r=".75"><stop offset="0" stop-color="#B76E4D" stop-opacity=".38"/><stop offset="1" stop-color="#B76E4D" stop-opacity="0"/></radialGradient>'
+    +'</defs>'
+    +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'sky)"/>'
+    +'<rect width="'+w+'" height="'+h+'" fill="url(#'+uid+'g)"/>'
+    +bars.join('')+glows.join('')
     +'<rect width="'+w+'" height="'+h+'" fill="none" stroke="rgba(230,230,230,.08)"/></svg>';
+}
+function cityTileHTML(w,count,extraClass){
+  return '<a class="city-tile'+(extraClass?(' '+extraClass):'')+'" href="/projets?ville='+w+'">'
+    +'<div class="ct-art">'+cityArtSVG('city-'+w,420,280)+'</div>'
+    +'<div class="ct-label"><div><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div>'
+    +'<span class="ct-arrow">'+ic('chevronRight')+'</span></div>'
+  +'</a>';
 }
 function mediaHTML(p,w,h,seedSuffix){
   if(p.photo && !seedSuffix){ return '<img class="card-photo" src="'+p.photo+'" alt="'+esc(p.nom)+'" loading="lazy">'; }
@@ -1342,7 +1388,7 @@ function pageHome(){
       +'<div class="grid reveal-stagger" style="grid-template-columns:repeat(2,1fr);">'
         +WILAYA_ORDER.map(function(w){
           var count = PROJECTS.filter(function(p){return p.wilaya===w;}).length;
-          return '<a class="city-tile reveal" href="/projets?ville='+w+'">'+cityArtSVG('city-'+w)+'<div class="ct-label"><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div></a>';
+          return cityTileHTML(w,count,'reveal');
         }).join('')
       +'</div>'
     +'</div>'
@@ -1395,9 +1441,15 @@ function pageHome(){
   +'</section>';
 }
 function valueCard(icon,title,desc){ return '<div class="value-card">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+var MARQUEE_EXTRA_CITIES = ['Tlemcen','Béjaïa','Batna','Mostaganem','Skikda','Ghardaïa','Tipaza','Boumerdès'];
 function cityMarqueeItems(hidden){
-  return WILAYA_ORDER.map(function(w){
-    return '<a href="/projets?ville='+w+'"'+(hidden?' tabindex="-1" aria-hidden="true"':'')+'>'+ic('pin')+WILAYAS[w].label+'</a><span class="dot" aria-hidden="true"></span>';
+  var items = WILAYA_ORDER.map(function(w){
+    return {label:WILAYAS[w].label, href:'/projets?ville='+w};
+  }).concat(MARQUEE_EXTRA_CITIES.map(function(name){
+    return {label:name, href:'/projets'};
+  }));
+  return items.map(function(it){
+    return '<a href="'+it.href+'"'+(hidden?' tabindex="-1" aria-hidden="true"':'')+'>'+ic('pin')+it.label+'</a><span class="dot" aria-hidden="true"></span>';
   }).join('');
 }
 function trustItem(icon,label,desc){
@@ -2120,7 +2172,7 @@ function pageVilles(){
     +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">'
       +WILAYA_ORDER.map(function(w){
         var count = getAllProjects().filter(function(p){return p.wilaya===w;}).length;
-        return '<a class="city-tile" href="/projets?ville='+w+'">'+cityArtSVG('city-'+w)+'<div class="ct-label"><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div></a>';
+        return cityTileHTML(w,count);
       }).join('')
     +'</div>'
   +'</div>';
@@ -2157,7 +2209,7 @@ function pageAbout(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">À propos</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.8rem,3.6vw,2.6rem);color:var(--heading);font-style:italic;">Une nouvelle façon de vivre l’immobilier en Algérie.</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Une nouvelle façon de vivre l’immobilier en Algérie.</h1>'
     +'<p class="prose" style="margin-top:18px;">yadra! met en relation directe les acquéreurs et les promoteurs immobiliers à travers l’Algérie. Notre mission : simplifier la recherche d’un bien neuf, avec des fiches projets complètes, des promoteurs vérifiés et un contact direct, sans intermédiaire superflu.</p>'
     +'<p class="prose">Fondée à Alger, l’équipe qbm construit yadra! comme la référence de la promotion immobilière premium en Algérie — exigeante sur la qualité des projets présentés, simple d’usage pour les acquéreurs.</p>'
   +'</div>'
@@ -2188,7 +2240,7 @@ function pageInvest(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Investir</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.8rem,3.6vw,2.6rem);color:var(--heading);font-style:italic;">Investir dans l’immobilier neuf en Algérie.</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Investir dans l’immobilier neuf en Algérie.</h1>'
     +'<p class="prose" style="margin-top:18px;">Le marché immobilier algérien offre des opportunités croissantes pour les investisseurs, portées par l’urbanisation des grandes wilayas et le développement de programmes résidentiels de standing. yadra! vous donne accès aux projets les plus prometteurs, avec une information fiable sur les promoteurs et les prix.</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 50px;">'
@@ -2209,14 +2261,120 @@ function afterInvest(){}
 /* ================================================================
    PAGE: LEGAL
    ================================================================ */
+function lp(label){ return '<span class="legal-placeholder">'+label+'</span>'; }
+
+function legalSections(kind){
+  if(kind === 'mentions-legales'){
+    return [
+      {id:'editeur', h:'1. Éditeur du site', body:
+        '<p>Le site yadra.fr (ci-après « le Site ») est édité par la marque <strong>yadra! by qbm</strong>.</p>'
+        +'<ul>'
+        +'<li>Raison sociale / forme juridique : '+lp('à compléter')+'</li>'
+        +'<li>Siège social : '+lp('adresse à compléter')+'</li>'
+        +'<li>Numéro d’immatriculation (RCS / registre du commerce) : '+lp('à compléter')+'</li>'
+        +'<li>Capital social le cas échéant : '+lp('à compléter')+'</li>'
+        +'<li>Numéro de TVA intracommunautaire le cas échéant : '+lp('à compléter')+'</li>'
+        +'<li>Contact : WhatsApp <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a></li>'
+        +'</ul>'},
+      {id:'publication', h:'2. Directeur de la publication', body:
+        '<p>Directeur de la publication : '+lp('nom et qualité à compléter')+'. Conformément à la loi, ses coordonnées complètes sont tenues à la disposition de toute autorité compétente qui en ferait la demande.</p>'},
+      {id:'hebergement', h:'3. Hébergement', body:
+        '<p>Le Site est hébergé par :</p>'
+        +'<ul><li><strong>GitHub, Inc.</strong> (GitHub Pages) — 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis. Informations complémentaires disponibles sur <a href="https://docs.github.com/pages" target="_blank" rel="noopener">docs.github.com/pages</a>.</li></ul>'},
+      {id:'nature-contenu', h:'4. Nature du contenu publié', body:
+        '<p>yadra! est une plateforme de mise en relation entre porteurs de projets immobiliers (promoteurs) et particuliers intéressés. <strong>Le Site est actuellement en phase de développement</strong> : certains projets, promoteurs, avis ou statistiques affichés peuvent constituer des exemples de démonstration destinés à illustrer le fonctionnement de la plateforme, et non des annonces réelles disponibles à la vente. Toute mention contraire explicite sur une fiche donnée prévaut sur la présente clause générale.</p>'
+        +'<p>yadra! n’est ni agent immobilier, ni notaire, ni intermédiaire à la transaction au sens réglementaire : le Site a vocation à mettre en relation les utilisateurs avec des promoteurs, qui restent seuls responsables de l’exactitude des informations qu’ils publient et de la conduite des opérations de vente.</p>'},
+      {id:'propriete', h:'5. Propriété intellectuelle', body:
+        '<p>La structure du Site, sa charte graphique, son logo, ses textes et éléments visuels sont, sauf mention contraire, la propriété de l’éditeur ou de ses partenaires et sont protégés par le droit de la propriété intellectuelle. Toute reproduction, représentation ou exploitation, totale ou partielle, sans autorisation préalable est interdite. Les visuels de projets immobiliers appartiennent à leurs promoteurs ou auteurs respectifs.</p>'},
+      {id:'liens-tiers', h:'6. Liens et services tiers', body:
+        '<p>Le Site s’appuie sur des services tiers pour certaines fonctionnalités, notamment :</p>'
+        +'<ul>'
+        +'<li><strong>WhatsApp</strong> (Meta Platforms, Inc.) pour la prise de contact directe ;</li>'
+        +'<li><strong>Google Fonts</strong> pour l’affichage des polices de caractères ;</li>'
+        +'<li><strong>OpenStreetMap</strong> et sa communauté de contributeurs pour l’affichage des cartes interactives.</li>'
+        +'</ul>'
+        +'<p>Ces services sont régis par leurs propres conditions d’utilisation et politiques de confidentialité, indépendantes de yadra!.</p>'},
+      {id:'responsabilite', h:'7. Limitation de responsabilité', body:
+        '<p>L’éditeur s’efforce d’assurer l’exactitude des informations diffusées sur le Site mais ne peut garantir l’absence d’erreur ou d’omission, notamment concernant les informations fournies par des tiers (promoteurs). L’éditeur ne saurait être tenu responsable des dommages directs ou indirects résultant de l’accès ou de l’usage du Site.</p>'},
+      {id:'droit', h:'8. Droit applicable', body:
+        '<p>Les présentes mentions légales sont soumises au droit '+lp('juridiction à préciser')+'. En cas de litige et à défaut de résolution amiable, les tribunaux compétents seront ceux du ressort '+lp('à préciser')+'.</p>'},
+      {id:'contact', h:'9. Contact', body:
+        '<p>Pour toute question relative au Site, vous pouvez nous contacter via WhatsApp au <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>.</p>'}
+    ];
+  }
+  if(kind === 'confidentialite'){
+    return [
+      {id:'preambule', h:'1. Préambule', body:
+        '<p>yadra! accorde une importance particulière à la protection de la vie privée des utilisateurs du Site. Cette politique explique quelles informations sont traitées, dans quel but, et quels sont vos droits. Elle est rédigée dans un esprit de conformité avec le Règlement Général sur la Protection des Données (RGPD — UE 2016/679) et, le cas échéant, avec la législation algérienne applicable à la protection des données à caractère personnel.</p>'},
+      {id:'responsable', h:'2. Responsable du traitement', body:
+        '<p>Le responsable du traitement des données est l’éditeur du Site, identifié dans les <a href="/legal/mentions-legales">mentions légales</a>. Contact : WhatsApp <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>.</p>'},
+      {id:'donnees', h:'3. Données traitées', body:
+        '<p>À la date de publication de cette politique, le Site fonctionne <strong>sans compte serveur ni base de données distante</strong> : aucune information saisie sur le Site n’est transmise à un serveur yadra!. Concrètement :</p>'
+        +'<ul>'
+        +'<li><strong>Favoris et préférences d’affichage</strong> : enregistrés uniquement dans le stockage local de votre navigateur (« localStorage »), sur votre propre appareil. Ces données ne sont jamais transmises à yadra! et disparaissent si vous videz les données de votre navigateur.</li>'
+        +'<li><strong>Prise de contact</strong> (bouton WhatsApp, appel téléphonique, formulaire de contact) : lorsque vous choisissez de nous contacter, les informations que vous transmettez (nom, message, numéro de téléphone) le sont directement via l’application WhatsApp ou votre téléphone, en dehors du Site, et sont régies par la politique de confidentialité de WhatsApp/Meta.</li>'
+        +'</ul>'
+        +'<p>Si yadra! met en place à l’avenir un espace utilisateur avec création de compte et traitement de données côté serveur (inscription, candidature promoteur, historique de recherche, etc.), la présente politique sera mise à jour en conséquence avant l’activation de cette fonctionnalité, et les finalités, bases légales et durées de conservation correspondantes y seront précisées.</p>'},
+      {id:'finalites', h:'4. Finalités et base légale', body:
+        '<p>Les seules données actuellement traitées (favoris en local) le sont dans l’intérêt légitime de l’utilisateur, pour améliorer son confort de navigation, sans finalité commerciale ni transmission à un tiers. Les échanges via WhatsApp ou téléphone reposent sur votre consentement explicite au moment où vous initiez le contact.</p>'},
+      {id:'conservation', h:'5. Durée de conservation', body:
+        '<p>Les favoris stockés localement sont conservés jusqu’à suppression manuelle par l’utilisateur ou effacement des données du navigateur. yadra! ne conserve aucune copie de ces informations sur ses propres systèmes.</p>'},
+      {id:'destinataires', h:'6. Destinataires des données', body:
+        '<p>Aucune donnée n’est vendue, louée ou cédée à des tiers à des fins commerciales. Lorsqu’un contact est initié au sujet d’un projet précis, les informations échangées peuvent être partagées avec le promoteur concerné, dans le seul but de traiter votre demande.</p>'},
+      {id:'cookies', h:'7. Cookies et traceurs', body:
+        '<p>Le Site ne dépose <strong>aucun cookie de mesure d’audience ou publicitaire</strong>. Certaines ressources sont néanmoins chargées depuis des serveurs tiers pour le bon fonctionnement du Site (polices de caractères via Google Fonts, fonds de carte via OpenStreetMap) : ces requêtes techniques transmettent votre adresse IP à ces prestataires, indépendamment de yadra!, conformément à leurs propres politiques respectives.</p>'},
+      {id:'securite', h:'8. Sécurité', body:
+        '<p>Le Site est servi exclusivement en HTTPS. En l’absence de traitement de données côté serveur, le principal enjeu de sécurité relève de votre propre appareil et navigateur.</p>'},
+      {id:'droits', h:'9. Vos droits', body:
+        '<p>Conformément à la réglementation applicable, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité sur les données vous concernant. Le stockage local (favoris) étant sous votre contrôle direct, vous pouvez l’effacer à tout moment depuis les réglages de votre navigateur. Pour toute autre demande, contactez-nous via WhatsApp au <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>. Vous disposez également du droit d’introduire une réclamation auprès de l’autorité de protection des données compétente (en France, la CNIL — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>'},
+      {id:'modifications', h:'10. Modification de la politique', body:
+        '<p>Cette politique peut être mise à jour pour refléter l’évolution du Site ou de la réglementation. La date de dernière mise à jour figure en haut de cette page.</p>'}
+    ];
+  }
+  // conditions d'utilisation
+  return [
+    {id:'objet', h:'1. Objet', body:
+      '<p>Les présentes conditions d’utilisation (ci-après « CGU ») ont pour objet de définir les modalités d’accès et d’utilisation du site yadra.fr (ci-après « le Site »), plateforme de mise en relation entre porteurs de projets immobiliers et utilisateurs intéressés en Algérie.</p>'},
+    {id:'acceptation', h:'2. Acceptation des CGU', body:
+      '<p>L’accès et l’utilisation du Site impliquent l’acceptation pleine et entière des présentes CGU. Si vous n’acceptez pas ces conditions, vous êtes invité(e) à ne pas utiliser le Site.</p>'},
+    {id:'description', h:'3. Description du service', body:
+      '<p>yadra! permet de consulter des projets immobiliers, de rechercher par ville, budget ou typologie, de sauvegarder des favoris et d’entrer en contact avec les promoteurs référencés. <strong>yadra! agit uniquement comme intermédiaire de mise en relation</strong> : le Site n’est ni vendeur, ni agent immobilier, ni partie aux transactions conclues entre utilisateurs et promoteurs, et n’intervient pas dans la négociation, la signature ou l’exécution des contrats de vente.</p>'},
+    {id:'statut-contenu', h:'4. Statut du contenu', body:
+      '<p>Le Site étant en cours de constitution de son catalogue, <strong>certains projets, promoteurs ou avis peuvent constituer des exemples de démonstration</strong> destinés à illustrer les fonctionnalités de la plateforme plutôt que des annonces réelles. yadra! s’engage à indiquer clairement le statut « démonstration » lorsque cela s’applique, et à ne présenter comme réels que des projets et promoteurs effectivement vérifiés.</p>'},
+    {id:'compte', h:'5. Compte utilisateur', body:
+      '<p>Certaines fonctionnalités (favoris, espace promoteur) peuvent nécessiter la création d’un compte. Vous vous engagez à fournir des informations exactes et à préserver la confidentialité de vos identifiants. Vous êtes responsable de toute activité effectuée depuis votre compte.</p>'},
+    {id:'obligations', h:'6. Obligations de l’utilisateur', body:
+      '<p>L’utilisateur s’engage à utiliser le Site conformément à sa destination, à ne pas porter atteinte à son bon fonctionnement (extraction massive de données, tentative d’intrusion, usage abusif des formulaires de contact) et à ne pas publier de contenu illicite, trompeur ou portant atteinte aux droits de tiers.</p>'},
+    {id:'promoteurs', h:'7. Relation avec les promoteurs', body:
+      '<p>Les promoteurs référencés sur le Site restent seuls responsables de l’exactitude, de la légalité et de la mise à jour des informations qu’ils publient (prix, disponibilité, caractéristiques des biens). yadra! met en œuvre une démarche de vérification des promoteurs mis en avant, sans que cela constitue une garantie de résultat quant à l’issue d’une transaction.</p>'},
+    {id:'propriete-cgu', h:'8. Propriété intellectuelle', body:
+      '<p>L’ensemble des éléments du Site (charte graphique, textes, logo, code source) est protégé par le droit de la propriété intellectuelle. Toute reproduction non autorisée est interdite, sous réserve des contenus appartenant aux promoteurs tiers.</p>'},
+    {id:'responsabilite-cgu', h:'9. Limitation de responsabilité', body:
+      '<p>yadra! s’efforce d’assurer la disponibilité et l’exactitude du Site, sans pouvoir le garantir en toutes circonstances (maintenance, interruption technique, inexactitude d’une information fournie par un tiers). yadra! ne saurait être tenu responsable des conséquences d’une décision d’achat prise sur la base des informations du Site ; il appartient à chaque utilisateur de procéder aux vérifications d’usage avant tout engagement.</p>'},
+    {id:'liens-tiers-cgu', h:'10. Services tiers', body:
+      '<p>La mise en relation via WhatsApp s’effectue selon les conditions propres à ce service, indépendantes de yadra!.</p>'},
+    {id:'resiliation', h:'11. Suspension et résiliation', body:
+      '<p>yadra! se réserve le droit de suspendre ou de résilier l’accès d’un utilisateur en cas de manquement grave aux présentes CGU, notamment en cas d’usage frauduleux ou abusif du Site.</p>'},
+    {id:'modification-cgu', h:'12. Modification des CGU', body:
+      '<p>yadra! peut modifier les présentes CGU à tout moment pour refléter l’évolution du Site ou de la réglementation applicable. Les utilisateurs sont invités à consulter régulièrement cette page.</p>'},
+    {id:'droit-cgu', h:'13. Droit applicable et litiges', body:
+      '<p>Les présentes CGU sont soumises au droit '+lp('juridiction à préciser')+'. Tout litige relatif à leur interprétation ou leur exécution relève, à défaut de résolution amiable, des tribunaux compétents '+lp('à préciser')+'.</p>'},
+    {id:'contact-cgu', h:'14. Contact', body:
+      '<p>Pour toute question relative aux présentes CGU, contactez-nous via WhatsApp au <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>.</p>'}
+  ];
+}
+
 function pageLegal(kind){
   var titles = {'mentions-legales':'Mentions légales','conditions':'Conditions d’utilisation','confidentialite':'Politique de confidentialité'};
   var title = titles[kind] || 'Informations légales';
+  var sections = legalSections(kind);
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+title+'</span></div></div>'
-  +'<div class="wrap" style="max-width:760px;padding-bottom:80px;">'
-    +'<h1 style="font-size:clamp(1.6rem,3vw,2.2rem);color:var(--heading);font-style:italic;margin-bottom:18px;">'+title+'</h1>'
-    +'<p class="prose">Cette page de démonstration présente la structure du site yadra!. Le contenu juridique définitif ('+title.toLowerCase()+') sera fourni par l’éditeur du site avant mise en production.</p>'
+  +'<div class="wrap legal-doc" style="padding-bottom:80px;">'
+    +'<h1 style="font-size:clamp(1.6rem,3vw,2.2rem);color:var(--heading);text-transform:uppercase;letter-spacing:.02em;font-weight:800;margin-bottom:10px;">'+title+'</h1>'
+    +'<p class="legal-updated">Dernière mise à jour : '+lp('date à préciser')+'. Document fourni à titre de trame professionnelle ; les champs signalés '+lp('ainsi')+' doivent être complétés par l’éditeur du Site avant publication définitive.</p>'
+    +'<nav class="legal-toc" aria-label="Sommaire">'+sections.map(function(s){return '<a href="#'+s.id+'">'+s.h.replace(/^\d+\.\s*/,'')+'</a>';}).join('')+'</nav>'
+    +sections.map(function(s){return '<section id="'+s.id+'"><h2>'+s.h+'</h2>'+s.body+'</section>';}).join('')
   +'</div>';
 }
 function afterLegal(){}
