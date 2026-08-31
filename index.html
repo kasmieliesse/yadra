@@ -213,7 +213,14 @@ p{margin:0;}
 .hero-content{position:relative;z-index:1;max-width:760px;}
 .hero h1{font-size:clamp(2.3rem,5.6vw,4.2rem);font-style:italic;font-weight:600;color:#fff;letter-spacing:-.01em;}
 .hero h1 em{font-style:italic;color:var(--or-rose-light);position:relative;}
-.hero .sub{margin-top:18px;font-size:16px;color:var(--text-dim);max-width:520px;}
+.hero h1 .hw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em;}
+.hero h1 .hw-in{display:inline-block;transform:translateY(112%);opacity:0;animation:heroWordUp .9s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(.15s + var(--wi) * .1s);}
+@keyframes heroWordUp{to{transform:translateY(0);opacity:1;}}
+.hero .eyebrow{opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;}
+.hero .sub{margin-top:18px;font-size:16px;color:var(--text-dim);max-width:520px;opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.5s;}
+.hero .search-card{opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.6s;}
+.hero .hero-contact-row{opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.7s;}
+@keyframes heroFadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 @media (min-width:700px){.hero .sub{font-size:18px;}}
 
 /* Hero visual: rotating 3D gem ornament */
@@ -635,6 +642,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 @media (prefers-reduced-motion:reduce){
   .hero-gem,.hero-ring,.hero-orb-1,.hero-orb-2,.coin,.hero-gem-float,.sparkle,.badge-feature::after{animation:none!important;}
   .reveal{opacity:1;transform:none;}
+  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .search-card,.hero .hero-contact-row{opacity:1;transform:none;}
 }
 </style>
 </head>
@@ -902,6 +910,11 @@ function renderProjectsMap(containerId, projects, opts){
     else { map.fitBounds(bounds, {padding:[36,36], maxZoom:13}); }
     return map;
   }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
+}
+function heroWordsHTML(words){
+  return words.map(function(w,i){
+    return '<span class="hw" style="--wi:'+i+'"><span class="hw-in">'+w+'</span></span>';
+  }).join(' ');
 }
 function heroSkylineSVG(){
   var rnd = mulberry32(7);
@@ -1289,8 +1302,8 @@ function pageHome(){
           +'<div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>'
         +'</div></div></div>'
         +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
-        +'<h1>L’immobilier <em>autrement.</em></h1>'
-        +'<p class="sub">Trouvez le projet qui vous correspond.</p>'
+        +'<h1>'+heroWordsHTML(['L’immobilier','<em>autrement.</em>'])+'</h1>'
+        +'<p class="sub">Des résidences d’exception pour une vie sans égal.</p>'
         +'<form class="search-card" id="heroSearch">'
           +'<div class="search-field"><label>Où</label>'
             +'<select name="ville"><option value="">Ville, commune, quartier</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
