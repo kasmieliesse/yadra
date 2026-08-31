@@ -1181,6 +1181,7 @@ function go(path){
 
 function render(){
   closeModal();
+  setStructuredData(null);
   var r = parseHash();
   var main = document.getElementById('main');
   var segs = r.segs;
@@ -1347,14 +1348,14 @@ function pageHome(){
           +'<div><a class="btn btn-light" href="/projets">Explorer les projets</a></div>'
         +'</div>'
         +'<div class="split-card accent">'
-          +'<span class="eyebrow">Promoteurs</span><h3>Présentez vos programmes, générez des prospects</h3>'
-          +'<p>Publiez vos projets avec une présentation premium et recevez des demandes qualifiées d\'acquéreurs réellement intéressés.</p>'
+          +'<span class="eyebrow">Promoteurs</span><h3>Vous avez un projet ?</h3>'
+          +'<p>Présentez vos programmes avec une mise en scène premium et recevez des demandes qualifiées d\'acquéreurs réellement intéressés — sans intermédiaire superflu.</p>'
           +'<ul>'
-            +'<li>'+ic('check')+'Fiche projet complète : typologies, prix, plans, prestations</li>'
-            +'<li>'+ic('check')+'Suivi des demandes reçues, statut par statut</li>'
-            +'<li>'+ic('check')+'Statistiques de vos publications</li>'
+            +'<li>'+ic('check')+'Visibilité auprès d\'acquéreurs qualifiés, dans toute l\'Algérie</li>'
+            +'<li>'+ic('check')+'Accompagnement et présentation premium de vos projets</li>'
+            +'<li>'+ic('check')+'Diffusion, suivi des demandes et statistiques en temps réel</li>'
           +'</ul>'
-          +'<div><a class="btn btn-primary" href="/promoteur">Publier un projet</a></div>'
+          +'<div style="display:flex;gap:10px;flex-wrap:wrap;"><a class="btn btn-primary" href="/promoteur">Présenter mon projet</a><a class="btn btn-ghost" href="/promoteur">Devenir partenaire</a></div>'
         +'</div>'
       +'</div>'
     +'</div>'
@@ -1604,9 +1605,23 @@ function pageDetail(wilaya,slug){
   +'<div class="mobile-cta-bar"><button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button><a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a></div>'
   +'</div>';
 }
+function setStructuredData(obj){
+  var el = document.getElementById('ldjson');
+  if(!el){ el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ldjson'; document.head.appendChild(el); }
+  el.textContent = obj ? JSON.stringify(obj) : '';
+}
 function afterDetail(wilaya,slug){
   var p = getProjectBySlug(wilaya,slug);
-  if(p) renderProjectsMap('detailMap', [p], {single:true, activeId:p.id, scrollZoom:false});
+  if(!p) return;
+  renderProjectsMap('detailMap', [p], {single:true, activeId:p.id, scrollZoom:false});
+  setStructuredData({
+    '@context':'https://schema.org', '@type':'RealEstateListing',
+    name:p.nom, description:p.description, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug,
+    image: p.photo ? 'https://yadra.fr'+p.photo : undefined,
+    address:{'@type':'PostalAddress', addressLocality:p.commune, addressRegion:WILAYAS[p.wilaya].label, addressCountry:'DZ'},
+    geo:{'@type':'GeoCoordinates', latitude:p.lat, longitude:p.lng},
+    offers:{'@type':'Offer', price:p.prixMin, priceCurrency:'DZD', availability:'https://schema.org/InStock'}
+  });
 }
 
 /* ---------------- Contact modal ---------------- */

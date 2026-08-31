@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://yadra.fr/</loc><priority>1.0</priority></url>
   <url><loc>https://yadra.fr/projets</loc><priority>0.8</priority></url>
+  <url><loc>https://yadra.fr/villes</loc><priority>0.7</priority></url>
+  <url><loc>https://yadra.fr/promoteurs</loc><priority>0.7</priority></url>
+  <url><loc>https://yadra.fr/a-propos</loc><priority>0.5</priority></url>
+  <url><loc>https://yadra.fr/investir</loc><priority>0.5</priority></url>
   <url><loc>https://yadra.fr/projets/alger/jnane-el-bahdja</loc><priority>0.6</priority></url>
   <url><loc>https://yadra.fr/projets/alger/terrasses-el-achour</loc><priority>0.6</priority></url>
   <url><loc>https://yadra.fr/projets/alger/panorama-bab-ezzouar</loc><priority>0.6</priority></url>
