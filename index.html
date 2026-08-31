@@ -207,7 +207,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 /* ---------------- Hero ---------------- */
 .hero{position:relative;overflow:hidden;padding:130px 0 0;border-bottom:1px solid var(--border);background:radial-gradient(120% 100% at 85% 0%,#1c1310 0%,var(--noir) 55%);}
 .hero-bg{position:absolute;inset:0;z-index:0;}
-.hero-bg .hero-bg-photo{position:absolute;inset:0;background-image:url('/assets/hero-bg-mobile.jpg');background-size:cover;background-position:26% 58%;}
+.hero-bg .hero-bg-photo{position:absolute;inset:0;background-image:url('/assets/hero-bg-mobile.jpg');background-size:cover;background-position:88% 55%;}
 @media (min-width:760px){.hero-bg .hero-bg-photo{background-image:url('/assets/hero-bg.jpg');background-position:48% 68%;}}
 .hero-bg .sky-grad{position:absolute;inset:0;background:linear-gradient(115deg,rgba(10,10,10,.92) 8%,rgba(10,10,10,.62) 38%,rgba(10,10,10,.32) 58%,rgba(10,10,10,.7) 100%);}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;opacity:.55;z-index:0;}
@@ -2511,8 +2511,8 @@ function mountHeroSymbol3D(){
   camera.position.set(0, 0, 15);
   camera.lookAt(0,0,0);
 
-  var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 3));
   renderer.setSize(w,h);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -2548,7 +2548,7 @@ function mountHeroSymbol3D(){
 
   var loader = new SVGLoader();
   loader.load('/assets/symbol.svg', function(data){
-    var extrudeSettings = {depth:48, bevelEnabled:true, bevelThickness:6, bevelSize:4.2, bevelSegments:3, curveSegments:24};
+    var extrudeSettings = {depth:48, bevelEnabled:true, bevelThickness:6, bevelSize:4.2, bevelSegments:6, curveSegments:48};
     data.paths.forEach(function(path){
       var id = (path.userData && path.userData.node && path.userData.node.getAttribute('id')) || '';
       if(id.indexOf('Fold') !== -1) return; // flat shading hints for the 2D SVG only; real lighting replaces them in 3D
