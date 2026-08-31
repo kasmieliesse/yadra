@@ -12,18 +12,19 @@
 <meta name="theme-color" content="#0A0A0A">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="yadra!">
-<meta property="og:title" content="yadra! — Votre prochain projet commence ici.">
+<meta property="og:title" content="yadra! — L'immobilier autrement.">
 <meta property="og:description" content="Découvrez les projets immobiliers des promoteurs en Algérie : recherchez, consultez, sauvegardez et contactez, sans détour.">
 <meta property="og:image" content="https://yadra.fr/og-image.png">
 <meta property="og:url" content="https://yadra.fr/">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="yadra! — Votre prochain projet commence ici.">
+<meta name="twitter:title" content="yadra! — L'immobilier autrement.">
 <meta name="twitter:description" content="Découvrez les projets immobiliers des promoteurs en Algérie : recherchez, consultez, sauvegardez et contactez, sans détour.">
 <meta name="twitter:image" content="https://yadra.fr/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ============================================================
    YADRA! by qbm — Design tokens
@@ -452,8 +453,27 @@ p{margin:0;}
 .doc-item svg{width:20px;height:20px;color:var(--or-rose-light);flex:0 0 auto;}
 .doc-item .fname{flex:1;color:var(--text);}
 .doc-item .fsize{color:var(--text-dim);font-size:11.5px;}
-.map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:260px;background:var(--surface-2);}
+.map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:320px;background:var(--surface-2);}
 .map-box .pin-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);text-align:center;}
+.map-box .leaflet-container{width:100%;height:100%;font-family:inherit;background:var(--surface-2);}
+.leaflet-tile-pane{filter:grayscale(.55) brightness(1.06) contrast(.92) sepia(.06);}
+.yadra-pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));border:2px solid #fff;box-shadow:0 3px 10px -2px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;}
+.yadra-pin::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff;transform:rotate(45deg);}
+.yadra-pin.active{background:linear-gradient(135deg,#fff,#E6E6E6);}
+.leaflet-popup-content-wrapper{background:var(--noir);color:var(--argent);border-radius:var(--radius-m);}
+.leaflet-popup-tip{background:var(--noir);}
+.map-popup{width:200px;}
+.map-popup img{width:100%;height:96px;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px;}
+.map-popup .mp-loc{font-size:10.5px;color:var(--text-dim);display:flex;align-items:center;gap:4px;}
+.map-popup .mp-title{font-family:var(--font-display);font-size:15px;color:#fff;margin:4px 0;}
+.map-popup .mp-price{font-size:12.5px;color:var(--or-rose-light);font-weight:700;margin-bottom:8px;}
+.map-popup a{display:block;text-align:center;background:var(--argent);color:var(--noir);border-radius:999px;padding:7px;font-size:11.5px;font-weight:800;}
+.market-view-toggle{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px;}
+.market-view-toggle button{border:0;background:transparent;color:var(--text-dim);padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.market-view-toggle button.active{background:var(--or-rose);color:#fff;}
+.market-view-toggle .i-def{width:14px;height:14px;}
+.market-map{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);height:560px;}
+.market-map .leaflet-container{width:100%;height:100%;background:var(--surface-2);}
 .side-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px;}
 .side-block + .side-block{margin-top:20px;}
 .mobile-cta-bar{
@@ -809,6 +829,61 @@ function mediaHTML(p,w,h,seedSuffix){
   if(p.photo && !seedSuffix){ return '<img class="card-photo" src="'+p.photo+'" alt="'+esc(p.nom)+'" loading="lazy">'; }
   return artSVG(p.slug+(seedSuffix||''),w,h);
 }
+
+/* ---------------- Leaflet (vraie carte interactive) ---------------- */
+var _leafletPromise = null;
+function loadLeaflet(){
+  if(window.L) return Promise.resolve(window.L);
+  if(_leafletPromise) return _leafletPromise;
+  _leafletPromise = new Promise(function(resolve,reject){
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
+    s.crossOrigin = '';
+    s.onload = function(){ resolve(window.L); };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return _leafletPromise;
+}
+function yadraMarkerIcon(L, active){
+  return L.divIcon({className:'', html:'<div class="yadra-pin'+(active?' active':'')+'"></div>', iconSize:[30,30], iconAnchor:[15,29], popupAnchor:[0,-26]});
+}
+function renderProjectsMap(containerId, projects, opts){
+  opts = opts || {};
+  var host = document.getElementById(containerId);
+  if(!host) return;
+  loadLeaflet().then(function(L){
+    host = document.getElementById(containerId); // page may have changed while the script was loading
+    if(!host) return;
+    if(host._yadraMap){ host._yadraMap.remove(); host._yadraMap = null; }
+    var map = L.map(host, {scrollWheelZoom:!!opts.scrollZoom, zoomControl:true, attributionControl:true});
+    host._yadraMap = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom:19, subdomains:'abc',
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    var pts = projects.filter(function(p){return p.lat && p.lng;});
+    if(!pts.length){ map.setView([28.0,2.6],5); return map; }
+    var bounds = [];
+    pts.forEach(function(p){
+      var marker = L.marker([p.lat,p.lng], {icon:yadraMarkerIcon(L, p.id===opts.activeId)}).addTo(map);
+      marker.bindPopup(
+        '<div class="map-popup">'
+        +(p.photo?('<img src="'+p.photo+'" alt="">'):artSVG(p.slug+'-map',200,96))
+        +'<div class="mp-loc">'+ic('pin')+' '+esc(p.commune)+', '+WILAYAS[p.wilaya].label+'</div>'
+        +'<div class="mp-title">'+esc(p.nom)+'</div>'
+        +'<div class="mp-price">à partir de '+moneyShort(p.prixMin)+'</div>'
+        +'<a href="/projets/'+p.wilaya+'/'+p.slug+'">Voir le projet</a>'
+        +'</div>', {maxWidth:220}
+      );
+      bounds.push([p.lat,p.lng]);
+    });
+    if(opts.single && pts.length===1){ map.setView([pts[0].lat,pts[0].lng], 14); }
+    else { map.fitBounds(bounds, {padding:[36,36], maxZoom:13}); }
+    return map;
+  }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
+}
 function heroSkylineSVG(){
   var rnd = mulberry32(7);
   var n = 26; var w=1400,h=560; var baseY=h*0.86; var x=0; var bars=[];
@@ -854,6 +929,17 @@ var WILAYAS = {
   'tizi-ouzou': {label:'Tizi Ouzou', communes:['Tizi Ouzou Centre','Draâ Ben Khedda','Boukhalfa']}
 };
 var WILAYA_ORDER = ['alger','oran','blida','constantine','setif','annaba','tizi-ouzou'];
+/* Coordonnées réelles (approx. centre de commune) — utilisées pour la carte interactive. */
+var COMMUNE_COORDS = {
+  'Hydra':[36.7378,3.0464], 'Bab Ezzouar':[36.7167,3.1833], 'Dely Ibrahim':[36.7500,2.9833],
+  'Bir Mourad Raïs':[36.7333,3.0500], 'El Achour':[36.7500,2.9500], 'Ouled Fayet':[36.7500,2.9333],
+  'Bir El Djir':[35.7167,-0.5667], 'Es Sénia':[35.6333,-0.6167], 'Canastel':[35.7333,-0.5333], 'Oran Centre':[35.6969,-0.6331],
+  'Blida Centre':[36.4700,2.8300], 'Boufarik':[36.5700,2.9100], 'Ouled Yaïch':[36.4900,2.8200],
+  'Ali Mendjeli':[36.2400,6.6500], 'Constantine Centre':[36.3650,6.6147], 'El Khroub':[36.2617,6.6981],
+  'Sétif Centre':[36.1900,5.4100], 'El Eulma':[36.1500,5.6900],
+  'Annaba Centre':[36.9000,7.7667], 'Seraïdi':[36.9833,7.7500], 'El Bouni':[36.8833,7.7667],
+  'Tizi Ouzou Centre':[36.7169,4.0497], 'Draâ Ben Khedda':[36.7386,3.9486], 'Boukhalfa':[36.7167,4.0333]
+};
 
 var PROMOTERS_BASE = [
   {id:'pr-atlas', name:'Atlas Promotion', slug:'atlas-promotion', wilaya:'alger', verified:true, founded:2011,
@@ -945,6 +1031,10 @@ function mkTypologies(seedStr,type,prixBase){
 function enrichProject(raw, idx){
   var promoter = PROMOTERS_BASE.filter(function(p){return p.id===raw.promoterId;})[0];
   var seed = hashStr(raw.slug);
+  var rndGeo = mulberry32(seed+7);
+  var base = COMMUNE_COORDS[raw.commune] || [WILAYAS[raw.wilaya].lat||36.5,WILAYAS[raw.wilaya].lng||3];
+  var lat = base[0] + (rndGeo()-0.5)*0.014;
+  var lng = base[1] + (rndGeo()-0.5)*0.014;
   var typologies = raw.typologiesOverride || mkTypologies(raw.slug, raw.type, raw.prixBase);
   var prices = typologies.map(function(t){return t.prix;});
   var surfaces = typologies.map(function(t){return t.surface;});
@@ -960,7 +1050,8 @@ function enrichProject(raw, idx){
     surfaceMax: Math.max.apply(null,surfaces),
     prestations: pickN(seed+1, PRESTATIONS_POOL, 5+Math.floor(mulberry32(seed+2)()*4)),
     pointsForts: pickN(seed+3, POINTSFORTS_POOL, 4),
-    adresse: raw.quartier+', '+raw.commune+', '+WILAYAS[raw.wilaya].label
+    adresse: raw.quartier+', '+raw.commune+', '+WILAYAS[raw.wilaya].label,
+    lat: lat, lng: lng
   });
 }
 var PROJECTS = RAW_PROJECTS.map(enrichProject);
@@ -1311,17 +1402,20 @@ function projectCardHTML(p){
    PAGE: MARKETPLACE
    ================================================================ */
 var marketState = null;
+var marketViewMode = 'grid';
 function pageMarketplace(params){
   marketState = {
     ville: params.get('ville')||'', commune:'', type: params.get('type')||'', budgetMax: params.get('budgetMax')||'',
     surfaceMin:'', pieces:'', livraison:'', statut:'', verifie: params.get('verifie')==='1', sort:'pertinence', q: params.get('q')||''
   };
+  marketViewMode = 'grid';
   return '<div class="theme-light">'
   +'<div class="market-head wrap">'
     +'<div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Projets</span></div>'
     +'<div class="section-head" style="margin-top:10px;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
   +'</div>'
   +'<div class="wrap"><div class="filter-bar">'
+    +'<div class="fb-field fb-search">'+ic('search')+'<input type="text" id="fQ" placeholder="Alger, Hydra, F3, Appartement…" value="'+esc((marketState.q)||'')+'" aria-label="Recherche"/></div>'
     +'<div class="fb-field">'+ic('pin')+'<select id="fVille" aria-label="Ville"><option value="">Ville</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
     +'<div class="fb-field">'+ic('building')+'<select id="fType" aria-label="Type de bien"><option value="">Type de bien</option>'+['Appartement','Duplex','Villa','Résidence mixte'].map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join('')+'</select></div>'
     +'<div class="fb-field">'+ic('chart')+'<select id="fBudget" aria-label="Prix"><option value="">Prix</option><option value="10000000">Jusqu’à 10 M DA</option><option value="15000000">Jusqu’à 15 M DA</option><option value="25000000">Jusqu’à 25 M DA</option><option value="50000000">Jusqu’à 50 M DA</option></select></div>'
@@ -1331,17 +1425,23 @@ function pageMarketplace(params){
   +'<div class="wrap" style="padding-bottom:80px;">'
       +'<div class="results-bar">'
         +'<div class="results-count" id="resultsCount"></div>'
-        +'<select class="sort-select" id="sortSelect"><option value="pertinence">Pertinence</option><option value="prix-asc">Prix croissant</option><option value="prix-desc">Prix décroissant</option><option value="livraison">Livraison la plus proche</option></select>'
+        +'<div style="display:flex;gap:10px;align-items:center;">'
+          +'<div class="market-view-toggle" id="viewToggle">'
+            +'<button type="button" class="active" data-view="grid">'+ic('grid')+' Grille</button>'
+            +'<button type="button" data-view="map">'+ic('pin')+' Carte</button>'
+          +'</div>'
+          +'<select class="sort-select" id="sortSelect"><option value="pertinence">Pertinence</option><option value="prix-asc">Prix croissant</option><option value="prix-desc">Prix décroissant</option><option value="livraison">Livraison la plus proche</option></select>'
+        +'</div>'
       +'</div>'
       +'<div class="active-filters" id="activeFilters"></div>'
       +'<div class="grid grid-cards" id="resultsGrid"></div>'
+      +'<div class="market-map" id="marketMap" style="display:none;"></div>'
   +'</div>'
   +'</div>';
 }
 function moreFiltersModalHTML(){
   var s = marketState;
   return '<h2>Plus de filtres</h2>'
-  +'<div class="f-group"><label class="f-title">Recherche</label><input type="text" id="fQ" placeholder="Nom du projet, quartier…" value="'+esc(s.q)+'"/></div>'
   +'<div class="f-group"><label class="f-title">Commune</label><select id="fCommune"><option value="">Toutes</option>'+(s.ville?WILAYAS[s.ville].communes.map(function(c){return '<option value="'+c+'"'+(c===s.commune?' selected':'')+'>'+c+'</option>';}).join(''):'')+'</select></div>'
   +'<div class="f-group"><label class="f-title">Surface min (m²)</label><input type="number" id="fSurface" placeholder="ex. 70" value="'+esc(s.surfaceMin)+'"/></div>'
   +'<div class="f-group"><label class="f-title">Pièces</label><div class="chip-row" id="fPieces">'+['F2','F3','F4','F5'].map(function(t){return '<button type="button" class="chip'+(t===s.pieces?' active':'')+'" data-val="'+t+'">'+t+'</button>';}).join('')+'</div></div>'
@@ -1352,9 +1452,8 @@ function moreFiltersModalHTML(){
   +'<button class="btn btn-primary btn-block" id="moreFiltersApply" style="margin-top:18px;">Voir les résultats</button>';
 }
 function wireMoreFiltersModal(){
-  var q=document.getElementById('fQ'), commune=document.getElementById('fCommune'), surface=document.getElementById('fSurface'),
+  var commune=document.getElementById('fCommune'), surface=document.getElementById('fSurface'),
       livraison=document.getElementById('fLivraison'), verifie=document.getElementById('fVerifie');
-  q.addEventListener('input', debounce(function(){ marketState.q=q.value; applyFilters(); },220));
   commune.addEventListener('change', function(){ marketState.commune=commune.value; applyFilters(); });
   surface.addEventListener('input', debounce(function(){ marketState.surfaceMin=surface.value; applyFilters(); },220));
   livraison.addEventListener('change', function(){ marketState.livraison=livraison.value; applyFilters(); });
@@ -1368,22 +1467,32 @@ function wireMoreFiltersModal(){
   document.getElementById('moreFiltersApply').addEventListener('click', closeModal);
 }
 function afterMarketplace(params){
-  var els = { ville: document.getElementById('fVille'), type: document.getElementById('fType'), budget: document.getElementById('fBudget') };
+  var els = { q: document.getElementById('fQ'), ville: document.getElementById('fVille'), type: document.getElementById('fType'), budget: document.getElementById('fBudget') };
   els.ville.value = marketState.ville;
   els.type.value = marketState.type;
   els.budget.value = marketState.budgetMax;
+  els.q.addEventListener('input', debounce(function(){ marketState.q=els.q.value; applyFilters(); },220));
   els.ville.addEventListener('change', function(){ marketState.ville=els.ville.value; marketState.commune=''; applyFilters(); });
   els.type.addEventListener('change', function(){ marketState.type=els.type.value; applyFilters(); });
   els.budget.addEventListener('change', function(){ marketState.budgetMax=els.budget.value; applyFilters(); });
   document.getElementById('sortSelect').addEventListener('change', function(e){ marketState.sort=e.target.value; applyFilters(); });
   document.getElementById('resetFilters').addEventListener('click', function(){
     marketState = {ville:'',commune:'',type:'',budgetMax:'',surfaceMin:'',pieces:'',livraison:'',statut:'',verifie:false,sort:'pertinence',q:''};
-    els.ville.value=''; els.type.value=''; els.budget.value='';
+    els.ville.value=''; els.type.value=''; els.budget.value=''; els.q.value='';
     applyFilters();
   });
   document.getElementById('moreFiltersBtn').addEventListener('click', function(){
     openModal(moreFiltersModalHTML());
     wireMoreFiltersModal();
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#viewToggle button'), function(btn){
+    btn.addEventListener('click', function(){
+      marketViewMode = btn.dataset.view;
+      Array.prototype.forEach.call(document.querySelectorAll('#viewToggle button'), function(b){ b.classList.toggle('active', b===btn); });
+      document.getElementById('resultsGrid').style.display = marketViewMode==='grid' ? '' : 'none';
+      document.getElementById('marketMap').style.display = marketViewMode==='map' ? '' : 'none';
+      if(marketViewMode==='map') applyFilters();
+    });
   });
   applyFilters();
 }
@@ -1400,7 +1509,13 @@ function applyFilters(){
     if(s.statut && p.statut!==s.statut) return false;
     if(s.livraison && p.livraison.indexOf(s.livraison)===-1) return false;
     if(s.verifie && !p.verified) return false;
-    if(s.q){ var hay=(p.nom+' '+p.quartier+' '+p.commune).toLowerCase(); if(hay.indexOf(s.q.toLowerCase())===-1) return false; }
+    if(s.q){
+      var hay = [p.nom, p.quartier, p.commune, WILAYAS[p.wilaya].label, p.type, p.adresse]
+        .concat(p.typologies.map(function(t){return t.label;}))
+        .join(' ').toLowerCase();
+      var tokens = s.q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      if(!tokens.every(function(tok){ return hay.indexOf(tok)!==-1; })) return false;
+    }
     return true;
   });
   if(s.sort==='prix-asc') results.sort(function(a,b){return a.prixMin-b.prixMin;});
@@ -1409,7 +1524,10 @@ function applyFilters(){
 
   document.getElementById('resultsCount').innerHTML = '<b>'+results.length+'</b> projet'+(results.length>1?'s':'')+' trouvé'+(results.length>1?'s':'');
   var grid = document.getElementById('resultsGrid');
-  grid.innerHTML = results.length ? results.map(projectCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1;">'+ic('search','ic')+'<h3>Aucun projet ne correspond</h3><p>Essayez d\'élargir votre recherche ou de réinitialiser les filtres.</p></div>';
+  grid.innerHTML = results.length ? results.map(projectCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1;">'+ic('search','ic')+'<h3>Aucun projet ne correspond à votre recherche.</h3><p>Essayez d\'élargir votre recherche ou <a href="#" id="emptyStateReset" style="color:var(--or-rose-light);text-decoration:underline;">réinitialisez les filtres</a>.</p></div>';
+  var emptyResetLink = document.getElementById('emptyStateReset');
+  if(emptyResetLink) emptyResetLink.addEventListener('click', function(e){ e.preventDefault(); document.getElementById('resetFilters').click(); });
+  if(marketViewMode==='map'){ renderProjectsMap('marketMap', results, {scrollZoom:true}); }
 
   var chips = [];
   if(s.ville) chips.push(['Ville: '+WILAYAS[s.ville].label, function(){ marketState.ville=''; var el=document.getElementById('fVille'); if(el) el.value=''; applyFilters(); }]);
@@ -1468,7 +1586,7 @@ function pageDetail(wilaya,slug){
       +'<div class="doc-item">'+ic('doc')+'<span class="fname">Plan '+p.typologies[0].label+' type.pdf</span><span class="fsize">640 Ko</span></div>'
     +'</div><p class="form-note">Documents fournis à titre indicatif pour cette démonstration.</p></div>'
     +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Localisation</h2>'
-      +'<div class="map-box">'+zelligePattern('zMap'+p.id,0.06)+'<div class="pin-center">'+ic('pin')+'<div style="margin-top:6px;color:var(--heading);font-weight:700;font-size:13px;">'+esc(p.adresse)+'</div></div></div>'
+      +'<div class="map-box" id="detailMap"></div>'
     +'</div>'
     +(p.promoter?('<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">À propos du promoteur</h2>'
       +'<a class="split-card" style="flex-direction:row;align-items:center;gap:18px;" href="/promoteurs/'+p.promoter.slug+'">'
@@ -1486,7 +1604,10 @@ function pageDetail(wilaya,slug){
   +'<div class="mobile-cta-bar"><button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button><a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a></div>'
   +'</div>';
 }
-function afterDetail(){ /* interactions wired via inline handlers */ }
+function afterDetail(wilaya,slug){
+  var p = getProjectBySlug(wilaya,slug);
+  if(p) renderProjectsMap('detailMap', [p], {single:true, activeId:p.id, scrollZoom:false});
+}
 
 /* ---------------- Contact modal ---------------- */
 window.App = window.App || {};
