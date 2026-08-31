@@ -287,6 +287,14 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
   .trust-item{border-top:0;border-right:1px solid var(--border);}
   .trust-cta{border-top:0;border-left:1px solid var(--border);margin-left:auto;}
 }
+@media (max-width:699px){
+  .trust-strip{display:grid;grid-template-columns:1fr 1fr;}
+  .trust-item{padding:14px;gap:9px;}
+  .trust-item:nth-child(odd){border-right:1px solid var(--border);}
+  .trust-item .ti-desc{display:none;}
+  .trust-item:last-of-type{grid-column:1 / -1;border-right:0;}
+  .trust-cta{grid-column:1 / -1;justify-content:center;padding:15px;}
+}
 
 .search-card{
   margin-top:36px;background:rgba(30,28,26,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
@@ -338,7 +346,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .card-media > img.card-photo{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1);}
 .card:hover .card-photo{transform:scale(1.08);}
 .card-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(10,10,10,.55) 100%);pointer-events:none;}
-.card-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:2;}
+.card-badges{position:absolute;top:12px;left:12px;right:58px;display:flex;gap:6px;flex-wrap:wrap;z-index:2;}
 .badge{
   font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;
   background:rgba(10,10,10,.72);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);color:var(--argent);
@@ -407,9 +415,11 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .split-card li svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px;color:var(--or-rose-light);}
 
 /* ---------------- Footer ---------------- */
-.site-footer{border-top:1px solid var(--border);padding:56px 0 28px;background:var(--gris-fonce);position:relative;}
-.foot-grid{display:grid;gap:36px;grid-template-columns:1fr;}
-@media (min-width:800px){.foot-grid{grid-template-columns:1.5fr .8fr .9fr .8fr .8fr;}}
+.site-footer{border-top:1px solid var(--border);padding:56px 0 90px;background:var(--gris-fonce);position:relative;}
+@media (min-width:960px){.site-footer{padding-bottom:40px;}}
+.foot-grid{display:grid;gap:30px 20px;grid-template-columns:1fr 1fr;}
+.foot-grid .foot-col:first-child{grid-column:1 / -1;}
+@media (min-width:800px){.foot-grid{grid-template-columns:1.5fr .8fr .9fr .8fr .8fr;gap:36px;}.foot-grid .foot-col:first-child{grid-column:auto;}}
 .foot-col h4{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--text-dim);margin-bottom:14px;}
 .foot-col a{display:block;font-size:13.5px;color:var(--text);padding:6px 0;}
 .foot-col a:hover{color:var(--or-rose-light);}
@@ -429,6 +439,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 }
 .wa-float svg{width:28px;height:28px;}
 @media (min-width:960px){.wa-float{right:28px;bottom:28px;}}
+body:has(.mobile-cta-bar) .wa-float{display:none;}
+@media (min-width:960px){body:has(.mobile-cta-bar) .wa-float{display:flex;}}
 
 /* ---------------- Filters / marketplace ---------------- */
 .market-head{padding:30px 0 18px;border-bottom:1px solid var(--border);}
@@ -450,6 +462,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .check-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);}
 .results-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
 .results-count{font-size:13px;color:var(--text-dim);}
+.results-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;min-width:0;}
+.results-actions .sort-select{min-width:0;max-width:100%;}
 .results-count b{color:var(--heading);}
 .sort-select{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-s);padding:9px 12px;font-size:12.5px;font-family:inherit;}
 .active-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
@@ -535,9 +549,16 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .side-block + .side-block{margin-top:20px;}
 .mobile-cta-bar{
   position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(10,10,10,.94);backdrop-filter:blur(10px);
-  border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:10px;
+  border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:10px;align-items:center;
+  padding-bottom:calc(10px + env(safe-area-inset-bottom));
 }
+.mobile-cta-bar .mcb-fav{position:static;flex:0 0 auto;background:transparent;border-color:var(--border);color:var(--text);}
 @media (min-width:960px){.mobile-cta-bar{display:none;}}
+@media (max-width:959px){
+  .price-box .cta-row{display:none;}
+  .price-box{padding:14px 18px;}
+  .detail-header{padding-bottom:14px;}
+}
 
 /* ---------------- Promoter page ---------------- */
 .promo-hero{padding:50px 0 30px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
@@ -1508,7 +1529,7 @@ function pageMarketplace(params){
   +'<div class="wrap" style="padding-bottom:80px;">'
       +'<div class="results-bar">'
         +'<div class="results-count" id="resultsCount"></div>'
-        +'<div style="display:flex;gap:10px;align-items:center;">'
+        +'<div class="results-actions">'
           +'<div class="market-view-toggle" id="viewToggle">'
             +'<button type="button" class="active" data-view="grid">'+ic('grid')+' Grille</button>'
             +'<button type="button" data-view="map">'+ic('pin')+' Carte</button>'
@@ -1684,7 +1705,11 @@ function pageDetail(wilaya,slug){
     +'<a class="btn btn-wa btn-block" style="margin-top:10px;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' Contacter sur WhatsApp</a>'
   +'</div></aside>'
   +'</div>'
-  +'<div class="mobile-cta-bar"><button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button><a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a></div>'
+  +'<div class="mobile-cta-bar">'
+    +'<button class="fav-btn mcb-fav" id="favBtnMobile" onclick="App.toggleFav(\''+p.id+'\',this,true)" aria-label="Ajouter aux favoris">'+ic('heart')+'</button>'
+    +'<button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button>'
+    +'<a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a>'
+  +'</div>'
   +'</div>';
 }
 function setStructuredData(obj){
