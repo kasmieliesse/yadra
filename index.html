@@ -23,7 +23,7 @@
 <meta name="twitter:image" content="https://yadra.fr/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ============================================================
@@ -58,8 +58,8 @@
   --accent:var(--or-rose);
   --accent-2:#9C5C3E;
 
-  --font-display:'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
-  --font-body:'Manrope', -apple-system, 'Segoe UI', sans-serif;
+  --font-display:'Geist', -apple-system, 'Segoe UI', sans-serif;
+  --font-body:'Geist', -apple-system, 'Segoe UI', sans-serif;
 
   --radius-s:6px;
   --radius-m:12px;
@@ -257,19 +257,21 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .hero-visual .sparkle{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:sparkle 3.6s ease-in-out infinite;}
 @keyframes sparkle{0%,100%{opacity:0;transform:scale(.4);}50%{opacity:.9;transform:scale(1);}}
 
-/* Popular searches */
-.popular-searches{margin-top:0;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:12.5px;color:var(--text-dim);}
-.popular-searches .ps-chip{color:var(--text);padding:5px 13px;border:1px solid var(--border);border-radius:999px;font-weight:600;transition:border-color .2s ease, color .2s ease, transform .2s ease;}
-.popular-searches .ps-chip:hover{border-color:var(--or-rose);color:var(--or-rose-light);transform:translateY(-2px);}
-
-/* Hero contact row */
-.hero-contact-row{margin-top:22px;display:flex;flex-direction:column;gap:16px;}
-@media (min-width:640px){.hero-contact-row{flex-direction:row;align-items:center;flex-wrap:wrap;gap:24px;}}
-.hero-phone{display:inline-flex;align-items:center;gap:12px;color:var(--text);}
-.hero-phone .i-def{width:38px;height:38px;flex:0 0 auto;padding:9px;border-radius:50%;background:rgba(183,110,77,.14);color:var(--or-rose-light);box-sizing:border-box;}
-.hero-phone span{display:flex;flex-direction:column;font-size:11px;color:var(--text-dim);}
-.hero-phone b{font-family:var(--font-display);font-size:16px;font-weight:600;color:#fff;letter-spacing:.01em;}
-.hero-phone:hover b{color:var(--or-rose-light);}
+/* City marquee */
+.city-marquee{position:relative;z-index:1;overflow:hidden;padding:16px 0;margin-top:8px;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:rgba(10,10,10,.35);backdrop-filter:blur(8px);
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+  opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.7s;}
+.city-marquee-track{display:flex;width:max-content;animation:cityScroll 30s linear infinite;}
+.city-marquee:hover .city-marquee-track{animation-play-state:paused;}
+.city-marquee a{display:inline-flex;align-items:center;gap:9px;padding:0 30px;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;transition:color .2s ease;}
+.city-marquee a:hover{color:#fff;}
+.city-marquee a .i-def{width:13px;height:13px;color:var(--or-rose-light);flex:0 0 auto;}
+.city-marquee .dot{width:4px;height:4px;border-radius:50%;background:var(--or-rose-dim);flex:0 0 auto;}
+@keyframes cityScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media (prefers-reduced-motion:reduce){.city-marquee-track{animation:none;}}
 
 /* Trust strip */
 .trust-strip{position:relative;z-index:1;margin-top:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);
@@ -650,7 +652,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 @media (prefers-reduced-motion:reduce){
   .hero-gem,.hero-ring,.hero-orb-1,.hero-orb-2,.hero-gem-float,.sparkle,.badge-feature::after{animation:none!important;}
   .reveal{opacity:1;transform:none;}
-  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .hero-divider,.hero .search-card,.hero .hero-contact-row{opacity:1;transform:none;}
+  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .hero-divider,.hero .search-card,.hero .city-marquee{opacity:1;transform:none;}
   .hero h1 .hw-in{background:linear-gradient(100deg,#fff,var(--argent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .hero h1 .hw-line.accent .hw-in{background:linear-gradient(100deg,var(--or-rose-light),var(--or-rose) 55%,var(--or-rose-light));-webkit-background-clip:text;background-clip:text;}
 }
@@ -1279,7 +1281,6 @@ function updateHeader(){
 function pageHome(){
   var featured = PROJECTS.filter(function(p){return p.featured;}).slice(0,6);
   var latest = PROJECTS.slice().reverse().slice(0,6);
-  var villesPop = ['alger','oran','blida','constantine','setif'];
   return ''
   +'<section class="hero theme-dark">'
     +'<div class="hero-bg" aria-hidden="true"><div class="hero-bg-photo"></div><div class="sky-grad"></div>'+zelligePattern('zHero',0.05)+'</div>'
@@ -1306,10 +1307,6 @@ function pageHome(){
             +'<select name="budgetMax"><option value="">Budget max</option><option value="10000000">Jusqu\'à 10 M DA</option><option value="15000000">Jusqu\'à 15 M DA</option><option value="25000000">Jusqu\'à 25 M DA</option><option value="50000000">Jusqu\'à 50 M DA</option></select></div>'
           +'<button class="btn btn-primary search-submit" type="submit" aria-label="Rechercher">'+ic('search')+'</button>'
         +'</form>'
-        +'<div class="hero-contact-row">'
-          +'<a class="hero-phone" href="tel:+33670131501">'+ic('phone')+'<span>Nous contacter<b>+33 6 70 13 15 01</b></span></a>'
-          +'<div class="popular-searches">Recherches populaires : '+villesPop.map(function(w){return '<a class="ps-chip" href="/projets?ville='+w+'">'+WILAYAS[w].label+'</a>';}).join('')+'</div>'
-        +'</div>'
       +'</div>'
       +'<div class="hero-visual">'
         +'<div class="hero-ring"></div><div class="hero-ring r2"></div>'
@@ -1320,6 +1317,7 @@ function pageHome(){
         +[[10,18,'0s'],[85,30,'.8s'],[70,80,'1.6s'],[18,70,'2.4s'],[92,66,'.4s']].map(function(s){return '<span class="sparkle" style="left:'+s[0]+'%;top:'+s[1]+'%;animation-delay:'+s[2]+';width:4px;height:4px;"></span>';}).join('')
       +'</div>'
     +'</div>'
+    +'<div class="city-marquee"><div class="city-marquee-track">'+cityMarqueeItems(false)+cityMarqueeItems(true)+'</div></div>'
     +'<div class="wrap"><div class="trust-strip reveal" id="heroTrust" style="transition-delay:.85s">'
       +trustItem('star','Sélection exclusive','Des projets triés sur le volet')
       +trustItem('handshake','Accompagnement sur mesure','De la recherche à l’acquisition')
@@ -1397,6 +1395,11 @@ function pageHome(){
   +'</section>';
 }
 function valueCard(icon,title,desc){ return '<div class="value-card">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+function cityMarqueeItems(hidden){
+  return WILAYA_ORDER.map(function(w){
+    return '<a href="/projets?ville='+w+'"'+(hidden?' tabindex="-1" aria-hidden="true"':'')+'>'+ic('pin')+WILAYAS[w].label+'</a><span class="dot" aria-hidden="true"></span>';
+  }).join('');
+}
 function trustItem(icon,label,desc){
   return '<div class="trust-item"><div class="ic-wrap">'+ic(icon)+'</div><div><div class="ti-label">'+label+'</div><div class="ti-desc">'+desc+'</div></div></div>';
 }
