@@ -1,61 +1,72 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 1215" role="img" aria-labelledby="yadraSymbolTitle">
-<title id="yadraSymbolTitle">Symbole YADRA!</title>
-<defs>
-<linearGradient id="symSilverTail" x1="0" y1="0" x2="1" y2="0.9">
-  <stop offset="0" stop-color="#FFFFFF"/>
-  <stop offset=".4" stop-color="#D3D4D5"/>
-  <stop offset=".55" stop-color="#6E7173"/>
-  <stop offset=".72" stop-color="#EDEDED"/>
-  <stop offset="1" stop-color="#B9BABB"/>
-</linearGradient>
-<linearGradient id="symSilverArm" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#FFFFFF"/>
-  <stop offset=".28" stop-color="#F4F4F4"/>
-  <stop offset=".47" stop-color="#75787A"/>
-  <stop offset=".64" stop-color="#F7F7F7"/>
-  <stop offset="1" stop-color="#C3C4C5"/>
-</linearGradient>
-<linearGradient id="symCopper" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#FBE3C8"/>
-  <stop offset=".3" stop-color="#E2A06C"/>
-  <stop offset=".5" stop-color="#6E3A22"/>
-  <stop offset=".68" stop-color="#F0C9A6"/>
-  <stop offset="1" stop-color="#C08454"/>
-</linearGradient>
-</defs>
-<path id="symTail" d="M410,466
-  C 330,466 270,470 262,480
-  C 245,600 270,700 300,760
-  C 340,830 470,850 551,862
-  C 560,920 500,980 470,1000
-  C 440,1040 400,1080 388,1101
-  C 390,1105 395,1107 399,1107
-  C 470,1080 550,1050 600,1020
-  C 660,985 710,965 738,945
-  C 755,910 767,870 767,838
-  C 767,780 700,700 650,650
-  C 580,570 520,510 482,480
-  C 460,472 435,466 410,466
-  Z" fill="url(#symSilverTail)" stroke="rgba(0,0,0,.3)" stroke-width="1.4"/>
-<path id="symArmCopper" d="M753,943
-  C 720,880 690,820 680,760
-  C 660,650 595,600 605,560
-  C 612,460 605,380 615,315
-  L 810,108
-  C 811,300 811,500 811,650
-  C 811,720 808,770 804,810
-  C 796,860 770,910 753,943
-  Z" fill="url(#symCopper)" stroke="rgba(0,0,0,.3)" stroke-width="1.4"/>
-<path id="symArmCopperFold" d="M805,140 L811,300 L811,650 L790,400 Z" fill="#6E3A22" opacity="0.5"/>
-<path id="symArmSilver" d="M764,944
-  C 795,905 825,860 836,810
-  L 835,375
-  C 838,335 844,295 852,261
-  C 862,300 966,335 966,390
-  L 966,700
-  C 966,760 958,830 940,880
-  C 920,920 880,935 850,940
-  C 815,943 785,944 764,944
-  Z" fill="url(#symSilverArm)" stroke="rgba(0,0,0,.3)" stroke-width="1.4"/>
-<path id="symArmSilverFold" d="M855,300 L966,335 L966,700 L900,420 Z" fill="#75787A" opacity="0.45"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" role="img" aria-labelledby="yadraSymbolTitle">
+  <title id="yadraSymbolTitle">Symbole YADRA!</title>
+  <defs>
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.28" stop-color="#c9cdd1"/>
+      <stop offset="0.52" stop-color="#f8f8f8"/>
+      <stop offset="0.78" stop-color="#9da2a7"/>
+      <stop offset="1" stop-color="#eceff1"/>
+    </linearGradient>
+    <linearGradient id="silver2" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#f5f6f7"/>
+      <stop offset="0.5" stop-color="#aeb3b8"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="rose" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0e6"/>
+      <stop offset="0.25" stop-color="#d99a73"/>
+      <stop offset="0.55" stop-color="#b96d45"/>
+      <stop offset="0.8" stop-color="#f1b18b"/>
+      <stop offset="1" stop-color="#8f4d31"/>
+    </linearGradient>
+    <linearGradient id="rose2" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#e8b08f"/>
+      <stop offset="0.5" stop-color="#a85f3d"/>
+      <stop offset="1" stop-color="#f2c0a0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000000" flood-opacity=".28"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <!-- rear rose-gold blade -->
+    <path id="symBladeRoseRear" d="M445 132 L558 45 L558 565
+             C558 616 536 661 500 700
+             L449 755 L449 184 Z"
+          fill="url(#rose2)" stroke="#7f432b" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- central rose-gold blade -->
+    <path id="symBladeRoseCentral" d="M558 45 L681 0 L681 552
+             C681 604 658 650 619 691
+             L559 753 L559 120 Z"
+          fill="url(#rose)" stroke="#7d422a" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- right silver blade -->
+    <path id="symBladeSilver" d="M681 0 L792 111 L792 595
+             L693 697
+             C708 658 716 615 716 570
+             L716 78 Z"
+          fill="url(#silver2)" stroke="#777d82" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- left silver sweeping form -->
+    <path id="symTail" d="M92 401
+             C155 401 217 413 278 441
+             C347 473 404 512 449 558
+             C492 602 516 646 516 692
+             C516 759 473 822 399 873
+             C332 919 238 949 130 966
+             C191 923 235 876 263 831
+             C295 780 307 727 295 679
+             C281 624 238 578 183 539
+             C143 511 111 474 92 401 Z"
+          fill="url(#silver)" stroke="#73787d" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- subtle internal separation (2D shading hints only, excluded from 3D extrusion) -->
+    <path id="symFoldRoseRear" d="M448 184 L448 755" fill="none" stroke="#7e442e" stroke-width="4" opacity=".75"/>
+    <path id="symFoldRoseCentral" d="M558 120 L558 753" fill="none" stroke="#f6c0a0" stroke-width="3" opacity=".55"/>
+    <path id="symFoldSilver" d="M716 78 L716 570" fill="none" stroke="#ffffff" stroke-width="3" opacity=".55"/>
+  </g>
 </svg>
