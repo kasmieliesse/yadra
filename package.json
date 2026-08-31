@@ -1,0 +1,11 @@
+{
+  "name": "yadra-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API serverless (Vercel) pour yadra! — inscription, vérification email, contact, notifications.",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.5",
+    "bcryptjs": "^2.4.3",
+    "resend": "^4.0.1"
+  }
+}

@@ -1116,7 +1116,7 @@ function getUsers(){ return LS.get('yadra_users',[]); }
 function saveUsers(u){ LS.set('yadra_users',u); }
 function getSession(){ return LS.get('yadra_session',null); }
 function setSession(s){ LS.set('yadra_session',s); }
-function currentUser(){ var s=getSession(); if(!s) return null; return getUsers().filter(function(u){return u.id===s.userId;})[0]||null; }
+function currentUser(){ var s=getSession(); return (s && s.user) ? s.user : null; }
 function logout(){ setSession(null); go('/'); }
 
 function getLeads(){ return LS.get('yadra_leads',[]); }
@@ -1147,6 +1147,19 @@ function statutLabel(s){ return s==='sur-plan'?'Sur plan': s==='construction'?'E
 function statutClass(s){ return s==='sur-plan'?'status-plan': s==='construction'?'status-construction':'status-livre'; }
 function waLink(text){ return 'https://wa.me/33670131501?text='+encodeURIComponent(text); }
 function waLinkForProject(p){ return waLink('Bonjour YADRA!, je suis intéressé(e) par le projet '+p.nom+'. Je souhaite obtenir plus d\'informations.'); }
+
+/* ---------------- Backend API (Vercel /api) ---------------- */
+function apiRequest(path, payload){
+  return fetch(path, {
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload||{})
+  }).then(function(r){
+    return r.json().catch(function(){ return {}; }).then(function(data){
+      if(!r.ok) throw Object.assign(new Error(data.error||'Erreur serveur'), {status:r.status, data:data});
+      return data;
+    });
+  });
+}
+function submitLead(payload){ return apiRequest('/api/contact', payload); }
 
 function toast(msg, kind){
   var wrap = document.getElementById('toastWrap');
@@ -1355,7 +1368,7 @@ function pageHome(){
             +'<li>'+ic('check')+'Accompagnement et présentation premium de vos projets</li>'
             +'<li>'+ic('check')+'Diffusion, suivi des demandes et statistiques en temps réel</li>'
           +'</ul>'
-          +'<div style="display:flex;gap:10px;flex-wrap:wrap;"><a class="btn btn-primary" href="/promoteur">Présenter mon projet</a><a class="btn btn-ghost" href="/promoteur">Devenir partenaire</a></div>'
+          +'<div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="App.partnerModal()">Présenter mon projet</button><button class="btn btn-ghost" onclick="App.partnerModal()">Devenir partenaire</button></div>'
         +'</div>'
       +'</div>'
     +'</div>'
@@ -1655,10 +1668,49 @@ App.contactModal = function(projectId){
   );
   document.getElementById('contactForm').addEventListener('submit', function(e){
     e.preventDefault();
-    var f = new FormData(e.target);
+    var form = e.target;
+    var f = new FormData(form);
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Envoi…';
     addLead({projectId:p.id, projectName:p.nom, promoterId:p.promoterId, name:f.get('name'), phone:f.get('phone'), email:f.get('email'), message:f.get('message')});
-    closeModal();
-    toast('Votre demande a été envoyée à '+(p.promoter?p.promoter.name:'le promoteur'));
+    submitLead({
+      type:'project_inquiry', projectId:p.id, projectName:p.nom,
+      name:f.get('name'), phone:f.get('phone'), email:f.get('email'), message:f.get('message')
+    }).then(function(){
+      closeModal();
+      toast('Votre demande a été envoyée à '+(p.promoter?p.promoter.name:'le promoteur'));
+    }).catch(function(){
+      closeModal();
+      toast('Demande enregistrée. En cas de problème, écrivez-nous directement sur WhatsApp.');
+    });
+  });
+};
+
+App.partnerModal = function(){
+  openModal(
+    '<h2>Devenir partenaire</h2>'
+    +'<p style="color:var(--text-dim);font-size:13px;margin-top:6px;">Présentez votre entreprise et vos projets — notre équipe vous recontacte pour l\'onboarding.</p>'
+    +'<form id="partnerForm">'
+      +'<div class="field"><label>Nom et entreprise</label><input required name="name" placeholder="Amine Kaci — Atlas Promotion"/></div>'
+      +'<div class="field-row"><div class="field"><label>Téléphone</label><input required name="phone" placeholder="05 55 12 34 56"/></div>'
+      +'<div class="field"><label>Email</label><input required type="email" name="email"/></div></div>'
+      +'<div class="field"><label>Votre projet</label><textarea name="message" placeholder="Décrivez votre programme immobilier, sa localisation, son avancement…"></textarea></div>'
+      +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:18px;">Envoyer ma candidature</button>'
+      +'<p class="form-note">En envoyant ce formulaire, vos coordonnées sont transmises à l\'équipe yadra!.</p>'
+    +'</form>'
+  );
+  document.getElementById('partnerForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var form = e.target, f = new FormData(form);
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Envoi…';
+    submitLead({type:'promoter_application', name:f.get('name'), phone:f.get('phone'), email:f.get('email'), message:f.get('message')}).then(function(){
+      closeModal();
+      toast('Votre candidature a bien été envoyée.');
+    }).catch(function(){
+      closeModal();
+      toast('Candidature enregistrée. En cas de problème, écrivez-nous sur WhatsApp.');
+    });
   });
 };
 
@@ -1695,9 +1747,15 @@ function afterPromoter(){}
    PAGE: AUTH
    ================================================================ */
 function pageLogin(){
+  var verified = new URLSearchParams(location.search).get('email_verified');
+  var banner = '';
+  if(verified==='success') banner = '<p class="form-note" style="color:var(--ok);text-align:center;margin-bottom:10px;">Email vérifié — vous pouvez vous connecter.</p>';
+  else if(verified==='expired') banner = '<p class="form-error" style="text-align:center;margin-bottom:10px;">Ce lien a expiré. Réinscrivez-vous pour en recevoir un nouveau.</p>';
+  else if(verified==='invalid'||verified==='missing') banner = '<p class="form-error" style="text-align:center;margin-bottom:10px;">Lien de vérification invalide.</p>';
   return '<div class="auth-shell"><div class="auth-card">'
     +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
     +'<h1>Bon retour</h1><p class="sub">Connectez-vous pour retrouver vos favoris et vos demandes.</p>'
+    +banner
     +'<form id="loginForm">'
       +'<div class="field"><label>Email</label><input required type="email" name="email"/></div>'
       +'<div class="field"><label>Mot de passe</label><input required type="password" name="password"/></div>'
@@ -1705,23 +1763,26 @@ function pageLogin(){
       +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Se connecter</button>'
     +'</form>'
     +'<p class="form-note" style="text-align:center;margin-top:18px;">Pas encore de compte ? <a href="/inscription" style="color:var(--accent-2);font-weight:700;">Créer un compte</a></p>'
-    +'<p class="form-note">Ceci est un compte de démonstration : n\'utilisez pas un mot de passe que vous utilisez ailleurs.</p>'
   +'</div></div>';
 }
 function pageRegister(){
   return '<div class="auth-shell"><div class="auth-card">'
     +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
-    +'<h1>Créer un compte</h1><p class="sub">Rejoignez yadra! en tant qu\'acquéreur ou promoteur.</p>'
-    +'<div class="switcher" id="typeSwitch"><button type="button" class="active" data-val="acquereur">Acquéreur</button><button type="button" data-val="promoteur">Promoteur</button></div>'
+    +'<h1>Créer un compte</h1><p class="sub">Rejoignez yadra! pour sauvegarder vos favoris et suivre vos demandes.</p>'
+    +'<div id="registerSuccess" style="display:none;text-align:center;padding:20px 0;">'
+      +'<h3 style="color:#fff;font-size:17px;margin-bottom:10px;">Vérifiez votre adresse email</h3>'
+      +'<p class="form-note">Nous vous avons envoyé un lien de confirmation. Cliquez dessus pour activer votre compte, puis connectez-vous.</p>'
+    +'</div>'
     +'<form id="registerForm">'
-      +'<div class="field"><label>Nom complet</label><input required name="name"/></div>'
-      +'<div id="companyField" style="display:none;" class="field"><label>Nom de l\'entreprise</label><input name="company"/></div>'
-      +'<div class="field-row"><div class="field"><label>Email</label><input required type="email" name="email"/></div><div class="field"><label>Téléphone</label><input required name="phone" placeholder="05 55 12 34 56"/></div></div>'
-      +'<div class="field"><label>Mot de passe</label><input required type="password" name="password" minlength="4"/></div>'
+      +'<div class="field-row"><div class="field"><label>Prénom</label><input required name="firstName"/></div><div class="field"><label>Nom</label><input required name="lastName"/></div></div>'
+      +'<div class="field"><label>Email</label><input required type="email" name="email"/></div>'
+      +'<div class="field"><label>Mot de passe</label><input required type="password" name="password" minlength="8" placeholder="8 caractères minimum"/></div>'
+      +'<div class="field"><label>Confirmer le mot de passe</label><input required type="password" name="passwordConfirm"/></div>'
       +'<div id="registerError" class="form-error" style="display:none;"></div>'
       +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Créer mon compte</button>'
     +'</form>'
     +'<p class="form-note" style="text-align:center;margin-top:18px;">Déjà inscrit ? <a href="/connexion" style="color:var(--accent-2);font-weight:700;">Se connecter</a></p>'
+    +'<p class="form-note" style="text-align:center;margin-top:10px;">Vous êtes promoteur ? <a href="/promoteur" style="color:var(--accent-2);font-weight:700;">Présentez votre projet</a></p>'
   +'</div></div>';
 }
 function afterAuth(){
@@ -1729,44 +1790,45 @@ function afterAuth(){
   if(loginForm){
     loginForm.addEventListener('submit', function(e){
       e.preventDefault();
-      var f = new FormData(e.target);
-      var email = f.get('email').trim().toLowerCase();
-      var user = getUsers().filter(function(u){return u.email.toLowerCase()===email;})[0];
+      var form = e.target, f = new FormData(form);
+      var btn = form.querySelector('button[type="submit"]');
       var err = document.getElementById('loginError');
-      if(!user || user.password!==f.get('password')){ err.textContent='Email ou mot de passe incorrect.'; err.style.display='block'; return; }
-      setSession({userId:user.id});
-      toast('Bienvenue, '+user.name.split(' ')[0]+' !');
-      go(user.type==='promoteur' ? '/promoteur' : '/compte');
+      err.style.display = 'none';
+      btn.disabled = true; btn.textContent = 'Connexion…';
+      apiRequest('/api/login', {email:f.get('email'), password:f.get('password')}).then(function(data){
+        data.user.name = data.user.firstName + ' ' + data.user.lastName;
+        setSession({user:data.user});
+        toast('Bienvenue, '+data.user.firstName+' !');
+        go('/compte');
+      }).catch(function(e2){
+        err.textContent = (e2.data && e2.data.error) || 'Connexion impossible. Réessayez.';
+        err.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Se connecter';
+      });
     });
   }
   var regForm = document.getElementById('registerForm');
   if(regForm){
-    var type = 'acquereur';
-    var sw = document.getElementById('typeSwitch');
-    sw.addEventListener('click', function(e){
-      var btn = e.target.closest('button'); if(!btn) return;
-      type = btn.dataset.val;
-      Array.prototype.forEach.call(sw.children, function(b){ b.classList.toggle('active', b===btn); });
-      document.getElementById('companyField').style.display = type==='promoteur' ? 'flex':'none';
-    });
     regForm.addEventListener('submit', function(e){
       e.preventDefault();
-      var f = new FormData(e.target);
-      var email = f.get('email').trim().toLowerCase();
+      var form = e.target, f = new FormData(form);
+      var btn = form.querySelector('button[type="submit"]');
       var err = document.getElementById('registerError');
-      if(getUsers().some(function(u){return u.email.toLowerCase()===email;})){ err.textContent='Un compte existe déjà avec cet email.'; err.style.display='block'; return; }
-      var users = getUsers();
-      var newUser = {id:uid('user'), name:f.get('name'), email:f.get('email'), phone:f.get('phone'), password:f.get('password'), type:type, createdAt:new Date().toISOString()};
-      if(type==='promoteur'){
-        var company = f.get('company') || (f.get('name')+' Immobilier');
-        var promoter = {id:uid('pr'), name:company, slug:company.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''), wilaya:'alger', verified:false, founded:new Date().getFullYear(), desc:'Nouveau promoteur inscrit sur yadra!.'};
-        addExtraPromoter(promoter);
-        newUser.promoterId = promoter.id;
+      err.style.display = 'none';
+      if(f.get('password') !== f.get('passwordConfirm')){
+        err.textContent = 'Les mots de passe ne correspondent pas.'; err.style.display = 'block'; return;
       }
-      users.push(newUser); saveUsers(users);
-      setSession({userId:newUser.id});
-      toast('Compte créé, bienvenue '+newUser.name.split(' ')[0]+' !');
-      go(type==='promoteur' ? '/promoteur' : '/compte');
+      btn.disabled = true; btn.textContent = 'Création…';
+      apiRequest('/api/register', {
+        firstName:f.get('firstName'), lastName:f.get('lastName'), email:f.get('email'), password:f.get('password')
+      }).then(function(){
+        form.style.display = 'none';
+        document.getElementById('registerSuccess').style.display = 'block';
+      }).catch(function(e2){
+        err.textContent = (e2.data && e2.data.error) || 'Inscription impossible. Réessayez.';
+        err.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Créer mon compte';
+      });
     });
   }
 }
