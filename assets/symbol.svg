@@ -34,19 +34,19 @@
   C 48,158 26,146 3,142
   Z" fill="url(#symSilverTail)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
 <path id="symArmCopper" d="M91,167
-  L105,6
+  L103,7 L108,6
   L147,139
   C 149,146 146,153 139,158
   L 112,191
   C 100,198 91,190 91,177
   Z" fill="url(#symCopper)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
-<path id="symArmCopperFold" d="M105,6 L118,10 L138,120 L117,58 Z" fill="#6E3A22" opacity="0.6"/>
+<path id="symArmCopperFold" d="M103,7 L118,10 L138,120 L117,58 Z" fill="#6E3A22" opacity="0.6"/>
 <path id="symArmSilver" d="M130,183
-  L168,39
+  L166,40 L171,39
   L192,149
   C 194,156 191,163 184,168
   L 152,204
   C 140,210 130,202 130,190
   Z" fill="url(#symSilverArm)" stroke="rgba(0,0,0,.3)" stroke-width="0.6"/>
-<path id="symArmSilverFold" d="M168,39 L180,44 L186,130 L167,73 Z" fill="#75787A" opacity="0.55"/>
+<path id="symArmSilverFold" d="M166,40 L180,44 L186,130 L167,73 Z" fill="#75787A" opacity="0.55"/>
 </svg>

@@ -2330,26 +2330,36 @@ function mountHeroSymbol3D(){
   renderer.toneMappingExposure = 1.3;
 
   var pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.018).texture;
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-  var key = new THREE.DirectionalLight(0xffd9b8, 3);
+  var key = new THREE.DirectionalLight(0xffd9b8, 3.2);
   key.position.set(4,6,7);
   scene.add(key);
-  var rim = new THREE.DirectionalLight(0xbcd7ff, 1.6);
+  var fill = new THREE.DirectionalLight(0xfff2e2, 2.2);
+  fill.position.set(-5,3,6);
+  scene.add(fill);
+  var rim = new THREE.DirectionalLight(0xbcd7ff, 1.8);
   rim.position.set(-6,1,-4);
   scene.add(rim);
-  var glint = new THREE.PointLight(0xffffff, 6, 40);
+  var back = new THREE.DirectionalLight(0xffe4c8, 1.4);
+  back.position.set(2,-4,-6);
+  scene.add(back);
+  var glint = new THREE.PointLight(0xffffff, 7, 40);
   glint.position.set(2,4,9);
   scene.add(glint);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.18));
+  var glint2 = new THREE.PointLight(0xffe9d2, 6, 40);
+  glint2.position.set(-3,-2,8);
+  scene.add(glint2);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x554236, 0.85));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
 
-  var silverMat = new THREE.MeshPhysicalMaterial({color:0xe8e9ea, metalness:1, roughness:0.13, clearcoat:0.7, clearcoatRoughness:0.08, envMapIntensity:1.7});
-  var copperMat = new THREE.MeshPhysicalMaterial({color:0xc47a52, metalness:1, roughness:0.16, clearcoat:0.65, clearcoatRoughness:0.1, envMapIntensity:1.7});
+  var silverMat = new THREE.MeshPhysicalMaterial({color:0xf0f0f1, metalness:1, roughness:0.16, clearcoat:0.7, clearcoatRoughness:0.1, envMapIntensity:2.1});
+  var copperMat = new THREE.MeshPhysicalMaterial({color:0xd4926a, metalness:1, roughness:0.18, clearcoat:0.65, clearcoatRoughness:0.12, envMapIntensity:2.1});
   var group = new THREE.Group();
 
   var loader = new SVGLoader();
   loader.load('/assets/symbol.svg', function(data){
-    var extrudeSettings = {depth:14, bevelEnabled:true, bevelThickness:2, bevelSize:1.3, bevelSegments:3, curveSegments:24};
+    var extrudeSettings = {depth:14, bevelEnabled:true, bevelThickness:1.3, bevelSize:0.9, bevelSegments:3, curveSegments:24};
     data.paths.forEach(function(path){
       var id = (path.userData && path.userData.node && path.userData.node.getAttribute('id')) || '';
       if(id.indexOf('Fold') !== -1) return; // flat shading hints for the 2D SVG only; real lighting replaces them in 3D
