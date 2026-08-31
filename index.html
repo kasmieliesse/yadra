@@ -12,18 +12,19 @@
 <meta name="theme-color" content="#0A0A0A">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="yadra!">
-<meta property="og:title" content="yadra! — Votre prochain projet commence ici.">
+<meta property="og:title" content="yadra! — L'immobilier autrement.">
 <meta property="og:description" content="Découvrez les projets immobiliers des promoteurs en Algérie : recherchez, consultez, sauvegardez et contactez, sans détour.">
 <meta property="og:image" content="https://yadra.fr/og-image.png">
 <meta property="og:url" content="https://yadra.fr/">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="yadra! — Votre prochain projet commence ici.">
+<meta name="twitter:title" content="yadra! — L'immobilier autrement.">
 <meta name="twitter:description" content="Découvrez les projets immobiliers des promoteurs en Algérie : recherchez, consultez, sauvegardez et contactez, sans détour.">
 <meta name="twitter:image" content="https://yadra.fr/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ============================================================
    YADRA! by qbm — Design tokens
@@ -63,8 +64,25 @@
   --radius-m:12px;
   --radius-l:20px;
   --container:1280px;
+  --heading:#fff;
 
   color-scheme:dark;
+}
+
+/* ---------------- Light editorial theme (Projets / fiche projet) ---------------- */
+.theme-light{
+  --bg:#F7F4EF;
+  --surface:#FFFFFF;
+  --surface-2:#FFFFFF;
+  --surface-3:#F1EDE6;
+  --text:#4A443C;
+  --text-dim:#8C8477;
+  --border:rgba(20,16,12,0.12);
+  --heading:#18140F;
+  --accent-2:#9C5C3E;
+  background:var(--bg);
+  color:var(--text);
+  color-scheme:light;
 }
 
 *,*::before,*::after{box-sizing:border-box;}
@@ -124,7 +142,7 @@ p{margin:0;}
 .btn-primary{background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));color:#fff;box-shadow:0 6px 20px -6px rgba(183,110,77,.55);}
 .btn-primary:hover{filter:brightness(1.08);}
 .btn-ghost{background:transparent;border-color:var(--border);color:var(--text);}
-.btn-ghost:hover{border-color:var(--accent-2);color:#fff;}
+.btn-ghost:hover{border-color:var(--accent-2);color:var(--heading);}
 .btn-light{background:var(--argent);color:var(--noir);}
 .btn-light:hover{background:#fff;}
 .btn-wa{background:#1e2b23;border-color:rgba(111,207,151,.35);color:#eafff3;}
@@ -199,6 +217,9 @@ p{margin:0;}
 .hero-gem .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-mask-image:radial-gradient(ellipse 56% 60% at 50% 45%,#000 60%,transparent 85%);mask-image:radial-gradient(ellipse 56% 60% at 50% 45%,#000 60%,transparent 85%);}
 .hero-gem .face img{width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 22px 38px rgba(183,110,77,.55));}
 .hero-gem .face.back{transform:rotateY(180deg);}
+.hero-gem .face.back img.mirrored{transform:scaleX(-1);filter:brightness(.55) saturate(.7);}
+.hero-symbol-canvas-wrap{position:absolute;inset:0;}
+.hero-symbol-canvas-wrap canvas{width:100%;height:100%;display:block;}
 @keyframes gemSpin{from{transform:rotateY(0deg) rotateX(6deg);}to{transform:rotateY(360deg) rotateX(6deg);}}
 .hero-gem-float{animation:gemFloat 4.5s ease-in-out infinite;}
 @keyframes gemFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
@@ -259,7 +280,7 @@ p{margin:0;}
 .section{padding:64px 0;}
 .section.tight{padding:44px 0;}
 .section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;}
-.section-head h2{font-size:clamp(1.6rem,3vw,2.2rem);font-style:italic;color:#fff;}
+.section-head h2{font-size:clamp(1.6rem,3vw,2.2rem);font-style:italic;color:var(--heading);}
 .section-head .desc{color:var(--text-dim);max-width:520px;margin-top:8px;font-size:14px;}
 .see-all{font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--accent-2);border-bottom:1px solid var(--or-rose-dim);padding-bottom:2px;white-space:nowrap;}
 
@@ -303,12 +324,12 @@ p{margin:0;}
 .fav-btn.active svg{fill:var(--or-rose-light);}
 .card-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1;}
 .card-loc{font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;letter-spacing:.03em;}
-.card-title{font-family:var(--font-display);font-size:20px;font-weight:600;color:#fff;}
+.card-title{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--heading);}
 .card-promoter{font-size:12px;color:var(--accent-2);display:flex;align-items:center;gap:5px;}
 .card-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--text-dim);margin-top:2px;}
 .card-meta span{display:flex;align-items:center;gap:5px;}
 .card-foot{margin-top:auto;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-price{font-family:var(--font-display);font-weight:600;color:#fff;font-size:17px;}
+.card-price{font-family:var(--font-display);font-weight:600;color:var(--heading);font-size:17px;}
 .card-price small{display:block;font-family:var(--font-body);font-size:10px;color:var(--text-dim);font-weight:600;}
 .card-cta{font-size:11.5px;font-weight:800;letter-spacing:.05em;color:var(--noir);background:var(--argent);padding:9px 14px;border-radius:999px;}
 .card:hover .card-cta{background:var(--or-rose-light);}
@@ -367,11 +388,11 @@ p{margin:0;}
 
 /* ---------------- Filters / marketplace ---------------- */
 .market-head{padding:30px 0 18px;border-bottom:1px solid var(--border);}
-.market-layout{display:grid;gap:28px;padding:28px 0 80px;grid-template-columns:1fr;}
-@media (min-width:980px){.market-layout{grid-template-columns:280px 1fr;}}
-.filters{position:sticky;top:92px;align-self:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 120px);overflow:auto;}
-.filters h3{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:#fff;}
-.f-group{display:flex;flex-direction:column;gap:8px;}
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:20px 0;}
+.fb-field{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:9px 16px;display:flex;align-items:center;gap:8px;}
+.fb-field .i-def{width:15px;height:15px;color:var(--or-rose-light);flex:0 0 auto;}
+.fb-field select{background:transparent;border:0;color:var(--heading);font-size:13px;font-weight:700;font-family:inherit;padding:0;}
+.f-group{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
 .f-group label.f-title{font-size:11.5px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
 .f-group select,.f-group input[type=text],.f-group input[type=number]{
   width:100%;background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-s);
@@ -379,20 +400,18 @@ p{margin:0;}
 }
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
 .chip{padding:7px 12px;border-radius:999px;border:1px solid var(--border);font-size:12px;color:var(--text-dim);cursor:pointer;background:transparent;}
-.chip.active{border-color:var(--or-rose);color:#fff;background:rgba(183,110,77,.16);}
+.chip.active{border-color:var(--or-rose);color:var(--heading);background:rgba(183,110,77,.16);}
 .range-row{display:flex;gap:8px;align-items:center;}
 .range-row input{flex:1;min-width:0;}
 .check-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);}
 .results-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
 .results-count{font-size:13px;color:var(--text-dim);}
-.results-count b{color:#fff;}
+.results-count b{color:var(--heading);}
 .sort-select{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-s);padding:9px 12px;font-size:12.5px;font-family:inherit;}
 .active-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.active-filters .chip{background:rgba(183,110,77,.12);border-color:rgba(183,110,77,.4);color:#fff;display:flex;gap:6px;align-items:center;}
-.mobile-filter-btn{display:flex;}
-@media (min-width:980px){.mobile-filter-btn{display:none;}}
+.active-filters .chip{background:rgba(183,110,77,.12);border-color:rgba(183,110,77,.4);color:var(--heading);display:flex;gap:6px;align-items:center;}
 .empty-state{padding:70px 20px;text-align:center;border:1px dashed var(--border);border-radius:var(--radius-l);}
-.empty-state h3{color:#fff;font-size:20px;margin-bottom:8px;}
+.empty-state h3{color:var(--heading);font-size:20px;margin-bottom:8px;}
 .empty-state p{color:var(--text-dim);font-size:13.5px;}
 
 /* ---------------- Detail page ---------------- */
@@ -404,13 +423,13 @@ p{margin:0;}
 .detail-gallery > div > svg{width:100%;height:100%;}
 .detail-gallery > div > img{width:100%;height:100%;object-fit:cover;display:block;}
 .detail-header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;padding:26px 0;}
-.detail-title h1{font-size:clamp(1.8rem,3.4vw,2.6rem);color:#fff;font-style:italic;}
+.detail-title h1{font-size:clamp(1.8rem,3.4vw,2.6rem);color:var(--heading);font-style:italic;}
 .detail-title .loc{color:var(--text-dim);font-size:13.5px;margin-top:6px;display:flex;align-items:center;gap:6px;}
 .detail-promoter-chip{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px 6px 6px;margin-top:14px;}
 .pchip-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;}
-.price-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px 22px;min-width:230px;}
+.price-box{background:#141210;border:1px solid rgba(255,255,255,.09);border-radius:var(--radius-l);padding:20px 22px;min-width:230px;}
 .price-box .amount{font-family:var(--font-display);font-size:28px;color:#fff;}
-.price-box .amount small{font-size:12px;color:var(--text-dim);font-family:var(--font-body);}
+.price-box .amount small{font-size:12px;color:rgba(255,255,255,.55);font-family:var(--font-body);}
 .price-box .cta-row{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
 .detail-grid{display:grid;gap:40px;grid-template-columns:1fr;padding-bottom:70px;}
 @media (min-width:960px){.detail-grid{grid-template-columns:1fr 320px;}}
@@ -419,7 +438,7 @@ p{margin:0;}
 @media (min-width:560px){.stat-row{grid-template-columns:repeat(4,1fr);}}
 .stat-tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);padding:16px;text-align:left;}
 .stat-tile .k{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);font-weight:700;}
-.stat-tile .v{font-family:var(--font-display);font-size:19px;color:#fff;margin-top:6px;}
+.stat-tile .v{font-family:var(--font-display);font-size:19px;color:var(--heading);margin-top:6px;}
 .prose{color:var(--text);font-size:14.5px;line-height:1.85;max-width:66ch;}
 .prose + .prose{margin-top:10px;}
 .chips-plain{display:flex;flex-wrap:wrap;gap:10px;}
@@ -428,14 +447,33 @@ p{margin:0;}
 .typo-table{width:100%;border-collapse:collapse;font-size:13.5px;}
 .typo-table th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);padding:0 14px 10px 0;font-weight:700;}
 .typo-table td{padding:14px 14px 14px 0;border-top:1px solid var(--border);color:var(--text);}
-.typo-table td:first-child{color:#fff;font-weight:700;font-family:var(--font-display);font-size:15px;}
+.typo-table td:first-child{color:var(--heading);font-weight:700;font-family:var(--font-display);font-size:15px;}
 .doc-list{display:flex;flex-direction:column;gap:10px;}
 .doc-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-m);background:var(--surface);font-size:13px;}
 .doc-item svg{width:20px;height:20px;color:var(--or-rose-light);flex:0 0 auto;}
 .doc-item .fname{flex:1;color:var(--text);}
 .doc-item .fsize{color:var(--text-dim);font-size:11.5px;}
-.map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:260px;background:var(--surface-2);}
+.map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:320px;background:var(--surface-2);}
 .map-box .pin-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);text-align:center;}
+.map-box .leaflet-container{width:100%;height:100%;font-family:inherit;background:var(--surface-2);}
+.leaflet-tile-pane{filter:grayscale(.55) brightness(1.06) contrast(.92) sepia(.06);}
+.yadra-pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));border:2px solid #fff;box-shadow:0 3px 10px -2px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;}
+.yadra-pin::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff;transform:rotate(45deg);}
+.yadra-pin.active{background:linear-gradient(135deg,#fff,#E6E6E6);}
+.leaflet-popup-content-wrapper{background:var(--noir);color:var(--argent);border-radius:var(--radius-m);}
+.leaflet-popup-tip{background:var(--noir);}
+.map-popup{width:200px;}
+.map-popup img{width:100%;height:96px;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px;}
+.map-popup .mp-loc{font-size:10.5px;color:var(--text-dim);display:flex;align-items:center;gap:4px;}
+.map-popup .mp-title{font-family:var(--font-display);font-size:15px;color:#fff;margin:4px 0;}
+.map-popup .mp-price{font-size:12.5px;color:var(--or-rose-light);font-weight:700;margin-bottom:8px;}
+.map-popup a{display:block;text-align:center;background:var(--argent);color:var(--noir);border-radius:999px;padding:7px;font-size:11.5px;font-weight:800;}
+.market-view-toggle{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px;}
+.market-view-toggle button{border:0;background:transparent;color:var(--text-dim);padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.market-view-toggle button.active{background:var(--or-rose);color:#fff;}
+.market-view-toggle .i-def{width:14px;height:14px;}
+.market-map{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);height:560px;}
+.market-map .leaflet-container{width:100%;height:100%;background:var(--surface-2);}
 .side-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:20px;}
 .side-block + .side-block{margin-top:20px;}
 .mobile-cta-bar{
@@ -791,6 +829,61 @@ function mediaHTML(p,w,h,seedSuffix){
   if(p.photo && !seedSuffix){ return '<img class="card-photo" src="'+p.photo+'" alt="'+esc(p.nom)+'" loading="lazy">'; }
   return artSVG(p.slug+(seedSuffix||''),w,h);
 }
+
+/* ---------------- Leaflet (vraie carte interactive) ---------------- */
+var _leafletPromise = null;
+function loadLeaflet(){
+  if(window.L) return Promise.resolve(window.L);
+  if(_leafletPromise) return _leafletPromise;
+  _leafletPromise = new Promise(function(resolve,reject){
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    s.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
+    s.crossOrigin = '';
+    s.onload = function(){ resolve(window.L); };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return _leafletPromise;
+}
+function yadraMarkerIcon(L, active){
+  return L.divIcon({className:'', html:'<div class="yadra-pin'+(active?' active':'')+'"></div>', iconSize:[30,30], iconAnchor:[15,29], popupAnchor:[0,-26]});
+}
+function renderProjectsMap(containerId, projects, opts){
+  opts = opts || {};
+  var host = document.getElementById(containerId);
+  if(!host) return;
+  loadLeaflet().then(function(L){
+    host = document.getElementById(containerId); // page may have changed while the script was loading
+    if(!host) return;
+    if(host._yadraMap){ host._yadraMap.remove(); host._yadraMap = null; }
+    var map = L.map(host, {scrollWheelZoom:!!opts.scrollZoom, zoomControl:true, attributionControl:true});
+    host._yadraMap = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom:19, subdomains:'abc',
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    var pts = projects.filter(function(p){return p.lat && p.lng;});
+    if(!pts.length){ map.setView([28.0,2.6],5); return map; }
+    var bounds = [];
+    pts.forEach(function(p){
+      var marker = L.marker([p.lat,p.lng], {icon:yadraMarkerIcon(L, p.id===opts.activeId)}).addTo(map);
+      marker.bindPopup(
+        '<div class="map-popup">'
+        +(p.photo?('<img src="'+p.photo+'" alt="">'):artSVG(p.slug+'-map',200,96))
+        +'<div class="mp-loc">'+ic('pin')+' '+esc(p.commune)+', '+WILAYAS[p.wilaya].label+'</div>'
+        +'<div class="mp-title">'+esc(p.nom)+'</div>'
+        +'<div class="mp-price">à partir de '+moneyShort(p.prixMin)+'</div>'
+        +'<a href="/projets/'+p.wilaya+'/'+p.slug+'">Voir le projet</a>'
+        +'</div>', {maxWidth:220}
+      );
+      bounds.push([p.lat,p.lng]);
+    });
+    if(opts.single && pts.length===1){ map.setView([pts[0].lat,pts[0].lng], 14); }
+    else { map.fitBounds(bounds, {padding:[36,36], maxZoom:13}); }
+    return map;
+  }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
+}
 function heroSkylineSVG(){
   var rnd = mulberry32(7);
   var n = 26; var w=1400,h=560; var baseY=h*0.86; var x=0; var bars=[];
@@ -836,6 +929,17 @@ var WILAYAS = {
   'tizi-ouzou': {label:'Tizi Ouzou', communes:['Tizi Ouzou Centre','Draâ Ben Khedda','Boukhalfa']}
 };
 var WILAYA_ORDER = ['alger','oran','blida','constantine','setif','annaba','tizi-ouzou'];
+/* Coordonnées réelles (approx. centre de commune) — utilisées pour la carte interactive. */
+var COMMUNE_COORDS = {
+  'Hydra':[36.7378,3.0464], 'Bab Ezzouar':[36.7167,3.1833], 'Dely Ibrahim':[36.7500,2.9833],
+  'Bir Mourad Raïs':[36.7333,3.0500], 'El Achour':[36.7500,2.9500], 'Ouled Fayet':[36.7500,2.9333],
+  'Bir El Djir':[35.7167,-0.5667], 'Es Sénia':[35.6333,-0.6167], 'Canastel':[35.7333,-0.5333], 'Oran Centre':[35.6969,-0.6331],
+  'Blida Centre':[36.4700,2.8300], 'Boufarik':[36.5700,2.9100], 'Ouled Yaïch':[36.4900,2.8200],
+  'Ali Mendjeli':[36.2400,6.6500], 'Constantine Centre':[36.3650,6.6147], 'El Khroub':[36.2617,6.6981],
+  'Sétif Centre':[36.1900,5.4100], 'El Eulma':[36.1500,5.6900],
+  'Annaba Centre':[36.9000,7.7667], 'Seraïdi':[36.9833,7.7500], 'El Bouni':[36.8833,7.7667],
+  'Tizi Ouzou Centre':[36.7169,4.0497], 'Draâ Ben Khedda':[36.7386,3.9486], 'Boukhalfa':[36.7167,4.0333]
+};
 
 var PROMOTERS_BASE = [
   {id:'pr-atlas', name:'Atlas Promotion', slug:'atlas-promotion', wilaya:'alger', verified:true, founded:2011,
@@ -927,6 +1031,10 @@ function mkTypologies(seedStr,type,prixBase){
 function enrichProject(raw, idx){
   var promoter = PROMOTERS_BASE.filter(function(p){return p.id===raw.promoterId;})[0];
   var seed = hashStr(raw.slug);
+  var rndGeo = mulberry32(seed+7);
+  var base = COMMUNE_COORDS[raw.commune] || [WILAYAS[raw.wilaya].lat||36.5,WILAYAS[raw.wilaya].lng||3];
+  var lat = base[0] + (rndGeo()-0.5)*0.014;
+  var lng = base[1] + (rndGeo()-0.5)*0.014;
   var typologies = raw.typologiesOverride || mkTypologies(raw.slug, raw.type, raw.prixBase);
   var prices = typologies.map(function(t){return t.prix;});
   var surfaces = typologies.map(function(t){return t.surface;});
@@ -942,7 +1050,8 @@ function enrichProject(raw, idx){
     surfaceMax: Math.max.apply(null,surfaces),
     prestations: pickN(seed+1, PRESTATIONS_POOL, 5+Math.floor(mulberry32(seed+2)()*4)),
     pointsForts: pickN(seed+3, POINTSFORTS_POOL, 4),
-    adresse: raw.quartier+', '+raw.commune+', '+WILAYAS[raw.wilaya].label
+    adresse: raw.quartier+', '+raw.commune+', '+WILAYAS[raw.wilaya].label,
+    lat: lat, lng: lng
   });
 }
 var PROJECTS = RAW_PROJECTS.map(enrichProject);
@@ -1072,6 +1181,7 @@ function go(path){
 
 function render(){
   closeModal();
+  setStructuredData(null);
   var r = parseHash();
   var main = document.getElementById('main');
   var segs = r.segs;
@@ -1156,8 +1266,8 @@ function pageHome(){
     +'<div class="wrap hero-grid">'
       +'<div class="hero-content">'
         +'<div class="hero-emblem-inline"><div class="hero-gem-wrap hero-gem-float"><div class="hero-gem">'
-          +'<div class="face front"><img src="/assets/logo-icon.png" alt="Emblème yadra!"></div>'
-          +'<div class="face back"><img src="/assets/logo-icon-back.png" alt=""></div>'
+          +'<div class="face front"><img src="/assets/symbol.svg" alt="Symbole yadra!"></div>'
+          +'<div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>'
         +'</div></div></div>'
         +'<p class="eyebrow">Marketplace immobilier · Algérie</p>'
         +'<h1>L’immobilier <em>autrement.</em></h1>'
@@ -1178,9 +1288,9 @@ function pageHome(){
       +'</div>'
       +'<div class="hero-visual">'
         +'<div class="hero-ring"></div><div class="hero-ring r2"></div>'
-        +'<div class="hero-gem-wrap hero-gem-float"><div class="hero-emblem-pedestal"></div><div class="hero-gem">'
-          +'<div class="face front"><img src="/assets/logo-icon.png" alt="Emblème yadra!"></div>'
-          +'<div class="face back"><img src="/assets/logo-icon-back.png" alt=""></div>'
+        +'<div class="hero-gem-wrap hero-gem-float" id="heroSymbolMount"><div class="hero-emblem-pedestal"></div><div class="hero-gem">'
+          +'<div class="face front"><img src="/assets/symbol.svg" alt="Symbole yadra!"></div>'
+          +'<div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>'
         +'</div></div>'
         +[[10,18,'0s'],[85,30,'.8s'],[70,80,'1.6s'],[18,70,'2.4s'],[92,66,'.4s']].map(function(s){return '<span class="sparkle" style="left:'+s[0]+'%;top:'+s[1]+'%;animation-delay:'+s[2]+';width:4px;height:4px;"></span>';}).join('')
       +'</div>'
@@ -1238,14 +1348,14 @@ function pageHome(){
           +'<div><a class="btn btn-light" href="/projets">Explorer les projets</a></div>'
         +'</div>'
         +'<div class="split-card accent">'
-          +'<span class="eyebrow">Promoteurs</span><h3>Présentez vos programmes, générez des prospects</h3>'
-          +'<p>Publiez vos projets avec une présentation premium et recevez des demandes qualifiées d\'acquéreurs réellement intéressés.</p>'
+          +'<span class="eyebrow">Promoteurs</span><h3>Vous avez un projet ?</h3>'
+          +'<p>Présentez vos programmes avec une mise en scène premium et recevez des demandes qualifiées d\'acquéreurs réellement intéressés — sans intermédiaire superflu.</p>'
           +'<ul>'
-            +'<li>'+ic('check')+'Fiche projet complète : typologies, prix, plans, prestations</li>'
-            +'<li>'+ic('check')+'Suivi des demandes reçues, statut par statut</li>'
-            +'<li>'+ic('check')+'Statistiques de vos publications</li>'
+            +'<li>'+ic('check')+'Visibilité auprès d\'acquéreurs qualifiés, dans toute l\'Algérie</li>'
+            +'<li>'+ic('check')+'Accompagnement et présentation premium de vos projets</li>'
+            +'<li>'+ic('check')+'Diffusion, suivi des demandes et statistiques en temps réel</li>'
           +'</ul>'
-          +'<div><a class="btn btn-primary" href="/promoteur">Publier un projet</a></div>'
+          +'<div style="display:flex;gap:10px;flex-wrap:wrap;"><a class="btn btn-primary" href="/promoteur">Présenter mon projet</a><a class="btn btn-ghost" href="/promoteur">Devenir partenaire</a></div>'
         +'</div>'
       +'</div>'
     +'</div>'
@@ -1269,6 +1379,7 @@ function afterHome(){
     var f = new FormData(e.target);
     go('/projets'+qs({ville:f.get('ville'),type:f.get('type'),budgetMax:f.get('budgetMax')}));
   });
+  if(window.mountHeroSymbol3D) window.mountHeroSymbol3D();
 }
 
 /* ---------------- Project card (shared) ---------------- */
@@ -1292,89 +1403,97 @@ function projectCardHTML(p){
    PAGE: MARKETPLACE
    ================================================================ */
 var marketState = null;
+var marketViewMode = 'grid';
 function pageMarketplace(params){
   marketState = {
     ville: params.get('ville')||'', commune:'', type: params.get('type')||'', budgetMax: params.get('budgetMax')||'',
     surfaceMin:'', pieces:'', livraison:'', statut:'', verifie: params.get('verifie')==='1', sort:'pertinence', q: params.get('q')||''
   };
-  return ''
+  marketViewMode = 'grid';
+  return '<div class="theme-light">'
   +'<div class="market-head wrap">'
-    +'<div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:#fff;">Projets</span></div>'
-    +'<div class="section-head" style="margin-top:10px;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Recherchez et filtrez les programmes immobiliers publiés par nos promoteurs.</p></div></div>'
+    +'<div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Projets</span></div>'
+    +'<div class="section-head" style="margin-top:10px;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
   +'</div>'
-  +'<div class="wrap market-layout">'
-    +'<aside class="filters" id="filtersPanel">'+filtersInnerHTML()+'</aside>'
-    +'<div>'
+  +'<div class="wrap"><div class="filter-bar">'
+    +'<div class="fb-field fb-search">'+ic('search')+'<input type="text" id="fQ" placeholder="Alger, Hydra, F3, Appartement…" value="'+esc((marketState.q)||'')+'" aria-label="Recherche"/></div>'
+    +'<div class="fb-field">'+ic('pin')+'<select id="fVille" aria-label="Ville"><option value="">Ville</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
+    +'<div class="fb-field">'+ic('building')+'<select id="fType" aria-label="Type de bien"><option value="">Type de bien</option>'+['Appartement','Duplex','Villa','Résidence mixte'].map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join('')+'</select></div>'
+    +'<div class="fb-field">'+ic('chart')+'<select id="fBudget" aria-label="Prix"><option value="">Prix</option><option value="10000000">Jusqu’à 10 M DA</option><option value="15000000">Jusqu’à 15 M DA</option><option value="25000000">Jusqu’à 25 M DA</option><option value="50000000">Jusqu’à 50 M DA</option></select></div>'
+    +'<button type="button" class="btn btn-ghost btn-sm" id="moreFiltersBtn">'+ic('filter')+' Plus de filtres</button>'
+    +'<button type="button" class="mini-btn" id="resetFilters" style="margin-left:auto;">Réinitialiser</button>'
+  +'</div></div>'
+  +'<div class="wrap" style="padding-bottom:80px;">'
       +'<div class="results-bar">'
         +'<div class="results-count" id="resultsCount"></div>'
         +'<div style="display:flex;gap:10px;align-items:center;">'
-          +'<button class="btn btn-ghost btn-sm mobile-filter-btn" id="mobileFilterBtn">'+ic('filter')+' Filtres</button>'
+          +'<div class="market-view-toggle" id="viewToggle">'
+            +'<button type="button" class="active" data-view="grid">'+ic('grid')+' Grille</button>'
+            +'<button type="button" data-view="map">'+ic('pin')+' Carte</button>'
+          +'</div>'
           +'<select class="sort-select" id="sortSelect"><option value="pertinence">Pertinence</option><option value="prix-asc">Prix croissant</option><option value="prix-desc">Prix décroissant</option><option value="livraison">Livraison la plus proche</option></select>'
         +'</div>'
       +'</div>'
       +'<div class="active-filters" id="activeFilters"></div>'
       +'<div class="grid grid-cards" id="resultsGrid"></div>'
-    +'</div>'
+      +'<div class="market-map" id="marketMap" style="display:none;"></div>'
+  +'</div>'
   +'</div>';
 }
-function filtersInnerHTML(){
-  return '<div style="display:flex;justify-content:space-between;align-items:center;"><h3>Filtres</h3><button class="mini-btn" id="resetFilters">Réinitialiser</button></div>'
-  +'<div class="f-group"><label class="f-title">Recherche</label><input type="text" id="fQ" placeholder="Nom du projet, quartier…"/></div>'
-  +'<div class="f-group"><label class="f-title">Wilaya</label><select id="fVille"><option value="">Toutes</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
-  +'<div class="f-group"><label class="f-title">Commune</label><select id="fCommune"><option value="">Toutes</option></select></div>'
-  +'<div class="f-group"><label class="f-title">Type de bien</label><div class="chip-row" id="fType">'+['Appartement','Duplex','Villa','Résidence mixte'].map(function(t){return '<button type="button" class="chip" data-val="'+t+'">'+t+'</button>';}).join('')+'</div></div>'
-  +'<div class="f-group"><label class="f-title">Budget max (DA)</label><select id="fBudget"><option value="">Indifférent</option><option value="10000000">10 M DA</option><option value="15000000">15 M DA</option><option value="25000000">25 M DA</option><option value="50000000">50 M DA</option><option value="999999999">50 M DA +</option></select></div>'
-  +'<div class="f-group"><label class="f-title">Surface min (m²)</label><input type="number" id="fSurface" placeholder="ex. 70"/></div>'
-  +'<div class="f-group"><label class="f-title">Pièces</label><div class="chip-row" id="fPieces">'+['F2','F3','F4','F5'].map(function(t){return '<button type="button" class="chip" data-val="'+t+'">'+t+'</button>';}).join('')+'</div></div>'
+function moreFiltersModalHTML(){
+  var s = marketState;
+  return '<h2>Plus de filtres</h2>'
+  +'<div class="f-group"><label class="f-title">Commune</label><select id="fCommune"><option value="">Toutes</option>'+(s.ville?WILAYAS[s.ville].communes.map(function(c){return '<option value="'+c+'"'+(c===s.commune?' selected':'')+'>'+c+'</option>';}).join(''):'')+'</select></div>'
+  +'<div class="f-group"><label class="f-title">Surface min (m²)</label><input type="number" id="fSurface" placeholder="ex. 70" value="'+esc(s.surfaceMin)+'"/></div>'
+  +'<div class="f-group"><label class="f-title">Pièces</label><div class="chip-row" id="fPieces">'+['F2','F3','F4','F5'].map(function(t){return '<button type="button" class="chip'+(t===s.pieces?' active':'')+'" data-val="'+t+'">'+t+'</button>';}).join('')+'</div></div>'
   +'<div class="f-group"><label class="f-title">Statut</label><div class="chip-row" id="fStatut">'
-    +['sur-plan|Sur plan','construction|En construction','livre|Livré'].map(function(t){var a=t.split('|');return '<button type="button" class="chip" data-val="'+a[0]+'">'+a[1]+'</button>';}).join('')+'</div></div>'
-  +'<div class="f-group"><label class="f-title">Livraison</label><select id="fLivraison"><option value="">Toutes</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option></select></div>'
-  +'<div class="f-group"><label class="check-row"><input type="checkbox" id="fVerifie"/> Promoteur vérifié uniquement</label></div>';
+    +['sur-plan|Sur plan','construction|En construction','livre|Livré'].map(function(t){var a=t.split('|');return '<button type="button" class="chip'+(a[0]===s.statut?' active':'')+'" data-val="'+a[0]+'">'+a[1]+'</button>';}).join('')+'</div></div>'
+  +'<div class="f-group"><label class="f-title">Livraison</label><select id="fLivraison"><option value="">Toutes</option><option value="2027"'+(s.livraison==='2027'?' selected':'')+'>2027</option><option value="2028"'+(s.livraison==='2028'?' selected':'')+'>2028</option><option value="2029"'+(s.livraison==='2029'?' selected':'')+'>2029</option></select></div>'
+  +'<div class="f-group"><label class="check-row"><input type="checkbox" id="fVerifie"'+(s.verifie?' checked':'')+'/> Promoteur vérifié uniquement</label></div>'
+  +'<button class="btn btn-primary btn-block" id="moreFiltersApply" style="margin-top:18px;">Voir les résultats</button>';
 }
-function afterMarketplace(params){
-  var els = {
-    q: document.getElementById('fQ'), ville: document.getElementById('fVille'), commune: document.getElementById('fCommune'),
-    budget: document.getElementById('fBudget'), surface: document.getElementById('fSurface'), livraison: document.getElementById('fLivraison'), verifie: document.getElementById('fVerifie')
-  };
-  els.ville.value = marketState.ville;
-  refreshCommunes();
-  els.q.value = marketState.q;
-  function refreshCommunes(){
-    var w = els.ville.value;
-    var communes = w ? WILAYAS[w].communes : [];
-    els.commune.innerHTML = '<option value="">Toutes</option>'+communes.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
-  }
-  els.ville.addEventListener('change', function(){ marketState.ville=els.ville.value; refreshCommunes(); marketState.commune=''; applyFilters(); });
-  els.commune.addEventListener('change', function(){ marketState.commune=els.commune.value; applyFilters(); });
-  els.q.addEventListener('input', debounce(function(){ marketState.q=els.q.value; applyFilters(); },220));
-  els.budget.addEventListener('change', function(){ marketState.budgetMax=els.budget.value; applyFilters(); });
-  els.surface.addEventListener('input', debounce(function(){ marketState.surfaceMin=els.surface.value; applyFilters(); },220));
-  els.livraison.addEventListener('change', function(){ marketState.livraison=els.livraison.value; applyFilters(); });
-  els.verifie.addEventListener('change', function(){ marketState.verifie=els.verifie.checked; applyFilters(); });
-  Array.prototype.forEach.call(document.querySelectorAll('#fType .chip'), function(chip){
-    chip.addEventListener('click', function(){ marketState.type = marketState.type===chip.dataset.val?'':chip.dataset.val; applyFilters(); });
+function wireMoreFiltersModal(){
+  var commune=document.getElementById('fCommune'), surface=document.getElementById('fSurface'),
+      livraison=document.getElementById('fLivraison'), verifie=document.getElementById('fVerifie');
+  commune.addEventListener('change', function(){ marketState.commune=commune.value; applyFilters(); });
+  surface.addEventListener('input', debounce(function(){ marketState.surfaceMin=surface.value; applyFilters(); },220));
+  livraison.addEventListener('change', function(){ marketState.livraison=livraison.value; applyFilters(); });
+  verifie.addEventListener('change', function(){ marketState.verifie=verifie.checked; applyFilters(); });
+  Array.prototype.forEach.call(document.querySelectorAll('#fPieces .chip'), function(chip){
+    chip.addEventListener('click', function(){ marketState.pieces = marketState.pieces===chip.dataset.val?'':chip.dataset.val; chip.classList.toggle('active'); Array.prototype.forEach.call(document.querySelectorAll('#fPieces .chip'),function(c){ if(c!==chip) c.classList.remove('active'); }); applyFilters(); });
   });
   Array.prototype.forEach.call(document.querySelectorAll('#fStatut .chip'), function(chip){
-    chip.addEventListener('click', function(){ marketState.statut = marketState.statut===chip.dataset.val?'':chip.dataset.val; applyFilters(); });
+    chip.addEventListener('click', function(){ marketState.statut = marketState.statut===chip.dataset.val?'':chip.dataset.val; chip.classList.toggle('active'); Array.prototype.forEach.call(document.querySelectorAll('#fStatut .chip'),function(c){ if(c!==chip) c.classList.remove('active'); }); applyFilters(); });
   });
-  Array.prototype.forEach.call(document.querySelectorAll('#fPieces .chip'), function(chip){
-    chip.addEventListener('click', function(){ marketState.pieces = marketState.pieces===chip.dataset.val?'':chip.dataset.val; applyFilters(); });
-  });
+  document.getElementById('moreFiltersApply').addEventListener('click', closeModal);
+}
+function afterMarketplace(params){
+  var els = { q: document.getElementById('fQ'), ville: document.getElementById('fVille'), type: document.getElementById('fType'), budget: document.getElementById('fBudget') };
+  els.ville.value = marketState.ville;
+  els.type.value = marketState.type;
+  els.budget.value = marketState.budgetMax;
+  els.q.addEventListener('input', debounce(function(){ marketState.q=els.q.value; applyFilters(); },220));
+  els.ville.addEventListener('change', function(){ marketState.ville=els.ville.value; marketState.commune=''; applyFilters(); });
+  els.type.addEventListener('change', function(){ marketState.type=els.type.value; applyFilters(); });
+  els.budget.addEventListener('change', function(){ marketState.budgetMax=els.budget.value; applyFilters(); });
   document.getElementById('sortSelect').addEventListener('change', function(e){ marketState.sort=e.target.value; applyFilters(); });
   document.getElementById('resetFilters').addEventListener('click', function(){
     marketState = {ville:'',commune:'',type:'',budgetMax:'',surfaceMin:'',pieces:'',livraison:'',statut:'',verifie:false,sort:'pertinence',q:''};
-    document.getElementById('filtersPanel').innerHTML = filtersInnerHTML();
-    afterMarketplace(new URLSearchParams());
+    els.ville.value=''; els.type.value=''; els.budget.value=''; els.q.value='';
     applyFilters();
   });
-  var mfb = document.getElementById('mobileFilterBtn');
-  if(mfb) mfb.addEventListener('click', function(){
-    var panel = document.getElementById('filtersPanel');
-    panel.style.position='fixed'; panel.style.inset='76px 12px 12px 12px'; panel.style.zIndex='58'; panel.style.maxHeight='calc(100vh - 100px)';
-    var closeBtn = document.createElement('button');
-    closeBtn.className='btn btn-primary btn-block'; closeBtn.textContent='Voir les résultats'; closeBtn.style.marginTop='10px';
-    closeBtn.onclick = function(){ panel.style.position=''; panel.style.inset=''; panel.style.zIndex=''; };
-    panel.appendChild(closeBtn);
+  document.getElementById('moreFiltersBtn').addEventListener('click', function(){
+    openModal(moreFiltersModalHTML());
+    wireMoreFiltersModal();
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#viewToggle button'), function(btn){
+    btn.addEventListener('click', function(){
+      marketViewMode = btn.dataset.view;
+      Array.prototype.forEach.call(document.querySelectorAll('#viewToggle button'), function(b){ b.classList.toggle('active', b===btn); });
+      document.getElementById('resultsGrid').style.display = marketViewMode==='grid' ? '' : 'none';
+      document.getElementById('marketMap').style.display = marketViewMode==='map' ? '' : 'none';
+      if(marketViewMode==='map') applyFilters();
+    });
   });
   applyFilters();
 }
@@ -1391,7 +1510,13 @@ function applyFilters(){
     if(s.statut && p.statut!==s.statut) return false;
     if(s.livraison && p.livraison.indexOf(s.livraison)===-1) return false;
     if(s.verifie && !p.verified) return false;
-    if(s.q){ var hay=(p.nom+' '+p.quartier+' '+p.commune).toLowerCase(); if(hay.indexOf(s.q.toLowerCase())===-1) return false; }
+    if(s.q){
+      var hay = [p.nom, p.quartier, p.commune, WILAYAS[p.wilaya].label, p.type, p.adresse]
+        .concat(p.typologies.map(function(t){return t.label;}))
+        .join(' ').toLowerCase();
+      var tokens = s.q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      if(!tokens.every(function(tok){ return hay.indexOf(tok)!==-1; })) return false;
+    }
     return true;
   });
   if(s.sort==='prix-asc') results.sort(function(a,b){return a.prixMin-b.prixMin;});
@@ -1400,17 +1525,19 @@ function applyFilters(){
 
   document.getElementById('resultsCount').innerHTML = '<b>'+results.length+'</b> projet'+(results.length>1?'s':'')+' trouvé'+(results.length>1?'s':'');
   var grid = document.getElementById('resultsGrid');
-  grid.innerHTML = results.length ? results.map(projectCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1;">'+ic('search','ic')+'<h3>Aucun projet ne correspond</h3><p>Essayez d\'élargir votre recherche ou de réinitialiser les filtres.</p></div>';
+  grid.innerHTML = results.length ? results.map(projectCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1;">'+ic('search','ic')+'<h3>Aucun projet ne correspond à votre recherche.</h3><p>Essayez d\'élargir votre recherche ou <a href="#" id="emptyStateReset" style="color:var(--or-rose-light);text-decoration:underline;">réinitialisez les filtres</a>.</p></div>';
+  var emptyResetLink = document.getElementById('emptyStateReset');
+  if(emptyResetLink) emptyResetLink.addEventListener('click', function(e){ e.preventDefault(); document.getElementById('resetFilters').click(); });
+  if(marketViewMode==='map'){ renderProjectsMap('marketMap', results, {scrollZoom:true}); }
 
   var chips = [];
-  if(s.ville) chips.push(['Ville: '+WILAYAS[s.ville].label, function(){ marketState.ville=''; document.getElementById('fVille').value=''; applyFilters(); }]);
-  if(s.type) chips.push(['Type: '+s.type, function(){ marketState.type=''; applyFilters(); document.querySelectorAll('#fType .chip').forEach(function(c){c.classList.remove('active');}); }]);
-  if(s.budgetMax) chips.push(['Budget ≤ '+moneyShort(Number(s.budgetMax)), function(){ marketState.budgetMax=''; document.getElementById('fBudget').value=''; applyFilters(); }]);
-  if(s.verifie) chips.push(['Vérifié', function(){ marketState.verifie=false; document.getElementById('fVerifie').checked=false; applyFilters(); }]);
+  if(s.ville) chips.push(['Ville: '+WILAYAS[s.ville].label, function(){ marketState.ville=''; var el=document.getElementById('fVille'); if(el) el.value=''; applyFilters(); }]);
+  if(s.type) chips.push(['Type: '+s.type, function(){ marketState.type=''; var el=document.getElementById('fType'); if(el) el.value=''; applyFilters(); }]);
+  if(s.budgetMax) chips.push(['Budget ≤ '+moneyShort(Number(s.budgetMax)), function(){ marketState.budgetMax=''; var el=document.getElementById('fBudget'); if(el) el.value=''; applyFilters(); }]);
+  if(s.verifie) chips.push(['Vérifié', function(){ marketState.verifie=false; var el=document.getElementById('fVerifie'); if(el) el.checked=false; applyFilters(); }]);
   document.getElementById('activeFilters').innerHTML = chips.map(function(c,i){ return '<button class="chip active" data-i="'+i+'">'+esc(c[0])+' '+ic('close')+'</button>'; }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('#activeFilters .chip'), function(btn,i){ btn.addEventListener('click', function(){ chips[i][1](); }); });
 
-  Array.prototype.forEach.call(document.querySelectorAll('#fType .chip'), function(c){ c.classList.toggle('active', c.dataset.val===s.type); });
   Array.prototype.forEach.call(document.querySelectorAll('#fStatut .chip'), function(c){ c.classList.toggle('active', c.dataset.val===s.statut); });
   Array.prototype.forEach.call(document.querySelectorAll('#fPieces .chip'), function(c){ c.classList.toggle('active', c.dataset.val===s.pieces); });
 }
@@ -1422,8 +1549,8 @@ function pageDetail(wilaya,slug){
   var p = getProjectBySlug(wilaya,slug);
   if(!p) return page404();
   var similar = getAllProjects().filter(function(x){return x.id!==p.id && (x.wilaya===p.wilaya || x.type===p.type);}).slice(0,3);
-  return ''
-  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/projets">Projets</a> '+ic('chevronRight')+' <a href="/projets?ville='+p.wilaya+'">'+WILAYAS[p.wilaya].label+'</a> '+ic('chevronRight')+' <span style="color:#fff;">'+esc(p.nom)+'</span></div></div>'
+  return '<div class="theme-light">'
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/projets">Projets</a> '+ic('chevronRight')+' <a href="/projets?ville='+p.wilaya+'">'+WILAYAS[p.wilaya].label+'</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(p.nom)+'</span></div></div>'
   +'<div class="wrap"><div class="detail-gallery" id="detailGallery">'
     +[0,1,2,3].map(function(i){ return '<div>'+(i===0?mediaHTML(p,500,400):artSVG(p.slug+'-g'+i,500,400))+'</div>'; }).join('')
   +'</div></div>'
@@ -1433,9 +1560,9 @@ function pageDetail(wilaya,slug){
     +'</div>'
     +'<div class="price-box"><div class="amount tabular">'+moneyShort(p.prixMin)+' <small>à partir de</small></div>'
       +'<div class="cta-row">'
-        +'<button class="btn btn-primary btn-block" onclick="App.contactModal(\''+p.id+'\')">Contacter le promoteur</button>'
-        +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' WhatsApp</a>'
-        +'<button class="btn btn-ghost btn-block" id="favBtnDetail" onclick="App.toggleFav(\''+p.id+'\',this,true)">'+ic('heart')+' '+(isFavorite(p.id)?'Retiré des favoris':'Ajouter aux favoris')+'</button>'
+        +'<button class="btn btn-primary btn-block" onclick="App.contactModal(\''+p.id+'\')">Demander plus d’informations</button>'
+        +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' Contacter sur WhatsApp</a>'
+        +'<button class="btn btn-ghost btn-block" id="favBtnDetail" onclick="App.toggleFav(\''+p.id+'\',this,true)" style="color:#fff;border-color:rgba(255,255,255,.2);">'+ic('heart')+' '+(isFavorite(p.id)?'Retiré des favoris':'Ajouter aux favoris')+'</button>'
       +'</div>'
     +'</div>'
   +'</div></div>'
@@ -1446,38 +1573,56 @@ function pageDetail(wilaya,slug){
       +'<div class="stat-tile"><div class="k">Livraison</div><div class="v" style="font-size:15px;">'+esc(p.livraison)+'</div></div>'
       +'<div class="stat-tile"><div class="k">Statut</div><div class="v" style="font-size:15px;"><span class="badge '+statutClass(p.statut)+'" style="position:static;">'+statutLabel(p.statut)+'</span></div></div>'
     +'</div>'
-    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Présentation</h2><div class="prose">'+esc(p.description)+'</div></div>'
-    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Points forts</h2><div class="chips-plain">'+p.pointsForts.map(function(x){return '<span class="chip-plain">'+ic('check')+esc(x)+'</span>';}).join('')+'</div></div>'
-    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Typologies &amp; disponibilités</h2>'
+    +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Présentation</h2><div class="prose">'+esc(p.description)+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Points forts</h2><div class="chips-plain">'+p.pointsForts.map(function(x){return '<span class="chip-plain">'+ic('check')+esc(x)+'</span>';}).join('')+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Typologies &amp; disponibilités</h2>'
       +'<div class="table-wrap"><table class="data typo-table"><thead><tr><th>Typologie</th><th>Surface</th><th>Prix à partir de</th><th>Disponibilité</th></tr></thead><tbody>'
         +p.typologies.map(function(t){ return '<tr><td>'+t.label+'</td><td>'+t.surface+' m²</td><td class="tabular">'+money(t.prix)+'</td><td>'+t.dispo+' lot'+(t.dispo>1?'s':'')+'</td></tr>'; }).join('')
       +'</tbody></table></div>'
     +'</div>'
-    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Prestations</h2><div class="chips-plain">'+p.prestations.map(function(x){return '<span class="chip-plain">'+ic(PRESTATION_ICON[x]||'sparkle')+esc(x)+'</span>';}).join('')+'</div></div>'
-    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Plans &amp; documents</h2><div class="doc-list">'
+    +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Prestations</h2><div class="chips-plain">'+p.prestations.map(function(x){return '<span class="chip-plain">'+ic(PRESTATION_ICON[x]||'sparkle')+esc(x)+'</span>';}).join('')+'</div></div>'
+    +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Plans &amp; documents</h2><div class="doc-list">'
       +'<div class="doc-item">'+ic('doc')+'<span class="fname">Plan de masse — '+esc(p.nom)+'.pdf</span><span class="fsize">2,4 Mo</span></div>'
       +'<div class="doc-item">'+ic('doc')+'<span class="fname">Notice descriptive.pdf</span><span class="fsize">1,1 Mo</span></div>'
       +'<div class="doc-item">'+ic('doc')+'<span class="fname">Plan '+p.typologies[0].label+' type.pdf</span><span class="fsize">640 Ko</span></div>'
     +'</div><p class="form-note">Documents fournis à titre indicatif pour cette démonstration.</p></div>'
-    +'<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Localisation</h2>'
-      +'<div class="map-box">'+zelligePattern('zMap'+p.id,0.06)+'<div class="pin-center">'+ic('pin')+'<div style="margin-top:6px;color:#fff;font-weight:700;font-size:13px;">'+esc(p.adresse)+'</div></div></div>'
+    +'<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Localisation</h2>'
+      +'<div class="map-box" id="detailMap"></div>'
     +'</div>'
-    +(p.promoter?('<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">À propos du promoteur</h2>'
+    +(p.promoter?('<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">À propos du promoteur</h2>'
       +'<a class="split-card" style="flex-direction:row;align-items:center;gap:18px;" href="/promoteurs/'+p.promoter.slug+'">'
       +'<span class="promo-logo" style="width:56px;height:56px;font-size:20px;">'+p.promoter.name.charAt(0)+'</span>'
       +'<span><b style="display:block;color:#fff;font-family:var(--font-display);font-size:18px;">'+esc(p.promoter.name)+(p.verified?(' '+ic('shield')):'')+'</b><span style="color:var(--text-dim);font-size:13px;">'+esc(p.promoter.desc.slice(0,110))+'…</span></span>'
       +'</a></div>'):'')
-    +(similar.length?('<div><h2 style="font-size:22px;color:#fff;margin-bottom:14px;">Projets similaires</h2><div class="grid grid-cards">'+similar.map(projectCardHTML).join('')+'</div></div>'):'')
+    +(similar.length?('<div><h2 style="font-size:22px;color:var(--heading);margin-bottom:14px;">Projets similaires</h2><div class="grid grid-cards">'+similar.map(projectCardHTML).join('')+'</div></div>'):'')
   +'</div>'
-  +'<aside><div class="side-block"><h3 style="color:#fff;font-size:15px;margin-bottom:12px;">Une question sur ce projet ?</h3>'
+  +'<aside><div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:12px;">Une question sur ce projet ?</h3>'
     +'<p style="color:var(--text-dim);font-size:13px;margin-bottom:14px;">'+esc(p.promoter?p.promoter.name:'Le promoteur')+' vous répond directement.</p>'
-    +'<button class="btn btn-primary btn-block" onclick="App.contactModal(\''+p.id+'\')">Contacter le promoteur</button>'
-    +'<a class="btn btn-wa btn-block" style="margin-top:10px;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a>'
+    +'<button class="btn btn-primary btn-block" onclick="App.contactModal(\''+p.id+'\')">Demander plus d’informations</button>'
+    +'<a class="btn btn-wa btn-block" style="margin-top:10px;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+' Contacter sur WhatsApp</a>'
   +'</div></aside>'
   +'</div>'
-  +'<div class="mobile-cta-bar"><button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button><a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a></div>';
+  +'<div class="mobile-cta-bar"><button class="btn btn-primary" style="flex:1;" onclick="App.contactModal(\''+p.id+'\')">Contacter</button><a class="btn btn-wa" style="flex:0 0 auto;" target="_blank" rel="noopener" href="'+waLinkForProject(p)+'">'+ic('whatsapp')+'</a></div>'
+  +'</div>';
 }
-function afterDetail(){ /* interactions wired via inline handlers */ }
+function setStructuredData(obj){
+  var el = document.getElementById('ldjson');
+  if(!el){ el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ldjson'; document.head.appendChild(el); }
+  el.textContent = obj ? JSON.stringify(obj) : '';
+}
+function afterDetail(wilaya,slug){
+  var p = getProjectBySlug(wilaya,slug);
+  if(!p) return;
+  renderProjectsMap('detailMap', [p], {single:true, activeId:p.id, scrollZoom:false});
+  setStructuredData({
+    '@context':'https://schema.org', '@type':'RealEstateListing',
+    name:p.nom, description:p.description, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug,
+    image: p.photo ? 'https://yadra.fr'+p.photo : undefined,
+    address:{'@type':'PostalAddress', addressLocality:p.commune, addressRegion:WILAYAS[p.wilaya].label, addressCountry:'DZ'},
+    geo:{'@type':'GeoCoordinates', latitude:p.lat, longitude:p.lng},
+    offers:{'@type':'Offer', price:p.prixMin, priceCurrency:'DZD', availability:'https://schema.org/InStock'}
+  });
+}
 
 /* ---------------- Contact modal ---------------- */
 window.App = window.App || {};
@@ -2106,6 +2251,137 @@ document.addEventListener('DOMContentLoaded', render);
 if(document.readyState!=='loading') render();
 })();
 
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+/* ==========================================================
+   YADRA! — symbole 3D (vraie géométrie extrudée, Three.js)
+   Chargé uniquement sur le hero desktop (≥980px). Le mobile
+   garde l'emblème CSS 2D (fallback léger, déjà élégant).
+   En cas d'échec réseau/CDN, le HTML statique existant
+   (faces front/back CSS) reste affiché tel quel.
+   ========================================================== */
+import * as THREE from 'three';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+var current = null; // {renderer, raf}
+
+function disposeCurrent(){
+  if(!current) return;
+  if(current.raf) cancelAnimationFrame(current.raf);
+  current.renderer.dispose();
+  current = null;
+}
+
+function mountHeroSymbol3D(){
+  var mount = document.getElementById('heroSymbolMount');
+  if(!mount) return;
+  if(window.innerWidth < 980) return; // mobile: keep CSS fallback, save bandwidth/CPU
+  if(!window.WebGLRenderingContext) return;
+  if(mount.dataset.symbol3d) return; // already mounted on this exact node
+  disposeCurrent();
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var w = mount.clientWidth || 230, h = mount.clientHeight || 270;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(30, w/h, 0.1, 100);
+  camera.position.set(0, 0, 15);
+  camera.lookAt(0,0,0);
+
+  var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  var pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.035).texture;
+
+  var key = new THREE.DirectionalLight(0xffd9b8, 2.4);
+  key.position.set(4,6,7);
+  scene.add(key);
+  var rim = new THREE.DirectionalLight(0xbcd7ff, 1.2);
+  rim.position.set(-6,1,-4);
+  scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+
+  var silverMat = new THREE.MeshPhysicalMaterial({color:0xd9dadb, metalness:1, roughness:0.27, clearcoat:0.35, clearcoatRoughness:0.25});
+  var copperMat = new THREE.MeshPhysicalMaterial({color:0xb76e4d, metalness:1, roughness:0.32, clearcoat:0.3, clearcoatRoughness:0.3});
+  var group = new THREE.Group();
+
+  var loader = new SVGLoader();
+  loader.load('/assets/symbol.svg', function(data){
+    var extrudeSettings = {depth:14, bevelEnabled:true, bevelThickness:2, bevelSize:1.3, bevelSegments:3, curveSegments:24};
+    data.paths.forEach(function(path){
+      var id = (path.userData && path.userData.node && path.userData.node.getAttribute('id')) || '';
+      if(id.indexOf('Fold') !== -1) return; // flat shading hints for the 2D SVG only; real lighting replaces them in 3D
+      var mat = id === 'symArmCopper' ? copperMat : silverMat;
+      SVGLoader.createShapes(path).forEach(function(shape){
+        var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        group.add(new THREE.Mesh(geo, mat));
+      });
+    });
+    if(!group.children.length) return; // parsing failed: leave CSS fallback untouched
+
+    var box = new THREE.Box3().setFromObject(group);
+    var size = box.getSize(new THREE.Vector3());
+    var scale = 8.6 / Math.max(size.x, size.y);
+    group.scale.set(scale, -scale, scale);
+    box.setFromObject(group);
+    var center = box.getCenter(new THREE.Vector3());
+    group.position.sub(center);
+    scene.add(group);
+
+    // swap in the canvas only once the geometry is actually ready
+    var wrap = document.createElement('div');
+    wrap.className = 'hero-symbol-canvas-wrap';
+    wrap.appendChild(renderer.domElement);
+    var gemEl = mount.querySelector('.hero-gem');
+    if(gemEl) gemEl.style.display = 'none';
+    mount.appendChild(wrap);
+    mount.dataset.symbol3d = '1';
+
+    var start = performance.now();
+    var PERIOD = 26000; // ms — one slow face→3/4→profile→3/4→face cycle
+    var MAX_YAW = 1.05; // rad, ~60° — reads as "profile" without the blades vanishing edge-on
+    function frame(now){
+      if(!reduceMotion){
+        var t = (now - start) / PERIOD;
+        group.rotation.y = Math.sin(t * Math.PI * 2) * MAX_YAW;
+        current.raf = requestAnimationFrame(frame);
+      }
+      renderer.render(scene, camera);
+    }
+    current = {renderer:renderer, camera:camera, raf:null};
+    current.raf = reduceMotion ? null : requestAnimationFrame(frame);
+    if(reduceMotion) renderer.render(scene, camera);
+  }, undefined, function(){
+    /* network/CDN failure: static CSS front/back faces stay visible, nothing to clean up */
+  });
+}
+
+window.mountHeroSymbol3D = mountHeroSymbol3D;
+window.addEventListener('resize', function(){
+  var mount = document.getElementById('heroSymbolMount');
+  if(!mount || !current) return;
+  var w = mount.clientWidth, h = mount.clientHeight;
+  if(!w || !h) return;
+  current.renderer.setSize(w,h);
+  current.camera.aspect = w/h;
+  current.camera.updateProjectionMatrix();
+});
+mountHeroSymbol3D();
 </script>
 
 </body>
