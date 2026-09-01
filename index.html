@@ -1377,10 +1377,12 @@ function render(){
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal(); }
   else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); }
   else if(segs[0]==='inscription'){ main.innerHTML = pageRegister(); afterAuth(); }
+  else if(segs[0]==='mot-de-passe-oublie'){ main.innerHTML = pageForgotPassword(); afterForgotPassword(); }
+  else if(segs[0]==='reinitialiser-mot-de-passe'){ main.innerHTML = pageResetPassword(r.params); afterResetPassword(r.params); }
   else if(segs[0]==='compte'){ main.innerHTML = pageAccount(); afterAccount(); }
   else if(segs[0]==='favoris'){ main.innerHTML = pageFavorites(); afterFavorites(); }
   else if(segs[0]==='promoteur'){ main.innerHTML = pagePromoterDash(); afterPromoterDash(); }
-  else if(segs[0]==='admin'){ main.innerHTML = pageAdmin(); afterAdmin(); }
+  else if(segs[0]==='admin'){ main.innerHTML = pageAdmin(r.params); afterAdmin(r.params); }
   else { main.innerHTML = page404(); }
 
   if(location.hash){
@@ -1922,8 +1924,75 @@ function pageLogin(){
       +'<div id="loginError" class="form-error" style="display:none;"></div>'
       +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Se connecter</button>'
     +'</form>'
-    +'<p class="form-note" style="text-align:center;margin-top:18px;">Pas encore de compte ? <a href="/inscription" style="color:var(--accent-2);font-weight:700;">Créer un compte</a></p>'
+    +'<p class="form-note" style="text-align:center;margin-top:14px;"><a href="/mot-de-passe-oublie" style="color:var(--accent-2);font-weight:700;">Mot de passe oublié ?</a></p>'
+    +'<p class="form-note" style="text-align:center;margin-top:8px;">Pas encore de compte ? <a href="/inscription" style="color:var(--accent-2);font-weight:700;">Créer un compte</a></p>'
   +'</div></div>';
+}
+function pageForgotPassword(){
+  return '<div class="auth-shell"><div class="auth-card">'
+    +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
+    +'<h1>Mot de passe oublié</h1><p class="sub">Indiquez votre email, nous vous envoyons un lien de réinitialisation.</p>'
+    +'<form id="forgotForm">'
+      +'<div class="field"><label>Email</label><input required type="email" name="email"/></div>'
+      +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Envoyer le lien</button>'
+    +'</form>'
+    +'<div id="forgotResult"></div>'
+    +'<p class="form-note" style="text-align:center;margin-top:18px;"><a href="/connexion" style="color:var(--accent-2);font-weight:700;">Retour à la connexion</a></p>'
+  +'</div></div>';
+}
+function afterForgotPassword(){
+  var form = document.getElementById('forgotForm');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = new FormData(e.target);
+    var submitBtn = form.querySelector('button[type=submit]'); submitBtn.disabled = true;
+    api('/api/auth', {method:'POST', body:{action:'forgot', email:f.get('email')}})
+      .then(function(){
+        form.style.display = 'none';
+        document.getElementById('forgotResult').innerHTML = '<div class="empty-state">'+ic('mail','ic')+'<h3>Email envoyé</h3><p>Si un compte existe avec cette adresse, vous recevrez un lien de réinitialisation d’ici quelques minutes.</p></div>';
+      })
+      .catch(function(){ submitBtn.disabled = false; });
+  });
+}
+function pageResetPassword(params){
+  var token = params && params.get('token');
+  if(!token){
+    return '<div class="auth-shell"><div class="auth-card">'
+      +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
+      +'<div class="empty-state">'+ic('lock','ic')+'<h3>Lien invalide</h3><p>Ce lien de réinitialisation est incomplet. Demandez-en un nouveau.</p></div>'
+      +'<p class="form-note" style="text-align:center;margin-top:18px;"><a href="/mot-de-passe-oublie" style="color:var(--accent-2);font-weight:700;">Demander un nouveau lien</a></p>'
+    +'</div></div>';
+  }
+  return '<div class="auth-shell"><div class="auth-card">'
+    +'<a href="/" style="display:flex;justify-content:center;margin-bottom:18px;">'+logoHTML()+'</a>'
+    +'<h1>Nouveau mot de passe</h1><p class="sub">Choisissez un nouveau mot de passe pour votre compte.</p>'
+    +'<form id="resetForm">'
+      +'<div class="field"><label>Nouveau mot de passe</label><input required type="password" name="password" minlength="4"/></div>'
+      +'<div id="resetError" class="form-error" style="display:none;"></div>'
+      +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Réinitialiser</button>'
+    +'</form>'
+    +'<div id="resetResult"></div>'
+  +'</div></div>';
+}
+function afterResetPassword(params){
+  var token = params && params.get('token');
+  var form = document.getElementById('resetForm');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = new FormData(e.target);
+    var err = document.getElementById('resetError');
+    err.style.display = 'none';
+    var submitBtn = form.querySelector('button[type=submit]'); submitBtn.disabled = true;
+    api('/api/auth', {method:'POST', body:{action:'reset', token:token, password:f.get('password')}})
+      .then(function(){
+        form.style.display = 'none';
+        document.getElementById('resetResult').innerHTML = '<div class="empty-state">'+ic('checkCircle','ic')+'<h3>Mot de passe mis à jour</h3><p>Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.</p></div>'
+          +'<p class="form-note" style="text-align:center;margin-top:14px;"><a href="/connexion" style="color:var(--accent-2);font-weight:700;">Se connecter</a></p>';
+      })
+      .catch(function(error){ err.textContent = error.message || 'Impossible de réinitialiser le mot de passe.'; err.style.display='block'; submitBtn.disabled = false; });
+  });
 }
 function pageRegister(){
   return '<div class="auth-shell"><div class="auth-card">'
@@ -2033,9 +2102,12 @@ function afterAccount(){
       body.innerHTML = '<p class="form-note">Chargement…</p>';
       api('/api/leads').then(function(r){
         MY_LEADS = r.leads;
-        body.innerHTML = MY_LEADS.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
-          +MY_LEADS.map(function(l){ return '<tr><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
+        body.innerHTML = MY_LEADS.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Date</th><th>Statut</th><th></th></tr></thead><tbody>'
+          +MY_LEADS.map(function(l){ return '<tr><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td><td class="row-actions"><button class="mini-btn danger" data-delete-lead="'+l.id+'">Supprimer</button></td></tr>'; }).join('')
           +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande envoyée</h3><p>Contactez un promoteur depuis une fiche projet pour la voir apparaître ici.</p></div>';
+        Array.prototype.forEach.call(body.querySelectorAll('[data-delete-lead]'), function(b){ b.onclick=function(){
+          api('/api/leads', {method:'DELETE', body:{id:b.dataset.deleteLead}}).then(function(){ toast('Demande supprimée'); renderTab('demandes'); }).catch(function(err){ toast(err.message||'Erreur'); });
+        }; });
       }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     } else {
       var favs = getFavorites().map(getProjectById).filter(Boolean);
@@ -2275,24 +2347,28 @@ function authGate(msg){
 /* ================================================================
    PAGE: ADMIN
    ================================================================ */
-function pageAdmin(){
+var ADMIN_TABS = ['projets','promoteurs','utilisateurs','demandes','signalements','stats'];
+function pageAdmin(params){
   var user = currentUser();
   if(!user || !user.isAdmin) return authGate('Cet espace est réservé aux administrateurs.');
+  var initial = params && ADMIN_TABS.indexOf(params.get('tab'))!==-1 ? params.get('tab') : 'projets';
+  function tabBtn(t,label){ return '<button class="tab-btn'+(t===initial?' active':'')+'" data-t="'+t+'">'+label+'</button>'; }
   return '<div class="wrap dash-shell">'
     +'<div class="dash-head"><div><h1>Administration</h1></div></div>'
     +'<div class="tab-row" id="adminTabs">'
-      +'<button class="tab-btn active" data-t="projets">Projets</button>'
-      +'<button class="tab-btn" data-t="promoteurs">Promoteurs</button>'
-      +'<button class="tab-btn" data-t="utilisateurs">Utilisateurs</button>'
-      +'<button class="tab-btn" data-t="demandes">Demandes</button>'
-      +'<button class="tab-btn" data-t="signalements">Signalements</button>'
-      +'<button class="tab-btn" data-t="stats">Statistiques</button>'
+      +tabBtn('projets','Projets')
+      +tabBtn('promoteurs','Promoteurs')
+      +tabBtn('utilisateurs','Utilisateurs')
+      +tabBtn('demandes','Demandes')
+      +tabBtn('signalements','Signalements')
+      +tabBtn('stats','Statistiques')
     +'</div>'
     +'<div id="adminBody"><p class="form-note">Chargement…</p></div>'
   +'</div>';
 }
-function afterAdmin(){
+function afterAdmin(params){
   var user = currentUser(); if(!user || !user.isAdmin) return;
+  var initial = params && ADMIN_TABS.indexOf(params.get('tab'))!==-1 ? params.get('tab') : 'projets';
   var tabs = document.getElementById('adminTabs');
   function statusLabel(s){ return s==='attente'?'En attente':s==='refuse'?'Refusé/Désactivé':s==='brouillon'?'Brouillon':'Publié'; }
   function statusClass(s){ return s==='attente'?'attente':s==='refuse'?'refuse':s==='brouillon'?'attente':'valide'; }
@@ -2364,7 +2440,7 @@ function afterAdmin(){
     }
   }
   tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
-  renderTab('projets');
+  renderTab(initial);
 }
 
 /* ================================================================

@@ -1,4 +1,4 @@
-const { sql, bcrypt, getSessionUser, setSessionCookie, clearSessionCookie, readBody, isAdminEmail, uid, slugify, sendEmail, adminNotifyHtml } = require('./_lib');
+const { sql, bcrypt, getSessionUser, setSessionCookie, clearSessionCookie, readBody, isAdminEmail, uid, slugify, sendEmail, adminNotifyHtml, resetPasswordHtml, makeResetToken, hashResetToken } = require('./_lib');
 
 module.exports = async function (req, res) {
   try {
@@ -78,6 +78,36 @@ module.exports = async function (req, res) {
       const session = { id: user.id, email: user.email, name: user.name, phone: user.phone, type: user.type, promoterId: user.promoter_id, isAdmin: isAdminEmail(user.email) };
       setSessionCookie(res, session);
       res.status(200).json({ user: session });
+      return;
+    }
+
+    if (action === 'forgot') {
+      const email = String(body.email || '').trim().toLowerCase();
+      if (email) {
+        const rows = await sql`SELECT id, name, email FROM users WHERE email = ${email}`;
+        const user = rows[0];
+        if (user) {
+          const token = makeResetToken();
+          const expires = new Date(Date.now() + 60 * 60 * 1000);
+          await sql`UPDATE users SET reset_token_hash = ${hashResetToken(token)}, reset_token_expires = ${expires} WHERE id = ${user.id}`;
+          const resetUrl = 'https://yadra.fr/reinitialiser-mot-de-passe?token=' + token;
+          await sendEmail({ to: user.email, subject: 'Réinitialisation de votre mot de passe yadra!', html: resetPasswordHtml(user, resetUrl) });
+        }
+      }
+      res.status(200).json({ ok: true });
+      return;
+    }
+
+    if (action === 'reset') {
+      const token = String(body.token || '');
+      const password = String(body.password || '');
+      if (!token || !password) { res.status(400).json({ error: 'Champs requis manquants.' }); return; }
+      const rows = await sql`SELECT id FROM users WHERE reset_token_hash = ${hashResetToken(token)} AND reset_token_expires > now()`;
+      const user = rows[0];
+      if (!user) { res.status(400).json({ error: 'Ce lien de réinitialisation est invalide ou a expiré.' }); return; }
+      const passwordHash = await bcrypt.hash(password, 10);
+      await sql`UPDATE users SET password_hash = ${passwordHash}, reset_token_hash = NULL, reset_token_expires = NULL WHERE id = ${user.id}`;
+      res.status(200).json({ ok: true });
       return;
     }
 

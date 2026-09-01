@@ -67,6 +67,21 @@ module.exports = async function (req, res) {
       return;
     }
 
+    if (req.method === 'DELETE') {
+      const session = getSessionUser(req);
+      if (!session) { res.status(401).json({ error: 'auth required' }); return; }
+      const body = await readBody(req);
+      const id = String(body.id || '');
+      if (!id) { res.status(400).json({ error: 'id requis' }); return; }
+      const owner = await sql`SELECT user_id FROM leads WHERE id = ${id}`;
+      if (!owner.length) { res.status(404).json({ error: 'introuvable' }); return; }
+      const allowed = session.isAdmin || owner[0].user_id === session.id;
+      if (!allowed) { res.status(403).json({ error: 'interdit' }); return; }
+      await sql`DELETE FROM leads WHERE id = ${id}`;
+      res.status(200).json({ ok: true });
+      return;
+    }
+
     res.status(405).json({ error: 'method not allowed' });
   } catch (err) {
     res.status(500).json({ error: 'leads failed', detail: String(err && err.message || err) });

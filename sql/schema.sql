@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS users (
   type TEXT NOT NULL DEFAULT 'acquereur', -- acquereur | promoteur | admin
   promoter_id TEXT REFERENCES promoters(id),
   status TEXT NOT NULL DEFAULT 'attente', -- attente | actif | refuse
+  reset_token_hash TEXT,
+  reset_token_expires TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

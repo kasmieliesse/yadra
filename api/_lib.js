@@ -86,6 +86,14 @@ function uid(prefix) {
   return prefix + '-' + Date.now().toString(36) + crypto.randomBytes(4).toString('hex');
 }
 
+function makeResetToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function hashResetToken(token) {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
+
 function slugify(s) {
   return String(s || '')
     .toLowerCase()
@@ -130,7 +138,7 @@ function adminNotifyHtml(user) {
     + '<tr><td style="padding:4px 0;color:#8A8378;">Téléphone</td><td style="padding:4px 0;">' + (user.phone || '—') + '</td></tr>'
     + '<tr><td style="padding:4px 0;color:#8A8378;">Type de compte</td><td style="padding:4px 0;">' + (user.type === 'promoteur' ? 'Promoteur' + (user.company ? ' — ' + user.company : '') : 'Acquéreur') + '</td></tr>'
     + '</table>'
-    + '<a href="https://yadra.fr/admin" style="display:inline-block;background:#A85E3E;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Examiner dans l\'administration</a>');
+    + '<a href="https://yadra.fr/admin?tab=utilisateurs" style="display:inline-block;background:#A85E3E;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Examiner dans l\'administration</a>');
 }
 
 function userApprovedHtml(user) {
@@ -145,6 +153,14 @@ function userRejectedHtml(user) {
     + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Bonjour ' + user.name.split(' ')[0] + ',</p>'
     + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Votre demande d\'inscription n\'a pas été retenue pour le moment. Pour toute question, vous pouvez nous contacter directement.</p>'
     + '<a href="https://wa.me/33670131501" style="display:inline-block;background:#25D366;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Nous contacter sur WhatsApp</a>');
+}
+
+function resetPasswordHtml(user, resetUrl) {
+  return emailShell('Réinitialisation de votre mot de passe', ''
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Bonjour ' + user.name.split(' ')[0] + ',</p>'
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Vous avez demandé la réinitialisation de votre mot de passe yadra!. Ce lien est valable 1 heure.</p>'
+    + '<a href="' + resetUrl + '" style="display:inline-block;background:#A85E3E;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Choisir un nouveau mot de passe</a>'
+    + '<p style="color:#8A8378;font-size:12.5px;line-height:1.6;margin-top:16px;">Si vous n\'êtes pas à l\'origine de cette demande, vous pouvez ignorer cet email.</p>');
 }
 
 function shapeProject(row, promotersById) {
@@ -204,5 +220,8 @@ module.exports = {
   emailShell,
   adminNotifyHtml,
   userApprovedHtml,
-  userRejectedHtml
+  userRejectedHtml,
+  resetPasswordHtml,
+  makeResetToken,
+  hashResetToken
 };
