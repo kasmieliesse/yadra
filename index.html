@@ -784,12 +784,15 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 [dir="rtl"] .fb-field,[dir="rtl"] .check-row,[dir="rtl"] li{
   flex-direction:row-reverse;
 }
-[dir="rtl"] .chevronRight-flip svg,[dir="rtl"] .see-all svg,[dir="rtl"] .breadcrumb svg,[dir="rtl"] .card-cta,
+[dir="rtl"] .chevronRight-flip svg,[dir="rtl"] .see-all svg,[dir="rtl"] .breadcrumb svg,
 [dir="rtl"] .trust-cta svg{transform:scaleX(-1);}
 [dir="rtl"] .fb-search input,[dir="rtl"] input,[dir="rtl"] textarea,[dir="rtl"] select{text-align:right;}
 [dir="rtl"] .mobile-cta-bar{flex-direction:row-reverse;}
 [dir="rtl"] .grid-cards,[dir="rtl"] .grid-3,[dir="rtl"] .grid-2{direction:rtl;}
 [dir="rtl"] .tilt-card{direction:rtl;}
+[dir="rtl"] .city-marquee,[dir="rtl"] .city-marquee-track,[dir="rtl"] .promoter-marquee,[dir="rtl"] .promoter-marquee-track{direction:ltr;}
+[dir="rtl"] .skip-link{left:auto;right:-999px;}
+[dir="rtl"] .skip-link:focus{left:auto;right:10px;}
 </style>
 </head>
 <body>
@@ -1112,7 +1115,7 @@ var I18N = {
 "Mot de passe":{en:"Password",de:"Passwort",ar:"كلمة المرور"},
 "Se connecter":{en:"Log in",de:"Anmelden",ar:"تسجيل الدخول"},
 "Mot de passe oublié ?":{en:"Forgot password?",de:"Passwort vergessen?",ar:"نسيت كلمة المرور؟"},
-"Pas encore de compte ? Créer un compte":{en:"No account yet? Create one",de:"Noch kein Konto? Konto erstellen",ar:"ليس لديك حساب؟ إنشاء حساب"},
+"Pas encore de compte ?":{en:"No account yet?",de:"Noch kein Konto?",ar:"ليس لديك حساب؟"},
 "Mot de passe oublié":{en:"Forgot password",de:"Passwort vergessen",ar:"نسيت كلمة المرور"},
 "Indiquez votre email, nous vous envoyons un lien de réinitialisation.":{en:"Enter your email, we'll send you a reset link.",de:"Geben Sie Ihre E-Mail-Adresse ein, wir senden Ihnen einen Link zum Zurücksetzen.",ar:"أدخل بريدك الإلكتروني، وسنرسل لك رابط إعادة التعيين."},
 "Envoyer le lien":{en:"Send link",de:"Link senden",ar:"إرسال الرابط"},
@@ -1132,7 +1135,7 @@ var I18N = {
 "Nom de l'entreprise":{en:"Company name",de:"Firmenname",ar:"اسم الشركة"},
 "Créer mon compte":{en:"Create my account",de:"Mein Konto erstellen",ar:"إنشاء حسابي"},
 "Chaque inscription est vérifiée par notre équipe avant activation. Vous serez prévenu(e) par email.":{en:"Every registration is reviewed by our team before activation. You'll be notified by email.",de:"Jede Registrierung wird vor der Aktivierung von unserem Team geprüft. Sie werden per E-Mail benachrichtigt.",ar:"يتم مراجعة كل تسجيل من قبل فريقنا قبل التفعيل. سيتم إعلامك عبر البريد الإلكتروني."},
-"Déjà inscrit ? Se connecter":{en:"Already registered? Log in",de:"Bereits registriert? Anmelden",ar:"مسجل بالفعل؟ تسجيل الدخول"},
+"Déjà inscrit ?":{en:"Already registered?",de:"Bereits registriert?",ar:"مسجل بالفعل؟"},
 "Inscription bien reçue":{en:"Registration received",de:"Registrierung erhalten",ar:"تم استلام التسجيل"},
 "Votre compte est en cours de validation par notre équipe. Vous recevrez un email dès qu'il sera activé.":{en:"Your account is being reviewed by our team. You'll receive an email once it's activated.",de:"Ihr Konto wird von unserem Team geprüft. Sie erhalten eine E-Mail, sobald es aktiviert ist.",ar:"يقوم فريقنا بمراجعة حسابك. ستتلقى بريدًا إلكترونيًا بمجرد تفعيله."},
 /* Account */
