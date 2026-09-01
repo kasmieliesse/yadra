@@ -538,7 +538,7 @@ body:has(.mobile-cta-bar) .wa-float{display:none;}
 .map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:320px;background:var(--surface-2);}
 .map-box .pin-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);text-align:center;}
 .map-box .leaflet-container{width:100%;height:100%;font-family:inherit;background:var(--surface-2);}
-.leaflet-tile-pane{filter:grayscale(.55) brightness(1.06) contrast(.92) sepia(.06);}
+.leaflet-tile-pane{filter:saturate(1.05) contrast(1.04) brightness(.98);}
 .yadra-pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:linear-gradient(135deg,var(--or-rose-light),var(--or-rose));border:2px solid #fff;box-shadow:0 3px 10px -2px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;}
 .yadra-pin::after{content:'';width:9px;height:9px;border-radius:50%;background:#fff;transform:rotate(45deg);}
 .yadra-pin.active{background:linear-gradient(135deg,#fff,#E6E6E6);}
@@ -947,8 +947,14 @@ function cityArtSVG(seedStr,w,h){
     +bars.join('')+glows.join('')
     +'<rect width="'+w+'" height="'+h+'" fill="none" stroke="rgba(230,230,230,.08)"/></svg>';
 }
-var CITY_PHOTOS = {alger:1, oran:1, blida:1, constantine:1, setif:1, annaba:1, 'tizi-ouzou':1};
+var CITY_PHOTOS = {alger:1, oran:1, blida:1, constantine:1};
+var GALLERY_PHOTOS = {
+  'cirta-panorama':1, 'jardins-canastel':1, 'vergers-boufarik':1, 'terrasses-oran-akid-lotfi':1,
+  'terrasses-el-achour':1, 'residence-elegance':1, 'diamond-tower-constantine':1, 'panorama-bab-ezzouar':1,
+  'oran-sky-residence':1, 'parc-des-pins-bouinan':1, 'jnane-el-bahdja':1
+};
 var EXTRA_CITY_PHOTOS = [
+  {slug:'setif', label:'Sétif'}, {slug:'annaba', label:'Annaba'}, {slug:'tizi-ouzou', label:'Tizi Ouzou'},
   {slug:'tlemcen', label:'Tlemcen'}, {slug:'bejaia', label:'Béjaïa'}, {slug:'batna', label:'Batna'},
   {slug:'mostaganem', label:'Mostaganem'}, {slug:'skikda', label:'Skikda'},
   {slug:'tipaza', label:'Tipaza'}, {slug:'boumerdes', label:'Boumerdès'}
@@ -1004,9 +1010,12 @@ function renderProjectsMap(containerId, projects, opts){
     if(host._yadraMap){ host._yadraMap.remove(); host._yadraMap = null; }
     var map = L.map(host, {scrollWheelZoom:!!opts.scrollZoom, zoomControl:true, attributionControl:true});
     host._yadraMap = map;
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom:19, subdomains:'abc',
-      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:19,
+      attribution:'Imagery &copy; Esri, Maxar, Earthstar Geographics'
+    }).addTo(map);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:19, opacity:0.85
     }).addTo(map);
     var pts = projects.filter(function(p){return p.lat && p.lng;});
     if(!pts.length){ map.setView([28.0,2.6],5); return map; }
@@ -1047,7 +1056,7 @@ var WILAYAS = {
   'annaba': {label:'Annaba', communes:['Annaba Centre','Seraïdi','El Bouni']},
   'tizi-ouzou': {label:'Tizi Ouzou', communes:['Tizi Ouzou Centre','Draâ Ben Khedda','Boukhalfa']}
 };
-var WILAYA_ORDER = ['alger','oran','blida','constantine','setif','annaba','tizi-ouzou'];
+var WILAYA_ORDER = ['alger','oran','blida','constantine'];
 /* Coordonnées réelles (approx. centre de commune) — utilisées pour la carte interactive. */
 var COMMUNE_COORDS = {
   'Hydra':[36.7378,3.0464], 'Bab Ezzouar':[36.7167,3.1833], 'Dely Ibrahim':[36.7500,2.9833],
@@ -1084,52 +1093,32 @@ var PRESTATION_ICON = {'Ascenseur panoramique':'building','Parking sous-sol séc
 var POINTSFORTS_POOL = ['Vue dégagée','Proche des axes principaux','Quartier calme et résidentiel','Finitions haut de gamme','Livraison clé en main','Proche écoles et commerces','Exposition ensoleillée','Accès sécurisé 24h/24','Cadre architectural contemporain','Proximité transports en commun'];
 
 var RAW_PROJECTS = [
-  {slug:'residence-elegance', nom:"Résidence L'Élégance", wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'construction', livraison:'2025', prixBase:3200000, featured:true, badge:'Nouveau', photo:'/assets/projects/elegance.jpg',
-    typologiesOverride:[{label:'F3',surface:90,prix:3200000,dispo:6},{label:'F4',surface:135,prix:4300000,dispo:4},{label:'F5',surface:180,prix:5600000,dispo:2}],
+  {slug:'residence-elegance', nom:"Résidence L'Élégance", wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'construction', livraison:'2025', prixBase:27000000, featured:true, badge:'Nouveau', photo:'/assets/projects/residence-elegance.jpg',
+    typologiesOverride:[{label:'F3',surface:90,prix:27000000,dispo:6},{label:'F4',surface:135,prix:39000000,dispo:4},{label:'F5',surface:180,prix:50000000,dispo:2}],
     description:"Résidence L'Élégance déploie ses immeubles blancs à ossature contemporaine autour d'un grand bassin paysager, palmiers et allées piétonnes, au cœur d'Hydra. Un programme pensé pour une vie de quartier haut de gamme, à deux pas des ambassades et des meilleures écoles de la capitale."},
-  {slug:'terrasses-oran-akid-lotfi', nom:"Les Terrasses d'Oran", wilaya:'oran', commune:'Akid Lotfi', quartier:'Akid Lotfi Nord', promoterId:'pr-marina', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:2800000, featured:true, badge:'Coup de cœur', photo:'/assets/projects/terrasses_oran.jpg',
-    typologiesOverride:[{label:'F2',surface:60,prix:2800000,dispo:5},{label:'F3',surface:95,prix:3600000,dispo:7},{label:'F4',surface:150,prix:4900000,dispo:3}],
+  {slug:'terrasses-oran-akid-lotfi', nom:"Les Terrasses d'Oran", wilaya:'oran', commune:'Akid Lotfi', quartier:'Akid Lotfi Nord', promoterId:'pr-marina', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:10000000, featured:true, badge:'Coup de cœur', photo:'/assets/projects/terrasses-oran-akid-lotfi.jpg',
+    typologiesOverride:[{label:'F2',surface:60,prix:10000000,dispo:5},{label:'F3',surface:95,prix:15000000,dispo:7},{label:'F4',surface:150,prix:22500000,dispo:3}],
     description:"Un ensemble résidentiel livré autour d'un grand bassin central, entre tours d'habitation modernes et jardins suspendus, dans le quartier prisé d'Akid Lotfi à Oran. Piscine, espaces verts et commerces de proximité en font une adresse très recherchée."},
-  {slug:'diamond-tower-constantine', nom:'Diamond Tower', wilaya:'constantine', commune:'Cité Zirout Youcef', quartier:'Zirout Youcef Sud', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'2026', prixBase:4500000, featured:true, badge:'Nouveau', photo:'/assets/projects/diamond_tower.jpg',
-    typologiesOverride:[{label:'F2',surface:100,prix:4500000,dispo:8},{label:'F3',surface:140,prix:5600000,dispo:6},{label:'F4',surface:175,prix:6800000,dispo:5},{label:'F5',surface:210,prix:8200000,dispo:3},{label:'F6',surface:250,prix:9600000,dispo:1}],
+  {slug:'diamond-tower-constantine', nom:'Diamond Tower', wilaya:'constantine', commune:'Cité Zirout Youcef', quartier:'Zirout Youcef Sud', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'2026', prixBase:13000000, featured:true, badge:'Nouveau', photo:'/assets/projects/diamond-tower-constantine.jpg',
+    typologiesOverride:[{label:'F2',surface:100,prix:13000000,dispo:8},{label:'F3',surface:140,prix:17500000,dispo:6},{label:'F4',surface:175,prix:21000000,dispo:5},{label:'F5',surface:210,prix:24000000,dispo:3},{label:'F6',surface:250,prix:27500000,dispo:1}],
     description:"Deux tours jumelles signées Numidia Immobilier, repères du nouveau skyline de Constantine à Cité Zirout Youcef. Larges baies vitrées, terrasses filantes et vue panoramique sur les gorges du Rhummel pour un programme résolument vertical."},
-  {slug:'parc-des-pins-bouinan', nom:'Le Parc des Pins', wilaya:'blida', commune:'Bouinan', quartier:'Bouinan Centre', promoterId:'pr-cirta', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:2600000, featured:true, badge:'Prestige', photo:'/assets/projects/parc_des_pins.jpg',
-    typologiesOverride:[{label:'F2',surface:70,prix:2600000,dispo:4},{label:'F3',surface:100,prix:3400000,dispo:6},{label:'F4',surface:140,prix:4500000,dispo:2}],
+  {slug:'parc-des-pins-bouinan', nom:'Le Parc des Pins', wilaya:'blida', commune:'Bouinan', quartier:'Bouinan Centre', promoterId:'pr-cirta', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:6300000, featured:true, badge:'Prestige', photo:'/assets/projects/parc-des-pins-bouinan.jpg',
+    typologiesOverride:[{label:'F2',surface:70,prix:6300000,dispo:4},{label:'F3',surface:100,prix:8500000,dispo:6},{label:'F4',surface:140,prix:11200000,dispo:2}],
     description:"Villas et appartements en bande organisés autour d'un long bassin miroir, entre pins et terrasses privatives, à Bouinan. Le Parc des Pins mise sur l'intimité et le prestige discret, à mi-chemin entre Blida et Alger."},
-  {slug:'jnane-el-bahdja', nom:'Jnane El Bahdja', wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'sur-plan', livraison:'T4 2028', prixBase:15800000, featured:false,
+  {slug:'jnane-el-bahdja', nom:'Jnane El Bahdja', wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'sur-plan', livraison:'T4 2028', prixBase:29000000, featured:false, photo:'/assets/projects/jnane-el-bahdja.jpg',
     description:"Un ensemble résidentiel signé Atlas Promotion au cœur d'Hydra, pensé autour d'un jardin central et de commerces de proximité en rez-de-chaussée. Les appartements profitent d'une double orientation et de larges balcons filants."},
-  {slug:'terrasses-el-achour', nom:"Les Terrasses d'El Achour", wilaya:'alger', commune:'El Achour', quartier:'El Achour', promoterId:'pr-djazair', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:12600000, featured:false,
+  {slug:'terrasses-el-achour', nom:"Les Terrasses d'El Achour", wilaya:'alger', commune:'El Achour', quartier:'El Achour', promoterId:'pr-djazair', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:14700000, featured:false, photo:'/assets/projects/terrasses-el-achour.jpg',
     description:"Face aux collines d'El Achour, cette résidence en cours de construction propose des appartements du F2 au F4 avec terrasses aménagées et vue dégagée sur la baie d'Alger."},
-  {slug:'panorama-bab-ezzouar', nom:'Panorama Bab Ezzouar', wilaya:'alger', commune:'Bab Ezzouar', quartier:'Bab Ezzouar', promoterId:'pr-atlas', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:10900000, featured:false,
+  {slug:'panorama-bab-ezzouar', nom:'Panorama Bab Ezzouar', wilaya:'alger', commune:'Bab Ezzouar', quartier:'Bab Ezzouar', promoterId:'pr-atlas', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:13700000, featured:false, photo:'/assets/projects/panorama-bab-ezzouar.jpg',
     description:"Déjà livrée et habitée, cette résidence proche du pôle universitaire et de la nouvelle gare offre un accès rapide aux transports et aux commerces."},
-  {slug:'villa-oliviers-dely-ibrahim', nom:'Villa des Oliviers', wilaya:'alger', commune:'Dely Ibrahim', quartier:'Dely Ibrahim', promoterId:'pr-djazair', type:'Villa', statut:'sur-plan', livraison:'T1 2029', prixBase:48000000, featured:false,
-    description:"Un programme de villas individuelles avec jardin privatif, dans un lotissement fermé et sécurisé à deux pas des grands axes vers Alger et Chéraga."},
-  {slug:'jardins-canastel', nom:'Les Jardins de Canastel', wilaya:'oran', commune:'Canastel', quartier:'Canastel', promoterId:'pr-marina', type:'Résidence mixte', statut:'construction', livraison:'T3 2027', prixBase:13400000, featured:false,
+  {slug:'jardins-canastel', nom:'Les Jardins de Canastel', wilaya:'oran', commune:'Canastel', quartier:'Canastel', promoterId:'pr-marina', type:'Résidence mixte', statut:'construction', livraison:'T3 2027', prixBase:16600000, featured:false, photo:'/assets/projects/jardins-canastel.jpg',
     description:"Sur les hauteurs de Canastel, ce programme mêle résidentiel et commerces de proximité avec une vue imprenable sur la baie d'Oran."},
-  {slug:'oran-sky-residence', nom:'Oran Sky Résidence', wilaya:'oran', commune:'Bir El Djir', quartier:'Bir El Djir', promoterId:'pr-marina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:11200000, featured:false,
+  {slug:'oran-sky-residence', nom:'Oran Sky Résidence', wilaya:'oran', commune:'Bir El Djir', quartier:'Bir El Djir', promoterId:'pr-marina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:14700000, featured:false, photo:'/assets/projects/oran-sky-residence.jpg',
     description:"Proche du nouveau pôle urbain de Bir El Djir, cette résidence propose des typologies du F2 au F5 avec parking sous-sol et espaces verts."},
-  {slug:'villa-corniche-es-senia', nom:'Villa Corniche', wilaya:'oran', commune:'Es Sénia', quartier:'Es Sénia', promoterId:'pr-marina', type:'Villa', statut:'livre', livraison:'Livré — 2024', prixBase:39500000, featured:false,
-    description:"Villas mitoyennes déjà livrées, à quelques minutes de l'aéroport et des axes reliant le centre-ville d'Oran."},
-  {slug:'vergers-boufarik', nom:'Les Vergers de Boufarik', wilaya:'blida', commune:'Boufarik', quartier:'Boufarik Centre', promoterId:'pr-cirta', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:9200000, featured:false,
+  {slug:'vergers-boufarik', nom:'Les Vergers de Boufarik', wilaya:'blida', commune:'Boufarik', quartier:'Boufarik Centre', promoterId:'pr-cirta', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:7800000, featured:false, photo:'/assets/projects/vergers-boufarik.jpg',
     description:"Un quartier résidentiel complet aux portes de Boufarik, entouré d'espaces verts, avec école et commerces intégrés au programme."},
-  {slug:'residence-chrea-view', nom:'Résidence Chréa View', wilaya:'blida', commune:'Blida Centre', quartier:'Blida Centre', promoterId:'pr-cirta', type:'Duplex', statut:'sur-plan', livraison:'T1 2028', prixBase:14700000, featured:false,
-    description:"Des duplex avec vue sur les montagnes de Chréa, dans un cadre résidentiel calme à proximité immédiate du centre-ville de Blida."},
-  {slug:'cirta-panorama', nom:'Cirta Panorama', wilaya:'constantine', commune:'Ali Mendjeli', quartier:'Ali Mendjeli', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'T4 2027', prixBase:10400000, featured:false,
-    description:"Dans la nouvelle ville d'Ali Mendjeli, un programme mixte associant logements et commerces, à proximité des grands équipements universitaires."},
-  {slug:'ponts-constantine', nom:'Les Ponts de Constantine', wilaya:'constantine', commune:'Constantine Centre', quartier:'Constantine Centre', promoterId:'pr-numidia', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:11800000, featured:false,
-    description:"Une résidence livrée au cœur de Constantine, à distance de marche des ponts emblématiques de la ville et de ses commerces."},
-  {slug:'aures-al-baraka', nom:'Aurès Résidence Al Baraka', wilaya:'setif', commune:'Sétif Centre', quartier:'Sétif Centre', promoterId:'pr-aures', type:'Appartement', statut:'sur-plan', livraison:'T3 2028', prixBase:8600000, featured:false,
-    description:"Un programme familial au centre de Sétif, avec mosquée de proximité et aire de jeux pour enfants intégrées à la résidence."},
-  {slug:'terrasses-el-eulma', nom:"Les Terrasses d'El Eulma", wilaya:'setif', commune:'El Eulma', quartier:'El Eulma', promoterId:'pr-aures', type:'Duplex', statut:'construction', livraison:'T1 2027', prixBase:9800000, featured:false,
-    description:"Des duplex spacieux à El Eulma, pensés pour les familles, avec terrasses privatives et parking dédié."},
-  {slug:'seraidi-bay-view', nom:'Seraïdi Bay View', wilaya:'annaba', commune:'Seraïdi', quartier:'Seraïdi', promoterId:'pr-zianide', type:'Villa', statut:'sur-plan', livraison:'T2 2029', prixBase:44000000, featured:false,
-    description:"Sur les hauteurs boisées de Seraïdi, ces villas offrent une vue plongeante sur le golfe d'Annaba, au calme absolu."},
-  {slug:'residence-cap-rosa', nom:'Résidence Cap Rosa', wilaya:'annaba', commune:'Annaba Centre', quartier:'Annaba Centre', promoterId:'pr-zianide', type:'Appartement', statut:'construction', livraison:'T3 2027', prixBase:10200000, featured:false,
-    description:"Proche du centre-ville et du front de mer d'Annaba, cette résidence propose des appartements lumineux du F2 au F4."},
-  {slug:'kahina-djurdjura', nom:'Kahina Résidence Djurdjura', wilaya:'tizi-ouzou', commune:'Tizi Ouzou Centre', quartier:'Tizi Ouzou Centre', promoterId:'pr-kahina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:8900000, featured:false,
-    description:"Face aux sommets du Djurdjura, cette résidence à taille humaine mêle tradition kabyle et confort contemporain."},
-  {slug:'villa-boukhalfa-hills', nom:'Villa Boukhalfa Hills', wilaya:'tizi-ouzou', commune:'Boukhalfa', quartier:'Boukhalfa', promoterId:'pr-kahina', type:'Villa', statut:'construction', livraison:'T2 2027', prixBase:31000000, featured:false,
-    description:"Un petit programme de villas sur les hauteurs de Boukhalfa, entre verdure et vue sur la vallée du Sébaou."}
+  {slug:'cirta-panorama', nom:'Cirta Panorama', wilaya:'constantine', commune:'Ali Mendjeli', quartier:'Ali Mendjeli', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'T4 2027', prixBase:9800000, featured:false, photo:'/assets/projects/cirta-panorama.jpg',
+    description:"Dans la nouvelle ville d'Ali Mendjeli, un programme mixte associant logements et commerces, à proximité des grands équipements universitaires."}
 ];
 
 function mkTypologies(seedStr,type,prixBase){
@@ -1448,7 +1437,7 @@ function pageHome(){
 
   +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Explorer par ville</h2><p class="desc">Sept wilayas suivies en continu, et d’autres villes bientôt disponibles.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>Explorer par ville</h2><p class="desc">Alger, Oran, Blida et Constantine suivies en continu, et d’autres villes bientôt disponibles.</p></div></div>'
       +'<div class="grid reveal-stagger" style="grid-template-columns:repeat(2,1fr);">'
         +WILAYA_ORDER.map(function(w){
           var count = PROJECTS.filter(function(p){return p.wilaya===w;}).length;
@@ -1699,7 +1688,13 @@ function pageDetail(wilaya,slug){
   return '<div class="theme-light">'
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/projets">Projets</a> '+ic('chevronRight')+' <a href="/projets?ville='+p.wilaya+'">'+WILAYAS[p.wilaya].label+'</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(p.nom)+'</span></div></div>'
   +'<div class="wrap"><div class="detail-gallery" id="detailGallery">'
-    +[0,1,2,3].map(function(i){ return '<div>'+(i===0?mediaHTML(p,500,400):artSVG(p.slug+'-g'+i,500,400))+'</div>'; }).join('')
+    +[0,1,2,3].map(function(i){
+      var cell;
+      if(i===0){ cell = mediaHTML(p,500,400); }
+      else if(GALLERY_PHOTOS[p.slug]){ cell = '<img src="/assets/projects/'+p.slug+'-g'+i+'.jpg" alt="'+esc(p.nom)+'" loading="lazy">'; }
+      else { cell = artSVG(p.slug+'-g'+i,500,400); }
+      return '<div>'+cell+'</div>';
+    }).join('')
   +'</div></div>'
   +'<div class="wrap"><div class="detail-header">'
     +'<div class="detail-title"><h1>'+esc(p.nom)+'</h1><div class="loc">'+ic('pin')+' '+esc(p.adresse)+'</div>'
@@ -2361,7 +2356,7 @@ function legalSections(kind){
         +'<ul>'
         +'<li><strong>WhatsApp</strong> (Meta Platforms, Inc.) pour la prise de contact directe ;</li>'
         +'<li><strong>Google Fonts</strong> pour l’affichage des polices de caractères ;</li>'
-        +'<li><strong>OpenStreetMap</strong> et sa communauté de contributeurs pour l’affichage des cartes interactives.</li>'
+        +'<li><strong>Esri</strong> (imagerie satellite) pour l’affichage des cartes interactives.</li>'
         +'</ul>'
         +'<p>Ces services sont régis par leurs propres conditions d’utilisation et politiques de confidentialité, indépendantes de yadra!.</p>'},
       {id:'responsabilite', h:'7. Limitation de responsabilité', body:
@@ -2392,7 +2387,7 @@ function legalSections(kind){
       {id:'destinataires', h:'6. Destinataires des données', body:
         '<p>Aucune donnée n’est vendue, louée ou cédée à des tiers à des fins commerciales. Lorsqu’un contact est initié au sujet d’un projet précis, les informations échangées peuvent être partagées avec le promoteur concerné, dans le seul but de traiter votre demande.</p>'},
       {id:'cookies', h:'7. Cookies et traceurs', body:
-        '<p>Le Site ne dépose <strong>aucun cookie de mesure d’audience ou publicitaire</strong>. Certaines ressources sont néanmoins chargées depuis des serveurs tiers pour le bon fonctionnement du Site (polices de caractères via Google Fonts, fonds de carte via OpenStreetMap) : ces requêtes techniques transmettent votre adresse IP à ces prestataires, indépendamment de yadra!, conformément à leurs propres politiques respectives.</p>'},
+        '<p>Le Site ne dépose <strong>aucun cookie de mesure d’audience ou publicitaire</strong>. Certaines ressources sont néanmoins chargées depuis des serveurs tiers pour le bon fonctionnement du Site (polices de caractères via Google Fonts, fonds de carte satellite via Esri) : ces requêtes techniques transmettent votre adresse IP à ces prestataires, indépendamment de yadra!, conformément à leurs propres politiques respectives.</p>'},
       {id:'securite', h:'8. Sécurité', body:
         '<p>Le Site est servi exclusivement en HTTPS. En l’absence de traitement de données côté serveur, le principal enjeu de sécurité relève de votre propre appareil et navigateur.</p>'},
       {id:'droits', h:'9. Vos droits', body:
