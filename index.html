@@ -189,10 +189,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .nav-links a{padding:6px 2px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s;}
 .nav-links a:hover,.nav-links a.is-active{color:#fff;border-color:var(--or-rose);}
 @media (min-width:960px){.nav-links{display:flex;}}
-.nav-actions{display:flex;align-items:center;gap:10px;}
-.nav-actions .btn{display:none;}
-.nav-actions .lang-flags{display:none;}
-@media (min-width:640px){.nav-actions .btn{display:inline-flex;}.nav-actions .lang-flags{display:flex;}}
+.nav-actions{display:flex;align-items:center;gap:6px;}
+@media (min-width:480px){.nav-actions{gap:10px;}}
 .burger{display:inline-flex;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);align-items:center;justify-content:center;background:transparent;color:var(--text);transition:transform .15s ease;}
 .burger:active{transform:scale(.93);}
 @media (min-width:960px){.burger{display:none;}}
@@ -260,20 +258,32 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 @keyframes sparkle{0%,100%{opacity:0;transform:scale(.4);}50%{opacity:.9;transform:scale(1);}}
 
 /* City marquee */
-.city-marquee{position:relative;z-index:1;overflow:hidden;padding:16px 0;margin-top:8px;
+.city-marquee-intro{position:relative;z-index:1;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;padding-top:26px;
+  opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.6s;}
+.city-marquee-intro .cmi-eyebrow{position:relative;padding-left:30px;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--or-rose-light);white-space:nowrap;}
+.city-marquee-intro .cmi-eyebrow::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:20px;height:1px;background:var(--or-rose-light);}
+.city-marquee-intro .cmi-text{font-size:14.5px;color:var(--text-dim);letter-spacing:.005em;}
+.city-marquee{position:relative;z-index:1;overflow:hidden;padding:16px 0;margin-top:14px;
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
   background:rgba(10,10,10,.35);backdrop-filter:blur(8px);
   mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
-  opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.7s;}
-.city-marquee-track{display:flex;width:max-content;animation:cityScroll 52s linear infinite;}
+  opacity:0;animation:heroFadeUp .7s cubic-bezier(.16,1,.3,1) forwards;animation-delay:.75s;}
+.city-marquee::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent 42%,rgba(255,255,255,.06) 50%,transparent 58%);
+  background-size:260% 100%;animation:marqueeShine 7s ease-in-out infinite;}
+.city-marquee-track{display:flex;width:max-content;animation:cityScroll 40s linear infinite;}
 .city-marquee:hover .city-marquee-track{animation-play-state:paused;}
-.city-marquee a{display:inline-flex;align-items:center;gap:9px;padding:0 30px;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;transition:color .2s ease;}
-.city-marquee a:hover{color:#fff;}
+.city-marquee a{display:inline-flex;align-items:center;gap:8px;margin:0 7px;padding:9px 20px;border-radius:999px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);
+  font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;
+  transition:color .25s ease,background .25s ease,border-color .25s ease,transform .25s ease;}
+.city-marquee a:hover{color:#fff;background:rgba(183,110,77,.14);border-color:rgba(216,154,120,.45);transform:translateY(-2px);}
 .city-marquee a .i-def{width:13px;height:13px;color:var(--or-rose-light);flex:0 0 auto;}
-.city-marquee .dot{width:4px;height:4px;border-radius:50%;background:var(--or-rose-dim);flex:0 0 auto;}
+.city-marquee .dot{display:none;}
 @keyframes cityScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-@media (prefers-reduced-motion:reduce){.city-marquee-track{animation:none;}}
+@keyframes marqueeShine{0%{background-position:160% 0;}100%{background-position:-60% 0;}}
+@media (prefers-reduced-motion:reduce){.city-marquee-track{animation:none;}.city-marquee::after{animation:none;}}
 
 /* Promoter logo marquee */
 .promoter-marquee{position:relative;overflow:hidden;padding:6px 0 30px;
@@ -736,21 +746,27 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 @media (prefers-reduced-motion:reduce){
   .hero-gem,.hero-ring,.hero-orb-1,.hero-orb-2,.hero-gem-float,.sparkle,.badge-feature::after{animation:none!important;}
   .reveal{opacity:1;transform:none;}
-  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .hero-divider,.hero .search-card,.hero .city-marquee{opacity:1;transform:none;}
+  .hero h1 .hw-in,.hero .eyebrow,.hero .sub,.hero .hero-divider,.hero .search-card,.hero .city-marquee,.hero .city-marquee-intro{opacity:1;transform:none;}
   .hero h1 .hw-in{background:linear-gradient(100deg,#fff,var(--argent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .hero h1 .hw-line.accent .hw-in{background:linear-gradient(100deg,var(--or-rose-light),var(--or-rose) 55%,var(--or-rose-light));-webkit-background-clip:text;background-clip:text;}
 }
 
 /* ---------------- Language switcher ---------------- */
-.lang-flags{display:flex;align-items:center;gap:6px;}
-.lang-flags button{display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);border-radius:50%;font-size:15px;line-height:1;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .2s ease;}
+.lang-flags{display:flex;align-items:center;gap:4px;flex:0 0 auto;}
+.lang-flags button{display:flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);border-radius:50%;font-size:12px;line-height:1;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .2s ease;}
 .lang-flags button:hover{background:rgba(255,255,255,.12);transform:translateY(-1px);}
 .lang-flags button.active{border-color:var(--or-rose-light);background:rgba(216,154,120,.16);}
-.mm-promo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 4px;border-bottom:1px solid var(--border);}
-.mm-promo-row .mm-promo-link{padding:0;border-bottom:none;flex:1;}
-.mm-lang{display:flex;gap:6px;flex-shrink:0;}
-.mm-lang button{display:flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);border-radius:50%;font-size:14px;line-height:1;}
-.mm-lang button.active{border-color:var(--or-rose-light);background:rgba(216,154,120,.16);}
+@media (min-width:480px){.lang-flags{gap:6px;}.lang-flags button{width:32px;height:32px;font-size:15px;}}
+
+/* ---------------- User menu ---------------- */
+.user-menu{position:relative;flex:0 0 auto;}
+.user-dropdown{position:absolute;top:calc(100% + 10px);right:0;background:#1a1712;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:6px;min-width:200px;display:none;flex-direction:column;gap:2px;z-index:220;box-shadow:0 16px 36px rgba(0,0,0,.45);}
+.user-dropdown.open{display:flex;}
+.user-dropdown a,.user-dropdown button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;background:transparent;color:#fff;font-size:13.5px;font-weight:600;text-align:left;width:100%;}
+.user-dropdown a:hover,.user-dropdown button:hover{background:rgba(255,255,255,.08);}
+.user-dropdown a svg,.user-dropdown button svg{width:16px;height:16px;flex:0 0 auto;color:var(--or-rose-light);}
+.user-dropdown .ud-name{padding:8px 12px 4px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);}
+.user-dropdown .ud-sep{height:1px;background:rgba(255,255,255,.1);margin:5px 6px;}
 
 /* ---------------- RTL (Arabic) ---------------- */
 :root[dir="rtl"]{--dir-mult:-1;}
@@ -760,12 +776,14 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 [dir="rtl"] .side-block,[dir="rtl"] .filter-bar,[dir="rtl"] .results-bar,[dir="rtl"] .breadcrumb,[dir="rtl"] .promo-id,
 [dir="rtl"] .promo-meta,[dir="rtl"] .detail-title .loc,[dir="rtl"] .doc-item,[dir="rtl"] .chips-plain .chip-plain,
 [dir="rtl"] .stat-tile,[dir="rtl"] .field-row,[dir="rtl"] .switcher,[dir="rtl"] .tab-row,[dir="rtl"] .dash-head,
-[dir="rtl"] .row-actions,[dir="rtl"] .mm-lang,[dir="rtl"] .foot-social,[dir="rtl"] .market-view-toggle{
+[dir="rtl"] .row-actions,[dir="rtl"] .foot-social,[dir="rtl"] .market-view-toggle{
   direction:rtl;
 }
 [dir="rtl"] .nav-links{gap:30px;}
 [dir="rtl"] .nav-actions{flex-direction:row-reverse;}
 [dir="rtl"] .mobile-menu{text-align:right;}
+[dir="rtl"] .user-dropdown{right:auto;left:0;}
+[dir="rtl"] .user-dropdown a,[dir="rtl"] .user-dropdown button{text-align:right;}
 [dir="rtl"] .hero-content,[dir="rtl"] .hero-grid,[dir="rtl"] .detail-title,[dir="rtl"] .split-card,[dir="rtl"] .value-card,
 [dir="rtl"] .side-block,[dir="rtl"] .prose,[dir="rtl"] .section-head,[dir="rtl"] .empty-state,[dir="rtl"] .empty-fav,
 [dir="rtl"] .auth-card,[dir="rtl"] .form-note,[dir="rtl"] .field,[dir="rtl"] .foot-col,[dir="rtl"] .stat-card,
@@ -807,13 +825,15 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" id="navFavBtn" title="Favoris" aria-label="Favoris"></button>
-      <button class="btn btn-ghost btn-sm" id="navAccountBtn">Compte</button>
-      <button class="btn btn-primary btn-sm" id="navCtaBtn">Espace promoteur</button>
       <div class="lang-flags" id="langFlags" role="group" aria-label="Changer de langue">
         <button type="button" data-lang="ar" aria-label="العربية" title="العربية">🇩🇿</button>
         <button type="button" data-lang="de" aria-label="Deutsch" title="Deutsch">🇩🇪</button>
         <button type="button" data-lang="en" aria-label="English" title="English">🇬🇧</button>
         <button type="button" data-lang="fr" aria-label="Français" title="Français">🇫🇷</button>
+      </div>
+      <div class="user-menu" id="userMenu">
+        <button class="icon-btn" id="navUserBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Compte"></button>
+        <div class="user-dropdown" id="userDropdown" role="menu"></div>
       </div>
       <button class="burger" id="burgerBtn" aria-label="Menu"></button>
     </div>
@@ -826,15 +846,8 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   <a href="/investir">Investir</a>
   <a href="/a-propos">À propos</a>
   <a href="/favoris">Favoris</a>
-  <div class="mm-promo-row">
-    <a href="/promoteur" class="mm-promo-link">Espace promoteur</a>
-    <div class="mm-lang" id="mmLangRow">
-      <button type="button" data-lang="ar" aria-label="العربية" title="العربية">🇩🇿</button>
-      <button type="button" data-lang="de" aria-label="Deutsch" title="Deutsch">🇩🇪</button>
-      <button type="button" data-lang="en" aria-label="English" title="English">🇬🇧</button>
-      <button type="button" data-lang="fr" aria-label="Français" title="Français">🇫🇷</button>
-    </div>
-  </div>
+  <a href="/compte">Mon compte</a>
+  <a href="/promoteur">Espace promoteur</a>
   <div class="mm-actions">
     <button class="btn btn-primary btn-block" id="mmAuthBtn">Connexion</button>
   </div>
@@ -968,6 +981,8 @@ var I18N = {
 "Tout sur une carte":{en:"Everything on one map",de:"Alles auf einer Karte",ar:"كل شيء على خريطة واحدة"},
 "Filtrez par ville, budget ou typologie, en un coup d'œil":{en:"Filter by city, budget or layout, at a glance",de:"Filtern Sie nach Stadt, Budget oder Wohnungstyp auf einen Blick",ar:"صفِّ حسب المدينة أو الميزانية أو النوع، بنظرة واحدة"},
 "Découvrir nos projets":{en:"Discover our properties",de:"Unsere Projekte entdecken",ar:"اكتشف مشاريعنا"},
+"Présents sur le terrain":{en:"Present on the ground",de:"Vor Ort präsent",ar:"حاضرون في الميدان"},
+"12 wilayas suivies aujourd'hui, la carte s'agrandit chaque mois.":{en:"12 provinces tracked today, and the map keeps growing.",de:"12 Provinzen heute erfasst, und die Karte wächst stetig.",ar:"12 ولاية مغطاة اليوم، والخريطة تتوسع كل شهر."},
 "Projets à la une":{en:"Featured properties",de:"Ausgewählte Projekte",ar:"مشاريع مميزة"},
 "Des programmes qu'on suit de près, pour l'emplacement ou la qualité de la construction.":{en:"Developments we follow closely, for their location or build quality.",de:"Projekte, die wir genau verfolgen — wegen ihrer Lage oder Bauqualität.",ar:"برامج نتابعها عن قرب، لموقعها أو جودة بنائها."},
 "Voir tous les projets":{en:"See all properties",de:"Alle Projekte ansehen",ar:"عرض جميع المشاريع"},
@@ -1131,6 +1146,8 @@ var I18N = {
 /* Account */
 "Bonjour,":{en:"Hello,",de:"Hallo,",ar:"مرحبًا،"},
 "Mes informations":{en:"My information",de:"Meine Angaben",ar:"معلوماتي"},
+"Mon compte":{en:"My account",de:"Mein Konto",ar:"حسابي"},
+"Administration":{en:"Administration",de:"Verwaltung",ar:"الإدارة"},
 "Mes demandes":{en:"My requests",de:"Meine Anfragen",ar:"طلباتي"},
 "Mes favoris":{en:"My favorites",de:"Meine Favoriten",ar:"مفضلاتي"},
 "Nom":{en:"Name",de:"Name",ar:"الاسم"},
@@ -1756,6 +1773,7 @@ function render(){
   var segs = r.segs;
   updateHeader();
   document.getElementById('mobileMenu').classList.remove('open');
+  closeUserDropdown();
   document.body.classList.toggle('is-home', segs.length===0);
   updateHeaderScrollState();
 
@@ -1817,6 +1835,39 @@ document.addEventListener('keydown', function(e){
 })();
 
 /* ---------------- Header ---------------- */
+function userDropdownHTML(user){
+  if(!user){
+    return ''
+      + '<a href="/connexion">'+ic('user')+' Connexion</a>'
+      + '<a href="/inscription">'+ic('plus')+' Créer un compte</a>'
+      + '<div class="ud-sep"></div>'
+      + '<a href="/promoteur">'+ic('buildings')+' Espace promoteur</a>';
+  }
+  var rows = '<div class="ud-name">'+esc(user.name.split(' ')[0])+'</div>'
+    + '<a href="/compte">'+ic('user')+' Mon compte</a>';
+  if(user.isAdmin){ rows += '<a href="/admin">'+ic('shield')+' Administration</a>'; }
+  rows += '<a href="/promoteur">'+ic('buildings')+' '+(user.type==='promoteur'?'Mon espace':'Espace promoteur')+'</a>';
+  rows += '<div class="ud-sep"></div>';
+  rows += '<button type="button" id="udLogout">'+ic('logout')+' Déconnexion</button>';
+  return rows;
+}
+function closeUserDropdown(){
+  var d = document.getElementById('userDropdown'); if(d) d.classList.remove('open');
+  var b = document.getElementById('navUserBtn'); if(b) b.setAttribute('aria-expanded','false');
+}
+function initUserMenu(){
+  var btn = document.getElementById('navUserBtn');
+  var drop = document.getElementById('userDropdown');
+  if(!btn || !drop) return;
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = drop.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e){
+    if(drop.classList.contains('open') && !drop.contains(e.target) && e.target!==btn){ closeUserDropdown(); }
+  });
+}
 function updateHeader(){
   document.getElementById('navLogo').innerHTML = logoHTML();
   document.getElementById('footLogo').innerHTML = logoHTML('sm');
@@ -1827,12 +1878,11 @@ function updateHeader(){
   document.getElementById('navFavBtn').style.position='relative';
   document.getElementById('navFavBtn').onclick = function(){ go('/favoris'); };
   var user = currentUser();
-  var accBtn = document.getElementById('navAccountBtn');
-  accBtn.textContent = user ? (user.name.split(' ')[0]) : 'Connexion';
-  accBtn.onclick = function(){ go(user? '/compte':'/connexion'); };
-  var ctaBtn = document.getElementById('navCtaBtn');
-  ctaBtn.textContent = (user && user.type==='promoteur') ? 'Mon espace' : 'Espace promoteur';
-  ctaBtn.onclick = function(){ go('/promoteur'); };
+  document.getElementById('navUserBtn').innerHTML = ic('user');
+  document.getElementById('userDropdown').innerHTML = userDropdownHTML(user);
+  var logoutBtn = document.getElementById('udLogout');
+  if(logoutBtn) logoutBtn.onclick = function(){ closeUserDropdown(); logout(); };
+  Array.prototype.forEach.call(document.querySelectorAll('#userDropdown a'), function(a){ a.onclick = closeUserDropdown; });
   document.getElementById('burgerBtn').onclick = function(){ document.getElementById('mobileMenu').classList.toggle('open'); };
   document.getElementById('mmAuthBtn').textContent = user ? 'Déconnexion' : 'Connexion';
   document.getElementById('mmAuthBtn').onclick = function(){ if(user){ logout(); } else { go('/connexion'); } document.getElementById('mobileMenu').classList.remove('open'); };
@@ -1882,6 +1932,7 @@ function pageHome(){
         +[[10,18,'0s'],[85,30,'.8s'],[70,80,'1.6s'],[18,70,'2.4s'],[92,66,'.4s']].map(function(s){return '<span class="sparkle" style="left:'+s[0]+'%;top:'+s[1]+'%;animation-delay:'+s[2]+';width:4px;height:4px;"></span>';}).join('')
       +'</div>'
     +'</div>'
+    +'<div class="wrap city-marquee-intro reveal"><span class="cmi-eyebrow">Présents sur le terrain</span><p class="cmi-text">12 wilayas suivies aujourd’hui, la carte s’agrandit chaque mois.</p></div>'
     +'<div class="city-marquee"><div class="city-marquee-track">'+cityMarqueeItems(false)+cityMarqueeItems(true)+'</div></div>'
     +'<div class="wrap"><div class="trust-strip reveal" id="heroTrust" style="transition-delay:.85s">'
       +trustItem('star','Une sélection, pas un catalogue','On ne met pas tout en ligne — seulement ce qui vaut le détour')
@@ -3128,7 +3179,7 @@ function initFX(){
 }
 
 /* ---------------- Init ---------------- */
-function startApp(){ initLangSwitcher(); boot().then(render); }
+function startApp(){ initLangSwitcher(); initUserMenu(); boot().then(render); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
 })();
 
