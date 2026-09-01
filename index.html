@@ -739,6 +739,60 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   .hero h1 .hw-in{background:linear-gradient(100deg,#fff,var(--argent) 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .hero h1 .hw-line.accent .hw-in{background:linear-gradient(100deg,var(--or-rose-light),var(--or-rose) 55%,var(--or-rose-light));-webkit-background-clip:text;background-clip:text;}
 }
+
+/* ---------------- Language switcher ---------------- */
+.brand-group{display:flex;align-items:center;gap:14px;}
+.lang-switch{position:relative;}
+.lang-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:8px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;min-height:36px;transition:background .2s ease,border-color .2s ease;}
+.lang-btn:hover{background:rgba(255,255,255,.12);}
+.lang-flag{font-size:15px;line-height:1;}
+.lang-menu{position:absolute;top:calc(100% + 10px);left:0;background:#1a1712;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:6px;min-width:168px;display:none;flex-direction:column;gap:2px;z-index:210;box-shadow:0 16px 36px rgba(0,0,0,.45);}
+.lang-menu.open{display:flex;}
+.lang-menu button{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;background:transparent;color:#fff;font-size:13px;font-weight:600;text-align:left;width:100%;}
+.lang-menu button:hover{background:rgba(255,255,255,.08);}
+.lang-menu button.active{color:var(--or-rose-light);}
+.lang-menu .lang-flag{font-size:16px;}
+.mm-lang{display:flex;gap:8px;padding:14px 0 4px;flex-wrap:wrap;}
+.mm-lang button{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 12px;color:#fff;font-size:12.5px;font-weight:700;min-height:36px;}
+.mm-lang button.active{border-color:var(--or-rose-light);color:var(--or-rose-light);}
+
+/* ---------------- RTL (Arabic) ---------------- */
+:root[dir="rtl"]{--dir-mult:-1;}
+[dir="rtl"] body{font-family:'Geist',Tahoma,Arial,sans-serif;}
+[dir="rtl"] .nav-row,[dir="rtl"] .foot-bottom,[dir="rtl"] .search-field label,[dir="rtl"] .field label,
+[dir="rtl"] .card-loc,[dir="rtl"] .card-meta,[dir="rtl"] .card-foot,[dir="rtl"] .trust-item,[dir="rtl"] .value-card,
+[dir="rtl"] .side-block,[dir="rtl"] .filter-bar,[dir="rtl"] .results-bar,[dir="rtl"] .breadcrumb,[dir="rtl"] .promo-id,
+[dir="rtl"] .promo-meta,[dir="rtl"] .detail-title .loc,[dir="rtl"] .doc-item,[dir="rtl"] .chips-plain .chip-plain,
+[dir="rtl"] .stat-tile,[dir="rtl"] .field-row,[dir="rtl"] .switcher,[dir="rtl"] .tab-row,[dir="rtl"] .dash-head,
+[dir="rtl"] .row-actions,[dir="rtl"] .mm-lang,[dir="rtl"] .lang-btn,[dir="rtl"] .foot-social,[dir="rtl"] .market-view-toggle{
+  direction:rtl;
+}
+[dir="rtl"] .nav-links{gap:30px;}
+[dir="rtl"] .brand-group{flex-direction:row-reverse;}
+[dir="rtl"] .nav-actions{flex-direction:row-reverse;}
+[dir="rtl"] .lang-menu{left:auto;right:0;}
+[dir="rtl"] .lang-menu button{text-align:right;}
+[dir="rtl"] .mobile-menu{text-align:right;}
+[dir="rtl"] .hero-content,[dir="rtl"] .hero-grid,[dir="rtl"] .detail-title,[dir="rtl"] .split-card,[dir="rtl"] .value-card,
+[dir="rtl"] .side-block,[dir="rtl"] .prose,[dir="rtl"] .section-head,[dir="rtl"] .empty-state,[dir="rtl"] .empty-fav,
+[dir="rtl"] .auth-card,[dir="rtl"] .form-note,[dir="rtl"] .field,[dir="rtl"] .foot-col,[dir="rtl"] .stat-card,
+[dir="rtl"] .promo-name,[dir="rtl"] table.data,[dir="rtl"] .detail-main,[dir="rtl"] .card-body{
+  text-align:right;
+}
+[dir="rtl"] .card-loc,[dir="rtl"] .card-meta span,[dir="rtl"] .trust-item,[dir="rtl"] .doc-item,
+[dir="rtl"] .chip-plain,[dir="rtl"] .status-pill,[dir="rtl"] .badge,[dir="rtl"] .btn,[dir="rtl"] .field label,
+[dir="rtl"] .fb-field,[dir="rtl"] .check-row,[dir="rtl"] li{
+  flex-direction:row-reverse;
+}
+[dir="rtl"] .chevronRight-flip svg,[dir="rtl"] .see-all svg,[dir="rtl"] .breadcrumb svg,
+[dir="rtl"] .trust-cta svg{transform:scaleX(-1);}
+[dir="rtl"] .fb-search input,[dir="rtl"] input,[dir="rtl"] textarea,[dir="rtl"] select{text-align:right;}
+[dir="rtl"] .mobile-cta-bar{flex-direction:row-reverse;}
+[dir="rtl"] .grid-cards,[dir="rtl"] .grid-3,[dir="rtl"] .grid-2{direction:rtl;}
+[dir="rtl"] .tilt-card{direction:rtl;}
+[dir="rtl"] .city-marquee,[dir="rtl"] .city-marquee-track,[dir="rtl"] .promoter-marquee,[dir="rtl"] .promoter-marquee-track{direction:ltr;}
+[dir="rtl"] .skip-link{left:auto;right:-999px;}
+[dir="rtl"] .skip-link:focus{left:auto;right:10px;}
 </style>
 </head>
 <body>
@@ -750,7 +804,18 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 <div id="demoBanner"></div>
 <header class="site-header theme-dark" id="siteHeader">
   <div class="wrap nav-row">
-    <a href="/" class="logo" id="navLogo"></a>
+    <div class="brand-group">
+      <div class="lang-switch" id="langSwitch">
+        <button class="lang-btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue"><span class="lang-flag" id="langFlag">🇫🇷</span><span id="langCode">FR</span></button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" role="menuitem" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button type="button" role="menuitem" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button type="button" role="menuitem" data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
+          <button type="button" role="menuitem" data-lang="ar"><span class="lang-flag">🇩🇿</span> العربية</button>
+        </div>
+      </div>
+      <a href="/" class="logo" id="navLogo"></a>
+    </div>
     <nav class="nav-links">
       <a href="/projets" data-route="/projets">Projets</a>
       <a href="/villes" data-route="/villes">Villes</a>
@@ -774,6 +839,12 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   <a href="/a-propos">À propos</a>
   <a href="/favoris">Favoris</a>
   <a href="/promoteur">Espace promoteur</a>
+  <div class="mm-lang" id="mmLangRow">
+    <button type="button" data-lang="fr">🇫🇷 FR</button>
+    <button type="button" data-lang="en">🇬🇧 EN</button>
+    <button type="button" data-lang="de">🇩🇪 DE</button>
+    <button type="button" data-lang="ar">🇩🇿 AR</button>
+  </div>
   <div class="mm-actions">
     <button class="btn btn-primary btn-block" id="mmAuthBtn">Connexion</button>
   </div>
@@ -822,7 +893,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
       <span>© 2026 yadra! by qbm — tous droits réservés.</span>
       <span>Fait avec soin en Algérie 🇩🇿</span>
     </div>
-    <p class="foot-disclaimer">Version de démonstration : les projets, promoteurs et avis présentés sur ce site sont fictifs et servent uniquement à illustrer le fonctionnement de la plateforme. Aucun de ces promoteurs n'est un partenaire réel de yadra!.</p>
+    <p class="foot-disclaimer">Les informations affichées (prix, disponibilité, caractéristiques) sont fournies par les promoteurs référencés. Vérifiez toujours les détails d'un projet directement auprès du promoteur avant tout engagement.</p>
   </div>
 </footer>
 
@@ -837,6 +908,353 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
    ========================================================== */
 (function(){
 "use strict";
+
+/* ---------------- i18n ---------------- */
+var LANG = 'fr';
+var ORIG_TEXT = (typeof WeakMap!=='undefined') ? new WeakMap() : null;
+var ORIG_ATTR = (typeof WeakMap!=='undefined') ? new WeakMap() : null;
+var I18N = {
+"Projets":{en:"Properties",de:"Projekte",ar:"المشاريع"},
+"Villes":{en:"Cities",de:"Städte",ar:"المدن"},
+"Promoteurs":{en:"Developers",de:"Bauträger",ar:"المطورون"},
+"Investir":{en:"Invest",de:"Investieren",ar:"استثمر"},
+"À propos":{en:"About",de:"Über uns",ar:"من نحن"},
+"Favoris":{en:"Favorites",de:"Favoriten",ar:"المفضلة"},
+"Connexion":{en:"Log in",de:"Anmelden",ar:"تسجيل الدخول"},
+"Déconnexion":{en:"Log out",de:"Abmelden",ar:"تسجيل الخروج"},
+"Espace promoteur":{en:"Developer portal",de:"Bauträger-Bereich",ar:"مساحة المطور"},
+"Mon espace":{en:"My dashboard",de:"Mein Bereich",ar:"مساحتي"},
+"Changer de langue":{en:"Change language",de:"Sprache ändern",ar:"تغيير اللغة"},
+"Menu":{en:"Menu",de:"Menü",ar:"القائمة"},
+"Compte":{en:"Account",de:"Konto",ar:"الحساب"},
+"YADRA! est la plateforme immobilière qui connecte les meilleurs promoteurs aux futurs propriétaires, partout en Algérie.":{en:"YADRA! is the real estate platform connecting the best developers with future homeowners, across Algeria.",de:"YADRA! ist die Immobilienplattform, die die besten Bauträger mit zukünftigen Eigentümern in ganz Algerien verbindet.",ar:"يادرا! هي منصة عقارية تربط أفضل المطورين بمالكي المنازل المستقبليين في جميع أنحاء الجزائر."},
+"Navigation":{en:"Navigation",de:"Navigation",ar:"التصفح"},
+"Informations":{en:"Information",de:"Informationen",ar:"معلومات"},
+"Investir en Algérie":{en:"Invest in Algeria",de:"In Algerien investieren",ar:"الاستثمار في الجزائر"},
+"Questions fréquentes":{en:"FAQ",de:"Häufige Fragen",ar:"الأسئلة الشائعة"},
+"Blog":{en:"Blog",de:"Blog",ar:"المدونة"},
+"Contact":{en:"Contact",de:"Kontakt",ar:"اتصل بنا"},
+"Légal":{en:"Legal",de:"Rechtliches",ar:"قانوني"},
+"Mentions légales":{en:"Legal notice",de:"Impressum",ar:"إشعار قانوني"},
+"Conditions d'utilisation":{en:"Terms of use",de:"Nutzungsbedingungen",ar:"شروط الاستخدام"},
+"Politique de confidentialité":{en:"Privacy policy",de:"Datenschutzrichtlinie",ar:"سياسة الخصوصية"},
+"Suivez-nous":{en:"Follow us",de:"Folgen Sie uns",ar:"تابعونا"},
+"© 2026 yadra! by qbm — tous droits réservés.":{en:"© 2026 yadra! by qbm — all rights reserved.",de:"© 2026 yadra! by qbm — alle Rechte vorbehalten.",ar:"© 2026 yadra! by qbm — جميع الحقوق محفوظة."},
+"Fait avec soin en Algérie 🇩🇿":{en:"Made with care in Algeria 🇩🇿",de:"Mit Sorgfalt in Algerien gemacht 🇩🇿",ar:"صنع بعناية في الجزائر 🇩🇿"},
+"Les informations affichées (prix, disponibilité, caractéristiques) sont fournies par les promoteurs référencés. Vérifiez toujours les détails d'un projet directement auprès du promoteur avant tout engagement.":{en:"The information shown (price, availability, features) is provided by the listed developers. Always verify a project's details directly with the developer before making any commitment.",de:"Die angezeigten Informationen (Preis, Verfügbarkeit, Merkmale) stammen von den gelisteten Bauträgern. Prüfen Sie die Details eines Projekts vor jeder Verpflichtung stets direkt beim Bauträger.",ar:"المعلومات المعروضة (السعر، التوفر، المواصفات) مقدمة من المطورين المدرجين. تحقق دائمًا من تفاصيل المشروع مباشرة مع المطور قبل أي التزام."},
+"Contacter sur WhatsApp":{en:"Contact on WhatsApp",de:"Über WhatsApp kontaktieren",ar:"التواصل عبر واتساب"},
+"Rechercher":{en:"Search",de:"Suchen",ar:"بحث"},
+"Fermer":{en:"Close",de:"Schließen",ar:"إغلاق"},
+"Ajouter aux favoris":{en:"Add to favorites",de:"Zu Favoriten hinzufügen",ar:"إضافة إلى المفضلة"},
+"Retiré des favoris":{en:"Removed from favorites",de:"Aus Favoriten entfernt",ar:"إزالة من المفضلة"},
+/* Home */
+"Marketplace immobilier · Algérie":{en:"Real estate marketplace · Algeria",de:"Immobilienmarktplatz · Algerien",ar:"سوق العقارات · الجزائر"},
+"L'immobilier":{en:"Real estate,",de:"Immobilien,",ar:"العقارات،"},
+"autrement.":{en:"reimagined.",de:"neu gedacht.",ar:"بطريقة مختلفة."},
+"En arabe, « yadra » veut dire qui sait.":{en:"In Arabic, « yadra » means \"who knows\".",de:"Auf Arabisch bedeutet « yadra » „wer weiß“.",ar:"«يدري» تعني بالعربية من يعرف."},
+"Nous, on sait où vous allez vivre.":{en:"We know where you'll live next.",de:"Wir wissen, wo Sie als Nächstes wohnen werden.",ar:"نحن نعرف أين ستعيشون."},
+"Où ?":{en:"Where?",de:"Wo?",ar:"أين؟"},
+"Ville, commune, quartier":{en:"City, district, neighborhood",de:"Stadt, Gemeinde, Viertel",ar:"المدينة، البلدية، الحي"},
+"Type":{en:"Type",de:"Typ",ar:"النوع"},
+"Tous types":{en:"All types",de:"Alle Typen",ar:"جميع الأنواع"},
+"Appartement":{en:"Apartment",de:"Wohnung",ar:"شقة"},
+"Duplex":{en:"Duplex",de:"Maisonette",ar:"دوبلكس"},
+"Villa":{en:"Villa",de:"Villa",ar:"فيلا"},
+"Résidence mixte":{en:"Mixed residence",de:"Gemischte Wohnanlage",ar:"إقامة مختلطة"},
+"Budget":{en:"Budget",de:"Budget",ar:"الميزانية"},
+"Budget max":{en:"Max budget",de:"Maximales Budget",ar:"الحد الأقصى للميزانية"},
+"Jusqu'à 10 M DA":{en:"Up to 10M DZD",de:"Bis zu 10 Mio. DZD",ar:"حتى 10 مليون دينار"},
+"Jusqu'à 15 M DA":{en:"Up to 15M DZD",de:"Bis zu 15 Mio. DZD",ar:"حتى 15 مليون دينار"},
+"Jusqu'à 25 M DA":{en:"Up to 25M DZD",de:"Bis zu 25 Mio. DZD",ar:"حتى 25 مليون دينار"},
+"Jusqu'à 50 M DA":{en:"Up to 50M DZD",de:"Bis zu 50 Mio. DZD",ar:"حتى 50 مليون دينار"},
+"Une sélection, pas un catalogue":{en:"A selection, not a catalog",de:"Eine Auswahl, kein Katalog",ar:"اختيار، وليس كتالوجًا"},
+"On ne met pas tout en ligne — seulement ce qui vaut le détour":{en:"We don't list everything — only what's truly worth it",de:"Wir stellen nicht alles online — nur das, was sich wirklich lohnt",ar:"لا ننشر كل شيء — فقط ما يستحق العناء"},
+"On reste avec vous":{en:"We stay with you",de:"Wir begleiten Sie",ar:"نبقى معكم"},
+"De la première visite jusqu'à la signature":{en:"From the first visit to the signing",de:"Von der ersten Besichtigung bis zur Unterschrift",ar:"من الزيارة الأولى وحتى التوقيع"},
+"On connaît le terrain":{en:"We know the ground",de:"Wir kennen die Gegend",ar:"نعرف الأرض جيدًا"},
+"Wilaya par wilaya, quartier par quartier":{en:"Province by province, neighborhood by neighborhood",de:"Provinz für Provinz, Viertel für Viertel",ar:"ولاية بولاية، حيًا بحي"},
+"Ce qu'on affiche est vérifié":{en:"What we show is verified",de:"Was wir zeigen, ist geprüft",ar:"ما نعرضه تم التحقق منه"},
+"Prix, promoteur, avancement des travaux":{en:"Price, developer, construction progress",de:"Preis, Bauträger, Baufortschritt",ar:"السعر، المطور، تقدم الأشغال"},
+"Tout sur une carte":{en:"Everything on one map",de:"Alles auf einer Karte",ar:"كل شيء على خريطة واحدة"},
+"Filtrez par ville, budget ou typologie, en un coup d'œil":{en:"Filter by city, budget or layout, at a glance",de:"Filtern Sie nach Stadt, Budget oder Wohnungstyp auf einen Blick",ar:"صفِّ حسب المدينة أو الميزانية أو النوع، بنظرة واحدة"},
+"Découvrir nos projets":{en:"Discover our properties",de:"Unsere Projekte entdecken",ar:"اكتشف مشاريعنا"},
+"Projets à la une":{en:"Featured properties",de:"Ausgewählte Projekte",ar:"مشاريع مميزة"},
+"Des programmes qu'on suit de près, pour l'emplacement ou la qualité de la construction.":{en:"Developments we follow closely, for their location or build quality.",de:"Projekte, die wir genau verfolgen — wegen ihrer Lage oder Bauqualität.",ar:"برامج نتابعها عن قرب، لموقعها أو جودة بنائها."},
+"Voir tous les projets":{en:"See all properties",de:"Alle Projekte ansehen",ar:"عرض جميع المشاريع"},
+"Derniers projets":{en:"Latest properties",de:"Neueste Projekte",ar:"أحدث المشاريع"},
+"Publiés récemment sur yadra!.":{en:"Recently published on yadra!.",de:"Kürzlich auf yadra! veröffentlicht.",ar:"نُشرت مؤخرًا على يادرا!."},
+"Tout voir":{en:"See all",de:"Alle ansehen",ar:"عرض الكل"},
+"Explorer par ville":{en:"Explore by city",de:"Nach Stadt erkunden",ar:"استكشف حسب المدينة"},
+"Alger, Oran, Blida et Constantine, pour l'instant. D'autres wilayas arrivent.":{en:"Algiers, Oran, Blida and Constantine, for now. More provinces are coming.",de:"Vorerst Algier, Oran, Blida und Constantine. Weitere Provinzen folgen.",ar:"الجزائر العاصمة، وهران، البليدة وقسنطينة حاليًا. ولايات أخرى قريبًا."},
+"Pourquoi yadra!":{en:"Why yadra!",de:"Warum yadra!",ar:"لماذا يادرا!"},
+"Pas d'agence, pas de commission cachée : vous parlez directement au promoteur.":{en:"No agency, no hidden commission: you talk directly to the developer.",de:"Keine Agentur, keine versteckte Provision: Sie sprechen direkt mit dem Bauträger.",ar:"لا وكالة، لا عمولة خفية: تتحدث مباشرة مع المطور."},
+"Promoteurs vérifiés":{en:"Verified developers",de:"Geprüfte Bauträger",ar:"مطورون موثّقون"},
+"On vérifie chaque promoteur avant de le publier — pas après.":{en:"We verify every developer before publishing them — not after.",de:"Wir prüfen jeden Bauträger vor der Veröffentlichung — nicht danach.",ar:"نتحقق من كل مطور قبل نشره — وليس بعد ذلك."},
+"Recherche directe":{en:"Direct search",de:"Direkte Suche",ar:"بحث مباشر"},
+"Ville, budget, type de bien : trois filtres, et c'est tout.":{en:"City, budget, property type: three filters, that's it.",de:"Stadt, Budget, Immobilientyp: drei Filter, das war's.",ar:"المدينة، الميزانية، نوع العقار: ثلاثة فلاتر فقط."},
+"Contact immédiat":{en:"Instant contact",de:"Sofortiger Kontakt",ar:"تواصل فوري"},
+"Un clic, un message WhatsApp, et vous parlez au promoteur — pas à un intermédiaire.":{en:"One click, one WhatsApp message, and you're talking to the developer — not a middleman.",de:"Ein Klick, eine WhatsApp-Nachricht, und Sie sprechen mit dem Bauträger — nicht mit einem Vermittler.",ar:"نقرة واحدة، رسالة واتساب، وتتحدث مع المطور — لا مع وسيط."},
+"Acquéreurs":{en:"Buyers",de:"Käufer",ar:"المشترون"},
+"Trouvez, comparez, contactez":{en:"Find, compare, contact",de:"Finden, vergleichen, kontaktieren",ar:"ابحث، قارن، تواصل"},
+"Filtrez par ville, budget et typologie. Gardez vos coups de cœur de côté. Contactez le promoteur quand vous êtes prêt.":{en:"Filter by city, budget and layout. Keep your favorites aside. Contact the developer when you're ready.",de:"Filtern Sie nach Stadt, Budget und Wohnungstyp. Speichern Sie Ihre Favoriten. Kontaktieren Sie den Bauträger, wenn Sie bereit sind.",ar:"صفِّ حسب المدينة والميزانية والنوع. احتفظ بمفضلاتك جانبًا. تواصل مع المطور عندما تكون جاهزًا."},
+"Recherche par wilaya, budget et typologie":{en:"Search by province, budget and layout",de:"Suche nach Provinz, Budget und Wohnungstyp",ar:"بحث حسب الولاية والميزانية والنوع"},
+"Favoris sauvegardés, avant même de créer un compte":{en:"Favorites saved, even before creating an account",de:"Favoriten gespeichert, noch bevor Sie ein Konto erstellen",ar:"حفظ المفضلة حتى قبل إنشاء حساب"},
+"Contact direct — formulaire ou WhatsApp":{en:"Direct contact — form or WhatsApp",de:"Direkter Kontakt — Formular oder WhatsApp",ar:"تواصل مباشر — نموذج أو واتساب"},
+"Explorer les projets":{en:"Explore properties",de:"Projekte erkunden",ar:"استكشف المشاريع"},
+"Vous avez un projet ?":{en:"Have a project?",de:"Haben Sie ein Projekt?",ar:"لديك مشروع؟"},
+"Mettez vos programmes en valeur avec de vraies photos et une fiche complète, et recevez des demandes d'acheteurs qui ont déjà fait leurs recherches.":{en:"Showcase your developments with real photos and a complete listing, and receive requests from buyers who've already done their research.",de:"Präsentieren Sie Ihre Projekte mit echten Fotos und einem vollständigen Profil und erhalten Sie Anfragen von Käufern, die bereits recherchiert haben.",ar:"اعرض مشاريعك بصور حقيقية وملف كامل، واستقبل طلبات من مشترين قاموا بالفعل بأبحاثهم."},
+"Visible par des acheteurs sérieux, partout en Algérie":{en:"Visible to serious buyers, all across Algeria",de:"Sichtbar für ernsthafte Käufer in ganz Algerien",ar:"مرئي لمشترين جادين في جميع أنحاء الجزائر"},
+"Une fiche projet soignée, pas un simple listing":{en:"A polished project page, not just a plain listing",de:"Ein sorgfältig gestaltetes Projektprofil, nicht nur ein einfaches Listing",ar:"صفحة مشروع مصقولة، وليست مجرد إعلان بسيط"},
+"Suivi des demandes et statistiques, en temps réel":{en:"Real-time tracking of requests and statistics",de:"Echtzeit-Verfolgung von Anfragen und Statistiken",ar:"متابعة الطلبات والإحصائيات في الوقت الفعلي"},
+"Présenter mon projet":{en:"Present my project",de:"Mein Projekt vorstellen",ar:"عرض مشروعي"},
+"Devenir partenaire":{en:"Become a partner",de:"Partner werden",ar:"كن شريكًا"},
+/* Project card + shared labels */
+"Vérifié":{en:"Verified",de:"Geprüft",ar:"موثّق"},
+"Voir le projet":{en:"View property",de:"Projekt ansehen",ar:"عرض المشروع"},
+"à partir de":{en:"starting from",de:"ab",ar:"ابتداءً من"},
+"Sur plan":{en:"Off-plan",de:"Im Bau (Plan)",ar:"على المخطط"},
+"En construction":{en:"Under construction",de:"Im Bau",ar:"قيد الإنشاء"},
+"Livré":{en:"Delivered",de:"Fertiggestellt",ar:"مُسلَّم"},
+/* Marketplace */
+"Accueil":{en:"Home",de:"Startseite",ar:"الرئيسية"},
+"Tous les projets":{en:"All properties",de:"Alle Projekte",ar:"جميع المشاريع"},
+"Découvrez notre sélection des meilleurs projets immobiliers à travers l'Algérie.":{en:"Discover our selection of the best real estate projects across Algeria.",de:"Entdecken Sie unsere Auswahl der besten Immobilienprojekte in ganz Algerien.",ar:"اكتشف مجموعتنا المختارة من أفضل المشاريع العقارية في جميع أنحاء الجزائر."},
+"Alger, Hydra, F3, Appartement…":{en:"Algiers, Hydra, 3-room, Apartment…",de:"Algier, Hydra, 3-Zimmer, Wohnung…",ar:"الجزائر، حيدرة، F3، شقة…"},
+"Recherche":{en:"Search",de:"Suche",ar:"بحث"},
+"Ville":{en:"City",de:"Stadt",ar:"المدينة"},
+"Type de bien":{en:"Property type",de:"Immobilientyp",ar:"نوع العقار"},
+"Prix":{en:"Price",de:"Preis",ar:"السعر"},
+"Jusqu’à 10 M DA":{en:"Up to 10M DZD",de:"Bis zu 10 Mio. DZD",ar:"حتى 10 مليون دينار"},
+"Jusqu’à 15 M DA":{en:"Up to 15M DZD",de:"Bis zu 15 Mio. DZD",ar:"حتى 15 مليون دينار"},
+"Jusqu’à 25 M DA":{en:"Up to 25M DZD",de:"Bis zu 25 Mio. DZD",ar:"حتى 25 مليون دينار"},
+"Jusqu’à 50 M DA":{en:"Up to 50M DZD",de:"Bis zu 50 Mio. DZD",ar:"حتى 50 مليون دينار"},
+"Plus de filtres":{en:"More filters",de:"Weitere Filter",ar:"مزيد من الفلاتر"},
+"Réinitialiser":{en:"Reset",de:"Zurücksetzen",ar:"إعادة تعيين"},
+"Grille":{en:"Grid",de:"Raster",ar:"شبكة"},
+"Carte":{en:"Map",de:"Karte",ar:"خريطة"},
+"Pertinence":{en:"Relevance",de:"Relevanz",ar:"الأكثر ملاءمة"},
+"Prix croissant":{en:"Price: low to high",de:"Preis aufsteigend",ar:"السعر: من الأقل إلى الأعلى"},
+"Prix décroissant":{en:"Price: high to low",de:"Preis absteigend",ar:"السعر: من الأعلى إلى الأقل"},
+"Livraison la plus proche":{en:"Soonest delivery",de:"Früheste Fertigstellung",ar:"أقرب تسليم"},
+"Commune":{en:"District",de:"Gemeinde",ar:"البلدية"},
+"Toutes":{en:"All",de:"Alle",ar:"الكل"},
+"Surface min (m²)":{en:"Min. area (m²)",de:"Mindestfläche (m²)",ar:"المساحة الدنيا (م²)"},
+"ex. 70":{en:"e.g. 70",de:"z. B. 70",ar:"مثال: 70"},
+"Pièces":{en:"Rooms",de:"Zimmer",ar:"الغرف"},
+"Statut":{en:"Status",de:"Status",ar:"الحالة"},
+"Livraison":{en:"Delivery",de:"Fertigstellung",ar:"التسليم"},
+"Promoteur vérifié uniquement":{en:"Verified developers only",de:"Nur geprüfte Bauträger",ar:"المطورون الموثّقون فقط"},
+"Voir les résultats":{en:"See results",de:"Ergebnisse anzeigen",ar:"عرض النتائج"},
+"Aucun projet ne correspond à votre recherche.":{en:"No property matches your search.",de:"Kein Projekt entspricht Ihrer Suche.",ar:"لا يوجد مشروع يطابق بحثك."},
+/* Project detail */
+"Demander plus d'informations":{en:"Request more information",de:"Weitere Informationen anfordern",ar:"طلب مزيد من المعلومات"},
+"Contacter sur WhatsApp ":{en:"Contact on WhatsApp",de:"Über WhatsApp kontaktieren",ar:"التواصل عبر واتساب"},
+"Surface":{en:"Area",de:"Fläche",ar:"المساحة"},
+"Présentation":{en:"Overview",de:"Vorstellung",ar:"نبذة"},
+"Points forts":{en:"Highlights",de:"Highlights",ar:"أبرز المميزات"},
+"Typologies & disponibilités":{en:"Layouts & availability",de:"Wohnungstypen & Verfügbarkeit",ar:"الأنواع والتوفر"},
+"Typologie":{en:"Layout",de:"Wohnungstyp",ar:"النوع"},
+"Prix à partir de":{en:"Price from",de:"Preis ab",ar:"السعر ابتداءً من"},
+"Disponibilité":{en:"Availability",de:"Verfügbarkeit",ar:"التوفر"},
+"Prestations":{en:"Amenities",de:"Ausstattung",ar:"الخدمات"},
+"Plans & documents":{en:"Plans & documents",de:"Pläne & Dokumente",ar:"المخططات والوثائق"},
+"Localisation":{en:"Location",de:"Lage",ar:"الموقع"},
+"À propos du promoteur":{en:"About the developer",de:"Über den Bauträger",ar:"عن المطور"},
+"Projets similaires":{en:"Similar properties",de:"Ähnliche Projekte",ar:"مشاريع مماثلة"},
+"Une question sur ce projet ?":{en:"A question about this property?",de:"Eine Frage zu diesem Projekt?",ar:"سؤال حول هذا المشروع؟"},
+"Contacter":{en:"Contact",de:"Kontaktieren",ar:"تواصل"},
+"Nom complet":{en:"Full name",de:"Vollständiger Name",ar:"الاسم الكامل"},
+"Téléphone":{en:"Phone",de:"Telefon",ar:"الهاتف"},
+"Email":{en:"Email",de:"E-Mail",ar:"البريد الإلكتروني"},
+"Message":{en:"Message",de:"Nachricht",ar:"الرسالة"},
+"Envoyer la demande":{en:"Send request",de:"Anfrage senden",ar:"إرسال الطلب"},
+"Ou écrire directement sur WhatsApp":{en:"Or write directly on WhatsApp",de:"Oder direkt über WhatsApp schreiben",ar:"أو الكتابة مباشرة عبر واتساب"},
+/* Promoter profile / list */
+"Depuis":{en:"Since",de:"Seit",ar:"منذ"},
+"Promoteur vérifié":{en:"Verified developer",de:"Geprüfter Bauträger",ar:"مطور موثّق"},
+"Vérification en cours":{en:"Verification in progress",de:"Prüfung läuft",ar:"التحقق قيد التنفيذ"},
+"À propos":{en:"About",de:"Über uns",ar:"من نحن"},
+"Aucun projet publié pour le moment":{en:"No property published yet",de:"Noch kein Projekt veröffentlicht",ar:"لا يوجد مشروع منشور حاليًا"},
+"Revenez bientôt pour découvrir les prochains programmes de ce promoteur.":{en:"Check back soon to discover this developer's upcoming projects.",de:"Schauen Sie bald wieder vorbei, um die kommenden Projekte dieses Bauträgers zu entdecken.",ar:"عودوا قريبًا لاكتشاف المشاريع القادمة لهذا المطور."},
+"Nos promoteurs":{en:"Our developers",de:"Unsere Bauträger",ar:"مطورونا"},
+"Des promoteurs vérifiés, présents dans toute l'Algérie.":{en:"Verified developers, present across Algeria.",de:"Geprüfte Bauträger, vertreten in ganz Algerien.",ar:"مطورون موثّقون، حاضرون في جميع أنحاء الجزائر."},
+/* Villes */
+"Parcourez nos programmes immobiliers wilaya par wilaya, et découvrez les prochaines villes couvertes.":{en:"Browse our developments province by province, and discover the next cities we'll cover.",de:"Durchsuchen Sie unsere Projekte Provinz für Provinz und entdecken Sie die nächsten Städte.",ar:"تصفح برامجنا العقارية ولاية بولاية، واكتشف المدن القادمة."},
+/* About */
+"L'immobilier neuf en Algérie, sans le flou habituel.":{en:"New-build real estate in Algeria, without the usual guesswork.",de:"Neubauimmobilien in Algerien — ohne die übliche Unklarheit.",ar:"العقارات الجديدة في الجزائر، دون الغموض المعتاد."},
+"yadra! met en relation directe les acquéreurs et les promoteurs immobiliers à travers l'Algérie : fiches projets complètes, promoteurs vérifiés, contact direct.":{en:"yadra! directly connects buyers and real estate developers across Algeria: complete project pages, verified developers, direct contact.",de:"yadra! verbindet Käufer direkt mit Immobilienentwicklern in ganz Algerien: vollständige Projektprofile, geprüfte Bauträger, direkter Kontakt.",ar:"يادرا! تربط مباشرة بين المشترين والمطورين العقاريين في جميع أنحاء الجزائر: صفحات مشاريع كاملة، مطورون موثّقون، تواصل مباشر."},
+"Fondée à Alger, l'équipe qbm construit yadra! projet par projet — on préfère dix fiches bien faites à cent approximatives.":{en:"Founded in Algiers, the qbm team builds yadra! project by project — we'd rather have ten well-crafted listings than a hundred approximate ones.",de:"Das qbm-Team wurde in Algier gegründet und baut yadra! Projekt für Projekt auf — lieber zehn gut gemachte Profile als hundert ungenaue.",ar:"تأسس في الجزائر العاصمة، يبني فريق qbm يادرا! مشروعًا تلو الآخر — نفضل عشر صفحات متقنة على مئة تقريبية."},
+"Exigence":{en:"Rigor",de:"Anspruch",ar:"الدقة"},
+"Chaque promoteur mis en avant est vérifié avant publication.":{en:"Every featured developer is verified before publication.",de:"Jeder vorgestellte Bauträger wird vor der Veröffentlichung geprüft.",ar:"يتم التحقق من كل مطور مميز قبل النشر."},
+"Transparence":{en:"Transparency",de:"Transparenz",ar:"الشفافية"},
+"Prix, plans, disponibilités : une information complète, sans surprise.":{en:"Price, floor plans, availability: complete information, no surprises.",de:"Preis, Grundrisse, Verfügbarkeit: vollständige Informationen, keine Überraschungen.",ar:"السعر، المخططات، التوفر: معلومات كاملة، دون مفاجآت."},
+"Sélection":{en:"Curation",de:"Auswahl",ar:"الانتقاء"},
+"Des projets choisis pour leur emplacement et la qualité de leur conception.":{en:"Projects chosen for their location and design quality.",de:"Projekte, ausgewählt nach Lage und Gestaltungsqualität.",ar:"مشاريع مختارة لموقعها وجودة تصميمها."},
+"Est-ce que yadra! vend directement des biens ?":{en:"Does yadra! sell properties directly?",de:"Verkauft yadra! Immobilien direkt?",ar:"هل تبيع يادرا! العقارات مباشرة؟"},
+"Non, yadra! met en relation les acquéreurs avec les promoteurs. La vente se fait toujours directement avec le promoteur du projet.":{en:"No, yadra! connects buyers with developers. The sale always takes place directly with the project's developer.",de:"Nein, yadra! verbindet Käufer mit Bauträgern. Der Verkauf erfolgt immer direkt mit dem Bauträger des Projekts.",ar:"لا، تربط يادرا! المشترين بالمطورين. تتم عملية البيع دائمًا مباشرة مع مطور المشروع."},
+"Comment un promoteur est-il vérifié ?":{en:"How is a developer verified?",de:"Wie wird ein Bauträger geprüft?",ar:"كيف يتم التحقق من المطور؟"},
+"Chaque promoteur transmet ses documents d'enregistrement et ses références avant publication de ses projets sur la plateforme.":{en:"Each developer submits their registration documents and references before their projects are published on the platform.",de:"Jeder Bauträger reicht seine Registrierungsunterlagen und Referenzen ein, bevor seine Projekte auf der Plattform veröffentlicht werden.",ar:"يقدم كل مطور وثائق تسجيله ومراجعه قبل نشر مشاريعه على المنصة."},
+"L'utilisation de yadra! est-elle gratuite pour les acquéreurs ?":{en:"Is yadra! free to use for buyers?",de:"Ist die Nutzung von yadra! für Käufer kostenlos?",ar:"هل استخدام يادرا! مجاني للمشترين؟"},
+"Oui, la recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits.":{en:"Yes, searching, browsing project pages and contacting developers are entirely free.",de:"Ja, die Suche, das Durchsuchen von Projektprofilen und die Kontaktaufnahme mit Bauträgern sind völlig kostenlos.",ar:"نعم، البحث وتصفح صفحات المشاريع والتواصل مع المطورين مجاني بالكامل."},
+"Nous contacter":{en:"Contact us",de:"Kontaktieren Sie uns",ar:"تواصل معنا"},
+"Une question, une suggestion ? Notre équipe vous répond directement.":{en:"A question, a suggestion? Our team replies directly.",de:"Eine Frage, ein Vorschlag? Unser Team antwortet Ihnen direkt.",ar:"سؤال أو اقتراح؟ يرد عليك فريقنا مباشرة."},
+"Écrire sur WhatsApp":{en:"Write on WhatsApp",de:"Auf WhatsApp schreiben",ar:"الكتابة عبر واتساب"},
+/* Invest */
+"Investir dans l'immobilier neuf en Algérie.":{en:"Invest in new-build real estate in Algeria.",de:"In Neubauimmobilien in Algerien investieren.",ar:"استثمر في العقارات الجديدة في الجزائر."},
+"Les grandes villes algériennes construisent vite, et le neuf reste encore accessible face à l'ancien bien situé. yadra! vous donne une vue claire sur les projets en cours, avec une information fiable sur les promoteurs et les prix.":{en:"Algeria's major cities are building fast, and new-build remains affordable compared to well-located resale. yadra! gives you a clear view of ongoing projects, with reliable information on developers and prices.",de:"Algeriens Großstädte bauen schnell, und Neubauten bleiben im Vergleich zu gut gelegenen Bestandsimmobilien erschwinglich. yadra! bietet Ihnen einen klaren Überblick über laufende Projekte mit zuverlässigen Informationen zu Bauträgern und Preisen.",ar:"تبني المدن الجزائرية الكبرى بسرعة، ويظل الجديد في متناول اليد مقارنة بالعقارات القديمة ذات الموقع الجيد. تمنحك يادرا! رؤية واضحة عن المشاريع الجارية، بمعلومات موثوقة عن المطورين والأسعار."},
+"Villes couvertes":{en:"Cities covered",de:"Abgedeckte Städte",ar:"المدن المغطاة"},
+"Projets suivis":{en:"Properties tracked",de:"Verfolgte Projekte",ar:"المشاريع المتابَعة"},
+"Promoteurs vérifiés ":{en:"Verified developers",de:"Geprüfte Bauträger",ar:"مطورون موثّقون"},
+"Investisseurs":{en:"Investors",de:"Investoren",ar:"المستثمرون"},
+"On vous met en relation":{en:"We connect you",de:"Wir stellen den Kontakt her",ar:"نربطك بالمطور المناسب"},
+"Un ou plusieurs programmes en tête ? Dites-nous votre budget, on vous met en relation avec les promoteurs qui correspondent.":{en:"Have one or several developments in mind? Tell us your budget, and we'll connect you with matching developers.",de:"Haben Sie ein oder mehrere Projekte im Kopf? Nennen Sie uns Ihr Budget, und wir stellen den Kontakt zu passenden Bauträgern her.",ar:"لديك برنامج أو عدة برامج في ذهنك؟ أخبرنا بميزانيتك، وسنربطك بالمطورين المناسبين."},
+"Être accompagné(e)":{en:"Get guidance",de:"Beratung erhalten",ar:"احصل على مرافقة"},
+/* Auth pages */
+"Bon retour":{en:"Welcome back",de:"Willkommen zurück",ar:"مرحبًا بعودتك"},
+"Connectez-vous pour retrouver vos favoris et vos demandes.":{en:"Log in to find your favorites and requests.",de:"Melden Sie sich an, um Ihre Favoriten und Anfragen wiederzufinden.",ar:"سجّل الدخول للعثور على مفضلاتك وطلباتك."},
+"Mot de passe":{en:"Password",de:"Passwort",ar:"كلمة المرور"},
+"Se connecter":{en:"Log in",de:"Anmelden",ar:"تسجيل الدخول"},
+"Mot de passe oublié ?":{en:"Forgot password?",de:"Passwort vergessen?",ar:"نسيت كلمة المرور؟"},
+"Pas encore de compte ?":{en:"No account yet?",de:"Noch kein Konto?",ar:"ليس لديك حساب؟"},
+"Mot de passe oublié":{en:"Forgot password",de:"Passwort vergessen",ar:"نسيت كلمة المرور"},
+"Indiquez votre email, nous vous envoyons un lien de réinitialisation.":{en:"Enter your email, we'll send you a reset link.",de:"Geben Sie Ihre E-Mail-Adresse ein, wir senden Ihnen einen Link zum Zurücksetzen.",ar:"أدخل بريدك الإلكتروني، وسنرسل لك رابط إعادة التعيين."},
+"Envoyer le lien":{en:"Send link",de:"Link senden",ar:"إرسال الرابط"},
+"Retour à la connexion":{en:"Back to log in",de:"Zurück zur Anmeldung",ar:"العودة لتسجيل الدخول"},
+"Email envoyé":{en:"Email sent",de:"E-Mail gesendet",ar:"تم إرسال البريد الإلكتروني"},
+"Si un compte existe avec cette adresse, vous recevrez un lien de réinitialisation d'ici quelques minutes.":{en:"If an account exists with this address, you'll receive a reset link within a few minutes.",de:"Falls ein Konto mit dieser Adresse existiert, erhalten Sie in wenigen Minuten einen Link zum Zurücksetzen.",ar:"إذا كان هناك حساب بهذا العنوان، فستتلقى رابط إعادة التعيين خلال دقائق قليلة."},
+"Lien invalide":{en:"Invalid link",de:"Ungültiger Link",ar:"رابط غير صالح"},
+"Ce lien de réinitialisation est incomplet. Demandez-en un nouveau.":{en:"This reset link is incomplete. Request a new one.",de:"Dieser Link zum Zurücksetzen ist unvollständig. Fordern Sie einen neuen an.",ar:"رابط إعادة التعيين هذا غير مكتمل. اطلب رابطًا جديدًا."},
+"Demander un nouveau lien":{en:"Request a new link",de:"Neuen Link anfordern",ar:"طلب رابط جديد"},
+"Nouveau mot de passe":{en:"New password",de:"Neues Passwort",ar:"كلمة مرور جديدة"},
+"Choisissez un nouveau mot de passe pour votre compte.":{en:"Choose a new password for your account.",de:"Wählen Sie ein neues Passwort für Ihr Konto.",ar:"اختر كلمة مرور جديدة لحسابك."},
+"Réinitialiser":{en:"Reset",de:"Zurücksetzen",ar:"إعادة التعيين"},
+"Mot de passe mis à jour":{en:"Password updated",de:"Passwort aktualisiert",ar:"تم تحديث كلمة المرور"},
+"Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.":{en:"You can now log in with your new password.",de:"Sie können sich jetzt mit Ihrem neuen Passwort anmelden.",ar:"يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."},
+"Créer un compte":{en:"Create an account",de:"Konto erstellen",ar:"إنشاء حساب"},
+"Rejoignez yadra! en tant qu'acquéreur ou promoteur.":{en:"Join yadra! as a buyer or a developer.",de:"Treten Sie yadra! als Käufer oder Bauträger bei.",ar:"انضم إلى يادرا! كمشترٍ أو مطور."},
+"Nom de l'entreprise":{en:"Company name",de:"Firmenname",ar:"اسم الشركة"},
+"Créer mon compte":{en:"Create my account",de:"Mein Konto erstellen",ar:"إنشاء حسابي"},
+"Chaque inscription est vérifiée par notre équipe avant activation. Vous serez prévenu(e) par email.":{en:"Every registration is reviewed by our team before activation. You'll be notified by email.",de:"Jede Registrierung wird vor der Aktivierung von unserem Team geprüft. Sie werden per E-Mail benachrichtigt.",ar:"يتم مراجعة كل تسجيل من قبل فريقنا قبل التفعيل. سيتم إعلامك عبر البريد الإلكتروني."},
+"Déjà inscrit ?":{en:"Already registered?",de:"Bereits registriert?",ar:"مسجل بالفعل؟"},
+"Inscription bien reçue":{en:"Registration received",de:"Registrierung erhalten",ar:"تم استلام التسجيل"},
+"Votre compte est en cours de validation par notre équipe. Vous recevrez un email dès qu'il sera activé.":{en:"Your account is being reviewed by our team. You'll receive an email once it's activated.",de:"Ihr Konto wird von unserem Team geprüft. Sie erhalten eine E-Mail, sobald es aktiviert ist.",ar:"يقوم فريقنا بمراجعة حسابك. ستتلقى بريدًا إلكترونيًا بمجرد تفعيله."},
+/* Account */
+"Bonjour,":{en:"Hello,",de:"Hallo,",ar:"مرحبًا،"},
+"Mes informations":{en:"My information",de:"Meine Angaben",ar:"معلوماتي"},
+"Mes demandes":{en:"My requests",de:"Meine Anfragen",ar:"طلباتي"},
+"Mes favoris":{en:"My favorites",de:"Meine Favoriten",ar:"مفضلاتي"},
+"Nom":{en:"Name",de:"Name",ar:"الاسم"},
+"Type de compte":{en:"Account type",de:"Kontotyp",ar:"نوع الحساب"},
+"Acquéreur":{en:"Buyer",de:"Käufer",ar:"مشترٍ"},
+"Promoteur":{en:"Developer",de:"Bauträger",ar:"مطور"},
+"Aucune demande envoyée":{en:"No request sent",de:"Keine Anfrage gesendet",ar:"لا يوجد طلب مُرسل"},
+"Contactez un promoteur depuis une fiche projet pour la voir apparaître ici.":{en:"Contact a developer from a project page to see it appear here.",de:"Kontaktieren Sie einen Bauträger über ein Projektprofil, damit es hier erscheint.",ar:"تواصل مع مطور من صفحة مشروع ليظهر هنا."},
+"Supprimer":{en:"Delete",de:"Löschen",ar:"حذف"},
+"Aucun favori":{en:"No favorites",de:"Keine Favoriten",ar:"لا توجد مفضلات"},
+"Ajoutez des projets à vos favoris pour les retrouver ici.":{en:"Add properties to your favorites to find them here.",de:"Fügen Sie Projekte zu Ihren Favoriten hinzu, um sie hier wiederzufinden.",ar:"أضف مشاريع إلى مفضلاتك لتجدها هنا."},
+"Vous n'avez pas encore de favoris":{en:"You don't have any favorites yet",de:"Sie haben noch keine Favoriten",ar:"ليس لديك مفضلات بعد"},
+"Ajoutez des projets à vos favoris pour les retrouver ici, où que vous soyez.":{en:"Add properties to your favorites to find them here, wherever you are.",de:"Fügen Sie Projekte zu Ihren Favoriten hinzu, um sie überall wiederzufinden.",ar:"أضف مشاريع إلى مفضلاتك لتجدها هنا أينما كنت."},
+/* Auth gates + common toasts */
+"Connexion requise":{en:"Login required",de:"Anmeldung erforderlich",ar:"تسجيل الدخول مطلوب"},
+"Connectez-vous pour accéder à votre compte.":{en:"Log in to access your account.",de:"Melden Sie sich an, um auf Ihr Konto zuzugreifen.",ar:"سجّل الدخول للوصول إلى حسابك."},
+"Connectez-vous pour retrouver vos favoris, sur tous vos appareils.":{en:"Log in to find your favorites, on all your devices.",de:"Melden Sie sich an, um Ihre Favoriten auf allen Geräten wiederzufinden.",ar:"سجّل الدخول للعثور على مفضلاتك على جميع أجهزتك."},
+"Connectez-vous avec un compte promoteur pour gérer vos projets.":{en:"Log in with a developer account to manage your projects.",de:"Melden Sie sich mit einem Bauträger-Konto an, um Ihre Projekte zu verwalten.",ar:"سجّل الدخول بحساب مطور لإدارة مشاريعك."},
+"Connectez-vous pour ajouter des favoris":{en:"Log in to add favorites",de:"Melden Sie sich an, um Favoriten hinzuzufügen",ar:"سجّل الدخول لإضافة مفضلات"},
+"Ajouté à vos favoris":{en:"Added to your favorites",de:"Zu Favoriten hinzugefügt",ar:"أُضيف إلى مفضلاتك"},
+"Retiré de vos favoris":{en:"Removed from your favorites",de:"Aus Favoriten entfernt",ar:"أُزيل من مفضلاتك"},
+"Demande supprimée":{en:"Request deleted",de:"Anfrage gelöscht",ar:"تم حذف الطلب"},
+"Cette page n'existe pas.":{en:"This page doesn't exist.",de:"Diese Seite existiert nicht.",ar:"هذه الصفحة غير موجودة."},
+"Retour à l'accueil":{en:"Back to home",de:"Zurück zur Startseite",ar:"العودة إلى الرئيسية"}
+};
+function normKey(s){ return String(s==null?'':s).replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g,' ').trim(); }
+function t(str){
+  if(LANG==='fr' || str==null) return str;
+  var key = normKey(str);
+  var entry = I18N[key];
+  return (entry && entry[LANG]) || str;
+}
+function translateDom(root){
+  if(!root) return;
+  var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  var nodes = []; var n;
+  while((n = walker.nextNode())) nodes.push(n);
+  nodes.forEach(function(node){
+    var orig = ORIG_TEXT && ORIG_TEXT.get(node);
+    if(orig===undefined){ orig = node.nodeValue; if(ORIG_TEXT) ORIG_TEXT.set(node, orig); }
+    var trimmed = orig.trim();
+    if(!trimmed) return;
+    var out = t(trimmed);
+    var newVal = orig.replace(trimmed, out);
+    if(node.nodeValue !== newVal) node.nodeValue = newVal;
+  });
+}
+function translateAttrs(root){
+  if(!root) return;
+  var ATTRS = ['placeholder','aria-label','title','alt'];
+  var list = root.querySelectorAll ? Array.prototype.slice.call(root.querySelectorAll('*')) : [];
+  if(root.getAttribute) list.unshift(root);
+  list.forEach(function(el){
+    ATTRS.forEach(function(attr){
+      if(!el.hasAttribute || !el.hasAttribute(attr)) return;
+      var map = ORIG_ATTR && ORIG_ATTR.get(el);
+      if(!map){ map = {}; if(ORIG_ATTR) ORIG_ATTR.set(el, map); }
+      if(map[attr]===undefined) map[attr] = el.getAttribute(attr);
+      var orig = map[attr];
+      var out = t(orig);
+      if(el.getAttribute(attr) !== out) el.setAttribute(attr, out);
+    });
+  });
+}
+function applyTranslations(root){ translateDom(root); translateAttrs(root); }
+function translateChrome(){
+  applyTranslations(document.getElementById('siteHeader'));
+  applyTranslations(document.getElementById('mobileMenu'));
+  applyTranslations(document.querySelector('.site-footer'));
+  applyTranslations(document.getElementById('waFloat'));
+}
+function updateLangSwitcherUI(){
+  var flags = {fr:'🇫🇷',en:'🇬🇧',de:'🇩🇪',ar:'🇩🇿'};
+  var codes = {fr:'FR',en:'EN',de:'DE',ar:'AR'};
+  var flagEl = document.getElementById('langFlag'); if(flagEl) flagEl.textContent = flags[LANG];
+  var codeEl = document.getElementById('langCode'); if(codeEl) codeEl.textContent = codes[LANG];
+  Array.prototype.forEach.call(document.querySelectorAll('#langMenu [data-lang], #mmLangRow [data-lang]'), function(b){ b.classList.toggle('active', b.dataset.lang===LANG); });
+}
+function setLang(code){
+  if(['fr','en','de','ar'].indexOf(code)===-1) return;
+  LANG = code;
+  try{ localStorage.setItem('yadra_lang', code); }catch(e){}
+  document.documentElement.setAttribute('lang', code);
+  document.documentElement.setAttribute('dir', code==='ar' ? 'rtl' : 'ltr');
+  var menu = document.getElementById('langMenu'); if(menu) menu.classList.remove('open');
+  updateLangSwitcherUI();
+  translateChrome();
+  render();
+}
+function initLangSwitcher(){
+  var btn = document.getElementById('langBtn');
+  var menu = document.getElementById('langMenu');
+  if(!btn || !menu) return;
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = menu.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e){
+    if(menu.classList.contains('open') && !menu.contains(e.target) && e.target!==btn){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#langMenu [data-lang], #mmLangRow [data-lang]'), function(b){
+    b.addEventListener('click', function(){ setLang(b.dataset.lang); });
+  });
+  var saved = null;
+  try{ saved = localStorage.getItem('yadra_lang'); }catch(e){}
+  if(saved && saved!=='fr'){
+    LANG = saved;
+    document.documentElement.setAttribute('lang', saved);
+    document.documentElement.setAttribute('dir', saved==='ar' ? 'rtl' : 'ltr');
+  }
+  updateLangSwitcherUI();
+  translateChrome();
+}
 
 /* ---------------- Icons ---------------- */
 var ICONS = {
@@ -1328,7 +1746,7 @@ function toast(msg, kind){
   var wrap = document.getElementById('toastWrap');
   var el = document.createElement('div');
   el.className = 'toast';
-  el.innerHTML = ic('checkCircle')+'<span>'+esc(msg)+'</span>';
+  el.innerHTML = ic('checkCircle')+'<span>'+esc(t(msg))+'</span>';
   wrap.appendChild(el);
   setTimeout(function(){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.remove(); },320); }, 3400);
 }
@@ -1337,6 +1755,7 @@ function openModal(innerHtml){
   root.innerHTML = '<div class="modal-overlay" id="modalOverlay"><div class="modal-card" role="dialog" aria-modal="true"><button class="icon-btn modal-x" id="modalXBtn" aria-label="Fermer">'+ic('close')+'</button>'+innerHtml+'</div></div>';
   document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target.id==='modalOverlay') closeModal(); });
   document.getElementById('modalXBtn').addEventListener('click', closeModal);
+  applyTranslations(root);
 }
 function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
@@ -1384,6 +1803,9 @@ function render(){
   else if(segs[0]==='promoteur'){ main.innerHTML = pagePromoterDash(); afterPromoterDash(); }
   else if(segs[0]==='admin'){ main.innerHTML = pageAdmin(r.params); afterAdmin(r.params); }
   else { main.innerHTML = page404(); }
+
+  applyTranslations(main);
+  translateChrome();
 
   if(location.hash){
     var target = document.getElementById(location.hash.slice(1));
@@ -2730,7 +3152,7 @@ function initFX(){
 }
 
 /* ---------------- Init ---------------- */
-function startApp(){ boot().then(render); }
+function startApp(){ initLangSwitcher(); boot().then(render); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
 })();
 
