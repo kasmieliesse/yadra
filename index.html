@@ -191,7 +191,8 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 @media (min-width:960px){.nav-links{display:flex;}}
 .nav-actions{display:flex;align-items:center;gap:10px;}
 .nav-actions .btn{display:none;}
-@media (min-width:640px){.nav-actions .btn{display:inline-flex;}}
+.nav-actions .lang-flags{display:none;}
+@media (min-width:640px){.nav-actions .btn{display:inline-flex;}.nav-actions .lang-flags{display:flex;}}
 .burger{display:inline-flex;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);align-items:center;justify-content:center;background:transparent;color:var(--text);transition:transform .15s ease;}
 .burger:active{transform:scale(.93);}
 @media (min-width:960px){.burger{display:none;}}
@@ -745,9 +746,11 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .lang-flags button{display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);border-radius:50%;font-size:15px;line-height:1;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .2s ease;}
 .lang-flags button:hover{background:rgba(255,255,255,.12);transform:translateY(-1px);}
 .lang-flags button.active{border-color:var(--or-rose-light);background:rgba(216,154,120,.16);}
-.mm-lang{display:flex;gap:8px;padding:14px 0 4px;flex-wrap:wrap;}
-.mm-lang button{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 12px;color:#fff;font-size:12.5px;font-weight:700;min-height:36px;}
-.mm-lang button.active{border-color:var(--or-rose-light);color:var(--or-rose-light);}
+.mm-promo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 4px;border-bottom:1px solid var(--border);}
+.mm-promo-row .mm-promo-link{padding:0;border-bottom:none;flex:1;}
+.mm-lang{display:flex;gap:6px;flex-shrink:0;}
+.mm-lang button{display:flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);border-radius:50%;font-size:14px;line-height:1;}
+.mm-lang button.active{border-color:var(--or-rose-light);background:rgba(216,154,120,.16);}
 
 /* ---------------- RTL (Arabic) ---------------- */
 :root[dir="rtl"]{--dir-mult:-1;}
@@ -823,12 +826,14 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   <a href="/investir">Investir</a>
   <a href="/a-propos">À propos</a>
   <a href="/favoris">Favoris</a>
-  <a href="/promoteur">Espace promoteur</a>
-  <div class="mm-lang" id="mmLangRow">
-    <button type="button" data-lang="ar">🇩🇿 AR</button>
-    <button type="button" data-lang="de">🇩🇪 DE</button>
-    <button type="button" data-lang="en">🇬🇧 EN</button>
-    <button type="button" data-lang="fr">🇫🇷 FR</button>
+  <div class="mm-promo-row">
+    <a href="/promoteur" class="mm-promo-link">Espace promoteur</a>
+    <div class="mm-lang" id="mmLangRow">
+      <button type="button" data-lang="ar" aria-label="العربية" title="العربية">🇩🇿</button>
+      <button type="button" data-lang="de" aria-label="Deutsch" title="Deutsch">🇩🇪</button>
+      <button type="button" data-lang="en" aria-label="English" title="English">🇬🇧</button>
+      <button type="button" data-lang="fr" aria-label="Français" title="Français">🇫🇷</button>
+    </div>
   </div>
   <div class="mm-actions">
     <button class="btn btn-primary btn-block" id="mmAuthBtn">Connexion</button>
@@ -2413,6 +2418,7 @@ function afterLoginSuccess(user){
   return Promise.all(tasks);
 }
 function afterAuth(){
+  var nextParam = new URLSearchParams(location.search).get('next');
   var loginForm = document.getElementById('loginForm');
   if(loginForm){
     loginForm.addEventListener('submit', function(e){
@@ -2425,7 +2431,7 @@ function afterAuth(){
         .then(function(r){ return afterLoginSuccess(r.user); })
         .then(function(){
           toast('Bienvenue, '+SESSION.name.split(' ')[0]+' !');
-          go(SESSION.type==='promoteur' ? '/promoteur' : '/compte');
+          go(nextParam || (SESSION.type==='promoteur' ? '/promoteur' : '/compte'));
         })
         .catch(function(error){ err.textContent = error.message || 'Email ou mot de passe incorrect.'; err.style.display='block'; })
         .then(function(){ submitBtn.disabled = false; });
@@ -2455,7 +2461,7 @@ function afterAuth(){
           }
           return afterLoginSuccess(r.user).then(function(){
             toast('Compte créé, bienvenue '+SESSION.name.split(' ')[0]+' !');
-            go(SESSION.type==='promoteur' ? '/promoteur' : '/compte');
+            go(nextParam || (SESSION.type==='promoteur' ? '/promoteur' : '/compte'));
           });
         })
         .catch(function(error){ err.textContent = error.message || 'Impossible de créer le compte.'; err.style.display='block'; })
@@ -2728,10 +2734,11 @@ function openWizard(existingDraft){
   function byId(id){ return document.getElementById(id); }
 }
 function authGate(msg){
+  var next = encodeURIComponent(location.pathname + location.search);
   return '<div class="auth-shell"><div class="auth-card" style="text-align:center;">'
     +ic('lock','ic')+'<h1 style="margin-top:14px;">Connexion requise</h1><p class="sub">'+esc(msg)+'</p>'
-    +'<a class="btn btn-primary btn-block" href="/connexion" style="margin-top:20px;">Se connecter</a>'
-    +'<a class="btn btn-ghost btn-block" href="/inscription" style="margin-top:10px;">Créer un compte</a>'
+    +'<a class="btn btn-primary btn-block" href="/connexion?next='+next+'" style="margin-top:20px;">Se connecter</a>'
+    +'<a class="btn btn-ghost btn-block" href="/inscription?next='+next+'" style="margin-top:10px;">Créer un compte</a>'
   +'</div></div>';
 }
 
