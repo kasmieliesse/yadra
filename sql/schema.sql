@@ -74,3 +74,12 @@ CREATE INDEX IF NOT EXISTS idx_projects_promoter ON projects(promoter_id);
 CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
 CREATE INDEX IF NOT EXISTS idx_leads_project ON leads(project_id);
 CREATE INDEX IF NOT EXISTS idx_leads_user ON leads(user_id);
+
+CREATE TABLE IF NOT EXISTS page_views (
+  id BIGSERIAL PRIMARY KEY,
+  path TEXT NOT NULL,
+  project_id TEXT REFERENCES projects(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_page_views_created ON page_views(created_at);
+CREATE INDEX IF NOT EXISTS idx_page_views_project ON page_views(project_id);

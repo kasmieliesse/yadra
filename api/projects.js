@@ -48,17 +48,21 @@ module.exports = async function (req, res) {
       const typologies = JSON.stringify(Array.isArray(body.typologies) ? body.typologies : []);
       const prestations = JSON.stringify(Array.isArray(body.prestations) ? body.prestations : []);
       const pointsForts = JSON.stringify(Array.isArray(body.pointsForts) ? body.pointsForts : []);
+      const gallery = Array.isArray(body.gallery) ? body.gallery.filter(function (u) { return typeof u === 'string' && u.length; }) : [];
+      const galleryJson = JSON.stringify(gallery);
+      const photo = gallery.length ? gallery[0] : (typeof body.photo === 'string' ? body.photo : null);
 
       if (existing.length) {
         await sql`UPDATE projects SET
           slug=${slug}, nom=${nom}, wilaya=${body.wilaya}, commune=${body.commune}, quartier=${body.quartier},
           type=${body.type}, statut=${body.statut}, livraison=${body.livraison}, description=${body.description},
           typologies=${typologies}::jsonb, prestations=${prestations}::jsonb, points_forts=${pointsForts}::jsonb,
+          photo=${photo}, gallery=${galleryJson}::jsonb,
           status=${status}
           WHERE id=${id}`;
       } else {
-        await sql`INSERT INTO projects (id, slug, nom, wilaya, commune, quartier, promoter_id, type, statut, livraison, description, typologies, prestations, points_forts, status)
-          VALUES (${id}, ${slug}, ${nom}, ${body.wilaya}, ${body.commune}, ${body.quartier}, ${session.promoterId}, ${body.type}, ${body.statut}, ${body.livraison}, ${body.description}, ${typologies}::jsonb, ${prestations}::jsonb, ${pointsForts}::jsonb, ${status})`;
+        await sql`INSERT INTO projects (id, slug, nom, wilaya, commune, quartier, promoter_id, type, statut, livraison, description, typologies, prestations, points_forts, photo, gallery, status)
+          VALUES (${id}, ${slug}, ${nom}, ${body.wilaya}, ${body.commune}, ${body.quartier}, ${session.promoterId}, ${body.type}, ${body.statut}, ${body.livraison}, ${body.description}, ${typologies}::jsonb, ${prestations}::jsonb, ${pointsForts}::jsonb, ${photo}, ${galleryJson}::jsonb, ${status})`;
       }
       res.status(200).json({ ok: true, id: id });
       return;

@@ -729,18 +729,11 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 }
 
 /* ---------------- Language switcher ---------------- */
-.lang-flags{display:flex;align-items:center;gap:4px;flex:0 0 auto;}
-.lang-flags button{display:flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);border-radius:50%;font-size:12px;line-height:1;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .2s ease;}
-.lang-flags button:hover{background:rgba(255,255,255,.12);transform:translateY(-1px);}
-.lang-flags button.active{border-color:var(--or-rose-light);background:rgba(216,154,120,.16);}
-@media (min-width:480px){.lang-flags{gap:6px;}.lang-flags button{width:32px;height:32px;font-size:15px;}}
-.lang-toggle{position:relative;display:none;flex:0 0 auto;}
-.lang-toggle #langToggleFlag{font-size:16px;}
+.lang-toggle{position:relative;display:block;flex:0 0 auto;}
+.lang-toggle-btn{display:flex;align-items:center;gap:6px;height:44px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;cursor:pointer;transition:background .2s ease,border-color .2s ease;}
+.lang-toggle-btn:hover{background:rgba(255,255,255,.12);}
+.lang-toggle-btn #langToggleFlag{font-size:16px;line-height:1;}
 .lang-toggle .lang-flag{font-size:16px;}
-@media (max-width:639px){
-  .lang-flags{display:none;}
-  .lang-toggle{display:block;}
-}
 
 /* ---------------- User menu ---------------- */
 .user-menu{position:relative;flex:0 0 auto;}
@@ -808,14 +801,8 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
     </nav>
     <div class="nav-actions">
       <button class="icon-btn" id="navFavBtn" title="Favoris" aria-label="Favoris"></button>
-      <div class="lang-flags" id="langFlags" role="group" aria-label="Changer de langue">
-        <button type="button" data-lang="ar" aria-label="العربية" title="العربية">🇩🇿</button>
-        <button type="button" data-lang="de" aria-label="Deutsch" title="Deutsch">🇩🇪</button>
-        <button type="button" data-lang="en" aria-label="English" title="English">🇬🇧</button>
-        <button type="button" data-lang="fr" aria-label="Français" title="Français">🇫🇷</button>
-      </div>
       <div class="lang-toggle" id="langToggle">
-        <button class="icon-btn" id="langToggleBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue"><span id="langToggleFlag">🇫🇷</span></button>
+        <button class="lang-toggle-btn" id="langToggleBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue"><span id="langToggleFlag">🇫🇷</span><span id="langToggleCode">FR</span></button>
         <div class="user-dropdown" id="langDropdown" role="menu">
           <button type="button" data-lang="ar"><span class="lang-flag">🇩🇿</span> العربية</button>
           <button type="button" data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
@@ -1198,9 +1185,11 @@ function translateChrome(){
   applyTranslations(document.getElementById('waFloat'));
 }
 var LANG_FLAG_EMOJI = {fr:'🇫🇷',en:'🇬🇧',de:'🇩🇪',ar:'🇩🇿'};
+var LANG_CODE_LABEL = {fr:'FR',en:'EN',de:'DE',ar:'DZ'};
 function updateLangSwitcherUI(){
-  Array.prototype.forEach.call(document.querySelectorAll('#langFlags [data-lang], #langDropdown [data-lang]'), function(b){ b.classList.toggle('active', b.dataset.lang===LANG); });
+  Array.prototype.forEach.call(document.querySelectorAll('#langDropdown [data-lang]'), function(b){ b.classList.toggle('active', b.dataset.lang===LANG); });
   var toggleFlag = document.getElementById('langToggleFlag'); if(toggleFlag) toggleFlag.textContent = LANG_FLAG_EMOJI[LANG];
+  var toggleCode = document.getElementById('langToggleCode'); if(toggleCode) toggleCode.textContent = LANG_CODE_LABEL[LANG];
 }
 function closeLangDropdown(){
   var d = document.getElementById('langDropdown'); if(d) d.classList.remove('open');
@@ -1218,7 +1207,7 @@ function setLang(code){
   render();
 }
 function initLangSwitcher(){
-  Array.prototype.forEach.call(document.querySelectorAll('#langFlags [data-lang], #langDropdown [data-lang]'), function(b){
+  Array.prototype.forEach.call(document.querySelectorAll('#langDropdown [data-lang]'), function(b){
     b.addEventListener('click', function(){ setLang(b.dataset.lang); });
   });
   var toggleBtn = document.getElementById('langToggleBtn');
@@ -1775,9 +1764,10 @@ function render(){
   document.body.classList.toggle('is-home', segs.length===0);
   updateHeaderScrollState();
 
+  var trackedProjectId = null;
   if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); }
   else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params); }
-  else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); }
+  else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); var trackedP = getProjectBySlug(segs[1],segs[2]); if(trackedP) trackedProjectId = trackedP.id; }
   else if(segs[0]==='villes' && segs.length===1){ main.innerHTML = pageVilles(); afterVilles(); }
   else if(segs[0]==='promoteurs' && segs.length===1){ main.innerHTML = pagePromotersList(); afterPromotersList(); }
   else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); }
@@ -1803,6 +1793,14 @@ function render(){
     else { window.scrollTo(0,0); }
   } else { window.scrollTo(0,0); }
   if(typeof initFX==='function') initFX();
+  trackPageView(location.pathname, trackedProjectId);
+}
+function trackPageView(path, projectId){
+  try{
+    var payload = JSON.stringify({path:path, projectId:projectId||null});
+    if(navigator.sendBeacon){ navigator.sendBeacon('/api/track', payload); }
+    else { fetch('/api/track', {method:'POST', body:payload, keepalive:true}).catch(function(){}); }
+  }catch(e){}
 }
 window.addEventListener('popstate', render);
 function updateHeaderScrollState(){
@@ -2192,7 +2190,8 @@ function pageDetail(wilaya,slug){
   +'<div class="wrap"><div class="detail-gallery" id="detailGallery">'
     +[0,1,2,3].map(function(i){
       var cell;
-      if(i===0){ cell = mediaHTML(p,500,400); }
+      if(p.gallery && p.gallery.length){ cell = '<img src="'+esc(p.gallery[i] || p.gallery[0])+'" alt="'+esc(p.nom)+'" loading="lazy">'; }
+      else if(i===0){ cell = mediaHTML(p,500,400); }
       else if(GALLERY_PHOTOS[p.slug]){ cell = '<img src="/assets/projects/'+p.slug+'-g'+i+'.jpg" alt="'+esc(p.nom)+'" loading="lazy">'; }
       else { cell = artSVG(p.slug+'-g'+i,500,400); }
       return '<div>'+cell+'</div>';
@@ -2580,6 +2579,7 @@ function pagePromoterDash(){
     +'<div class="dash-head"><div><h1>Espace promoteur</h1><p style="color:var(--text-dim);font-size:13px;margin-top:4px;">'+esc(pr?pr.name:'')+(pr&&pr.verified?(' '+ic('shield')):' — vérification en attente')+'</p></div>'
       +'<button class="btn btn-primary btn-sm" id="newProjectBtn">'+ic('plus')+' Ajouter un projet</button></div>'
     +'<div class="stat-grid">'
+      +'<div class="stat-card"><div class="k">Vues totales</div><div class="v" id="statViews">—</div></div>'
       +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v" id="statPublished">—</div></div>'
       +'<div class="stat-card"><div class="k">Demandes reçues</div><div class="v" id="statLeads">—</div></div>'
       +'<div class="stat-card"><div class="k">Nouvelles demandes</div><div class="v" id="statNewLeads">—</div><div class="d">à traiter</div></div>'
@@ -2626,10 +2626,18 @@ function afterPromoterDash(){
       var myLeads = MY_LEADS || [];
       var byStatus = {};
       myLeads.forEach(function(l){ byStatus[l.status]=(byStatus[l.status]||0)+1; });
-      body.innerHTML = '<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Demandes par statut</h3>'
-        +['Nouveau','Contacté','En cours','Terminé'].map(function(s){ var n=byStatus[s]||0; var max=Math.max(1,myLeads.length); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+s+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
-        +'<p class="form-note">'+live.length+' projet'+(live.length>1?'s publiés':' publié')+' au total.</p>'
-      +'</div>';
+      body.innerHTML = '<p class="form-note">Chargement…</p>';
+      api('/api/track?scope=mine').catch(function(){ return {total:0, byProject:[]}; }).then(function(visits){
+        body.innerHTML = '<div class="grid grid-2">'
+        +'<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Demandes par statut</h3>'
+          +['Nouveau','Contacté','En cours','Terminé'].map(function(s){ var n=byStatus[s]||0; var max=Math.max(1,myLeads.length); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+s+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
+          +'<p class="form-note">'+live.length+' projet'+(live.length>1?'s publiés':' publié')+' au total.</p>'
+        +'</div>'
+        +'<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Vues par projet ('+visits.total+' au total)</h3>'
+          +(visits.byProject.length ? visits.byProject.map(function(p){ var max=Math.max.apply(null,visits.byProject.map(function(x){return x.views;}).concat([1])); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+esc(p.nom)+'</span><span>'+p.views+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(p.views/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('') : '<p class="form-note">Aucun projet pour le moment.</p>')
+        +'</div>'
+        +'</div>';
+      });
     }
   }
   tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
@@ -2640,6 +2648,7 @@ function afterPromoterDash(){
     document.getElementById('statLeads').textContent = leads.length;
     document.getElementById('statNewLeads').textContent = leads.filter(function(l){return l.status==='Nouveau';}).length;
     document.getElementById('statDrafts').textContent = projects.filter(function(p){return p.status==='brouillon';}).length;
+    api('/api/track?scope=mine').then(function(r){ var el=document.getElementById('statViews'); if(el) el.textContent = r.total; }).catch(function(){});
   }
   function reloadDash(){
     return Promise.all([api('/api/projects?mine=1'), api('/api/leads')]).then(function(results){
@@ -2660,9 +2669,9 @@ function openWizard(existingDraft){
   var state = existingDraft ? JSON.parse(JSON.stringify(existingDraft)) : {
     id: null, promoterId:user.promoterId, nom:'', type:'Appartement', description:'',
     wilaya:'alger', commune:'', quartier:'', typologies:[{label:'F2',surface:60,prix:9000000,dispo:5}],
-    photos:[0,1,2], prestations:[], pointsForts:[], statut:'sur-plan', livraison:'T4 2028', status:'brouillon'
+    gallery:[], prestations:[], pointsForts:[], statut:'sur-plan', livraison:'T4 2028', status:'brouillon'
   };
-  if(!state.photos || !state.photos.length) state.photos = [0,1,2];
+  if(!Array.isArray(state.gallery)) state.gallery = state.photo ? [state.photo] : [];
   var step = 0;
   renderWizard();
   function renderWizard(){
@@ -2695,7 +2704,7 @@ function openWizard(existingDraft){
       nom: state.nom, type: state.type, description: state.description,
       wilaya: state.wilaya, commune: state.commune, quartier: state.quartier,
       typologies: state.typologies, prestations: state.prestations, pointsForts: state.pointsForts,
-      statut: state.statut, livraison: state.livraison, status: status
+      statut: state.statut, livraison: state.livraison, status: status, gallery: state.gallery
     };
     if(state.id) payload.id = state.id;
     return api('/api/projects', {method:'POST', body:payload}).then(function(r){ state.id = r.id; return r; });
@@ -2736,16 +2745,30 @@ function openWizard(existingDraft){
       drawRows();
       byId('wAddTypo').onclick = function(){ state.typologies.push({label:'F3',surface:78,prix:10000000,dispo:3}); drawRows(); };
     } else if(step===3){
-      panel.innerHTML = '<p class="form-note" style="margin-bottom:14px;">Ajoutez des visuels pour votre projet (démonstration — génère un rendu signature).</p>'
-        +'<div class="grid" style="grid-template-columns:repeat(3,1fr);" id="wPhotos"></div>';
+      panel.innerHTML = '<p class="form-note" style="margin-bottom:14px;">Ajoutez de vraies photos de votre projet (JPEG, PNG ou WebP, 10 Mo max par photo). La première photo devient la photo principale.</p>'
+        +'<div class="grid" style="grid-template-columns:repeat(3,1fr);" id="wPhotos"></div>'
+        +'<input type="file" id="wPhotoInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none;">';
       function drawPhotos(){
         var wrap = byId('wPhotos');
-        wrap.innerHTML = state.photos.map(function(seed,i){ return '<div class="photo-tile">'+artSVG(state.id+'-'+seed,300,225)+'<button class="mini-btn danger" data-rmp="'+i+'" style="position:absolute;top:8px;right:8px;">'+ic('trash')+'</button></div>'; }).join('')
-          + (state.photos.length<6 ? '<button class="photo-add" id="wAddPhoto" type="button">'+ic('upload')+' Ajouter</button>' : '');
-        var addBtn = byId('wAddPhoto'); if(addBtn) addBtn.onclick = function(){ state.photos.push(Date.now()%9999); drawPhotos(); };
-        Array.prototype.forEach.call(wrap.querySelectorAll('[data-rmp]'), function(b){ b.onclick=function(){ state.photos.splice(Number(b.dataset.rmp),1); drawPhotos(); }; });
+        wrap.innerHTML = state.gallery.map(function(url,i){ return '<div class="photo-tile"><img src="'+esc(url)+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"><button class="mini-btn danger" data-rmp="'+i+'" style="position:absolute;top:8px;right:8px;">'+ic('trash')+'</button></div>'; }).join('')
+          + (state.gallery.length<8 ? '<button class="photo-add" id="wAddPhoto" type="button">'+ic('upload')+' Ajouter</button>' : '');
+        var addBtn = byId('wAddPhoto'); if(addBtn) addBtn.onclick = function(){ byId('wPhotoInput').click(); };
+        Array.prototype.forEach.call(wrap.querySelectorAll('[data-rmp]'), function(b){ b.onclick=function(){ state.gallery.splice(Number(b.dataset.rmp),1); drawPhotos(); }; });
       }
       drawPhotos();
+      byId('wPhotoInput').onchange = function(e){
+        var files = Array.prototype.slice.call(e.target.files || []);
+        e.target.value = '';
+        if(!files.length) return;
+        if(!window.__yadraUploadPhoto){ toast('Le module de téléversement se charge encore, réessayez dans un instant.'); return; }
+        var slots = Math.max(0, 8 - state.gallery.length);
+        files = files.slice(0, slots);
+        var wrap = byId('wPhotos');
+        var addBtn = byId('wAddPhoto'); if(addBtn){ addBtn.disabled = true; addBtn.textContent = 'Envoi en cours…'; }
+        Promise.all(files.map(function(f){ return window.__yadraUploadPhoto(f); }))
+          .then(function(urls){ state.gallery = state.gallery.concat(urls); drawPhotos(); toast('Photo'+(urls.length>1?'s':'')+' ajoutée'+(urls.length>1?'s':'')); })
+          .catch(function(err){ toast(err.message || 'Échec de l\'envoi de la photo'); drawPhotos(); });
+      };
     } else if(step===4){
       panel.innerHTML = '<div class="f-group"><label class="f-title">Prestations</label><div class="chip-row" id="wPrest">'+PRESTATIONS_POOL.map(function(p){ return '<button type="button" class="chip'+(state.prestations.indexOf(p)!==-1?' active':'')+'" data-v="'+esc(p)+'">'+p+'</button>'; }).join('')+'</div></div>'
         +'<div class="f-group" style="margin-top:16px;"><label class="f-title">Points forts</label><div class="chip-row" id="wPF">'+POINTSFORTS_POOL.map(function(p){ return '<button type="button" class="chip'+(state.pointsForts.indexOf(p)!==-1?' active':'')+'" data-v="'+esc(p)+'">'+p+'</button>'; }).join('')+'</div></div>';
@@ -2762,7 +2785,7 @@ function openWizard(existingDraft){
       var preview = {id:'preview', wilaya:state.wilaya, slug:'apercu', nom:state.nom||'(Nom du projet)', commune:state.commune, promoter:getPromoterById(state.promoterId), verified:false, statut:state.statut, typologies:state.typologies, surfaceMin:Math.min.apply(null,state.typologies.map(function(t){return Number(t.surface)||0;})), surfaceMax:Math.max.apply(null,state.typologies.map(function(t){return Number(t.surface)||0;})), prixMin:Math.min.apply(null,prices), slugSafe:true};
       panel.innerHTML = '<p class="form-note" style="margin-bottom:14px;">Aperçu de la carte telle qu\'elle apparaîtra dans la marketplace.</p>'
         +'<div style="max-width:340px;">'+'<div class="card">'
-          +'<div class="card-media">'+artSVG(state.id,400,300)+'<div class="card-badges"><span class="badge '+statutClass(state.statut)+'">'+statutLabel(state.statut)+'</span></div></div>'
+          +'<div class="card-media">'+(state.gallery.length?('<img src="'+esc(state.gallery[0])+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">'):artSVG(state.id,400,300))+'<div class="card-badges"><span class="badge '+statutClass(state.statut)+'">'+statutLabel(state.statut)+'</span></div></div>'
           +'<div class="card-body"><div class="card-loc">'+ic('pin')+' '+esc(state.commune)+', '+WILAYAS[state.wilaya].label+'</div><div class="card-title">'+esc(state.nom||'(Nom du projet)')+'</div>'
           +'<div class="card-meta"><span>'+ic('bed')+' '+state.typologies.map(function(t){return t.label;}).join(', ')+'</span></div>'
           +'<div class="card-foot"><div class="card-price">'+moneyShort(preview.prixMin||0)+'</div><span class="card-cta">Voir le projet</span></div></div></div></div>'
@@ -2858,19 +2881,27 @@ function afterAdmin(params){
     } else if(t==='signalements'){
       body.innerHTML = '<div class="empty-state">'+ic('shield','ic')+'<h3>Aucun signalement</h3><p>Les projets ou promoteurs signalés par les utilisateurs apparaîtraient ici.</p></div>';
     } else {
-      Promise.all([api('/api/projects?admin=1'), api('/api/admin'), api('/api/leads')]).then(function(results){
+      Promise.all([api('/api/projects?admin=1'), api('/api/admin'), api('/api/leads'), api('/api/track?scope=admin').catch(function(){return {total:0,last30:0,topProjects:[]};})]).then(function(results){
         var all = results[0].projects.filter(function(p){return p.status==='publie';});
         var users = results[1].users;
         var leads = results[2].leads;
+        var visits = results[3];
         var byW = {}; all.forEach(function(p){ byW[p.wilaya]=(byW[p.wilaya]||0)+1; });
         body.innerHTML = '<div class="stat-grid">'
+          +'<div class="stat-card"><div class="k">Visites totales</div><div class="v">'+visits.total+'</div></div>'
+          +'<div class="stat-card"><div class="k">Visites (30 derniers jours)</div><div class="v">'+visits.last30+'</div></div>'
           +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v">'+all.length+'</div></div>'
           +'<div class="stat-card"><div class="k">Promoteurs</div><div class="v">'+getAllPromoters().length+'</div></div>'
           +'<div class="stat-card"><div class="k">Utilisateurs</div><div class="v">'+users.length+'</div></div>'
           +'<div class="stat-card"><div class="k">Demandes totales</div><div class="v">'+leads.length+'</div></div>'
         +'</div>'
+        +'<div class="grid grid-2">'
         +'<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Projets par wilaya</h3>'
           +WILAYA_ORDER.map(function(w){ var n=byW[w]||0; var max=Math.max.apply(null,WILAYA_ORDER.map(function(x){return byW[x]||0;}).concat([1])); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+WILAYAS[w].label+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
+        +'</div>'
+        +'<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Projets les plus vus</h3>'
+          +(visits.topProjects.length ? visits.topProjects.map(function(p){ var max=Math.max.apply(null,visits.topProjects.map(function(x){return x.views;}).concat([1])); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+esc(p.nom)+'</span><span>'+p.views+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(p.views/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('') : '<p class="form-note">Pas encore assez de visites pour établir un classement.</p>')
+        +'</div>'
         +'</div>';
       }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     }
@@ -3314,6 +3345,14 @@ window.addEventListener('resize', function(){
   current.camera.updateProjectionMatrix();
 });
 mountHeroSymbol3D();
+</script>
+
+<script type="module">
+import { upload } from 'https://esm.sh/@vercel/blob@2.8.0/client';
+window.__yadraUploadPhoto = function(file){
+  var filename = Date.now() + '-' + Math.random().toString(36).slice(2) + '-' + file.name;
+  return upload(filename, file, { access: 'public', handleUploadUrl: '/api/upload' }).then(function(blob){ return blob.url; });
+};
 </script>
 
 </body>
