@@ -947,7 +947,12 @@ function cityArtSVG(seedStr,w,h){
     +bars.join('')+glows.join('')
     +'<rect width="'+w+'" height="'+h+'" fill="none" stroke="rgba(230,230,230,.08)"/></svg>';
 }
-var CITY_PHOTOS = {alger:1, blida:1, constantine:1, setif:1, annaba:1, 'tizi-ouzou':1};
+var CITY_PHOTOS = {alger:1, oran:1, blida:1, constantine:1, setif:1, annaba:1, 'tizi-ouzou':1};
+var EXTRA_CITY_PHOTOS = [
+  {slug:'tlemcen', label:'Tlemcen'}, {slug:'bejaia', label:'Béjaïa'}, {slug:'batna', label:'Batna'},
+  {slug:'mostaganem', label:'Mostaganem'}, {slug:'skikda', label:'Skikda'},
+  {slug:'tipaza', label:'Tipaza'}, {slug:'boumerdes', label:'Boumerdès'}
+];
 function cityTileHTML(w,count,extraClass){
   var art = CITY_PHOTOS[w]
     ? '<img src="/assets/cities/'+w+'.jpg" alt="'+esc(WILAYAS[w].label)+'" loading="lazy">'
@@ -955,6 +960,13 @@ function cityTileHTML(w,count,extraClass){
   return '<a class="city-tile'+(extraClass?(' '+extraClass):'')+'" href="/projets?ville='+w+'">'
     +'<div class="ct-art">'+art+'</div>'
     +'<div class="ct-label"><div><b>'+WILAYAS[w].label+'</b><span>'+count+' projet'+(count>1?'s':'')+'</span></div>'
+    +'<span class="ct-arrow">'+ic('chevronRight')+'</span></div>'
+  +'</a>';
+}
+function extraCityTileHTML(c,extraClass){
+  return '<a class="city-tile'+(extraClass?(' '+extraClass):'')+'" href="/projets">'
+    +'<div class="ct-art"><img src="/assets/cities/'+c.slug+'.jpg" alt="'+esc(c.label)+'" loading="lazy"></div>'
+    +'<div class="ct-label"><div><b>'+c.label+'</b><span>Bientôt disponible</span></div>'
     +'<span class="ct-arrow">'+ic('chevronRight')+'</span></div>'
   +'</a>';
 }
@@ -1436,12 +1448,13 @@ function pageHome(){
 
   +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Explorer par ville</h2><p class="desc">Sept wilayas, des dizaines de programmes suivis en continu.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>Explorer par ville</h2><p class="desc">Sept wilayas suivies en continu, et d’autres villes bientôt disponibles.</p></div></div>'
       +'<div class="grid reveal-stagger" style="grid-template-columns:repeat(2,1fr);">'
         +WILAYA_ORDER.map(function(w){
           var count = PROJECTS.filter(function(p){return p.wilaya===w;}).length;
           return cityTileHTML(w,count,'reveal');
         }).join('')
+        +EXTRA_CITY_PHOTOS.map(function(c){ return extraCityTileHTML(c,'reveal'); }).join('')
       +'</div>'
     +'</div>'
   +'</section>'
@@ -2224,12 +2237,13 @@ function pageVilles(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Villes</span></div></div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
-    +'<div class="section-head"><div><h2>Explorer par ville</h2><p class="desc">Parcourez nos programmes immobiliers wilaya par wilaya.</p></div></div>'
+    +'<div class="section-head"><div><h2>Explorer par ville</h2><p class="desc">Parcourez nos programmes immobiliers wilaya par wilaya, et découvrez les prochaines villes couvertes.</p></div></div>'
     +'<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">'
       +WILAYA_ORDER.map(function(w){
         var count = getAllProjects().filter(function(p){return p.wilaya===w;}).length;
         return cityTileHTML(w,count);
       }).join('')
+      +EXTRA_CITY_PHOTOS.map(function(c){ return extraCityTileHTML(c); }).join('')
     +'</div>'
   +'</div>';
 }
