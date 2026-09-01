@@ -732,8 +732,6 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .lang-toggle{position:relative;display:block;flex:0 0 auto;}
 .lang-toggle-btn{display:flex;align-items:center;gap:6px;height:44px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;cursor:pointer;transition:background .2s ease,border-color .2s ease;}
 .lang-toggle-btn:hover{background:rgba(255,255,255,.12);}
-.lang-toggle-btn #langToggleFlag{font-size:16px;line-height:1;}
-.lang-toggle .lang-flag{font-size:16px;}
 
 /* ---------------- User menu ---------------- */
 .user-menu{position:relative;flex:0 0 auto;}
@@ -802,12 +800,12 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
     <div class="nav-actions">
       <button class="icon-btn" id="navFavBtn" title="Favoris" aria-label="Favoris"></button>
       <div class="lang-toggle" id="langToggle">
-        <button class="lang-toggle-btn" id="langToggleBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue"><span id="langToggleFlag">🇫🇷</span><span id="langToggleCode">FR</span></button>
+        <button class="lang-toggle-btn" id="langToggleBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue"><span id="langToggleCode">FR</span></button>
         <div class="user-dropdown" id="langDropdown" role="menu">
-          <button type="button" data-lang="ar"><span class="lang-flag">🇩🇿</span> العربية</button>
-          <button type="button" data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
-          <button type="button" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
-          <button type="button" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+          <button type="button" data-lang="ar">العربية</button>
+          <button type="button" data-lang="de">Deutsch</button>
+          <button type="button" data-lang="en">English</button>
+          <button type="button" data-lang="fr">Français</button>
         </div>
       </div>
       <div class="user-menu" id="userMenu">
@@ -1184,11 +1182,9 @@ function translateChrome(){
   applyTranslations(document.querySelector('.site-footer'));
   applyTranslations(document.getElementById('waFloat'));
 }
-var LANG_FLAG_EMOJI = {fr:'🇫🇷',en:'🇬🇧',de:'🇩🇪',ar:'🇩🇿'};
 var LANG_CODE_LABEL = {fr:'FR',en:'EN',de:'DE',ar:'DZ'};
 function updateLangSwitcherUI(){
   Array.prototype.forEach.call(document.querySelectorAll('#langDropdown [data-lang]'), function(b){ b.classList.toggle('active', b.dataset.lang===LANG); });
-  var toggleFlag = document.getElementById('langToggleFlag'); if(toggleFlag) toggleFlag.textContent = LANG_FLAG_EMOJI[LANG];
   var toggleCode = document.getElementById('langToggleCode'); if(toggleCode) toggleCode.textContent = LANG_CODE_LABEL[LANG];
 }
 function closeLangDropdown(){
