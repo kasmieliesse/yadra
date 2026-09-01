@@ -892,12 +892,6 @@ function logoHTML(size){
 /* ---------------- PRNG / hashing (deterministic art + sampling) ---------------- */
 function hashStr(s){ var h=1779033703^s.length; for(var i=0;i<s.length;i++){ h=Math.imul(h^s.charCodeAt(i),3432918353); h=h<<13|h>>>19; } return (h^h>>>16)>>>0; }
 function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
-function pickN(seed,pool,n){
-  var rnd=mulberry32(seed), copy=pool.map(function(_,i){return i;});
-  for(var i=copy.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var tmp=copy[i]; copy[i]=copy[j]; copy[j]=tmp; }
-  return copy.slice(0,n).map(function(i){return pool[i];});
-}
-
 /* ---------------- Generative "signature" art (stands in for photography) ---------------- */
 function artSVG(seedStr, w, h){
   var seed = hashStr(seedStr);
@@ -1237,185 +1231,79 @@ var WILAYAS = {
   'tizi-ouzou': {label:'Tizi Ouzou', communes:['Tizi Ouzou Centre','Draâ Ben Khedda','Boukhalfa']}
 };
 var WILAYA_ORDER = ['alger','oran','blida','constantine'];
-/* Coordonnées réelles (approx. centre de commune) — utilisées pour la carte interactive. */
-var COMMUNE_COORDS = {
-  'Hydra':[36.7378,3.0464], 'Bab Ezzouar':[36.7167,3.1833], 'Dely Ibrahim':[36.7500,2.9833],
-  'Bir Mourad Raïs':[36.7333,3.0500], 'El Achour':[36.7500,2.9500], 'Ouled Fayet':[36.7500,2.9333],
-  'Bir El Djir':[35.7167,-0.5667], 'Es Sénia':[35.6333,-0.6167], 'Canastel':[35.7333,-0.5333], 'Oran Centre':[35.6969,-0.6331],
-  'Blida Centre':[36.4700,2.8300], 'Boufarik':[36.5700,2.9100], 'Ouled Yaïch':[36.4900,2.8200],
-  'Ali Mendjeli':[36.2400,6.6500], 'Constantine Centre':[36.3650,6.6147], 'El Khroub':[36.2617,6.6981],
-  'Sétif Centre':[36.1900,5.4100], 'El Eulma':[36.1500,5.6900],
-  'Annaba Centre':[36.9000,7.7667], 'Seraïdi':[36.9833,7.7500], 'El Bouni':[36.8833,7.7667],
-  'Tizi Ouzou Centre':[36.7169,4.0497], 'Draâ Ben Khedda':[36.7386,3.9486], 'Boukhalfa':[36.7167,4.0333]
-};
-
-var PROMOTERS_BASE = [
-  {id:'pr-atlas', name:'Atlas Promotion', slug:'atlas-promotion', wilaya:'alger', verified:true, founded:2011,
-    desc:"Atlas Promotion conçoit des résidences contemporaines à Alger depuis plus de dix ans, avec une attention particulière portée aux espaces communs et à la qualité des finitions."},
-  {id:'pr-marina', name:'Marina Développement', slug:'marina-developpement', wilaya:'oran', verified:true, founded:2014,
-    desc:"Marina Développement façonne le littoral oranais avec des programmes résidentiels pensés pour la vue mer et la vie de quartier."},
-  {id:'pr-numidia', name:'Numidia Immobilier', slug:'numidia-immobilier', wilaya:'constantine', verified:true, founded:2009,
-    desc:"Numidia Immobilier accompagne l'essor de Constantine avec des ensembles résidentiels et mixtes à taille humaine."},
-  {id:'pr-kahina', name:'Kahina Résidences', slug:'kahina-residences', wilaya:'tizi-ouzou', verified:false, founded:2018,
-    desc:"Jeune promoteur implanté en Kabylie, Kahina Résidences développe des projets à échelle humaine, proches de la nature."},
-  {id:'pr-djazair', name:'El Djazaïr Capital', slug:'el-djazair-capital', wilaya:'alger', verified:true, founded:2006,
-    desc:"El Djazaïr Capital est l'un des acteurs historiques de la promotion immobilière à Alger, reconnu pour ses programmes haut de gamme."},
-  {id:'pr-aures', name:'Aurès Habitat', slug:'aures-habitat', wilaya:'setif', verified:true, founded:2016,
-    desc:"Aurès Habitat construit des résidences familiales dans les Hauts Plateaux, avec un fort ancrage local à Sétif et sa région."},
-  {id:'pr-zianide', name:'Zianide Properties', slug:'zianide-properties', wilaya:'annaba', verified:false, founded:2019,
-    desc:"Zianide Properties propose des programmes résidentiels et des villas sur le littoral est du pays."},
-  {id:'pr-cirta', name:'Cirta Urbanisme', slug:'cirta-urbanisme', wilaya:'blida', verified:true, founded:2012,
-    desc:"Cirta Urbanisme aménage des quartiers résidentiels complets à Blida, entre vergers et nouvelles infrastructures."}
-];
 
 var PRESTATIONS_POOL = ['Ascenseur panoramique','Parking sous-sol sécurisé','Espaces verts paysagers','Sécurité 24h/24','Salle de sport','Piscine résidentielle','Aire de jeux enfants','Mosquée de proximité','Commerces en rez-de-chaussée','Fibre optique','Vidéosurveillance','Groupe électrogène','Conciergerie','Terrasses aménagées'];
 var PRESTATION_ICON = {'Ascenseur panoramique':'building','Parking sous-sol sécurisé':'shield','Espaces verts paysagers':'sparkle','Sécurité 24h/24':'shield','Salle de sport':'gauge','Piscine résidentielle':'sparkle','Aire de jeux enfants':'sparkle','Mosquée de proximité':'building','Commerces en rez-de-chaussée':'buildings','Fibre optique':'sparkle','Vidéosurveillance':'shield','Groupe électrogène':'gauge','Conciergerie':'users','Terrasses aménagées':'home'};
 var POINTSFORTS_POOL = ['Vue dégagée','Proche des axes principaux','Quartier calme et résidentiel','Finitions haut de gamme','Livraison clé en main','Proche écoles et commerces','Exposition ensoleillée','Accès sécurisé 24h/24','Cadre architectural contemporain','Proximité transports en commun'];
 
-var RAW_PROJECTS = [
-  {slug:'residence-elegance', nom:"Résidence L'Élégance", wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'construction', livraison:'2025', prixBase:27000000, featured:true, badge:'Nouveau', photo:'/assets/projects/residence-elegance.jpg',
-    typologiesOverride:[{label:'F3',surface:90,prix:27000000,dispo:6},{label:'F4',surface:135,prix:39000000,dispo:4},{label:'F5',surface:180,prix:50000000,dispo:2}],
-    description:"Résidence L'Élégance déploie ses immeubles blancs à ossature contemporaine autour d'un grand bassin paysager, palmiers et allées piétonnes, au cœur d'Hydra. Un programme pensé pour une vie de quartier haut de gamme, à deux pas des ambassades et des meilleures écoles de la capitale."},
-  {slug:'terrasses-oran-akid-lotfi', nom:"Les Terrasses d'Oran", wilaya:'oran', commune:'Akid Lotfi', quartier:'Akid Lotfi Nord', promoterId:'pr-marina', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:10000000, featured:true, badge:'Coup de cœur', photo:'/assets/projects/terrasses-oran-akid-lotfi.jpg',
-    typologiesOverride:[{label:'F2',surface:60,prix:10000000,dispo:5},{label:'F3',surface:95,prix:15000000,dispo:7},{label:'F4',surface:150,prix:22500000,dispo:3}],
-    description:"Un ensemble résidentiel livré autour d'un grand bassin central, entre tours d'habitation modernes et jardins suspendus, dans le quartier prisé d'Akid Lotfi à Oran. Piscine, espaces verts et commerces de proximité en font une adresse très recherchée."},
-  {slug:'diamond-tower-constantine', nom:'Diamond Tower', wilaya:'constantine', commune:'Cité Zirout Youcef', quartier:'Zirout Youcef Sud', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'2026', prixBase:13000000, featured:true, badge:'Nouveau', photo:'/assets/projects/diamond-tower-constantine.jpg',
-    typologiesOverride:[{label:'F2',surface:100,prix:13000000,dispo:8},{label:'F3',surface:140,prix:17500000,dispo:6},{label:'F4',surface:175,prix:21000000,dispo:5},{label:'F5',surface:210,prix:24000000,dispo:3},{label:'F6',surface:250,prix:27500000,dispo:1}],
-    description:"Deux tours jumelles signées Numidia Immobilier, repères du nouveau skyline de Constantine à Cité Zirout Youcef. Larges baies vitrées, terrasses filantes et vue panoramique sur les gorges du Rhummel pour un programme résolument vertical."},
-  {slug:'parc-des-pins-bouinan', nom:'Le Parc des Pins', wilaya:'blida', commune:'Bouinan', quartier:'Bouinan Centre', promoterId:'pr-cirta', type:'Appartement', statut:'livre', livraison:'Livré — 2024', prixBase:6300000, featured:true, badge:'Prestige', photo:'/assets/projects/parc-des-pins-bouinan.jpg',
-    typologiesOverride:[{label:'F2',surface:70,prix:6300000,dispo:4},{label:'F3',surface:100,prix:8500000,dispo:6},{label:'F4',surface:140,prix:11200000,dispo:2}],
-    description:"Villas et appartements en bande organisés autour d'un long bassin miroir, entre pins et terrasses privatives, à Bouinan. Le Parc des Pins mise sur l'intimité et le prestige discret, à mi-chemin entre Blida et Alger."},
-  {slug:'jnane-el-bahdja', nom:'Jnane El Bahdja', wilaya:'alger', commune:'Hydra', quartier:'Hydra Centre', promoterId:'pr-atlas', type:'Résidence mixte', statut:'sur-plan', livraison:'T4 2028', prixBase:29000000, featured:false, photo:'/assets/projects/jnane-el-bahdja.jpg',
-    description:"Un ensemble résidentiel signé Atlas Promotion au cœur d'Hydra, pensé autour d'un jardin central et de commerces de proximité en rez-de-chaussée. Les appartements profitent d'une double orientation et de larges balcons filants."},
-  {slug:'terrasses-el-achour', nom:"Les Terrasses d'El Achour", wilaya:'alger', commune:'El Achour', quartier:'El Achour', promoterId:'pr-djazair', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:14700000, featured:false, photo:'/assets/projects/terrasses-el-achour.jpg',
-    description:"Face aux collines d'El Achour, cette résidence en cours de construction propose des appartements du F2 au F4 avec terrasses aménagées et vue dégagée sur la baie d'Alger."},
-  {slug:'panorama-bab-ezzouar', nom:'Panorama Bab Ezzouar', wilaya:'alger', commune:'Bab Ezzouar', quartier:'Bab Ezzouar', promoterId:'pr-atlas', type:'Appartement', statut:'livre', livraison:'Livré — 2025', prixBase:13700000, featured:false, photo:'/assets/projects/panorama-bab-ezzouar.jpg',
-    description:"Déjà livrée et habitée, cette résidence proche du pôle universitaire et de la nouvelle gare offre un accès rapide aux transports et aux commerces."},
-  {slug:'jardins-canastel', nom:'Les Jardins de Canastel', wilaya:'oran', commune:'Canastel', quartier:'Canastel', promoterId:'pr-marina', type:'Résidence mixte', statut:'construction', livraison:'T3 2027', prixBase:16600000, featured:false, photo:'/assets/projects/jardins-canastel.jpg',
-    description:"Sur les hauteurs de Canastel, ce programme mêle résidentiel et commerces de proximité avec une vue imprenable sur la baie d'Oran."},
-  {slug:'oran-sky-residence', nom:'Oran Sky Résidence', wilaya:'oran', commune:'Bir El Djir', quartier:'Bir El Djir', promoterId:'pr-marina', type:'Appartement', statut:'sur-plan', livraison:'T4 2028', prixBase:14700000, featured:false, photo:'/assets/projects/oran-sky-residence.jpg',
-    description:"Proche du nouveau pôle urbain de Bir El Djir, cette résidence propose des typologies du F2 au F5 avec parking sous-sol et espaces verts."},
-  {slug:'vergers-boufarik', nom:'Les Vergers de Boufarik', wilaya:'blida', commune:'Boufarik', quartier:'Boufarik Centre', promoterId:'pr-cirta', type:'Appartement', statut:'construction', livraison:'T2 2027', prixBase:7800000, featured:false, photo:'/assets/projects/vergers-boufarik.jpg',
-    description:"Un quartier résidentiel complet aux portes de Boufarik, entouré d'espaces verts, avec école et commerces intégrés au programme."},
-  {slug:'cirta-panorama', nom:'Cirta Panorama', wilaya:'constantine', commune:'Ali Mendjeli', quartier:'Ali Mendjeli', promoterId:'pr-numidia', type:'Résidence mixte', statut:'construction', livraison:'T4 2027', prixBase:9800000, featured:false, photo:'/assets/projects/cirta-panorama.jpg',
-    description:"Dans la nouvelle ville d'Ali Mendjeli, un programme mixte associant logements et commerces, à proximité des grands équipements universitaires."}
-];
+/* ---------------- Backend data layer (Vercel + Neon Postgres) ---------------- */
+var PROJECTS = [];
+var PROMOTERS = [];
+var SESSION = null;
+var FAVORITE_IDS = {};
+var MY_PROJECTS = null; // promoter's own projects (any status), fetched on demand
+var MY_LEADS = null;    // leads scoped to the current session (acquéreur or promoteur)
+var ADMIN_PROJECTS = null;
+var ADMIN_USERS = null;
 
-function mkTypologies(seedStr,type,prixBase){
-  var rnd = mulberry32(hashStr(seedStr+'-typo'));
-  if(type==='Villa'){
-    var surf = 260+Math.floor(rnd()*140);
-    return [{label:'Villa', surface:surf, prix:prixBase, dispo:1+Math.floor(rnd()*3)}];
-  }
-  var defs = [['F2',58,0.62],['F3',78,0.8],['F4',98,1.0],['F5',118,1.22]];
-  var count = type==='Duplex' ? 2 : (2+Math.floor(rnd()*3));
-  var chosen = defs.slice(0, Math.min(defs.length, count));
-  return chosen.map(function(d){
-    var surf = d[1] + Math.floor(rnd()*8) - 4;
-    var prix = Math.round((prixBase*d[2])/50000)*50000;
-    return {label:d[0], surface:surf, prix:prix, dispo: 2+Math.floor(rnd()*10)};
-  });
-}
-function enrichProject(raw, idx){
-  var promoter = PROMOTERS_BASE.filter(function(p){return p.id===raw.promoterId;})[0];
-  var seed = hashStr(raw.slug);
-  var rndGeo = mulberry32(seed+7);
-  var base = COMMUNE_COORDS[raw.commune] || [WILAYAS[raw.wilaya].lat||36.5,WILAYAS[raw.wilaya].lng||3];
-  var lat = base[0] + (rndGeo()-0.5)*0.014;
-  var lng = base[1] + (rndGeo()-0.5)*0.014;
-  var typologies = raw.typologiesOverride || mkTypologies(raw.slug, raw.type, raw.prixBase);
-  var prices = typologies.map(function(t){return t.prix;});
-  var surfaces = typologies.map(function(t){return t.surface;});
-  return Object.assign({}, raw, {
-    id:'proj-'+raw.slug,
-    idx:idx,
-    promoter:promoter,
-    verified: promoter ? promoter.verified : false,
-    typologies: typologies,
-    prixMin: Math.min.apply(null,prices),
-    prixMax: Math.max.apply(null,prices),
-    surfaceMin: Math.min.apply(null,surfaces),
-    surfaceMax: Math.max.apply(null,surfaces),
-    prestations: pickN(seed+1, PRESTATIONS_POOL, 5+Math.floor(mulberry32(seed+2)()*4)),
-    pointsForts: pickN(seed+3, POINTSFORTS_POOL, 4),
-    adresse: raw.quartier+', '+raw.commune+', '+WILAYAS[raw.wilaya].label,
-    lat: lat, lng: lng
-  });
-}
-var PROJECTS = RAW_PROJECTS.map(enrichProject);
-
-/* ---------------- Local persistence ---------------- */
-var LS = {
-  get:function(k,fallback){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } },
-  set:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
-};
 function uid(prefix){ return prefix+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
-function getFavorites(){ return LS.get('yadra_favorites',[]); }
-function isFavorite(id){ return getFavorites().indexOf(id) !== -1; }
-function toggleFavorite(id){
-  var f = getFavorites();
-  var i = f.indexOf(id);
-  if(i===-1){ f.push(id); } else { f.splice(i,1); }
-  LS.set('yadra_favorites',f);
-  return f.indexOf(id)!==-1;
-}
-function getExtraPromoters(){ return LS.get('yadra_extra_promoters',[]); }
-function addExtraPromoter(p){ var l=getExtraPromoters(); l.push(p); LS.set('yadra_extra_promoters',l); return p; }
-function getAllPromoters(){
-  var overrides = LS.get('yadra_promoter_overrides',{});
-  return PROMOTERS_BASE.concat(getExtraPromoters()).map(function(p){
-    var o = overrides[p.id];
-    return o ? Object.assign({},p,o) : p;
+function api(path, opts){
+  opts = opts || {};
+  var fetchOpts = {method: opts.method || 'GET', credentials:'same-origin', headers:{'Content-Type':'application/json'}};
+  if(opts.body!==undefined) fetchOpts.body = JSON.stringify(opts.body);
+  return fetch(path, fetchOpts).then(function(r){
+    return r.json().catch(function(){ return {}; }).then(function(data){
+      if(!r.ok) throw new Error(data.error || ('Erreur '+r.status));
+      return data;
+    });
   });
 }
-function getPromoterById(id){ return getAllPromoters().filter(function(p){return p.id===id;})[0]; }
-function getPromoterBySlug(slug){ return getAllPromoters().filter(function(p){return p.slug===slug;})[0]; }
-function setPromoterOverride(id,patch){ var o=LS.get('yadra_promoter_overrides',{}); o[id]=Object.assign({},o[id],patch); LS.set('yadra_promoter_overrides',o); }
 
-function getDrafts(){ return LS.get('yadra_promoter_drafts',[]); }
-function saveDrafts(d){ LS.set('yadra_promoter_drafts',d); }
-function getDisabled(){ return LS.get('yadra_disabled_projects',[]); }
-function toggleDisabled(id){ var d=getDisabled(); var i=d.indexOf(id); if(i===-1)d.push(id); else d.splice(i,1); LS.set('yadra_disabled_projects',d); }
-
-function draftToProject(d,idx){
-  var promoter = getPromoterById(d.promoterId);
-  var prices = d.typologies.map(function(t){return t.prix;});
-  var surfaces = d.typologies.map(function(t){return t.surface;});
-  return {
-    id:d.id, idx:1000+idx, slug:d.slug, nom:d.nom, wilaya:d.wilaya, commune:d.commune, quartier:d.quartier,
-    promoterId:d.promoterId, promoter:promoter, verified: promoter?promoter.verified:false,
-    type:d.type, statut:d.statut, livraison:d.livraison, description:d.description,
-    typologies:d.typologies, prixMin:Math.min.apply(null,prices), prixMax:Math.max.apply(null,prices),
-    surfaceMin:Math.min.apply(null,surfaces), surfaceMax:Math.max.apply(null,surfaces),
-    prestations:d.prestations||[], pointsForts:d.pointsForts||[], adresse:d.quartier+', '+d.commune+', '+(WILAYAS[d.wilaya]?WILAYAS[d.wilaya].label:d.wilaya),
-    featured:false, isDraft:true, draftStatus:d.status
-  };
+function boot(){
+  return api('/api/bootstrap').then(function(data){
+    PROJECTS = data.projects || [];
+    PROMOTERS = data.promoters || [];
+    SESSION = data.session || null;
+    if(!SESSION) return;
+    return api('/api/favorites').then(function(f){
+      (f.projectIds||[]).forEach(function(id){ FAVORITE_IDS[id]=true; });
+    }).catch(function(){});
+  }).catch(function(err){ console.error('Chargement impossible', err); });
 }
+
+function getFavorites(){ return Object.keys(FAVORITE_IDS); }
+function isFavorite(id){ return !!FAVORITE_IDS[id]; }
+function toggleFavorite(id){
+  return api('/api/favorites', {method:'POST', body:{projectId:id}}).then(function(r){
+    if(r.active) FAVORITE_IDS[id]=true; else delete FAVORITE_IDS[id];
+    return r.active;
+  });
+}
+
+function getAllPromoters(){ return PROMOTERS; }
+function getPromoterById(id){ return PROMOTERS.filter(function(p){return p.id===id;})[0]; }
+function getPromoterBySlug(slug){ return PROMOTERS.filter(function(p){return p.slug===slug;})[0]; }
+
 function getAllProjects(){
-  var disabled = getDisabled();
-  var validated = getDrafts().filter(function(d){return d.status==='valide';}).map(draftToProject);
-  return PROJECTS.concat(validated).filter(function(p){ return disabled.indexOf(p.id)===-1; });
+  if(!MY_PROJECTS) return PROJECTS;
+  var byId = {};
+  PROJECTS.forEach(function(p){ byId[p.id]=p; });
+  MY_PROJECTS.forEach(function(p){ byId[p.id]=p; });
+  return Object.keys(byId).map(function(k){ return byId[k]; });
 }
 function getProjectBySlug(wilaya,slug){ return getAllProjects().filter(function(p){return p.wilaya===wilaya && p.slug===slug;})[0]; }
 function getProjectById(id){ return getAllProjects().filter(function(p){return p.id===id;})[0]; }
 
-function getUsers(){ return LS.get('yadra_users',[]); }
-function saveUsers(u){ LS.set('yadra_users',u); }
-function getSession(){ return LS.get('yadra_session',null); }
-function setSession(s){ LS.set('yadra_session',s); }
-function currentUser(){ var s=getSession(); if(!s) return null; return getUsers().filter(function(u){return u.id===s.userId;})[0]||null; }
-function logout(){ setSession(null); go('/'); }
-
-function getLeads(){ return LS.get('yadra_leads',[]); }
-function saveLeads(l){ LS.set('yadra_leads',l); }
-function addLead(data){
-  var leads = getLeads();
-  var lead = Object.assign({id:uid('lead'), date:new Date().toISOString(), status:'Nouveau'}, data);
-  leads.unshift(lead);
-  saveLeads(leads);
-  return lead;
+function currentUser(){ return SESSION; }
+function logout(){
+  return api('/api/auth', {method:'POST', body:{action:'logout'}}).then(function(){
+    SESSION = null; MY_PROJECTS = null; MY_LEADS = null; FAVORITE_IDS = {};
+    go('/');
+  });
 }
+
+function addLead(data){ return api('/api/leads', {method:'POST', body:data}); }
 
 /* ---------------- Helpers ---------------- */
 function money(n){ if(n==null) return '—'; return Math.round(n).toLocaleString('fr-FR')+' DA'; }
@@ -1875,7 +1763,7 @@ function pageDetail(wilaya,slug){
     }).join('')
   +'</div></div>'
   +'<div class="wrap"><div class="detail-header">'
-    +'<div class="detail-title"><h1>'+esc(p.nom)+'</h1><div class="loc">'+ic('pin')+' '+esc(p.adresse)+'</div>'
+    +'<div class="detail-title"><h1>'+esc(p.nom)+'</h1><div class="loc">'+ic('pin')+' '+esc([p.quartier,p.commune,WILAYAS[p.wilaya]?WILAYAS[p.wilaya].label:p.wilaya].filter(Boolean).join(', '))+'</div>'
       +'<a class="detail-promoter-chip" href="/promoteurs/'+(p.promoter?p.promoter.slug:'')+'"><span class="pchip-avatar">'+(p.promoter?p.promoter.name.charAt(0):'?')+'</span><span>'+esc(p.promoter?p.promoter.name:'Promoteur')+(p.verified?(' '+ic('shield')):'')+'</span></a>'
     +'</div>'
     +'<div class="price-box"><div class="amount tabular">'+moneyShort(p.prixMin)+' <small>à partir de</small></div>'
@@ -1952,13 +1840,15 @@ function afterDetail(wilaya,slug){
 window.App = window.App || {};
 App.go = go;
 App.toggleFav = function(id, btn, detailMode){
-  var active = toggleFavorite(id);
-  if(btn){
-    btn.classList.toggle('active', active);
-    if(detailMode){ btn.innerHTML = ic('heart')+' '+(active?'Retiré des favoris':'Ajouter aux favoris'); }
-  }
-  updateHeader();
-  toast(active ? 'Ajouté à vos favoris' : 'Retiré de vos favoris');
+  if(!currentUser()){ toast('Connectez-vous pour ajouter des favoris'); go('/connexion'); return; }
+  toggleFavorite(id).then(function(active){
+    if(btn){
+      btn.classList.toggle('active', active);
+      if(detailMode){ btn.innerHTML = ic('heart')+' '+(active?'Retiré des favoris':'Ajouter aux favoris'); }
+    }
+    updateHeader();
+    toast(active ? 'Ajouté à vos favoris' : 'Retiré de vos favoris');
+  }).catch(function(err){ toast(err.message||'Erreur'); });
 };
 App.contactModal = function(projectId){
   var p = getProjectById(projectId);
@@ -1980,9 +1870,13 @@ App.contactModal = function(projectId){
   document.getElementById('contactForm').addEventListener('submit', function(e){
     e.preventDefault();
     var f = new FormData(e.target);
-    addLead({projectId:p.id, projectName:p.nom, promoterId:p.promoterId, name:f.get('name'), phone:f.get('phone'), email:f.get('email'), message:f.get('message')});
-    closeModal();
-    toast('Votre demande a été envoyée à '+(p.promoter?p.promoter.name:'le promoteur'));
+    var submitBtn = e.target.querySelector('button[type=submit]'); submitBtn.disabled = true;
+    addLead({projectId:p.id, name:f.get('name'), phone:f.get('phone'), email:f.get('email'), message:f.get('message')})
+      .then(function(){
+        closeModal();
+        toast('Votre demande a été envoyée à '+(p.promoter?p.promoter.name:'le promoteur'));
+      })
+      .catch(function(err){ toast(err.message||'Erreur, veuillez réessayer'); submitBtn.disabled = false; });
   });
 };
 
@@ -2029,7 +1923,6 @@ function pageLogin(){
       +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Se connecter</button>'
     +'</form>'
     +'<p class="form-note" style="text-align:center;margin-top:18px;">Pas encore de compte ? <a href="/inscription" style="color:var(--accent-2);font-weight:700;">Créer un compte</a></p>'
-    +'<p class="form-note">Ceci est un compte de démonstration : n\'utilisez pas un mot de passe que vous utilisez ailleurs.</p>'
   +'</div></div>';
 }
 function pageRegister(){
@@ -2048,19 +1941,33 @@ function pageRegister(){
     +'<p class="form-note" style="text-align:center;margin-top:18px;">Déjà inscrit ? <a href="/connexion" style="color:var(--accent-2);font-weight:700;">Se connecter</a></p>'
   +'</div></div>';
 }
+function afterLoginSuccess(user){
+  SESSION = user;
+  var tasks = [api('/api/favorites').then(function(f){
+    (f.projectIds||[]).forEach(function(id){ FAVORITE_IDS[id]=true; });
+  }).catch(function(){})];
+  if(user.type==='promoteur'){
+    tasks.push(api('/api/bootstrap').then(function(d){ PROMOTERS = d.promoters || PROMOTERS; }).catch(function(){}));
+  }
+  return Promise.all(tasks);
+}
 function afterAuth(){
   var loginForm = document.getElementById('loginForm');
   if(loginForm){
     loginForm.addEventListener('submit', function(e){
       e.preventDefault();
       var f = new FormData(e.target);
-      var email = f.get('email').trim().toLowerCase();
-      var user = getUsers().filter(function(u){return u.email.toLowerCase()===email;})[0];
       var err = document.getElementById('loginError');
-      if(!user || user.password!==f.get('password')){ err.textContent='Email ou mot de passe incorrect.'; err.style.display='block'; return; }
-      setSession({userId:user.id});
-      toast('Bienvenue, '+user.name.split(' ')[0]+' !');
-      go(user.type==='promoteur' ? '/promoteur' : '/compte');
+      err.style.display = 'none';
+      var submitBtn = loginForm.querySelector('button[type=submit]'); submitBtn.disabled = true;
+      api('/api/auth', {method:'POST', body:{action:'login', email:f.get('email'), password:f.get('password')}})
+        .then(function(r){ return afterLoginSuccess(r.user); })
+        .then(function(){
+          toast('Bienvenue, '+SESSION.name.split(' ')[0]+' !');
+          go(SESSION.type==='promoteur' ? '/promoteur' : '/compte');
+        })
+        .catch(function(error){ err.textContent = error.message || 'Email ou mot de passe incorrect.'; err.style.display='block'; })
+        .then(function(){ submitBtn.disabled = false; });
     });
   }
   var regForm = document.getElementById('registerForm');
@@ -2076,21 +1983,17 @@ function afterAuth(){
     regForm.addEventListener('submit', function(e){
       e.preventDefault();
       var f = new FormData(e.target);
-      var email = f.get('email').trim().toLowerCase();
       var err = document.getElementById('registerError');
-      if(getUsers().some(function(u){return u.email.toLowerCase()===email;})){ err.textContent='Un compte existe déjà avec cet email.'; err.style.display='block'; return; }
-      var users = getUsers();
-      var newUser = {id:uid('user'), name:f.get('name'), email:f.get('email'), phone:f.get('phone'), password:f.get('password'), type:type, createdAt:new Date().toISOString()};
-      if(type==='promoteur'){
-        var company = f.get('company') || (f.get('name')+' Immobilier');
-        var promoter = {id:uid('pr'), name:company, slug:company.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''), wilaya:'alger', verified:false, founded:new Date().getFullYear(), desc:'Nouveau promoteur inscrit sur yadra!.'};
-        addExtraPromoter(promoter);
-        newUser.promoterId = promoter.id;
-      }
-      users.push(newUser); saveUsers(users);
-      setSession({userId:newUser.id});
-      toast('Compte créé, bienvenue '+newUser.name.split(' ')[0]+' !');
-      go(type==='promoteur' ? '/promoteur' : '/compte');
+      err.style.display = 'none';
+      var submitBtn = regForm.querySelector('button[type=submit]'); submitBtn.disabled = true;
+      api('/api/auth', {method:'POST', body:{action:'register', name:f.get('name'), email:f.get('email'), phone:f.get('phone'), password:f.get('password'), type:type, company:f.get('company')}})
+        .then(function(r){ return afterLoginSuccess(r.user); })
+        .then(function(){
+          toast('Compte créé, bienvenue '+SESSION.name.split(' ')[0]+' !');
+          go(SESSION.type==='promoteur' ? '/promoteur' : '/compte');
+        })
+        .catch(function(error){ err.textContent = error.message || 'Impossible de créer le compte.'; err.style.display='block'; })
+        .then(function(){ submitBtn.disabled = false; });
     });
   }
 }
@@ -2101,7 +2004,6 @@ function afterAuth(){
 function pageAccount(){
   var user = currentUser();
   if(!user) return authGate('Connectez-vous pour accéder à votre compte.');
-  var leads = getLeads().filter(function(l){ return l.email===user.email || l.phone===user.phone; });
   return '<div class="wrap dash-shell">'
     +'<div class="dash-head"><h1>Bonjour, '+esc(user.name.split(' ')[0])+'</h1><button class="btn btn-ghost btn-sm" id="logoutBtn">'+ic('logout')+' Déconnexion</button></div>'
     +'<div class="tab-row" id="accTabs"><button class="tab-btn active" data-t="infos">Mes informations</button><button class="tab-btn" data-t="demandes">Mes demandes</button><button class="tab-btn" data-t="favoris">Mes favoris</button></div>'
@@ -2120,13 +2022,15 @@ function afterAccount(){
         +'<div class="field"><label>Email</label><input value="'+esc(user.email)+'" readonly/></div>'
         +'<div class="field"><label>Téléphone</label><input value="'+esc(user.phone||'')+'" readonly/></div>'
         +'<div class="field"><label>Type de compte</label><input value="'+(user.type==='promoteur'?'Promoteur':'Acquéreur')+'" readonly/></div>'
-        +'<p class="form-note">Les informations de ce compte de démonstration sont stockées uniquement dans ce navigateur.</p>'
       +'</div>';
     } else if(t==='demandes'){
-      var leads = getLeads().filter(function(l){ return l.email===user.email || l.phone===user.phone; });
-      body.innerHTML = leads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
-        +leads.map(function(l){ return '<tr><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
-        +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande envoyée</h3><p>Contactez un promoteur depuis une fiche projet pour la voir apparaître ici.</p></div>';
+      body.innerHTML = '<p class="form-note">Chargement…</p>';
+      api('/api/leads').then(function(r){
+        MY_LEADS = r.leads;
+        body.innerHTML = MY_LEADS.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
+          +MY_LEADS.map(function(l){ return '<tr><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
+          +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande envoyée</h3><p>Contactez un promoteur depuis une fiche projet pour la voir apparaître ici.</p></div>';
+      }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     } else {
       var favs = getFavorites().map(getProjectById).filter(Boolean);
       body.innerHTML = favs.length ? ('<div class="grid grid-cards">'+favs.map(projectCardHTML).join('')+'</div>') : '<div class="empty-state">'+ic('heart','ic')+'<h3>Aucun favori</h3><p>Ajoutez des projets à vos favoris pour les retrouver ici.</p></div>';
@@ -2141,11 +2045,12 @@ function statusPillClass(s){ return s==='Nouveau'?'nouveau': s==='Contacté'?'co
    PAGE: FAVORITES
    ================================================================ */
 function pageFavorites(){
+  if(!currentUser()) return authGate('Connectez-vous pour retrouver vos favoris, sur tous vos appareils.');
   var favs = getFavorites().map(getProjectById).filter(Boolean);
   return '<div class="wrap dash-shell">'
     +'<div class="dash-head"><h1>Mes favoris</h1></div>'
     +(favs.length ? '<div class="grid grid-cards">'+favs.map(projectCardHTML).join('')+'</div>'
-      : '<div class="empty-fav">'+ic('heart','ic')+'<h3 style="color:var(--heading);font-size:20px;margin:14px 0 8px;">Vous n\'avez pas encore de favoris</h3><p style="color:var(--text-dim);font-size:13.5px;margin-bottom:22px;">Vos favoris sont sauvegardés localement, dès maintenant — pas besoin de créer un compte pour commencer.</p><a class="btn btn-primary" href="/projets">Explorer les projets</a></div>')
+      : '<div class="empty-fav">'+ic('heart','ic')+'<h3 style="color:var(--heading);font-size:20px;margin:14px 0 8px;">Vous n\'avez pas encore de favoris</h3><p style="color:var(--text-dim);font-size:13.5px;margin-bottom:22px;">Ajoutez des projets à vos favoris pour les retrouver ici, où que vous soyez.</p><a class="btn btn-primary" href="/projets">Explorer les projets</a></div>')
   +'</div>';
 }
 function afterFavorites(){}
@@ -2158,53 +2063,54 @@ function pagePromoterDash(){
   if(!user) return authGate('Connectez-vous avec un compte promoteur pour gérer vos projets.');
   if(user.type!=='promoteur') return authGate('Cet espace est réservé aux comptes promoteur. Votre compte est un compte acquéreur.');
   var pr = getPromoterById(user.promoterId);
-  var myProjects = getAllProjects().filter(function(p){return p.promoterId===user.promoterId;});
-  var myLeads = getLeads().filter(function(l){return l.promoterId===user.promoterId;});
   return '<div class="wrap dash-shell">'
     +'<div class="dash-head"><div><h1>Espace promoteur</h1><p style="color:var(--text-dim);font-size:13px;margin-top:4px;">'+esc(pr?pr.name:'')+(pr&&pr.verified?(' '+ic('shield')):' — vérification en attente')+'</p></div>'
       +'<button class="btn btn-primary btn-sm" id="newProjectBtn">'+ic('plus')+' Ajouter un projet</button></div>'
     +'<div class="stat-grid">'
-      +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v">'+myProjects.length+'</div></div>'
-      +'<div class="stat-card"><div class="k">Demandes reçues</div><div class="v">'+myLeads.length+'</div></div>'
-      +'<div class="stat-card"><div class="k">Nouvelles demandes</div><div class="v">'+myLeads.filter(function(l){return l.status==='Nouveau';}).length+'</div><div class="d">à traiter</div></div>'
-      +'<div class="stat-card"><div class="k">Brouillons</div><div class="v">'+getDrafts().filter(function(d){return d.promoterId===user.promoterId && d.status==='brouillon';}).length+'</div></div>'
+      +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v" id="statPublished">—</div></div>'
+      +'<div class="stat-card"><div class="k">Demandes reçues</div><div class="v" id="statLeads">—</div></div>'
+      +'<div class="stat-card"><div class="k">Nouvelles demandes</div><div class="v" id="statNewLeads">—</div><div class="d">à traiter</div></div>'
+      +'<div class="stat-card"><div class="k">Brouillons</div><div class="v" id="statDrafts">—</div></div>'
     +'</div>'
     +'<div class="tab-row" id="prTabs"><button class="tab-btn active" data-t="projets">Mes projets</button><button class="tab-btn" data-t="demandes">Demandes</button><button class="tab-btn" data-t="stats">Statistiques</button></div>'
-    +'<div id="prBody"></div>'
+    +'<div id="prBody"><p class="form-note">Chargement…</p></div>'
   +'</div>';
 }
 function afterPromoterDash(){
   var user = currentUser(); if(!user || user.type!=='promoteur') return;
   document.getElementById('newProjectBtn').addEventListener('click', function(){ openWizard(); });
   var tabs = document.getElementById('prTabs');
+  function statusLabel(s){ return s==='publie'?'Publié':s==='attente'?'En attente':s==='refuse'?'Refusé':'Brouillon'; }
+  function statusClass(s){ return s==='publie'?'valide':s==='attente'?'attente':s==='refuse'?'refuse':'attente'; }
   function renderTab(t){
     var body = document.getElementById('prBody');
     if(t==='projets'){
-      var live = getAllProjects().filter(function(p){return p.promoterId===user.promoterId;});
-      var drafts = getDrafts().filter(function(d){return d.promoterId===user.promoterId;});
-      var rows = live.map(function(p){ return {label:p.nom, statusHtml:'<span class="status-pill valide">Publié</span>', extra:p}; })
-        .concat(drafts.map(function(d){ var cls = d.status==='attente'?'attente':d.status==='refuse'?'refuse':d.status==='valide'?'valide':'attente'; var lbl = d.status==='brouillon'?'Brouillon':d.status==='attente'?'En attente':d.status==='refuse'?'Refusé':'Publié'; return {label:d.nom||'(sans titre)', statusHtml:'<span class="status-pill '+(d.status==='brouillon'?'attente':cls)+'">'+lbl+'</span>', draft:d}; }));
+      var rows = MY_PROJECTS || [];
       body.innerHTML = rows.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Statut</th><th></th></tr></thead><tbody>'
-        +rows.map(function(r,i){ return '<tr><td>'+esc(r.label)+'</td><td>'+r.statusHtml+'</td><td class="row-actions">'+(r.draft?('<button class="mini-btn" data-edit="'+i+'">Modifier</button><button class="mini-btn danger" data-del="'+i+'">Supprimer</button>'):'<button class="mini-btn" data-view="'+(r.extra?r.extra.id:'')+'">Voir</button>')+'</td></tr>'; }).join('')
+        +rows.map(function(p){ return '<tr><td>'+esc(p.nom||'(sans titre)')+'</td><td><span class="status-pill '+statusClass(p.status)+'">'+statusLabel(p.status)+'</span></td><td class="row-actions">'+(p.status==='publie'?('<button class="mini-btn" data-view="'+p.id+'">Voir</button>'):('<button class="mini-btn" data-edit="'+p.id+'">Modifier</button><button class="mini-btn danger" data-del="'+p.id+'">Supprimer</button>'))+'</td></tr>'; }).join('')
         +'</tbody></table></div>') : '<div class="empty-state">'+ic('buildings','ic')+'<h3>Aucun projet pour le moment</h3><p>Ajoutez votre premier projet pour le présenter aux acquéreurs.</p></div>';
       Array.prototype.forEach.call(body.querySelectorAll('[data-view]'), function(b){ b.addEventListener('click', function(){ var p=getProjectById(b.dataset.view); if(p) go('/projets/'+p.wilaya+'/'+p.slug); }); });
-      Array.prototype.forEach.call(body.querySelectorAll('[data-edit]'), function(b){ b.addEventListener('click', function(){ openWizard(rows[Number(b.dataset.edit)].draft); }); });
+      Array.prototype.forEach.call(body.querySelectorAll('[data-edit]'), function(b){ b.addEventListener('click', function(){ var p=rows.filter(function(x){return x.id===b.dataset.edit;})[0]; if(p) openWizard(p); }); });
       Array.prototype.forEach.call(body.querySelectorAll('[data-del]'), function(b){ b.addEventListener('click', function(){
-        var d = rows[Number(b.dataset.del)].draft;
-        saveDrafts(getDrafts().filter(function(x){return x.id!==d.id;}));
-        toast('Brouillon supprimé'); renderTab('projets');
+        api('/api/projects?id='+encodeURIComponent(b.dataset.del), {method:'DELETE'}).then(function(){
+          toast('Brouillon supprimé');
+          return reloadDash();
+        }).catch(function(err){ toast(err.message||'Erreur'); });
       }); });
     } else if(t==='demandes'){
-      var myLeads = getLeads().filter(function(l){return l.promoterId===user.promoterId;});
+      var myLeads = MY_LEADS || [];
       body.innerHTML = myLeads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Contact</th><th>Projet</th><th>Date</th><th>Statut</th><th></th></tr></thead><tbody>'
         +myLeads.map(function(l){ return '<tr><td>'+esc(l.name)+'<br><span style="color:var(--text-dim);font-size:11.5px;">'+esc(l.phone)+'</span></td><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td><td><select class="mini-select" data-lead="'+l.id+'"><option'+(l.status==='Nouveau'?' selected':'')+'>Nouveau</option><option'+(l.status==='Contacté'?' selected':'')+'>Contacté</option><option'+(l.status==='En cours'?' selected':'')+'>En cours</option><option'+(l.status==='Terminé'?' selected':'')+'>Terminé</option></select></td></tr>'; }).join('')
         +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande reçue</h3><p>Les demandes des acquéreurs intéressés par vos projets apparaîtront ici.</p></div>';
       Array.prototype.forEach.call(body.querySelectorAll('[data-lead]'), function(sel){ sel.addEventListener('change', function(){
-        var leads = getLeads(); var lead = leads.filter(function(x){return x.id===sel.dataset.lead;})[0]; if(lead){ lead.status=sel.value; saveLeads(leads); toast('Statut mis à jour'); }
+        api('/api/leads', {method:'PATCH', body:{id:sel.dataset.lead, status:sel.value}}).then(function(){
+          var lead = myLeads.filter(function(x){return x.id===sel.dataset.lead;})[0]; if(lead) lead.status = sel.value;
+          toast('Statut mis à jour');
+        }).catch(function(err){ toast(err.message||'Erreur'); });
       }); });
     } else {
-      var live = getAllProjects().filter(function(p){return p.promoterId===user.promoterId;});
-      var myLeads = getLeads().filter(function(l){return l.promoterId===user.promoterId;});
+      var live = (MY_PROJECTS||[]).filter(function(p){return p.status==='publie';});
+      var myLeads = MY_LEADS || [];
       var byStatus = {};
       myLeads.forEach(function(l){ byStatus[l.status]=(byStatus[l.status]||0)+1; });
       body.innerHTML = '<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Demandes par statut</h3>'
@@ -2214,7 +2120,24 @@ function afterPromoterDash(){
     }
   }
   tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
-  renderTab('projets');
+  function updateStats(){
+    var projects = MY_PROJECTS || [];
+    var leads = MY_LEADS || [];
+    document.getElementById('statPublished').textContent = projects.filter(function(p){return p.status==='publie';}).length;
+    document.getElementById('statLeads').textContent = leads.length;
+    document.getElementById('statNewLeads').textContent = leads.filter(function(l){return l.status==='Nouveau';}).length;
+    document.getElementById('statDrafts').textContent = projects.filter(function(p){return p.status==='brouillon';}).length;
+  }
+  function reloadDash(){
+    return Promise.all([api('/api/projects?mine=1'), api('/api/leads')]).then(function(results){
+      MY_PROJECTS = results[0].projects;
+      MY_LEADS = results[1].leads;
+      updateStats();
+      var active = tabs.querySelector('.tab-btn.active');
+      renderTab(active ? active.dataset.t : 'projets');
+    }).catch(function(err){ document.getElementById('prBody').innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
+  }
+  reloadDash();
 }
 
 /* ---------------- Wizard (add / edit project) ---------------- */
@@ -2222,10 +2145,11 @@ var WIZ_STEPS = ['Informations','Localisation','Typologies & prix','Photos','Pre
 function openWizard(existingDraft){
   var user = currentUser();
   var state = existingDraft ? JSON.parse(JSON.stringify(existingDraft)) : {
-    id: uid('draft'), promoterId:user.promoterId, nom:'', type:'Appartement', description:'',
+    id: null, promoterId:user.promoterId, nom:'', type:'Appartement', description:'',
     wilaya:'alger', commune:'', quartier:'', typologies:[{label:'F2',surface:60,prix:9000000,dispo:5}],
     photos:[0,1,2], prestations:[], pointsForts:[], statut:'sur-plan', livraison:'T4 2028', status:'brouillon'
   };
+  if(!state.photos || !state.photos.length) state.photos = [0,1,2];
   var step = 0;
   renderWizard();
   function renderWizard(){
@@ -2243,17 +2167,25 @@ function openWizard(existingDraft){
     document.getElementById('wizClose').onclick = closeModal;
     document.getElementById('wizPrev').onclick = function(){ if(step>0){ step--; renderWizard(); } };
     var nextBtn = document.getElementById('wizNext'); if(nextBtn) nextBtn.onclick = function(){ if(step<WIZ_STEPS.length-1){ step++; renderWizard(); } };
-    document.getElementById('wizDraft').onclick = function(){ persist('brouillon'); closeModal(); toast('Brouillon enregistré'); render(); };
-    var submitBtn = document.getElementById('wizSubmit'); if(submitBtn) submitBtn.onclick = function(){ persist('attente'); closeModal(); toast('Projet soumis pour validation'); render(); };
+    document.getElementById('wizDraft').onclick = function(){
+      var btn = document.getElementById('wizDraft'); btn.disabled = true;
+      persist('brouillon').then(function(){ closeModal(); toast('Brouillon enregistré'); render(); }).catch(function(err){ btn.disabled=false; toast(err.message||'Erreur'); });
+    };
+    var submitBtn = document.getElementById('wizSubmit'); if(submitBtn) submitBtn.onclick = function(){
+      submitBtn.disabled = true;
+      persist('attente').then(function(){ closeModal(); toast('Projet soumis pour validation'); render(); }).catch(function(err){ submitBtn.disabled=false; toast(err.message||'Erreur'); });
+    };
     renderStep();
   }
   function persist(status){
-    state.status = status;
-    state.slug = (state.slug) || (state.nom||'projet').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')+'-'+state.id.slice(-4);
-    var d = getDrafts();
-    var i = d.findIndex(function(x){return x.id===state.id;});
-    if(i===-1) d.push(state); else d[i]=state;
-    saveDrafts(d);
+    var payload = {
+      nom: state.nom, type: state.type, description: state.description,
+      wilaya: state.wilaya, commune: state.commune, quartier: state.quartier,
+      typologies: state.typologies, prestations: state.prestations, pointsForts: state.pointsForts,
+      statut: state.statut, livraison: state.livraison, status: status
+    };
+    if(state.id) payload.id = state.id;
+    return api('/api/projects', {method:'POST', body:payload}).then(function(r){ state.id = r.id; return r; });
   }
   function renderStep(){
     var panel = document.getElementById('wizPanel');
@@ -2338,8 +2270,10 @@ function authGate(msg){
    PAGE: ADMIN
    ================================================================ */
 function pageAdmin(){
+  var user = currentUser();
+  if(!user || !user.isAdmin) return authGate('Cet espace est réservé aux administrateurs.');
   return '<div class="wrap dash-shell">'
-    +'<div class="dash-head"><div><h1>Administration</h1><p style="color:var(--text-dim);font-size:13px;">Mode démonstration — cette console serait protégée côté serveur en production.</p></div></div>'
+    +'<div class="dash-head"><div><h1>Administration</h1></div></div>'
     +'<div class="tab-row" id="adminTabs">'
       +'<button class="tab-btn active" data-t="projets">Projets</button>'
       +'<button class="tab-btn" data-t="promoteurs">Promoteurs</button>'
@@ -2348,55 +2282,71 @@ function pageAdmin(){
       +'<button class="tab-btn" data-t="signalements">Signalements</button>'
       +'<button class="tab-btn" data-t="stats">Statistiques</button>'
     +'</div>'
-    +'<div id="adminBody"></div>'
+    +'<div id="adminBody"><p class="form-note">Chargement…</p></div>'
   +'</div>';
 }
 function afterAdmin(){
+  var user = currentUser(); if(!user || !user.isAdmin) return;
   var tabs = document.getElementById('adminTabs');
+  function statusLabel(s){ return s==='attente'?'En attente':s==='refuse'?'Refusé/Désactivé':s==='brouillon'?'Brouillon':'Publié'; }
+  function statusClass(s){ return s==='attente'?'attente':s==='refuse'?'refuse':s==='brouillon'?'attente':'valide'; }
   function renderTab(t){
     var body = document.getElementById('adminBody');
+    body.innerHTML = '<p class="form-note">Chargement…</p>';
     if(t==='projets'){
-      var drafts = getDrafts();
-      var disabled = getDisabled();
-      var rows = PROJECTS.map(function(p){ return {id:p.id,nom:p.nom,promoter:p.promoter?p.promoter.name:'',status:disabled.indexOf(p.id)!==-1?'refuse':'valide',isDraft:false}; })
-        .concat(drafts.map(function(d){ var pr=getPromoterById(d.promoterId); return {id:d.id,nom:d.nom||'(sans titre)',promoter:pr?pr.name:'',status:d.status,isDraft:true}; }));
-      body.innerHTML = '<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Promoteur</th><th>Statut</th><th></th></tr></thead><tbody>'
-        +rows.map(function(r){ return '<tr><td>'+esc(r.nom)+'</td><td>'+esc(r.promoter)+'</td><td><span class="status-pill '+(r.status==='attente'?'attente':r.status==='refuse'?'refuse':r.status==='brouillon'?'attente':'valide')+'">'+(r.status==='attente'?'En attente':r.status==='refuse'?'Refusé/Désactivé':r.status==='brouillon'?'Brouillon':'Publié')+'</span></td>'
-          +'<td class="row-actions">'+(r.isDraft?('<button class="mini-btn" data-approve="'+r.id+'">Valider</button><button class="mini-btn danger" data-reject="'+r.id+'">Refuser</button>'):('<button class="mini-btn" data-toggle="'+r.id+'">'+(r.status==='refuse'?'Réactiver':'Désactiver')+'</button>'))+'</td></tr>'; }).join('')
-        +'</tbody></table></div>';
-      Array.prototype.forEach.call(body.querySelectorAll('[data-approve]'), function(b){ b.onclick=function(){ var d=getDrafts(); var x=d.filter(function(z){return z.id===b.dataset.approve;})[0]; if(x){x.status='valide'; saveDrafts(d); toast('Projet validé et publié'); renderTab('projets');} }; });
-      Array.prototype.forEach.call(body.querySelectorAll('[data-reject]'), function(b){ b.onclick=function(){ var d=getDrafts(); var x=d.filter(function(z){return z.id===b.dataset.reject;})[0]; if(x){x.status='refuse'; saveDrafts(d); toast('Projet refusé'); renderTab('projets');} }; });
-      Array.prototype.forEach.call(body.querySelectorAll('[data-toggle]'), function(b){ b.onclick=function(){ toggleDisabled(b.dataset.toggle); toast('Statut mis à jour'); renderTab('projets'); }; });
+      api('/api/projects?admin=1').then(function(r){
+        ADMIN_PROJECTS = r.projects;
+        body.innerHTML = '<div class="table-wrap"><table class="data"><thead><tr><th>Projet</th><th>Promoteur</th><th>Statut</th><th></th></tr></thead><tbody>'
+          +ADMIN_PROJECTS.map(function(p){ return '<tr><td>'+esc(p.nom)+'</td><td>'+esc(p.promoter?p.promoter.name:'')+'</td><td><span class="status-pill '+statusClass(p.status)+'">'+statusLabel(p.status)+'</span></td>'
+            +'<td class="row-actions">'+(p.status==='attente'?('<button class="mini-btn" data-approve="'+p.id+'">Valider</button><button class="mini-btn danger" data-reject="'+p.id+'">Refuser</button>'):('<button class="mini-btn" data-toggle="'+p.id+'" data-cur="'+p.status+'">'+(p.status==='refuse'?'Réactiver':'Désactiver')+'</button>'))+'</td></tr>'; }).join('')
+          +'</tbody></table></div>';
+        Array.prototype.forEach.call(body.querySelectorAll('[data-approve]'), function(b){ b.onclick=function(){ api('/api/projects', {method:'PATCH', body:{id:b.dataset.approve, status:'publie'}}).then(function(){ toast('Projet validé et publié'); renderTab('projets'); }).catch(function(err){ toast(err.message||'Erreur'); }); }; });
+        Array.prototype.forEach.call(body.querySelectorAll('[data-reject]'), function(b){ b.onclick=function(){ api('/api/projects', {method:'PATCH', body:{id:b.dataset.reject, status:'refuse'}}).then(function(){ toast('Projet refusé'); renderTab('projets'); }).catch(function(err){ toast(err.message||'Erreur'); }); }; });
+        Array.prototype.forEach.call(body.querySelectorAll('[data-toggle]'), function(b){ b.onclick=function(){ var next = b.dataset.cur==='refuse' ? 'publie' : 'refuse'; api('/api/projects', {method:'PATCH', body:{id:b.dataset.toggle, status:next}}).then(function(){ toast('Statut mis à jour'); renderTab('projets'); }).catch(function(err){ toast(err.message||'Erreur'); }); }; });
+      }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     } else if(t==='promoteurs'){
       var proms = getAllPromoters();
       body.innerHTML = '<div class="table-wrap"><table class="data"><thead><tr><th>Promoteur</th><th>Wilaya</th><th>Statut</th><th></th></tr></thead><tbody>'
         +proms.map(function(p){ return '<tr><td>'+esc(p.name)+'</td><td>'+WILAYAS[p.wilaya].label+'</td><td><span class="status-pill '+(p.verified?'valide':'attente')+'">'+(p.verified?'Vérifié':'Non vérifié')+'</span></td><td class="row-actions"><button class="mini-btn" data-verify="'+p.id+'">'+(p.verified?'Retirer vérif.':'Vérifier')+'</button></td></tr>'; }).join('')
         +'</tbody></table></div>';
-      Array.prototype.forEach.call(body.querySelectorAll('[data-verify]'), function(b){ b.onclick=function(){ var p=getPromoterById(b.dataset.verify); setPromoterOverride(p.id,{verified:!p.verified}); toast('Promoteur mis à jour'); renderTab('promoteurs'); }; });
+      Array.prototype.forEach.call(body.querySelectorAll('[data-verify]'), function(b){ b.onclick=function(){
+        api('/api/promoters', {method:'PATCH', body:{id:b.dataset.verify}}).then(function(){
+          var p = getPromoterById(b.dataset.verify); if(p) p.verified = !p.verified;
+          toast('Promoteur mis à jour'); renderTab('promoteurs');
+        }).catch(function(err){ toast(err.message||'Erreur'); });
+      }; });
     } else if(t==='utilisateurs'){
-      var users = getUsers();
-      body.innerHTML = users.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Nom</th><th>Email</th><th>Type</th><th>Inscrit le</th></tr></thead><tbody>'
-        +users.map(function(u){ return '<tr><td>'+esc(u.name)+'</td><td>'+esc(u.email)+'</td><td>'+(u.type==='promoteur'?'Promoteur':'Acquéreur')+'</td><td>'+new Date(u.createdAt).toLocaleDateString('fr-FR')+'</td></tr>'; }).join('')
-        +'</tbody></table></div>') : '<div class="empty-state">'+ic('users','ic')+'<h3>Aucun utilisateur inscrit</h3><p>Les comptes créés depuis ce navigateur apparaîtront ici.</p></div>';
+      api('/api/admin').then(function(r){
+        ADMIN_USERS = r.users;
+        body.innerHTML = ADMIN_USERS.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Nom</th><th>Email</th><th>Type</th><th>Inscrit le</th></tr></thead><tbody>'
+          +ADMIN_USERS.map(function(u){ return '<tr><td>'+esc(u.name)+'</td><td>'+esc(u.email)+'</td><td>'+(u.type==='promoteur'?'Promoteur':'Acquéreur')+'</td><td>'+new Date(u.createdAt).toLocaleDateString('fr-FR')+'</td></tr>'; }).join('')
+          +'</tbody></table></div>') : '<div class="empty-state">'+ic('users','ic')+'<h3>Aucun utilisateur inscrit</h3><p>Les comptes créés apparaîtront ici.</p></div>';
+      }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     } else if(t==='demandes'){
-      var leads = getLeads();
-      body.innerHTML = leads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Contact</th><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
-        +leads.map(function(l){ return '<tr><td>'+esc(l.name)+'</td><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
-        +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande</h3><p>Les demandes envoyées par les acquéreurs apparaîtront ici.</p></div>';
+      api('/api/leads').then(function(r){
+        var leads = r.leads;
+        body.innerHTML = leads.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Contact</th><th>Projet</th><th>Date</th><th>Statut</th></tr></thead><tbody>'
+          +leads.map(function(l){ return '<tr><td>'+esc(l.name)+'</td><td>'+esc(l.projectName)+'</td><td>'+new Date(l.date).toLocaleDateString('fr-FR')+'</td><td><span class="status-pill '+statusPillClass(l.status)+'">'+l.status+'</span></td></tr>'; }).join('')
+          +'</tbody></table></div>') : '<div class="empty-state">'+ic('mail','ic')+'<h3>Aucune demande</h3><p>Les demandes envoyées par les acquéreurs apparaîtront ici.</p></div>';
+      }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     } else if(t==='signalements'){
       body.innerHTML = '<div class="empty-state">'+ic('shield','ic')+'<h3>Aucun signalement</h3><p>Les projets ou promoteurs signalés par les utilisateurs apparaîtraient ici.</p></div>';
     } else {
-      var all = getAllProjects();
-      var byW = {}; all.forEach(function(p){ byW[p.wilaya]=(byW[p.wilaya]||0)+1; });
-      body.innerHTML = '<div class="stat-grid">'
-        +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v">'+all.length+'</div></div>'
-        +'<div class="stat-card"><div class="k">Promoteurs</div><div class="v">'+getAllPromoters().length+'</div></div>'
-        +'<div class="stat-card"><div class="k">Utilisateurs</div><div class="v">'+getUsers().length+'</div></div>'
-        +'<div class="stat-card"><div class="k">Demandes totales</div><div class="v">'+getLeads().length+'</div></div>'
-      +'</div>'
-      +'<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Projets par wilaya</h3>'
-        +WILAYA_ORDER.map(function(w){ var n=byW[w]||0; var max=Math.max.apply(null,WILAYA_ORDER.map(function(x){return byW[x]||0;}).concat([1])); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+WILAYAS[w].label+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
-      +'</div>';
+      Promise.all([api('/api/projects?admin=1'), api('/api/admin'), api('/api/leads')]).then(function(results){
+        var all = results[0].projects.filter(function(p){return p.status==='publie';});
+        var users = results[1].users;
+        var leads = results[2].leads;
+        var byW = {}; all.forEach(function(p){ byW[p.wilaya]=(byW[p.wilaya]||0)+1; });
+        body.innerHTML = '<div class="stat-grid">'
+          +'<div class="stat-card"><div class="k">Projets publiés</div><div class="v">'+all.length+'</div></div>'
+          +'<div class="stat-card"><div class="k">Promoteurs</div><div class="v">'+getAllPromoters().length+'</div></div>'
+          +'<div class="stat-card"><div class="k">Utilisateurs</div><div class="v">'+users.length+'</div></div>'
+          +'<div class="stat-card"><div class="k">Demandes totales</div><div class="v">'+leads.length+'</div></div>'
+        +'</div>'
+        +'<div class="side-block"><h3 style="color:var(--heading);font-size:15px;margin-bottom:16px;">Projets par wilaya</h3>'
+          +WILAYA_ORDER.map(function(w){ var n=byW[w]||0; var max=Math.max.apply(null,WILAYA_ORDER.map(function(x){return byW[x]||0;}).concat([1])); return '<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:5px;"><span>'+WILAYAS[w].label+'</span><span>'+n+'</span></div><div style="height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;"><div style="height:100%;width:'+(n/max*100)+'%;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));"></div></div></div>'; }).join('')
+        +'</div>';
+      }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     }
   }
   tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab-btn'); if(!b) return; Array.prototype.forEach.call(tabs.children,function(x){x.classList.toggle('active',x===b);}); renderTab(b.dataset.t); });
@@ -2555,24 +2505,26 @@ function legalSections(kind){
       {id:'responsable', h:'2. Responsable du traitement', body:
         '<p>Le responsable du traitement des données est l’éditeur du Site, identifié dans les <a href="/legal/mentions-legales">mentions légales</a>. Contact : WhatsApp <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>.</p>'},
       {id:'donnees', h:'3. Données traitées', body:
-        '<p>À la date de publication de cette politique, le Site fonctionne <strong>sans compte serveur ni base de données distante</strong> : aucune information saisie sur le Site n’est transmise à un serveur yadra!. Concrètement :</p>'
+        '<p>Le Site s’appuie sur une base de données pour les fonctionnalités nécessitant un compte. Concrètement :</p>'
         +'<ul>'
-        +'<li><strong>Favoris et préférences d’affichage</strong> : enregistrés uniquement dans le stockage local de votre navigateur (« localStorage »), sur votre propre appareil. Ces données ne sont jamais transmises à yadra! et disparaissent si vous videz les données de votre navigateur.</li>'
-        +'<li><strong>Prise de contact</strong> (bouton WhatsApp, appel téléphonique, formulaire de contact) : lorsque vous choisissez de nous contacter, les informations que vous transmettez (nom, message, numéro de téléphone) le sont directement via l’application WhatsApp ou votre téléphone, en dehors du Site, et sont régies par la politique de confidentialité de WhatsApp/Meta.</li>'
+        +'<li><strong>Compte utilisateur</strong> (acquéreur ou promoteur) : nom, email, téléphone, mot de passe (stocké de façon chiffrée, jamais en clair).</li>'
+        +'<li><strong>Favoris</strong> : liés à votre compte, pour les retrouver quel que soit l’appareil utilisé.</li>'
+        +'<li><strong>Demandes de contact</strong> : lorsque vous contactez un promoteur depuis une fiche projet, vos coordonnées et votre message lui sont transmis et conservés pour le suivi de votre demande.</li>'
+        +'<li><strong>Projets publiés par les promoteurs</strong> : informations qu’ils choisissent de rendre publiques sur leurs programmes.</li>'
         +'</ul>'
-        +'<p>Si yadra! met en place à l’avenir un espace utilisateur avec création de compte et traitement de données côté serveur (inscription, candidature promoteur, historique de recherche, etc.), la présente politique sera mise à jour en conséquence avant l’activation de cette fonctionnalité, et les finalités, bases légales et durées de conservation correspondantes y seront précisées.</p>'},
+        +'<p>Un cookie technique, strictement nécessaire au maintien de votre session de connexion, est déposé lorsque vous vous connectez. Il ne sert à aucun suivi publicitaire. Les échanges initiés directement via WhatsApp ou téléphone se déroulent en dehors du Site et sont régis par la politique de confidentialité de WhatsApp/Meta.</p>'},
       {id:'finalites', h:'4. Finalités et base légale', body:
-        '<p>Les seules données actuellement traitées (favoris en local) le sont dans l’intérêt légitime de l’utilisateur, pour améliorer son confort de navigation, sans finalité commerciale ni transmission à un tiers. Les échanges via WhatsApp ou téléphone reposent sur votre consentement explicite au moment où vous initiez le contact.</p>'},
+        '<p>Les données de compte et de contact sont traitées pour exécuter le service demandé (mise en relation acquéreur/promoteur, gestion du compte et des favoris), ce qui constitue la base légale de l’exécution d’un contrat ou de mesures précontractuelles. Aucune donnée n’est utilisée à des fins de prospection commerciale par yadra!.</p>'},
       {id:'conservation', h:'5. Durée de conservation', body:
-        '<p>Les favoris stockés localement sont conservés jusqu’à suppression manuelle par l’utilisateur ou effacement des données du navigateur. yadra! ne conserve aucune copie de ces informations sur ses propres systèmes.</p>'},
+        '<p>Les données de compte sont conservées tant que le compte reste actif. Vous pouvez demander la suppression de votre compte et des données associées à tout moment via WhatsApp. Les demandes de contact sont conservées le temps nécessaire à leur traitement par le promoteur concerné.</p>'},
       {id:'destinataires', h:'6. Destinataires des données', body:
         '<p>Aucune donnée n’est vendue, louée ou cédée à des tiers à des fins commerciales. Lorsqu’un contact est initié au sujet d’un projet précis, les informations échangées peuvent être partagées avec le promoteur concerné, dans le seul but de traiter votre demande.</p>'},
       {id:'cookies', h:'7. Cookies et traceurs', body:
-        '<p>Le Site ne dépose <strong>aucun cookie de mesure d’audience ou publicitaire</strong>. Certaines ressources sont néanmoins chargées depuis des serveurs tiers pour le bon fonctionnement du Site (polices de caractères via Google Fonts, fonds de carte satellite via Esri) : ces requêtes techniques transmettent votre adresse IP à ces prestataires, indépendamment de yadra!, conformément à leurs propres politiques respectives.</p>'},
+        '<p>Le Site dépose un unique cookie technique, strictement nécessaire au maintien de votre session de connexion, exempté de consentement au sens de la réglementation applicable. Le Site ne dépose <strong>aucun cookie de mesure d’audience ou publicitaire</strong>. Certaines ressources sont par ailleurs chargées depuis des serveurs tiers pour le bon fonctionnement du Site (polices de caractères via Google Fonts, fonds de carte satellite via Esri) : ces requêtes techniques transmettent votre adresse IP à ces prestataires, indépendamment de yadra!, conformément à leurs propres politiques respectives.</p>'},
       {id:'securite', h:'8. Sécurité', body:
-        '<p>Le Site est servi exclusivement en HTTPS. En l’absence de traitement de données côté serveur, le principal enjeu de sécurité relève de votre propre appareil et navigateur.</p>'},
+        '<p>Le Site est servi exclusivement en HTTPS. Les mots de passe sont stockés sous forme chiffrée (hachage), jamais en clair. L’accès aux données est restreint aux fonctions strictement nécessaires au service.</p>'},
       {id:'droits', h:'9. Vos droits', body:
-        '<p>Conformément à la réglementation applicable, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité sur les données vous concernant. Le stockage local (favoris) étant sous votre contrôle direct, vous pouvez l’effacer à tout moment depuis les réglages de votre navigateur. Pour toute autre demande, contactez-nous via WhatsApp au <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>. Vous disposez également du droit d’introduire une réclamation auprès de l’autorité de protection des données compétente (en France, la CNIL — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>'},
+        '<p>Conformément à la réglementation applicable, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité sur les données vous concernant. Pour exercer ces droits, y compris la suppression de votre compte, contactez-nous via WhatsApp au <a href="https://wa.me/33670131501" target="_blank" rel="noopener">+33 6 70 13 15 01</a>. Vous disposez également du droit d’introduire une réclamation auprès de l’autorité de protection des données compétente (en France, la CNIL — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a>).</p>'},
       {id:'modifications', h:'10. Modification de la politique', body:
         '<p>Cette politique peut être mise à jour pour refléter l’évolution du Site ou de la réglementation. La date de dernière mise à jour figure en haut de cette page.</p>'}
     ];
@@ -2688,8 +2640,8 @@ function initFX(){
 }
 
 /* ---------------- Init ---------------- */
-document.addEventListener('DOMContentLoaded', render);
-if(document.readyState!=='loading') render();
+function startApp(){ boot().then(render); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
 })();
 
 </script>
