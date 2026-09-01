@@ -206,7 +206,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 /* ---------------- Hero ---------------- */
 .hero{position:relative;overflow:hidden;padding:130px 0 0;border-bottom:1px solid var(--border);background:radial-gradient(120% 100% at 85% 0%,#1c1310 0%,var(--noir) 55%);}
 .hero-bg{position:absolute;inset:0;z-index:0;}
-.hero-bg .hero-bg-photo{position:absolute;inset:0;background-image:url('/assets/hero-bg-mobile.jpg');background-size:cover;background-position:88% 55%;}
+.hero-bg .hero-bg-photo{position:absolute;inset:0;background-image:url('/assets/hero-bg-mobile.jpg');background-size:cover;background-position:40% 48%;}
 @media (min-width:760px){.hero-bg .hero-bg-photo{background-image:url('/assets/hero-bg.jpg');background-position:48% 68%;}}
 .hero-bg .sky-grad{position:absolute;inset:0;background:linear-gradient(115deg,rgba(10,10,10,.92) 8%,rgba(10,10,10,.62) 38%,rgba(10,10,10,.32) 58%,rgba(10,10,10,.7) 100%);}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;opacity:.55;z-index:0;}
@@ -296,29 +296,6 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .pm-logo-item .pm-logo-name{font-size:12px;font-weight:700;color:var(--heading);text-align:center;letter-spacing:.01em;line-height:1.3;}
 @media (prefers-reduced-motion:reduce){.promoter-marquee-track{animation:none;}}
 
-/* Trust strip */
-.trust-strip{position:relative;z-index:1;margin-top:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-l);
-  display:flex;flex-wrap:wrap;overflow:hidden;}
-.trust-item{display:flex;align-items:flex-start;gap:11px;padding:20px 22px;flex:1 1 190px;border-top:1px solid var(--border);}
-.trust-item .ic-wrap{width:34px;height:34px;border-radius:50%;background:rgba(183,110,77,.14);display:flex;align-items:center;justify-content:center;color:var(--or-rose-light);flex:0 0 auto;}
-.trust-item .ic-wrap svg{width:16px;height:16px;}
-.trust-item .ti-label{font-size:12.5px;font-weight:700;color:#fff;letter-spacing:.01em;}
-.trust-item .ti-desc{font-size:12px;color:var(--text-dim);margin-top:3px;line-height:1.35;}
-.trust-cta{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:16px 24px;border-top:1px solid var(--border);white-space:nowrap;}
-.trust-cta svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1);}
-.trust-cta:hover svg{transform:translateX(5px);}
-@media (min-width:1000px){
-  .trust-item{border-top:0;border-right:1px solid var(--border);}
-  .trust-cta{border-top:0;border-left:1px solid var(--border);margin-left:auto;}
-}
-@media (max-width:699px){
-  .trust-strip{display:grid;grid-template-columns:1fr 1fr;}
-  .trust-item{padding:14px;gap:9px;}
-  .trust-item:nth-child(odd){border-right:1px solid var(--border);}
-  .trust-item .ti-desc{display:none;}
-  .trust-item:last-of-type{grid-column:1 / -1;border-right:0;}
-  .trust-cta{grid-column:1 / -1;justify-content:center;padding:15px;}
-}
 
 .search-card{
   margin-top:36px;background:rgba(30,28,26,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
@@ -757,6 +734,13 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .lang-flags button:hover{background:rgba(255,255,255,.12);transform:translateY(-1px);}
 .lang-flags button.active{border-color:var(--or-rose-light);background:rgba(216,154,120,.16);}
 @media (min-width:480px){.lang-flags{gap:6px;}.lang-flags button{width:32px;height:32px;font-size:15px;}}
+.lang-toggle{position:relative;display:none;flex:0 0 auto;}
+.lang-toggle #langToggleFlag{font-size:16px;}
+.lang-toggle .lang-flag{font-size:16px;}
+@media (max-width:639px){
+  .lang-flags{display:none;}
+  .lang-toggle{display:block;}
+}
 
 /* ---------------- User menu ---------------- */
 .user-menu{position:relative;flex:0 0 auto;}
@@ -772,7 +756,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 :root[dir="rtl"]{--dir-mult:-1;}
 [dir="rtl"] body{font-family:'Geist',Tahoma,Arial,sans-serif;}
 [dir="rtl"] .nav-row,[dir="rtl"] .foot-bottom,[dir="rtl"] .search-field label,[dir="rtl"] .field label,
-[dir="rtl"] .card-loc,[dir="rtl"] .card-meta,[dir="rtl"] .card-foot,[dir="rtl"] .trust-item,[dir="rtl"] .value-card,
+[dir="rtl"] .card-loc,[dir="rtl"] .card-meta,[dir="rtl"] .card-foot,[dir="rtl"] .value-card,
 [dir="rtl"] .side-block,[dir="rtl"] .filter-bar,[dir="rtl"] .results-bar,[dir="rtl"] .breadcrumb,[dir="rtl"] .promo-id,
 [dir="rtl"] .promo-meta,[dir="rtl"] .detail-title .loc,[dir="rtl"] .doc-item,[dir="rtl"] .chips-plain .chip-plain,
 [dir="rtl"] .stat-tile,[dir="rtl"] .field-row,[dir="rtl"] .switcher,[dir="rtl"] .tab-row,[dir="rtl"] .dash-head,
@@ -790,13 +774,12 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 [dir="rtl"] .promo-name,[dir="rtl"] table.data,[dir="rtl"] .detail-main,[dir="rtl"] .card-body{
   text-align:right;
 }
-[dir="rtl"] .card-loc,[dir="rtl"] .card-meta span,[dir="rtl"] .trust-item,[dir="rtl"] .doc-item,
+[dir="rtl"] .card-loc,[dir="rtl"] .card-meta span,[dir="rtl"] .doc-item,
 [dir="rtl"] .chip-plain,[dir="rtl"] .status-pill,[dir="rtl"] .badge,[dir="rtl"] .btn,[dir="rtl"] .field label,
 [dir="rtl"] .fb-field,[dir="rtl"] .check-row,[dir="rtl"] li{
   flex-direction:row-reverse;
 }
-[dir="rtl"] .chevronRight-flip svg,[dir="rtl"] .see-all svg,[dir="rtl"] .breadcrumb svg,
-[dir="rtl"] .trust-cta svg{transform:scaleX(-1);}
+[dir="rtl"] .chevronRight-flip svg,[dir="rtl"] .see-all svg,[dir="rtl"] .breadcrumb svg{transform:scaleX(-1);}
 [dir="rtl"] .fb-search input,[dir="rtl"] input,[dir="rtl"] textarea,[dir="rtl"] select{text-align:right;}
 [dir="rtl"] .mobile-cta-bar{flex-direction:row-reverse;}
 [dir="rtl"] .grid-cards,[dir="rtl"] .grid-3,[dir="rtl"] .grid-2{direction:rtl;}
@@ -831,6 +814,15 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <button type="button" data-lang="en" aria-label="English" title="English">🇬🇧</button>
         <button type="button" data-lang="fr" aria-label="Français" title="Français">🇫🇷</button>
       </div>
+      <div class="lang-toggle" id="langToggle">
+        <button class="icon-btn" id="langToggleBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue"><span id="langToggleFlag">🇫🇷</span></button>
+        <div class="user-dropdown" id="langDropdown" role="menu">
+          <button type="button" data-lang="ar"><span class="lang-flag">🇩🇿</span> العربية</button>
+          <button type="button" data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
+          <button type="button" data-lang="en"><span class="lang-flag">🇬🇧</span> English</button>
+          <button type="button" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
+        </div>
+      </div>
       <div class="user-menu" id="userMenu">
         <button class="icon-btn" id="navUserBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Compte"></button>
         <div class="user-dropdown" id="userDropdown" role="menu"></div>
@@ -846,8 +838,6 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   <a href="/investir">Investir</a>
   <a href="/a-propos">À propos</a>
   <a href="/favoris">Favoris</a>
-  <a href="/compte">Mon compte</a>
-  <a href="/promoteur">Espace promoteur</a>
   <div class="mm-actions">
     <button class="btn btn-primary btn-block" id="mmAuthBtn">Connexion</button>
   </div>
@@ -970,17 +960,6 @@ var I18N = {
 "Jusqu'à 15 M DA":{en:"Up to 15M DZD",de:"Bis zu 15 Mio. DZD",ar:"حتى 15 مليون دينار"},
 "Jusqu'à 25 M DA":{en:"Up to 25M DZD",de:"Bis zu 25 Mio. DZD",ar:"حتى 25 مليون دينار"},
 "Jusqu'à 50 M DA":{en:"Up to 50M DZD",de:"Bis zu 50 Mio. DZD",ar:"حتى 50 مليون دينار"},
-"Une sélection, pas un catalogue":{en:"A selection, not a catalog",de:"Eine Auswahl, kein Katalog",ar:"اختيار، وليس كتالوجًا"},
-"On ne met pas tout en ligne — seulement ce qui vaut le détour":{en:"We don't list everything — only what's truly worth it",de:"Wir stellen nicht alles online — nur das, was sich wirklich lohnt",ar:"لا ننشر كل شيء — فقط ما يستحق العناء"},
-"On reste avec vous":{en:"We stay with you",de:"Wir begleiten Sie",ar:"نبقى معكم"},
-"De la première visite jusqu'à la signature":{en:"From the first visit to the signing",de:"Von der ersten Besichtigung bis zur Unterschrift",ar:"من الزيارة الأولى وحتى التوقيع"},
-"On connaît le terrain":{en:"We know the ground",de:"Wir kennen die Gegend",ar:"نعرف الأرض جيدًا"},
-"Wilaya par wilaya, quartier par quartier":{en:"Province by province, neighborhood by neighborhood",de:"Provinz für Provinz, Viertel für Viertel",ar:"ولاية بولاية، حيًا بحي"},
-"Ce qu'on affiche est vérifié":{en:"What we show is verified",de:"Was wir zeigen, ist geprüft",ar:"ما نعرضه تم التحقق منه"},
-"Prix, promoteur, avancement des travaux":{en:"Price, developer, construction progress",de:"Preis, Bauträger, Baufortschritt",ar:"السعر، المطور، تقدم الأشغال"},
-"Tout sur une carte":{en:"Everything on one map",de:"Alles auf einer Karte",ar:"كل شيء على خريطة واحدة"},
-"Filtrez par ville, budget ou typologie, en un coup d'œil":{en:"Filter by city, budget or layout, at a glance",de:"Filtern Sie nach Stadt, Budget oder Wohnungstyp auf einen Blick",ar:"صفِّ حسب المدينة أو الميزانية أو النوع، بنظرة واحدة"},
-"Découvrir nos projets":{en:"Discover our properties",de:"Unsere Projekte entdecken",ar:"اكتشف مشاريعنا"},
 "Présents sur le terrain":{en:"Present on the ground",de:"Vor Ort präsent",ar:"حاضرون في الميدان"},
 "12 wilayas suivies aujourd'hui, la carte s'agrandit chaque mois.":{en:"12 provinces tracked today, and the map keeps growing.",de:"12 Provinzen heute erfasst, und die Karte wächst stetig.",ar:"12 ولاية مغطاة اليوم، والخريطة تتوسع كل شهر."},
 "Projets à la une":{en:"Featured properties",de:"Ausgewählte Projekte",ar:"مشاريع مميزة"},
@@ -1219,8 +1198,14 @@ function translateChrome(){
   applyTranslations(document.querySelector('.site-footer'));
   applyTranslations(document.getElementById('waFloat'));
 }
+var LANG_FLAG_EMOJI = {fr:'🇫🇷',en:'🇬🇧',de:'🇩🇪',ar:'🇩🇿'};
 function updateLangSwitcherUI(){
-  Array.prototype.forEach.call(document.querySelectorAll('#langFlags [data-lang], #mmLangRow [data-lang]'), function(b){ b.classList.toggle('active', b.dataset.lang===LANG); });
+  Array.prototype.forEach.call(document.querySelectorAll('#langFlags [data-lang], #langDropdown [data-lang]'), function(b){ b.classList.toggle('active', b.dataset.lang===LANG); });
+  var toggleFlag = document.getElementById('langToggleFlag'); if(toggleFlag) toggleFlag.textContent = LANG_FLAG_EMOJI[LANG];
+}
+function closeLangDropdown(){
+  var d = document.getElementById('langDropdown'); if(d) d.classList.remove('open');
+  var b = document.getElementById('langToggleBtn'); if(b) b.setAttribute('aria-expanded','false');
 }
 function setLang(code){
   if(['fr','en','de','ar'].indexOf(code)===-1) return;
@@ -1228,14 +1213,27 @@ function setLang(code){
   try{ localStorage.setItem('yadra_lang', code); }catch(e){}
   document.documentElement.setAttribute('lang', code);
   document.documentElement.setAttribute('dir', code==='ar' ? 'rtl' : 'ltr');
+  closeLangDropdown();
   updateLangSwitcherUI();
   translateChrome();
   render();
 }
 function initLangSwitcher(){
-  Array.prototype.forEach.call(document.querySelectorAll('#langFlags [data-lang], #mmLangRow [data-lang]'), function(b){
+  Array.prototype.forEach.call(document.querySelectorAll('#langFlags [data-lang], #langDropdown [data-lang]'), function(b){
     b.addEventListener('click', function(){ setLang(b.dataset.lang); });
   });
+  var toggleBtn = document.getElementById('langToggleBtn');
+  var toggleDrop = document.getElementById('langDropdown');
+  if(toggleBtn && toggleDrop){
+    toggleBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = toggleDrop.classList.toggle('open');
+      toggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', function(e){
+      if(toggleDrop.classList.contains('open') && !toggleDrop.contains(e.target) && e.target!==toggleBtn){ closeLangDropdown(); }
+    });
+  }
   var saved = null;
   try{ saved = localStorage.getItem('yadra_lang'); }catch(e){}
   if(saved && saved!=='fr'){
@@ -1774,6 +1772,7 @@ function render(){
   updateHeader();
   document.getElementById('mobileMenu').classList.remove('open');
   closeUserDropdown();
+  closeLangDropdown();
   document.body.classList.toggle('is-home', segs.length===0);
   updateHeaderScrollState();
 
@@ -1934,14 +1933,6 @@ function pageHome(){
     +'</div>'
     +'<div class="wrap city-marquee-intro reveal"><span class="cmi-eyebrow">Présents sur le terrain</span><p class="cmi-text">12 wilayas suivies aujourd’hui, la carte s’agrandit chaque mois.</p></div>'
     +'<div class="city-marquee"><div class="city-marquee-track">'+cityMarqueeItems(false)+cityMarqueeItems(true)+'</div></div>'
-    +'<div class="wrap"><div class="trust-strip reveal" id="heroTrust" style="transition-delay:.85s">'
-      +trustItem('star','Une sélection, pas un catalogue','On ne met pas tout en ligne — seulement ce qui vaut le détour')
-      +trustItem('handshake','On reste avec vous','De la première visite jusqu’à la signature')
-      +trustItem('pin','On connaît le terrain','Wilaya par wilaya, quartier par quartier')
-      +trustItem('shield','Ce qu’on affiche est vérifié','Prix, promoteur, avancement des travaux')
-      +trustItem('eye','Tout sur une carte','Filtrez par ville, budget ou typologie, en un coup d’œil')
-      +'<a class="btn btn-primary trust-cta" href="/projets">Découvrir nos projets '+ic('chevronRight')+'</a>'
-    +'</div></div>'
   +'</section>'
 
   +'<section class="section">'
@@ -2019,9 +2010,6 @@ function cityMarqueeItems(hidden){
   return items.map(function(it){
     return '<a href="'+it.href+'"'+(hidden?' tabindex="-1" aria-hidden="true"':'')+'>'+ic('pin')+it.label+'</a><span class="dot" aria-hidden="true"></span>';
   }).join('');
-}
-function trustItem(icon,label,desc){
-  return '<div class="trust-item"><div class="ic-wrap">'+ic(icon)+'</div><div><div class="ti-label">'+label+'</div><div class="ti-desc">'+desc+'</div></div></div>';
 }
 function afterHome(){
   document.getElementById('heroSearch').addEventListener('submit', function(e){
