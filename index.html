@@ -1761,24 +1761,33 @@ function render(){
   updateHeaderScrollState();
 
   var trackedProjectId = null;
-  if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); }
-  else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params); }
-  else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); var trackedP = getProjectBySlug(segs[1],segs[2]); if(trackedP) trackedProjectId = trackedP.id; }
-  else if(segs[0]==='villes' && segs.length===1){ main.innerHTML = pageVilles(); afterVilles(); }
-  else if(segs[0]==='promoteurs' && segs.length===1){ main.innerHTML = pagePromotersList(); afterPromotersList(); }
-  else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); }
-  else if(segs[0]==='a-propos'){ main.innerHTML = pageAbout(); afterAbout(); }
-  else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest(); }
-  else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal(); }
-  else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); }
-  else if(segs[0]==='inscription'){ main.innerHTML = pageRegister(); afterAuth(); }
-  else if(segs[0]==='mot-de-passe-oublie'){ main.innerHTML = pageForgotPassword(); afterForgotPassword(); }
-  else if(segs[0]==='reinitialiser-mot-de-passe'){ main.innerHTML = pageResetPassword(r.params); afterResetPassword(r.params); }
-  else if(segs[0]==='compte'){ main.innerHTML = pageAccount(); afterAccount(); }
-  else if(segs[0]==='favoris'){ main.innerHTML = pageFavorites(); afterFavorites(); }
-  else if(segs[0]==='promoteur'){ main.innerHTML = pagePromoterDash(); afterPromoterDash(); }
-  else if(segs[0]==='admin'){ main.innerHTML = pageAdmin(r.params); afterAdmin(r.params); }
-  else { main.innerHTML = page404(); }
+  var LEGAL_TITLES = {'mentions-legales':'Mentions légales','conditions':"Conditions d'utilisation",'confidentialite':'Politique de confidentialité'};
+  if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); updateMeta({path:'/'}); }
+  else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params);
+    updateMeta({path:'/projets'+location.search, title:'Tous les projets immobiliers en Algérie | yadra!', description:"Parcourez les programmes immobiliers neufs en Algérie : Alger, Oran, Blida, Constantine et plus. Filtrez par ville, budget et typologie."}); }
+  else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); var trackedP = getProjectBySlug(segs[1],segs[2]); if(trackedP){ trackedProjectId = trackedP.id;
+    updateMeta({path:'/projets/'+segs[1]+'/'+segs[2], title:trackedP.nom+' — '+(trackedP.commune||'')+', '+(WILAYAS[trackedP.wilaya]?WILAYAS[trackedP.wilaya].label:'')+' | yadra!', description:trackedP.description||DEFAULT_META.description, image: trackedP.photo || DEFAULT_META.image}); } }
+  else if(segs[0]==='villes' && segs.length===1){ main.innerHTML = pageVilles(); afterVilles();
+    updateMeta({path:'/villes', title:'Explorer par ville — Programmes immobiliers en Algérie | yadra!', description:'Parcourez nos programmes immobiliers wilaya par wilaya : Alger, Oran, Blida, Constantine et les prochaines villes couvertes.'}); }
+  else if(segs[0]==='promoteurs' && segs.length===1){ main.innerHTML = pagePromotersList(); afterPromotersList();
+    updateMeta({path:'/promoteurs', title:'Nos promoteurs immobiliers vérifiés en Algérie | yadra!', description:'Découvrez les promoteurs immobiliers vérifiés partenaires de yadra!, présents dans toute l\'Algérie.'}); }
+  else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); var trackedPr = getPromoterBySlug(segs[1]); if(trackedPr){
+    updateMeta({path:'/promoteurs/'+segs[1], title:trackedPr.name+' — Promoteur immobilier '+(WILAYAS[trackedPr.wilaya]?WILAYAS[trackedPr.wilaya].label:'')+' | yadra!', description:trackedPr.desc||DEFAULT_META.description}); } }
+  else if(segs[0]==='a-propos'){ main.innerHTML = pageAbout(); afterAbout();
+    updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! met en relation directe les acquéreurs et les promoteurs immobiliers à travers l'Algérie."}); }
+  else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest();
+    updateMeta({path:'/investir', title:"Investir dans l'immobilier neuf en Algérie | yadra!", description:'Une vue claire sur les projets immobiliers en cours en Algérie, avec une information fiable sur les promoteurs et les prix.'}); }
+  else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
+    updateMeta({path:'/legal/'+segs[1], title:(LEGAL_TITLES[segs[1]]||'Informations légales')+' | yadra!', description:'Informations légales de yadra!.'}); }
+  else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); updateMeta({path:'/connexion', title:'Connexion | yadra!', noindex:true}); }
+  else if(segs[0]==='inscription'){ main.innerHTML = pageRegister(); afterAuth(); updateMeta({path:'/inscription', title:'Créer un compte | yadra!', noindex:true}); }
+  else if(segs[0]==='mot-de-passe-oublie'){ main.innerHTML = pageForgotPassword(); afterForgotPassword(); updateMeta({path:'/mot-de-passe-oublie', title:'Mot de passe oublié | yadra!', noindex:true}); }
+  else if(segs[0]==='reinitialiser-mot-de-passe'){ main.innerHTML = pageResetPassword(r.params); afterResetPassword(r.params); updateMeta({path:'/reinitialiser-mot-de-passe', title:'Réinitialiser le mot de passe | yadra!', noindex:true}); }
+  else if(segs[0]==='compte'){ main.innerHTML = pageAccount(); afterAccount(); updateMeta({path:'/compte', title:'Mon compte | yadra!', noindex:true}); }
+  else if(segs[0]==='favoris'){ main.innerHTML = pageFavorites(); afterFavorites(); updateMeta({path:'/favoris', title:'Mes favoris | yadra!', noindex:true}); }
+  else if(segs[0]==='promoteur'){ main.innerHTML = pagePromoterDash(); afterPromoterDash(); updateMeta({path:'/promoteur', title:'Espace promoteur | yadra!', noindex:true}); }
+  else if(segs[0]==='admin'){ main.innerHTML = pageAdmin(r.params); afterAdmin(r.params); updateMeta({path:'/admin', title:'Administration | yadra!', noindex:true}); }
+  else { main.innerHTML = page404(); updateMeta({path:location.pathname, title:'Page introuvable | yadra!', noindex:true}); }
 
   applyTranslations(main);
   translateChrome();
@@ -2005,6 +2014,13 @@ function cityMarqueeItems(hidden){
   }).join('');
 }
 function afterHome(){
+  setStructuredData({
+    '@context':'https://schema.org',
+    '@graph':[
+      {'@type':'Organization', name:'yadra!', url:'https://yadra.fr/', logo:'https://yadra.fr/favicon.png'},
+      {'@type':'WebSite', name:'yadra!', url:'https://yadra.fr/', potentialAction:{'@type':'SearchAction', target:'https://yadra.fr/projets?q={search_term_string}', 'query-input':'required name=search_term_string'}}
+    ]
+  });
   document.getElementById('heroSearch').addEventListener('submit', function(e){
     e.preventDefault();
     var f = new FormData(e.target);
@@ -2253,17 +2269,60 @@ function setStructuredData(obj){
   if(!el){ el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ldjson'; document.head.appendChild(el); }
   el.textContent = obj ? JSON.stringify(obj) : '';
 }
+var DEFAULT_META = {
+  title: 'yadra! — Marketplace immobilier premium en Algérie',
+  description: "yadra! met en relation acquéreurs et promoteurs immobiliers en Algérie. Recherchez un projet par ville, budget et typologie, consultez les fiches détaillées et contactez directement le promoteur.",
+  image: 'https://yadra.fr/og-image.png'
+};
+function setMetaAttr(selector, attr, value){
+  var el = document.querySelector(selector);
+  if(el) el.setAttribute(attr, value);
+}
+function updateMeta(opts){
+  opts = opts || {};
+  var title = opts.title || DEFAULT_META.title;
+  var description = (opts.description || DEFAULT_META.description).slice(0, 300);
+  var canonical = 'https://yadra.fr' + (opts.path || '/');
+  var image = opts.image || DEFAULT_META.image;
+  if(image && !/^https?:\/\//.test(image)) image = 'https://yadra.fr' + image;
+  document.title = title;
+  setMetaAttr('meta[name="description"]', 'content', description);
+  setMetaAttr('link[rel="canonical"]', 'href', canonical);
+  setMetaAttr('meta[property="og:title"]', 'content', title);
+  setMetaAttr('meta[property="og:description"]', 'content', description);
+  setMetaAttr('meta[property="og:url"]', 'content', canonical);
+  setMetaAttr('meta[property="og:image"]', 'content', image);
+  setMetaAttr('meta[name="twitter:title"]', 'content', title);
+  setMetaAttr('meta[name="twitter:description"]', 'content', description);
+  setMetaAttr('meta[name="twitter:image"]', 'content', image);
+  setMetaAttr('meta[name="robots"]', 'content', opts.noindex ? 'noindex, follow' : 'index, follow');
+}
 function afterDetail(wilaya,slug){
   var p = getProjectBySlug(wilaya,slug);
   if(!p) return;
   renderProjectsMap('detailMap', [p], {single:true, activeId:p.id, scrollZoom:false});
+  var photoUrl = p.photo ? (/^https?:\/\//.test(p.photo) ? p.photo : 'https://yadra.fr'+p.photo) : undefined;
   setStructuredData({
-    '@context':'https://schema.org', '@type':'RealEstateListing',
-    name:p.nom, description:p.description, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug,
-    image: p.photo ? 'https://yadra.fr'+p.photo : undefined,
-    address:{'@type':'PostalAddress', addressLocality:p.commune, addressRegion:WILAYAS[p.wilaya].label, addressCountry:'DZ'},
-    geo:{'@type':'GeoCoordinates', latitude:p.lat, longitude:p.lng},
-    offers:{'@type':'Offer', price:p.prixMin, priceCurrency:'DZD', availability:'https://schema.org/InStock'}
+    '@context':'https://schema.org',
+    '@graph':[
+      {
+        '@type':'RealEstateListing',
+        name:p.nom, description:p.description, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug,
+        image: photoUrl,
+        address:{'@type':'PostalAddress', addressLocality:p.commune, addressRegion:WILAYAS[p.wilaya].label, addressCountry:'DZ'},
+        geo:{'@type':'GeoCoordinates', latitude:p.lat, longitude:p.lng},
+        offers:{'@type':'Offer', price:p.prixMin, priceCurrency:'DZD', availability:'https://schema.org/InStock'}
+      },
+      {
+        '@type':'BreadcrumbList',
+        itemListElement:[
+          {'@type':'ListItem', position:1, name:'Accueil', item:'https://yadra.fr/'},
+          {'@type':'ListItem', position:2, name:'Projets', item:'https://yadra.fr/projets'},
+          {'@type':'ListItem', position:3, name:WILAYAS[p.wilaya].label, item:'https://yadra.fr/projets?ville='+p.wilaya},
+          {'@type':'ListItem', position:4, name:p.nom, item:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug}
+        ]
+      }
+    ]
   });
 }
 
