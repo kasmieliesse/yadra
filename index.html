@@ -1937,6 +1937,7 @@ function pageRegister(){
       +'<div class="field"><label>Mot de passe</label><input required type="password" name="password" minlength="4"/></div>'
       +'<div id="registerError" class="form-error" style="display:none;"></div>'
       +'<button class="btn btn-primary btn-block" type="submit" style="margin-top:20px;">Créer mon compte</button>'
+      +'<p class="form-note" style="margin-top:12px;">Chaque inscription est vérifiée par notre équipe avant activation. Vous serez prévenu(e) par email.</p>'
     +'</form>'
     +'<p class="form-note" style="text-align:center;margin-top:18px;">Déjà inscrit ? <a href="/connexion" style="color:var(--accent-2);font-weight:700;">Se connecter</a></p>'
   +'</div></div>';
@@ -1987,10 +1988,15 @@ function afterAuth(){
       err.style.display = 'none';
       var submitBtn = regForm.querySelector('button[type=submit]'); submitBtn.disabled = true;
       api('/api/auth', {method:'POST', body:{action:'register', name:f.get('name'), email:f.get('email'), phone:f.get('phone'), password:f.get('password'), type:type, company:f.get('company')}})
-        .then(function(r){ return afterLoginSuccess(r.user); })
-        .then(function(){
-          toast('Compte créé, bienvenue '+SESSION.name.split(' ')[0]+' !');
-          go(SESSION.type==='promoteur' ? '/promoteur' : '/compte');
+        .then(function(r){
+          if(r.pending){
+            regForm.innerHTML = '<div class="empty-state">'+ic('mail','ic')+'<h3>Inscription bien reçue</h3><p>Votre compte est en cours de validation par notre équipe. Vous recevrez un email dès qu’il sera activé.</p></div>';
+            return;
+          }
+          return afterLoginSuccess(r.user).then(function(){
+            toast('Compte créé, bienvenue '+SESSION.name.split(' ')[0]+' !');
+            go(SESSION.type==='promoteur' ? '/promoteur' : '/compte');
+          });
         })
         .catch(function(error){ err.textContent = error.message || 'Impossible de créer le compte.'; err.style.display='block'; })
         .then(function(){ submitBtn.disabled = false; });
@@ -2318,9 +2324,17 @@ function afterAdmin(){
     } else if(t==='utilisateurs'){
       api('/api/admin').then(function(r){
         ADMIN_USERS = r.users;
-        body.innerHTML = ADMIN_USERS.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Nom</th><th>Email</th><th>Type</th><th>Inscrit le</th></tr></thead><tbody>'
-          +ADMIN_USERS.map(function(u){ return '<tr><td>'+esc(u.name)+'</td><td>'+esc(u.email)+'</td><td>'+(u.type==='promoteur'?'Promoteur':'Acquéreur')+'</td><td>'+new Date(u.createdAt).toLocaleDateString('fr-FR')+'</td></tr>'; }).join('')
+        function uStatusLabel(s){ return s==='attente'?'En attente':s==='refuse'?'Refusé':'Actif'; }
+        function uStatusClass(s){ return s==='attente'?'attente':s==='refuse'?'refuse':'valide'; }
+        body.innerHTML = ADMIN_USERS.length ? ('<div class="table-wrap"><table class="data"><thead><tr><th>Nom</th><th>Email</th><th>Type</th><th>Statut</th><th>Inscrit le</th><th></th></tr></thead><tbody>'
+          +ADMIN_USERS.map(function(u){ return '<tr><td>'+esc(u.name)+'</td><td>'+esc(u.email)+'</td><td>'+(u.type==='promoteur'?'Promoteur':'Acquéreur')+'</td>'
+            +'<td><span class="status-pill '+uStatusClass(u.status)+'">'+uStatusLabel(u.status)+'</span></td>'
+            +'<td>'+new Date(u.createdAt).toLocaleDateString('fr-FR')+'</td>'
+            +'<td class="row-actions">'+(u.status==='attente'?('<button class="mini-btn" data-uapprove="'+u.id+'">Valider</button><button class="mini-btn danger" data-ureject="'+u.id+'">Refuser</button>'):(u.status==='refuse'?'<button class="mini-btn" data-uapprove="'+u.id+'">Réactiver</button>':''))+'</td>'
+          +'</tr>'; }).join('')
           +'</tbody></table></div>') : '<div class="empty-state">'+ic('users','ic')+'<h3>Aucun utilisateur inscrit</h3><p>Les comptes créés apparaîtront ici.</p></div>';
+        Array.prototype.forEach.call(body.querySelectorAll('[data-uapprove]'), function(b){ b.onclick=function(){ api('/api/admin', {method:'PATCH', body:{id:b.dataset.uapprove, status:'actif'}}).then(function(){ toast('Compte activé'); renderTab('utilisateurs'); }).catch(function(err){ toast(err.message||'Erreur'); }); }; });
+        Array.prototype.forEach.call(body.querySelectorAll('[data-ureject]'), function(b){ b.onclick=function(){ api('/api/admin', {method:'PATCH', body:{id:b.dataset.ureject, status:'refuse'}}).then(function(){ toast('Compte refusé'); renderTab('utilisateurs'); }).catch(function(err){ toast(err.message||'Erreur'); }); }; });
       }).catch(function(err){ body.innerHTML = '<p class="form-error">'+esc(err.message||'Erreur de chargement')+'</p>'; });
     } else if(t==='demandes'){
       api('/api/leads').then(function(r){
