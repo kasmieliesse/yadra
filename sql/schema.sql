@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
   phone TEXT,
   type TEXT NOT NULL DEFAULT 'acquereur', -- acquereur | promoteur | admin
   promoter_id TEXT REFERENCES promoters(id),
+  status TEXT NOT NULL DEFAULT 'attente', -- attente | actif | refuse
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

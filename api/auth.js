@@ -1,4 +1,4 @@
-const { sql, bcrypt, getSessionUser, setSessionCookie, clearSessionCookie, readBody, isAdminEmail, uid, slugify } = require('./_lib');
+const { sql, bcrypt, getSessionUser, setSessionCookie, clearSessionCookie, readBody, isAdminEmail, uid, slugify, sendEmail, adminNotifyHtml } = require('./_lib');
 
 module.exports = async function (req, res) {
   try {
@@ -32,9 +32,10 @@ module.exports = async function (req, res) {
       const passwordHash = await bcrypt.hash(password, 10);
       const userId = uid('user');
       let promoterId = null;
+      let company = null;
 
       if (type === 'promoteur') {
-        const company = String(body.company || '').trim() || (name + ' Immobilier');
+        company = String(body.company || '').trim() || (name + ' Immobilier');
         promoterId = uid('pr');
         let slug = slugify(company);
         const slugClash = await sql`SELECT id FROM promoters WHERE slug = ${slug}`;
@@ -43,10 +44,22 @@ module.exports = async function (req, res) {
           VALUES (${promoterId}, ${slug}, ${company}, 'alger', false, ${new Date().getFullYear()}, 'Nouveau promoteur inscrit sur yadra!.')`;
       }
 
-      await sql`INSERT INTO users (id, email, password_hash, name, phone, type, promoter_id)
-        VALUES (${userId}, ${email}, ${passwordHash}, ${name}, ${phone}, ${type}, ${promoterId})`;
+      const isAdmin = isAdminEmail(email);
+      const status = isAdmin ? 'actif' : 'attente';
 
-      const session = { id: userId, email: email, name: name, phone: phone, type: type, promoterId: promoterId, isAdmin: isAdminEmail(email) };
+      await sql`INSERT INTO users (id, email, password_hash, name, phone, type, promoter_id, status)
+        VALUES (${userId}, ${email}, ${passwordHash}, ${name}, ${phone}, ${type}, ${promoterId}, ${status})`;
+
+      if (status === 'attente') {
+        const adminList = (process.env.ADMIN_EMAILS || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+        if (adminList.length) {
+          await sendEmail({ to: adminList, subject: 'Nouvelle inscription à valider — ' + name, html: adminNotifyHtml({ name, email, phone, type, company }) });
+        }
+        res.status(200).json({ pending: true });
+        return;
+      }
+
+      const session = { id: userId, email: email, name: name, phone: phone, type: type, promoterId: promoterId, isAdmin: isAdmin };
       setSessionCookie(res, session);
       res.status(200).json({ user: session });
       return;
@@ -60,6 +73,8 @@ module.exports = async function (req, res) {
       if (!user) { res.status(401).json({ error: 'Email ou mot de passe incorrect.' }); return; }
       const ok = await bcrypt.compare(password, user.password_hash);
       if (!ok) { res.status(401).json({ error: 'Email ou mot de passe incorrect.' }); return; }
+      if (user.status === 'attente') { res.status(403).json({ error: 'Votre compte est en attente de validation. Vous recevrez un email dès que ce sera fait.' }); return; }
+      if (user.status === 'refuse') { res.status(403).json({ error: 'Votre demande d\'inscription n\'a pas été retenue. Contactez-nous pour plus d\'informations.' }); return; }
       const session = { id: user.id, email: user.email, name: user.name, phone: user.phone, type: user.type, promoterId: user.promoter_id, isAdmin: isAdminEmail(user.email) };
       setSessionCookie(res, session);
       res.status(200).json({ user: session });

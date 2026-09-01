@@ -94,6 +94,59 @@ function slugify(s) {
     .replace(/(^-|-$)/g, '');
 }
 
+async function sendEmail({ to, subject, html }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) { console.error('RESEND_API_KEY missing, email not sent:', subject); return; }
+  const from = process.env.RESEND_FROM_EMAIL || 'yadra! <onboarding@resend.dev>';
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to: Array.isArray(to) ? to : [to], subject, html })
+    });
+    if (!res.ok) { console.error('Resend error', res.status, await res.text()); }
+  } catch (err) {
+    console.error('Resend request failed', err);
+  }
+}
+
+function emailShell(title, bodyHtml) {
+  return '<div style="font-family:-apple-system,\'Segoe UI\',sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;background:#F4F1EC;">'
+    + '<div style="text-align:center;margin-bottom:24px;"><span style="font-family:Georgia,serif;font-size:26px;color:#18140F;">yadra!</span></div>'
+    + '<div style="background:#fff;border-radius:14px;padding:28px;border:1px solid #E5E0D8;">'
+    + '<h1 style="font-size:19px;color:#18140F;margin:0 0 14px;">' + title + '</h1>'
+    + bodyHtml
+    + '</div>'
+    + '<p style="text-align:center;color:#8A8378;font-size:12px;margin-top:20px;">yadra! — marketplace immobilier en Algérie</p>'
+    + '</div>';
+}
+
+function adminNotifyHtml(user) {
+  return emailShell('Nouvelle inscription en attente', ''
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Une nouvelle inscription attend votre validation.</p>'
+    + '<table style="width:100%;font-size:14px;color:#18140F;margin:16px 0;">'
+    + '<tr><td style="padding:4px 0;color:#8A8378;">Nom</td><td style="padding:4px 0;">' + user.name + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:#8A8378;">Email</td><td style="padding:4px 0;">' + user.email + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:#8A8378;">Téléphone</td><td style="padding:4px 0;">' + (user.phone || '—') + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:#8A8378;">Type de compte</td><td style="padding:4px 0;">' + (user.type === 'promoteur' ? 'Promoteur' + (user.company ? ' — ' + user.company : '') : 'Acquéreur') + '</td></tr>'
+    + '</table>'
+    + '<a href="https://yadra.fr/admin" style="display:inline-block;background:#A85E3E;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Examiner dans l\'administration</a>');
+}
+
+function userApprovedHtml(user) {
+  return emailShell('Votre compte yadra! est activé', ''
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Bonjour ' + user.name.split(' ')[0] + ',</p>'
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Votre compte ' + (user.type === 'promoteur' ? 'promoteur' : 'acquéreur') + ' a été validé. Vous pouvez dès maintenant vous connecter.</p>'
+    + '<a href="https://yadra.fr/connexion" style="display:inline-block;background:#A85E3E;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Se connecter</a>');
+}
+
+function userRejectedHtml(user) {
+  return emailShell('Votre inscription yadra!', ''
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Bonjour ' + user.name.split(' ')[0] + ',</p>'
+    + '<p style="color:#4A443A;font-size:14px;line-height:1.6;">Votre demande d\'inscription n\'a pas été retenue pour le moment. Pour toute question, vous pouvez nous contacter directement.</p>'
+    + '<a href="https://wa.me/33670131501" style="display:inline-block;background:#25D366;color:#fff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;">Nous contacter sur WhatsApp</a>');
+}
+
 function shapeProject(row, promotersById) {
   const typologies = row.typologies || [];
   const prices = typologies.map(function (t) { return Number(t.prix) || 0; });
@@ -146,5 +199,10 @@ module.exports = {
   uid,
   slugify,
   shapeProject,
-  shapePromoter
+  shapePromoter,
+  sendEmail,
+  emailShell,
+  adminNotifyHtml,
+  userApprovedHtml,
+  userRejectedHtml
 };
