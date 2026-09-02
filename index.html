@@ -1864,7 +1864,7 @@ function render(){
   var LEGAL_TITLES = {'mentions-legales':'Mentions légales','conditions':"Conditions d'utilisation",'confidentialite':'Politique de confidentialité'};
   if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); updateMeta({path:'/'}); }
   else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params);
-    updateMeta({path:'/projets'+location.search, title:'Tous les projets immobiliers en Algérie | yadra!', description:"Parcourez les programmes immobiliers neufs en Algérie, consultables depuis le pays comme depuis la diaspora : Alger, Oran, Blida, Constantine et plus. Filtrez par ville, budget et typologie."}); }
+    updateMeta({path:'/projets'+location.search, title:'Tous les projets immobiliers en Algérie | yadra!', description:"Programmes immobiliers neufs en Algérie — Alger, Oran, Blida, Constantine et plus. Filtrez par ville, budget et typologie, en Algérie comme depuis la diaspora."}); }
   else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); var trackedP = getProjectBySlug(segs[1],segs[2]); if(trackedP){ trackedProjectId = trackedP.id;
     updateMeta({path:'/projets/'+segs[1]+'/'+segs[2], title:trackedP.nom+' — '+(trackedP.commune||'')+', '+(WILAYAS[trackedP.wilaya]?WILAYAS[trackedP.wilaya].label:'')+' | yadra!', description:trackedP.description||DEFAULT_META.description, image: trackedP.photo || DEFAULT_META.image}); } }
   else if(segs[0]==='villes' && segs.length===1){ main.innerHTML = pageVilles(); afterVilles();
@@ -1876,9 +1876,9 @@ function render(){
   else if(segs[0]==='a-propos'){ main.innerHTML = pageAbout(); afterAbout();
     updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! vérifie les promoteurs avant de publier leurs projets, pour les acquéreurs en Algérie comme pour la diaspora à l'étranger."}); }
   else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest();
-    updateMeta({path:'/investir', title:"Investir dans l'immobilier neuf en Algérie, depuis le pays ou l'étranger | yadra!", description:"Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger."}); }
+    updateMeta({path:'/investir', title:"Investir dans l'immobilier neuf en Algérie | yadra!", description:"Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger."}); }
   else if(segs[0]==='guides' && segs[1]==='acheter-depuis-letranger'){ main.innerHTML = pageGuideDiaspora(); afterGuideDiaspora();
-    updateMeta({path:'/guides/acheter-depuis-letranger', title:"Acheter un logement neuf en Algérie depuis l'étranger : le guide complet | yadra!", description:"Vérifier un promoteur, comprendre l'échéancier de paiement, suivre le chantier à distance, la procuration : les repères pour acheter un logement neuf en Algérie depuis la diaspora."});
+    updateMeta({path:'/guides/acheter-depuis-letranger', title:"Acheter un logement neuf en Algérie depuis l'étranger | yadra!", description:"Vérifier un promoteur, l'échéancier de paiement, le suivi de chantier à distance, la procuration : les repères pour acheter en Algérie depuis la diaspora."});
     setStructuredData({'@context':'https://schema.org','@type':'Article',headline:"Acheter un logement neuf en Algérie depuis l'étranger",description:"Vérifier un promoteur, comprendre l'échéancier de paiement, suivre le chantier à distance, la procuration : les repères pour acheter un logement neuf en Algérie depuis la diaspora.",author:{'@type':'Organization',name:'yadra!'},publisher:{'@type':'Organization',name:'yadra! by qbm'},mainEntityOfPage:'https://yadra.fr/guides/acheter-depuis-letranger'}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
     updateMeta({path:'/legal/'+segs[1], title:(LEGAL_TITLES[segs[1]]||'Informations légales')+' | yadra!', description:'Informations légales de yadra!.'}); }
@@ -3203,7 +3203,18 @@ function pageAbout(){
     +'</div>'
   +'</div>';
 }
-function afterAbout(){}
+function afterAbout(){
+  setStructuredData({
+    '@context':'https://schema.org',
+    '@type':'FAQPage',
+    mainEntity:[
+      ['yadra! vend-il directement des biens ?','Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet.'],
+      ['Comment un promoteur est-il vérifié avant publication ?','Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.'],
+      ["L'utilisation de yadra! est-elle payante ?",'Non. La recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits pour les acquéreurs.'],
+      ["Je vis à l'étranger, puis-je acheter depuis la diaspora ?","Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu'à la remise des clés."]
+    ].map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1]}}; })
+  });
+}
 
 /* ================================================================
    PAGE: INVESTIR
