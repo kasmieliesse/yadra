@@ -3309,7 +3309,9 @@ function hideBootLoader(){
 function startApp(){
   initLangSwitcher(); initUserMenu();
   setTimeout(hideBootLoader, 6000);
-  boot().then(render).then(hideBootLoader).catch(hideBootLoader);
+  var minDisplay = new Promise(function(res){ setTimeout(res, 1800); });
+  var ready = boot().then(render).catch(function(){});
+  Promise.all([ready, minDisplay]).then(hideBootLoader);
 }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
 })();
