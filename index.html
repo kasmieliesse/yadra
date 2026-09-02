@@ -3558,24 +3558,27 @@ function mountBootSymbol3D(){
     if(gemEl) gemEl.style.display = 'none';
     mount.appendChild(wrap);
 
-    // A full yaw (Y-axis) turn makes this flat extruded icon go edge-on/vanish
-    // at 90°/270°, and any fixed X/Y tilt combined with this asymmetric shape's
-    // off-mass-center silhouette makes a Z-spin wobble/drift on screen. Spinning
-    // dead-on the camera axis (Z, zero tilt) keeps the icon perfectly centered —
-    // the beveled edges still catch the fixed key/rim lights as they sweep round.
+    // A spin around the camera axis (Z) keeps the icon centered but, for this
+    // asymmetric silhouette, reads as circling around rather than turning on
+    // itself. A full 360° yaw (Y) turns it edge-on and it vanishes at 90/270
+    // (only the thin extrusion depth is left to see). Oscillating the yaw like
+    // a display-case turntable — continuous, never reaching edge-on — shows
+    // real depth and bevels sweeping the light without either flaw.
+    group.rotation.x = 0.14;
     var start = performance.now();
-    var PERIOD = 3600; // ms per full turn — brisk, continuous, premium
+    var PERIOD = 2200; // ms per left-right sweep — brisk, continuous, premium
+    var MAX_YAW = 0.95; // rad, ~54° — reads as a turn without vanishing edge-on
     function frame(now){
       if(!reduceMotion){
-        var t = ((now - start) % PERIOD) / PERIOD;
-        group.rotation.z = t * Math.PI * 2;
+        var t = (now - start) / PERIOD;
+        group.rotation.y = Math.sin(t * Math.PI * 2) * MAX_YAW;
         bootCurrent.raf = requestAnimationFrame(frame);
       }
       renderer.render(scene, camera);
     }
     bootCurrent = {renderer:renderer, camera:camera, raf:null};
     bootCurrent.raf = reduceMotion ? null : requestAnimationFrame(frame);
-    if(reduceMotion){ renderer.render(scene, camera); }
+    if(reduceMotion){ group.rotation.x = 0.14; renderer.render(scene, camera); }
   }, undefined, function(){
     /* network/CDN failure: CSS flip faces stay visible */
   });
