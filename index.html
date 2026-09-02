@@ -359,6 +359,11 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .section-head h2{position:relative;padding-left:24px;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--heading);}
 .section-head h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:14px;height:2px;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));}
 .section-head .desc{color:var(--text-dim);max-width:520px;margin-top:8px;font-size:14px;}
+
+/* ---------------- Launch-phase notice ---------------- */
+.launch-note{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-m);padding:11px 16px;margin-bottom:24px;color:var(--text-dim);font-size:12.5px;line-height:1.5;}
+.launch-note svg{width:16px;height:16px;flex:0 0 auto;color:var(--or-rose-light);}
+[dir="rtl"] .launch-note{flex-direction:row-reverse;}
 .see-all{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--accent-2);border-bottom:1px solid var(--or-rose-dim);padding-bottom:2px;white-space:nowrap;}
 .see-all svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1);}
 .see-all:hover svg{transform:translateX(5px);}
@@ -1021,6 +1026,7 @@ var I18N = {
 "Projets à la une":{en:"Featured properties",de:"Ausgewählte Projekte",ar:"مشاريع مميزة"},
 "Des programmes qu'on suit de près, pour l'emplacement ou la qualité de la construction.":{en:"Developments we follow closely, for their location or build quality.",de:"Projekte, die wir genau verfolgen — wegen ihrer Lage oder Bauqualität.",ar:"برامج نتابعها عن قرب، لموقعها أو جودة بنائها."},
 "Voir tous les projets":{en:"See all properties",de:"Alle Projekte ansehen",ar:"عرض جميع المشاريع"},
+"yadra! est en phase de lancement : les projets ci-dessous illustrent la plateforme, en attendant les premières publications de nos promoteurs partenaires.":{en:"yadra! is in its launch phase: the projects below illustrate the platform while we await the first listings from our partner developers.",de:"yadra! befindet sich in der Startphase: Die unten gezeigten Projekte veranschaulichen die Plattform, während wir auf die ersten Veröffentlichungen unserer Partner-Bauträger warten.",ar:"يادرا! في مرحلة الانطلاق: المشاريع أدناه توضح عمل المنصة ريثما ننشر أولى مشاريع مطورينا الشركاء."},
 "Derniers projets":{en:"Latest properties",de:"Neueste Projekte",ar:"أحدث المشاريع"},
 "Publiés récemment sur yadra!.":{en:"Recently published on yadra!.",de:"Kürzlich auf yadra! veröffentlicht.",ar:"نُشرت مؤخرًا على يادرا!."},
 "Tout voir":{en:"See all",de:"Alle ansehen",ar:"عرض الكل"},
@@ -2018,6 +2024,7 @@ function pageHome(){
 
   +'<section class="section">'
     +'<div class="wrap">'
+      +launchNoticeHTML()
       +'<div class="section-head reveal"><div><h2>Projets à la une</h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div>'
         +'<a class="see-all" href="/projets">Voir tous les projets '+ic('chevronRight')+'</a></div>'
       +'<div class="grid grid-cards reveal-stagger">'+featured.map(function(p){return '<div class="reveal">'+projectCardHTML(p)+'</div>';}).join('')+'</div>'
@@ -2081,6 +2088,7 @@ function pageHome(){
   +'</section>';
 }
 function valueCard(icon,title,desc){ return '<div class="value-card spotlight">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+function launchNoticeHTML(){ return '<div class="launch-note reveal">'+ic('sparkle')+'<span>yadra! est en phase de lancement : les projets ci-dessous illustrent la plateforme, en attendant les premières publications de nos promoteurs partenaires.</span></div>'; }
 var MARQUEE_EXTRA_CITIES = ['Tlemcen','Béjaïa','Batna','Mostaganem','Skikda','Ghardaïa','Tipaza','Boumerdès'];
 function cityMarqueeItems(hidden){
   var items = WILAYA_ORDER.map(function(w){
@@ -2142,6 +2150,7 @@ function pageMarketplace(params){
     +'<div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Projets</span></div>'
     +'<div class="section-head" style="margin-top:10px;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
   +'</div>'
+  +'<div class="wrap">'+launchNoticeHTML()+'</div>'
   +'<div class="wrap"><div class="filter-bar">'
     +'<div class="fb-field fb-search">'+ic('search')+'<input type="text" id="fQ" placeholder="Alger, Hydra, F3, Appartement…" value="'+esc((marketState.q)||'')+'" aria-label="Recherche"/></div>'
     +'<div class="fb-field">'+ic('pin')+'<select id="fVille" aria-label="Ville"><option value="">Ville</option>'+WILAYA_ORDER.map(function(w){return '<option value="'+w+'">'+WILAYAS[w].label+'</option>';}).join('')+'</select></div>'
