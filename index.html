@@ -117,6 +117,36 @@ p{margin:0;}
 :focus-visible{outline:2px solid var(--or-rose-light);outline-offset:2px;border-radius:4px;}
 ::selection{background:var(--or-rose);color:#fff;}
 .tabular{font-variant-numeric:tabular-nums;}
+
+/* ---------------- Boot loader ---------------- */
+.boot-loader{
+  position:fixed;inset:0;z-index:9999;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  background:radial-gradient(120% 100% at 50% 0%,#1c1310 0%,var(--noir) 60%);
+  transition:opacity .5s cubic-bezier(.4,0,.2,1),visibility .5s;
+}
+.boot-loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.boot-glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;}
+.boot-glow-1{width:420px;height:420px;background:radial-gradient(circle,rgba(183,110,77,.55),transparent 70%);top:-120px;right:-80px;animation:bootDrift1 7s ease-in-out infinite;}
+.boot-glow-2{width:340px;height:340px;background:radial-gradient(circle,rgba(216,154,120,.32),transparent 70%);bottom:-110px;left:-60px;animation:bootDrift2 9s ease-in-out infinite;}
+@keyframes bootDrift1{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,30px);}}
+@keyframes bootDrift2{0%,100%{transform:translate(0,0);}50%{transform:translate(30px,-20px);}}
+.boot-gem-wrap{position:relative;width:120px;height:120px;perspective:900px;}
+.boot-gem{position:absolute;inset:0;transform-style:preserve-3d;animation:bootGemSpin 2.6s linear infinite;}
+.boot-gem .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;}
+.boot-gem .face img{width:82%;height:82%;object-fit:contain;filter:drop-shadow(0 18px 30px rgba(183,110,77,.6));}
+.boot-gem .face.back{transform:rotateY(180deg);}
+.boot-gem .face.back img.mirrored{transform:scaleX(-1);filter:brightness(.55) saturate(.7);}
+@keyframes bootGemSpin{from{transform:rotateY(0deg) rotateX(8deg);}to{transform:rotateY(360deg) rotateX(8deg);}}
+.boot-gem-shadow{position:absolute;left:50%;bottom:-22px;width:70px;height:14px;background:radial-gradient(ellipse,rgba(183,110,77,.45),transparent 70%);transform:translateX(-50%);animation:bootShadowPulse 2.6s ease-in-out infinite;}
+@keyframes bootShadowPulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.7;}50%{transform:translateX(-50%) scale(.7);opacity:.4;}}
+.boot-wordmark{position:relative;height:34px;width:auto;opacity:0;animation:bootWordmarkIn .7s ease-out .35s forwards;}
+@keyframes bootWordmarkIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media (prefers-reduced-motion:reduce){
+  .boot-gem{animation:none;transform:rotateX(8deg);}
+  .boot-glow-1,.boot-glow-2,.boot-gem-shadow{animation:none;}
+  .boot-wordmark{animation:none;opacity:1;}
+}
 .i-def{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;flex-shrink:0;}
 
 .wrap{max-width:var(--container);margin:0 auto;padding-inline:24px;}
@@ -782,6 +812,18 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 </head>
 <body>
 
+<div id="bootLoader" class="boot-loader" role="status" aria-label="Chargement de yadra!">
+  <div class="boot-glow boot-glow-1"></div>
+  <div class="boot-glow boot-glow-2"></div>
+  <div class="boot-gem-wrap">
+    <div class="boot-gem">
+      <div class="face front"><img src="/assets/symbol.svg" alt=""></div>
+      <div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>
+    </div>
+    <div class="boot-gem-shadow"></div>
+  </div>
+  <img src="/logo-lockup.png" alt="yadra!" class="boot-wordmark">
+</div>
 
 <a class="skip-link" href="#main">Aller au contenu</a>
 <div id="toastWrap" class="toast-wrap"></div>
@@ -3252,7 +3294,17 @@ function initFX(){
 }
 
 /* ---------------- Init ---------------- */
-function startApp(){ initLangSwitcher(); initUserMenu(); boot().then(render); }
+function hideBootLoader(){
+  var el = document.getElementById('bootLoader');
+  if(!el || el.classList.contains('hidden')) return;
+  el.classList.add('hidden');
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 600);
+}
+function startApp(){
+  initLangSwitcher(); initUserMenu();
+  setTimeout(hideBootLoader, 6000);
+  boot().then(render).then(hideBootLoader).catch(hideBootLoader);
+}
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', startApp); } else { startApp(); }
 })();
 
