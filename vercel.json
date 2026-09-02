@@ -1,5 +1,21 @@
 {
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+
+    { "source": "/", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=home" },
+
+    { "source": "/projets", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=marketplace" },
+
+    { "source": "/projets/:wilaya/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=detail&wilaya=:wilaya&slug=:slug" },
+
+    { "source": "/villes", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=villes" },
+
+    { "source": "/villes/:wilaya", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=ville&wilaya=:wilaya" },
+
+    { "source": "/typologies/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=typologie&slug=:slug" },
+
+    { "source": "/promoteurs", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=promoteurs" },
+
+    { "source": "/promoteurs/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=promoteur&slug=:slug" }
   ]
 }

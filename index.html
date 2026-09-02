@@ -1466,7 +1466,7 @@ var EXTRA_CITY_PHOTOS = [
   {slug:'tipaza', label:'Tipaza'}, {slug:'boumerdes', label:'Boumerdès'}
 ];
 function citySlideData(w,count){
-  return {slug:w, label:WILAYAS[w].label, photo:(CITY_PHOTOS[w]?'/assets/cities/'+w+'.jpg':null), href:'/projets?ville='+w, meta:count+' projet'+(count>1?'s':'')};
+  return {slug:w, label:WILAYAS[w].label, photo:(CITY_PHOTOS[w]?'/assets/cities/'+w+'.jpg':null), href:'/villes/'+w, meta:count+' projet'+(count>1?'s':'')};
 }
 function extraCitySlideData(c){
   return {slug:c.slug, label:c.label, photo:'/assets/cities/'+c.slug+'.jpg', href:'/projets', meta:'Bientôt disponible'};
@@ -1864,11 +1864,20 @@ function render(){
   var LEGAL_TITLES = {'mentions-legales':'Mentions légales','conditions':"Conditions d'utilisation",'confidentialite':'Politique de confidentialité'};
   if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); updateMeta({path:'/'}); }
   else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params);
-    updateMeta({path:'/projets'+location.search, title:'Tous les projets immobiliers en Algérie | yadra!', description:"Programmes immobiliers neufs en Algérie — Alger, Oran, Blida, Constantine et plus. Filtrez par ville, budget et typologie, en Algérie comme depuis la diaspora."}); }
+    var isFilteredView = !!location.search;
+    updateMeta({path:'/projets', title:'Tous les projets immobiliers en Algérie | yadra!', description:"Programmes immobiliers neufs en Algérie — Alger, Oran, Blida, Constantine et plus. Filtrez par ville, budget et typologie, en Algérie comme depuis la diaspora.", noindex:isFilteredView}); }
   else if(segs[0]==='projets' && segs.length===3){ main.innerHTML = pageDetail(segs[1],segs[2]); afterDetail(segs[1],segs[2]); var trackedP = getProjectBySlug(segs[1],segs[2]); if(trackedP){ trackedProjectId = trackedP.id;
     updateMeta({path:'/projets/'+segs[1]+'/'+segs[2], title:trackedP.nom+' — '+(trackedP.commune||'')+', '+(WILAYAS[trackedP.wilaya]?WILAYAS[trackedP.wilaya].label:'')+' | yadra!', description:trackedP.description||DEFAULT_META.description, image: trackedP.photo || DEFAULT_META.image}); } }
   else if(segs[0]==='villes' && segs.length===1){ main.innerHTML = pageVilles(); afterVilles();
     updateMeta({path:'/villes', title:'Explorer par ville — Programmes immobiliers en Algérie | yadra!', description:'Parcourez nos programmes immobiliers wilaya par wilaya : Alger, Oran, Blida, Constantine et les prochaines villes couvertes.'}); }
+  else if(segs[0]==='villes' && segs.length===2){ main.innerHTML = pageVilleDetail(segs[1]); afterVilleDetail(segs[1]); var wv = WILAYAS[segs[1]]; var wvCount = getAllProjects().filter(function(p){return p.wilaya===segs[1];}).length;
+    updateMeta({path:'/villes/'+segs[1], title: wv ? ('Immobilier neuf à '+wv.label+' | yadra!') : 'Ville introuvable | yadra!', description: wv ? ('Programmes immobiliers neufs à '+wv.label+' : prix, typologies et promoteurs vérifiés.') : DEFAULT_META.description, noindex: !wv || wvCount<3 }); }
+  else if(segs[0]==='typologies' && segs.length===2){ main.innerHTML = pageTypologie(segs[1]); afterTypologie(segs[1]); var td = TYPOLOGIE_DEFS[segs[1]]; var tdCount = td ? getAllProjects().filter(function(p){ return p.typologies.some(function(t){return td.labels.indexOf(t.label)!==-1;}); }).length : 0;
+    updateMeta({path:'/typologies/'+segs[1], title: td ? ('Logement '+td.title+' neuf en Algérie | yadra!') : 'Typologie introuvable | yadra!', description: td ? td.desc : DEFAULT_META.description, noindex: !td || tdCount<3 }); }
+  else if(segs[0]==='donnees' && segs[1]==='prix-immobilier'){ main.innerHTML = pageDonnees(); afterDonnees();
+    updateMeta({path:'/donnees/prix-immobilier', title:"Prix moyen au m² de l'immobilier neuf en Algérie | yadra!", description:"Prix moyen au m² par ville, calculé à partir du catalogue de programmes immobiliers neufs publiés sur yadra!."}); }
+  else if(segs[0]==='comparatifs' && segs[1]==='neuf-vs-ancien'){ main.innerHTML = pageComparatifNeufAncien(); afterComparatif();
+    updateMeta({path:'/comparatifs/neuf-vs-ancien', title:'Immobilier neuf ou ancien en Algérie ? | yadra!', description:'Garanties, calendrier, négociation : les repères pour comparer un achat dans le neuf et dans l\'ancien en Algérie.'}); }
   else if(segs[0]==='promoteurs' && segs.length===1){ main.innerHTML = pagePromotersList(); afterPromotersList();
     updateMeta({path:'/promoteurs', title:'Nos promoteurs immobiliers vérifiés en Algérie | yadra!', description:'Découvrez les promoteurs immobiliers vérifiés partenaires de yadra!, présents dans toute l\'Algérie.'}); }
   else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); var trackedPr = getPromoterBySlug(segs[1]); if(trackedPr){
@@ -1880,6 +1889,8 @@ function render(){
   else if(segs[0]==='guides' && segs[1]==='acheter-depuis-letranger'){ main.innerHTML = pageGuideDiaspora(); afterGuideDiaspora();
     updateMeta({path:'/guides/acheter-depuis-letranger', title:"Acheter un logement neuf en Algérie depuis l'étranger | yadra!", description:"Vérifier un promoteur, l'échéancier de paiement, le suivi de chantier à distance, la procuration : les repères pour acheter en Algérie depuis la diaspora."});
     setStructuredData({'@context':'https://schema.org','@type':'Article',headline:"Acheter un logement neuf en Algérie depuis l'étranger",description:"Vérifier un promoteur, comprendre l'échéancier de paiement, suivre le chantier à distance, la procuration : les repères pour acheter un logement neuf en Algérie depuis la diaspora.",author:{'@type':'Organization',name:'yadra!'},publisher:{'@type':'Organization',name:'yadra! by qbm'},mainEntityOfPage:'https://yadra.fr/guides/acheter-depuis-letranger'}); }
+  else if(segs[0]==='guides' && segs[1]==='financement-credit-immobilier-algerie'){ main.innerHTML = pageFinancement(); afterFinancement();
+    updateMeta({path:'/guides/financement-credit-immobilier-algerie', title:"Financer l'achat d'un logement neuf en Algérie | yadra!", description:"Crédit bancaire, apport, échéancier promoteur, cas de la diaspora : un aperçu des options pour financer un achat immobilier neuf en Algérie."}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
     updateMeta({path:'/legal/'+segs[1], title:(LEGAL_TITLES[segs[1]]||'Informations légales')+' | yadra!', description:'Informations légales de yadra!.'}); }
   else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); updateMeta({path:'/connexion', title:'Connexion | yadra!', noindex:true}); }
@@ -2110,7 +2121,7 @@ function launchNoticeHTML(){ return '<div class="launch-note reveal">'+ic('spark
 var MARQUEE_EXTRA_CITIES = ['Tlemcen','Béjaïa','Batna','Mostaganem','Skikda','Ghardaïa','Tipaza','Boumerdès'];
 function cityMarqueeItems(hidden){
   var items = WILAYA_ORDER.map(function(w){
-    return {label:WILAYAS[w].label, href:'/projets?ville='+w};
+    return {label:WILAYAS[w].label, href:'/villes/'+w};
   }).concat(MARQUEE_EXTRA_CITIES.map(function(name){
     return {label:name, href:'/projets'};
   }));
@@ -2375,6 +2386,15 @@ function setStructuredData(obj){
   if(!el){ el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'ldjson'; document.head.appendChild(el); }
   el.textContent = obj ? JSON.stringify(obj) : '';
 }
+/* items: [{name, path}], premier élément généralement {name:'Accueil', path:'/'} */
+function ldBreadcrumb(items){
+  return {
+    '@type':'BreadcrumbList',
+    itemListElement: items.map(function(it, i){
+      return {'@type':'ListItem', position:i+1, name:it.name, item:'https://yadra.fr'+it.path};
+    })
+  };
+}
 var DEFAULT_META = {
   title: 'yadra! — Marketplace immobilier premium en Algérie',
   description: "yadra! met en relation acquéreurs et promoteurs immobiliers en Algérie. Recherchez un projet par ville, budget et typologie, consultez les fiches détaillées et contactez directement le promoteur.",
@@ -2419,15 +2439,12 @@ function afterDetail(wilaya,slug){
         geo:{'@type':'GeoCoordinates', latitude:p.lat, longitude:p.lng},
         offers:{'@type':'Offer', price:p.prixMin, priceCurrency:'DZD', availability:'https://schema.org/InStock'}
       },
-      {
-        '@type':'BreadcrumbList',
-        itemListElement:[
-          {'@type':'ListItem', position:1, name:'Accueil', item:'https://yadra.fr/'},
-          {'@type':'ListItem', position:2, name:'Projets', item:'https://yadra.fr/projets'},
-          {'@type':'ListItem', position:3, name:WILAYAS[p.wilaya].label, item:'https://yadra.fr/projets?ville='+p.wilaya},
-          {'@type':'ListItem', position:4, name:p.nom, item:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug}
-        ]
-      }
+      ldBreadcrumb([
+        {name:'Accueil', path:'/'},
+        {name:'Projets', path:'/projets'},
+        {name:WILAYAS[p.wilaya].label, path:'/villes/'+p.wilaya},
+        {name:p.nom, path:'/projets/'+p.wilaya+'/'+p.slug}
+      ])
     ]
   });
 }
@@ -2503,7 +2520,27 @@ function pagePromoter(slug){
     +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLink('Bonjour '+pr.name+', je vous contacte via YADRA! au sujet de vos projets immobiliers.')+'">'+ic('whatsapp')+' WhatsApp</a>'
   +'</div></aside></div>';
 }
-function afterPromoter(){}
+function afterPromoter(slug){
+  var pr = getPromoterBySlug(slug);
+  if(!pr) return;
+  setStructuredData({
+    '@context':'https://schema.org',
+    '@graph':[
+      ldBreadcrumb([
+        {name:'Accueil', path:'/'},
+        {name:'Promoteurs', path:'/promoteurs'},
+        {name:pr.name, path:'/promoteurs/'+pr.slug}
+      ]),
+      {
+        '@type':'RealEstateAgent',
+        name: pr.name,
+        url: 'https://yadra.fr/promoteurs/'+pr.slug,
+        description: pr.desc,
+        areaServed: WILAYAS[pr.wilaya] ? WILAYAS[pr.wilaya].label : undefined
+      }
+    ]
+  });
+}
 
 /* ================================================================
    PAGE: AUTH
@@ -3231,6 +3268,20 @@ function pageInvest(){
     +'<div class="stat-tile"><div class="k">Projets suivis</div><div class="v">'+getAllProjects().length+'+</div></div>'
     +'<div class="stat-tile"><div class="k">Promoteurs vérifiés</div><div class="v">100%</div></div>'
   +'</div></div>'
+  +'<div class="wrap" style="padding-bottom:40px;">'
+    +'<div class="section-head"><div><h2>Par typologie</h2></div></div>'
+    +'<div class="grid grid-3">'
+      +Object.keys(TYPOLOGIE_DEFS).map(function(slug){ var d=TYPOLOGIE_DEFS[slug]; return '<a class="stat-tile" href="/typologies/'+slug+'" style="display:block;text-decoration:none;"><div class="k">Logement</div><div class="v">'+esc(d.title)+'</div></a>'; }).join('')
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:70px;">'
+    +'<div class="section-head"><div><h2>Pour aller plus loin</h2></div></div>'
+    +'<div class="grid grid-3">'
+      +'<a class="stat-tile" href="/donnees/prix-immobilier" style="display:block;text-decoration:none;"><div class="k">Données</div><div class="v" style="font-size:16px;">Prix au m² par ville</div></a>'
+      +'<a class="stat-tile" href="/comparatifs/neuf-vs-ancien" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Neuf ou ancien</div></a>'
+      +'<a class="stat-tile" href="/guides/financement-credit-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Financer son achat</div></a>'
+    +'</div>'
+  +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
     +'<div class="split-card spotlight accent theme-dark">'
       +'<span class="eyebrow">Investisseurs</span><h3>On vous met en relation</h3>'
@@ -3280,6 +3331,201 @@ function pageGuideDiaspora(){
   +'</div>';
 }
 function afterGuideDiaspora(){}
+
+/* ================================================================
+   PAGE: VILLE (page pilier locale — §E/§F du dossier SEO)
+   Garde-fou anti-thin-content : uniquement les wilayas de WILAYA_ORDER
+   (couverture réelle), et noindex automatique si moins de 3 projets réels.
+   ================================================================ */
+var WILAYA_INTRO = {
+  'alger': "Alger, capitale du pays, concentre la plus forte densité de programmes immobiliers neufs d'Algérie, entre quartiers résidentiels historiques et nouveaux pôles urbains.",
+  'oran': "Oran, deuxième ville du pays et grande façade méditerranéenne, voit se développer de nombreux programmes résidentiels neufs, en centre-ville comme dans ses communes périphériques.",
+  'blida': "Blida, aux portes d'Alger, combine proximité de la capitale et cadre plus résidentiel — un profil qui attire une partie des acquéreurs cherchant à s'éloigner du cœur d'Alger sans s'en éloigner beaucoup.",
+  'constantine': "Constantine, capitale de l'Est algérien, connaît une expansion urbaine marquée, notamment autour de ses nouveaux pôles comme Ali Mendjeli."
+};
+function pageVilleDetail(wilaya){
+  if(WILAYA_ORDER.indexOf(wilaya)===-1 || !WILAYAS[wilaya]) return page404();
+  var projects = getAllProjects().filter(function(p){return p.wilaya===wilaya;});
+  var w = WILAYAS[wilaya];
+  var prices = projects.map(function(p){return p.prixMin;}).filter(function(n){return n>0;});
+  var typos = [];
+  projects.forEach(function(p){ p.typologies.forEach(function(t){ if(typos.indexOf(t.label)===-1) typos.push(t.label); }); });
+  typos.sort();
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/villes">Villes</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(w.label)+'</span></div></div>'
+  +'<div class="wrap" style="max-width:820px;">'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Immobilier neuf à '+esc(w.label)+'</h1>'
+    +'<p class="prose" style="margin-top:18px;">'+(WILAYA_INTRO[wilaya]||'')+'</p>'
+  +'</div>'
+  +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
+    +'<div class="stat-tile"><div class="k">Programmes suivis à '+esc(w.label)+'</div><div class="v">'+projects.length+'</div></div>'
+    +'<div class="stat-tile"><div class="k">Prix d\'entrée constaté</div><div class="v">'+(prices.length?moneyShort(Math.min.apply(null,prices)):'—')+'</div></div>'
+    +'<div class="stat-tile"><div class="k">Typologies disponibles</div><div class="v" style="font-size:16px;">'+(typos.length?esc(typos.join(', ')):'—')+'</div></div>'
+  +'</div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;">'
+    +'<div class="section-head"><div><h2>Communes couvertes</h2></div></div>'
+    +'<p class="prose">'+(w.communes||[]).map(esc).join(' · ')+'</p>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:70px;">'
+    +'<div class="section-head"><div><h2>Programmes à '+esc(w.label)+'</h2></div></div>'
+    +(projects.length? '<div class="grid grid-cards">'+projects.map(projectCardHTML).join('')+'</div>'
+      : '<div class="empty-state">'+ic('buildings','ic')+'<h3>Aucun programme publié pour le moment à '+esc(w.label)+'</h3><p>De nouveaux projets sont ajoutés régulièrement par nos promoteurs partenaires.</p></div>')
+  +'</div>';
+}
+function afterVilleDetail(wilaya){
+  var projects = getAllProjects().filter(function(p){return p.wilaya===wilaya;});
+  var w = WILAYAS[wilaya];
+  if(!w) return;
+  setStructuredData({
+    '@context':'https://schema.org',
+    '@graph':[
+      ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Villes',path:'/villes'},{name:w.label,path:'/villes/'+wilaya}]),
+      {'@type':'ItemList', name:'Programmes immobiliers neufs à '+w.label, itemListElement: projects.map(function(p,i){
+        return {'@type':'ListItem', position:i+1, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug, name:p.nom};
+      })}
+    ]
+  });
+}
+
+/* ================================================================
+   PAGE: TYPOLOGIE (page pilier — §E/§F)
+   ================================================================ */
+var TYPOLOGIE_DEFS = {
+  'f2': {labels:['F2'], title:'F2', desc:"En Algérie, un F2 désigne un logement de 2 pièces principales (un salon et une chambre), plus cuisine et salle de bain — un format recherché aussi bien par de jeunes acquéreurs que par des investisseurs en location."},
+  'f3': {labels:['F3'], title:'F3', desc:"Le F3 (salon + 2 chambres, cuisine et salle de bain) est la typologie la plus courante du marché algérien du neuf — un compromis souvent recherché entre budget, surface et facilité de revente ou de location."},
+  'f4-f5': {labels:['F4','F5'], title:'F4 / F5', desc:"Les F4 et F5 (3 à 4 chambres) s'adressent surtout aux familles nombreuses ou aux acquéreurs cherchant davantage d'espace ; leur budget d'entrée est en général le plus élevé du catalogue."}
+};
+function pageTypologie(slug){
+  var def = TYPOLOGIE_DEFS[slug];
+  if(!def) return page404();
+  var projects = getAllProjects().filter(function(p){ return p.typologies.some(function(t){ return def.labels.indexOf(t.label)!==-1; }); });
+  var matchingPrices = [];
+  projects.forEach(function(p){ p.typologies.forEach(function(t){ if(def.labels.indexOf(t.label)!==-1 && t.prix) matchingPrices.push(t.prix); }); });
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(def.title)+'</span></div></div>'
+  +'<div class="wrap" style="max-width:820px;">'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Logement '+esc(def.title)+' neuf en Algérie</h1>'
+    +'<p class="prose" style="margin-top:18px;">'+def.desc+'</p>'
+  +'</div>'
+  +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
+    +'<div class="stat-tile"><div class="k">Programmes proposant du '+esc(def.title)+'</div><div class="v">'+projects.length+'</div></div>'
+    +'<div class="stat-tile"><div class="k">Prix d\'entrée constaté</div><div class="v">'+(matchingPrices.length?moneyShort(Math.min.apply(null,matchingPrices)):'—')+'</div></div>'
+    +'<div class="stat-tile"><div class="k">Villes concernées</div><div class="v" style="font-size:16px;">'+(projects.length?esc(Array.from(new Set(projects.map(function(p){return WILAYAS[p.wilaya].label;}))).join(', ')):'—')+'</div></div>'
+  +'</div></div>'
+  +'<div class="wrap" style="padding-bottom:70px;">'
+    +'<div class="section-head"><div><h2>Programmes avec du '+esc(def.title)+'</h2></div></div>'
+    +(projects.length? '<div class="grid grid-cards">'+projects.map(projectCardHTML).join('')+'</div>'
+      : '<div class="empty-state">'+ic('buildings','ic')+'<h3>Aucun programme '+esc(def.title)+' publié pour le moment</h3><p>De nouveaux projets sont ajoutés régulièrement par nos promoteurs partenaires.</p></div>')
+  +'</div>';
+}
+function afterTypologie(slug){
+  var def = TYPOLOGIE_DEFS[slug];
+  if(!def) return;
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:def.title,path:'/typologies/'+slug}])
+  ]});
+}
+
+/* ================================================================
+   PAGE: DONNÉES — prix au m² (actif de contenu/PR, §G/§H)
+   Calculé en direct depuis le catalogue publié, jamais un chiffre saisi à la main.
+   ================================================================ */
+function marketStats(){
+  return WILAYA_ORDER.map(function(w){
+    var projects = getAllProjects().filter(function(p){return p.wilaya===w;});
+    var perM2 = [];
+    projects.forEach(function(p){ p.typologies.forEach(function(t){ if(t.prix && t.surface) perM2.push(t.prix/t.surface); }); });
+    var avg = perM2.length ? Math.round(perM2.reduce(function(a,b){return a+b;},0)/perM2.length) : null;
+    return {wilaya:w, label:WILAYAS[w].label, projects:projects.length, avgM2:avg, sample:perM2.length};
+  });
+}
+function pageDonnees(){
+  var stats = marketStats();
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Prix de l\'immobilier neuf</span></div></div>'
+  +'<div class="wrap" style="max-width:820px;">'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Prix moyen au m² de l\'immobilier neuf, par ville</h1>'
+    +'<p class="prose" style="margin-top:18px;">Ces chiffres sont calculés automatiquement à partir des prix affichés par les promoteurs sur les programmes actuellement publiés sur yadra! — pas une statistique officielle ou exhaustive du marché, mais un instantané réel et vérifiable de notre catalogue, mis à jour à chaque nouvelle publication.</p>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:40px;">'
+    +'<div class="table-wrap"><table class="data"><thead><tr><th>Ville</th><th>Prix moyen / m² constaté</th><th>Programmes</th></tr></thead><tbody>'
+      +stats.map(function(s){ return '<tr><td>'+esc(s.label)+'</td><td class="tabular">'+(s.avgM2?money(s.avgM2)+'/m²':'Données insuffisantes')+'</td><td>'+s.projects+'</td></tr>'; }).join('')
+      +'</tbody></table></div>'
+    +'<button class="btn btn-ghost btn-sm" id="btnCsvExport" style="margin-top:16px;">'+ic('doc')+' Exporter en CSV</button>'
+  +'</div>';
+}
+function afterDonnees(){
+  var btn = document.getElementById('btnCsvExport');
+  if(btn) btn.onclick = function(){
+    var stats = marketStats();
+    var rows = [['ville','prix_moyen_m2_da','nb_programmes']].concat(stats.map(function(s){ return [s.label, s.avgM2||'', s.projects]; }));
+    var csv = rows.map(function(r){ return r.join(','); }).join('\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url; a.download = 'yadra-prix-immobilier-algerie.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:"Prix de l'immobilier neuf",path:'/donnees/prix-immobilier'}]),
+    {'@type':'Dataset', name:"Prix moyen au m² de l'immobilier neuf en Algérie par ville — catalogue yadra!", description:"Prix moyen au m² calculé à partir des programmes immobiliers neufs publiés sur yadra!, par wilaya.", url:'https://yadra.fr/donnees/prix-immobilier', creator:{'@type':'Organization', name:'yadra!'}}
+  ]});
+}
+
+/* ================================================================
+   PAGE: GUIDE — financement (§G)
+   ================================================================ */
+function pageFinancement(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Financer un achat immobilier neuf</span></div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
+    +'<div class="eyebrow reveal">Guide</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Financer l\'achat d\'un logement neuf en Algérie</h1>'
+    +'<p class="prose reveal" style="margin-top:18px;">Un aperçu des grandes options de financement du neuf en Algérie, pour préparer vos questions avant de contacter votre banque ou le promoteur — ce guide ne remplace pas un conseil bancaire personnalisé.</p>'
+
+    +guideSection('01','Le crédit immobilier bancaire','<p>Plusieurs banques publiques et privées proposent des crédits immobiliers en Algérie, dont la CNEP-Banque, historiquement spécialisée sur ce segment. Les conditions (taux, durée, apport minimum, pièces demandées) varient selon la banque, le profil de l\'emprunteur et le type de bien — elles évoluent aussi dans le temps. Renseignez-vous directement auprès de plusieurs banques pour comparer une offre actuelle et chiffrée.</p>')
+
+    +guideSection('02','L\'apport personnel et l\'échéancier promoteur','<p>Au-delà du crédit bancaire, la plupart des promoteurs proposent un paiement échelonné directement lié à l\'avancement du chantier. Combiner un apport personnel avec un crédit partiel, ou payer intégralement selon l\'échéancier du promoteur, sont deux approches courantes — le bon choix dépend de votre situation et mérite d\'être chiffré au cas par cas.</p>')
+
+    +guideSection('03','Le cas particulier de la diaspora','<p>Un acquéreur résidant à l\'étranger peut, selon sa situation, mobiliser une épargne en devises ou un financement dans son pays de résidence, en plus des options disponibles en Algérie. Les modalités de transfert de fonds pour un achat immobilier sont encadrées par la réglementation algérienne des changes — un point à vérifier en amont auprès d\'une banque ou d\'un professionnel plutôt qu\'une fois l\'achat engagé.</p>')
+
+    +'<p style="color:var(--text-dim);font-size:12px;margin-top:28px;line-height:1.6;">Ce guide donne des repères généraux, non chiffrés et non contractuels. Il ne remplace pas les conseils d\'une banque ou d\'un conseiller financier — yadra! n\'est ni une banque ni un conseiller en financement.</p>'
+  +'</div>';
+}
+function afterFinancement(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Financer un achat neuf',path:'/guides/financement-credit-immobilier-algerie'}]),
+    {'@type':'Article', headline:"Financer l'achat d'un logement neuf en Algérie", author:{'@type':'Organization', name:'yadra!'}, publisher:{'@type':'Organization', name:'yadra! by qbm'}, mainEntityOfPage:'https://yadra.fr/guides/financement-credit-immobilier-algerie'}
+  ]});
+}
+
+/* ================================================================
+   PAGE: COMPARATIF — neuf vs ancien (§G)
+   ================================================================ */
+function pageComparatifNeufAncien(){
+  var rows = [
+    ['Garantie légale','Garantie décennale sur le gros œuvre, garantie de parfait achèvement','Aucune garantie constructeur ; l\'état dépend de l\'entretien passé'],
+    ['Normes et finitions','Aux normes en vigueur au moment de la construction, finitions au choix selon le promoteur','Normes de l\'époque de construction, finitions existantes à rénover ou non'],
+    ['Calendrier','Livraison différée si achat sur plan, avec un échéancier de paiement','Disponible immédiatement après la transaction'],
+    ['Négociation du prix','Généralement fixé par le promoteur, peu de marge de négociation','Marge de négociation souvent plus importante selon le vendeur'],
+    ['Visibilité avant achat','Visite d\'un logement témoin ou de plans, projection à faire sur le résultat final','Visite du bien réel, état constatable immédiatement']
+  ];
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Neuf vs ancien</span></div></div>'
+  +'<div class="wrap" style="max-width:820px;">'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Immobilier neuf ou ancien en Algérie : les repères pour comparer</h1>'
+    +'<p class="prose" style="margin-top:18px;">Il n\'y a pas de réponse universelle entre neuf et ancien — ça dépend du budget, du calendrier et de ce que vous recherchez. Voici les points de comparaison qui reviennent le plus souvent.</p>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:60px;">'
+    +'<div class="table-wrap"><table class="data"><thead><tr><th>Critère</th><th>Neuf</th><th>Ancien</th></tr></thead><tbody>'
+      +rows.map(function(r){ return '<tr><td style="font-weight:600;color:var(--heading);">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'; }).join('')
+      +'</tbody></table></div>'
+  +'</div>';
+}
+function afterComparatif(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Neuf vs ancien',path:'/comparatifs/neuf-vs-ancien'}])
+  ]});
+}
 
 /* ================================================================
    PAGE: LEGAL

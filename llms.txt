@@ -1,0 +1,23 @@
+# yadra!
+
+> yadra! est une marketplace immobilière algérienne qui met en relation des acquéreurs avec des promoteurs immobiliers vérifiés, autour de programmes neufs (sur plan, en construction, livrés) en Algérie. yadra! ne vend pas de biens directement : la transaction se conclut toujours avec le promoteur du projet. yadra! est en phase de lancement.
+
+## Pages principales
+
+- [Accueil](https://yadra.fr/): présentation de la plateforme et recherche de programmes.
+- [Tous les projets](https://yadra.fr/projets): catalogue complet des programmes immobiliers neufs publiés.
+- [Explorer par ville](https://yadra.fr/villes): programmes par wilaya (Alger, Oran, Blida, Constantine).
+- [Promoteurs vérifiés](https://yadra.fr/promoteurs): liste des promoteurs partenaires vérifiés.
+- [Investir](https://yadra.fr/investir): vue d'ensemble pour investir dans le neuf en Algérie.
+- [Prix de l'immobilier neuf](https://yadra.fr/donnees/prix-immobilier): prix moyen au m² par ville, calculé depuis le catalogue publié.
+- [Neuf ou ancien](https://yadra.fr/comparatifs/neuf-vs-ancien): comparatif pour aider à choisir.
+
+## Guides
+
+- [Acheter depuis l'étranger](https://yadra.fr/guides/acheter-depuis-letranger): repères pour les acheteurs de la diaspora (vérification du promoteur, échéancier, suivi de chantier, procuration).
+- [Financer un achat neuf](https://yadra.fr/guides/financement-credit-immobilier-algerie): aperçu des options de financement (crédit bancaire, apport, échéancier promoteur, cas de la diaspora).
+
+## Notes
+
+- Comment yadra! vérifie un promoteur avant publication : registre de commerce et références transmis, contrôlés avant que ses projets soient publiés sur la plateforme.
+- yadra! est un service gratuit pour les acquéreurs (recherche, consultation des fiches, contact des promoteurs).
