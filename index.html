@@ -423,6 +423,34 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .value-card h3{color:var(--heading);font-size:18px;margin-bottom:8px;}
 .value-card p{color:var(--text-dim);font-size:13.5px;}
 
+/* ---------------- Pull-quote (editorial) ---------------- */
+.pull-quote{
+  position:relative;margin:34px 0;padding:4px 0 4px 26px;border-left:2px solid var(--or-rose);
+  font-family:var(--font-body);font-style:italic;font-size:clamp(1.05rem,1.9vw,1.3rem);line-height:1.55;color:var(--heading);font-weight:500;
+}
+[dir="rtl"] .pull-quote{border-left:0;border-right:2px solid var(--or-rose);padding-left:0;padding-right:26px;}
+
+/* ---------------- FAQ accordion ---------------- */
+.faq-acc details{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);overflow:hidden;transition:border-color .2s ease;}
+.faq-acc details + details{margin-top:10px;}
+.faq-acc details[open]{border-color:rgba(183,110,77,.35);}
+.faq-acc summary{
+  list-style:none;cursor:pointer;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-size:14.5px;font-weight:700;color:var(--heading);-webkit-tap-highlight-color:transparent;
+}
+.faq-acc summary::-webkit-details-marker{display:none;}
+.faq-acc summary .ic{width:18px;height:18px;flex:0 0 auto;color:var(--or-rose-light);transition:transform .3s cubic-bezier(.2,.7,.2,1);}
+.faq-acc details[open] summary .ic{transform:rotate(180deg);}
+.faq-acc .faq-a{
+  padding:0 20px 18px;color:var(--text-dim);font-size:13.5px;line-height:1.75;max-width:64ch;
+  animation:faqOpen .35s cubic-bezier(.2,.7,.2,1);
+}
+@keyframes faqOpen{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){
+  .faq-acc .faq-a{animation:none;}
+  .faq-acc summary .ic{transition:none;}
+}
+
 /* ---------------- City coverflow carousel ---------------- */
 .cf-wrap{position:relative;padding:10px 0 6px;-webkit-user-select:none;user-select:none;}
 .cf-viewport{position:relative;height:min(64vw,420px);perspective:1500px;overflow:hidden;touch-action:pan-y;cursor:grab;}
@@ -1094,23 +1122,31 @@ var I18N = {
 /* Villes */
 "Parcourez nos programmes immobiliers wilaya par wilaya, et découvrez les prochaines villes couvertes.":{en:"Browse our developments province by province, and discover the next cities we'll cover.",de:"Durchsuchen Sie unsere Projekte Provinz für Provinz und entdecken Sie die nächsten Städte.",ar:"تصفح برامجنا العقارية ولاية بولاية، واكتشف المدن القادمة."},
 /* About */
-"L'immobilier neuf en Algérie, sans le flou habituel.":{en:"New-build real estate in Algeria, without the usual guesswork.",de:"Neubauimmobilien in Algerien — ohne die übliche Unklarheit.",ar:"العقارات الجديدة في الجزائر، دون الغموض المعتاد."},
-"yadra! met en relation directe les acquéreurs et les promoteurs immobiliers à travers l'Algérie, pour ceux qui y vivent comme pour la diaspora à l'étranger : fiches projets complètes, promoteurs vérifiés, contact direct.":{en:"yadra! directly connects buyers and real estate developers across Algeria, for those who live there and for the diaspora abroad: complete project pages, verified developers, direct contact.",de:"yadra! verbindet Käufer direkt mit Immobilienentwicklern in ganz Algerien — für alle, die dort leben, wie für die Diaspora im Ausland: vollständige Projektprofile, geprüfte Bauträger, direkter Kontakt.",ar:"يادرا! تربط مباشرة بين المشترين والمطورين العقاريين في جميع أنحاء الجزائر، لمن يعيش هناك كما للجالية في الخارج: صفحات مشاريع كاملة، مطورون موثّقون، تواصل مباشر."},
-"Fondée à Alger, l'équipe qbm construit yadra! projet par projet — on préfère dix fiches bien faites à cent approximatives.":{en:"Founded in Algiers, the qbm team builds yadra! project by project — we'd rather have ten well-crafted listings than a hundred approximate ones.",de:"Das qbm-Team wurde in Algier gegründet und baut yadra! Projekt für Projekt auf — lieber zehn gut gemachte Profile als hundert ungenaue.",ar:"تأسس في الجزائر العاصمة، يبني فريق qbm يادرا! مشروعًا تلو الآخر — نفضل عشر صفحات متقنة على مئة تقريبية."},
+"Notre démarche":{en:"Our approach",de:"Unser Ansatz",ar:"نهجنا"},
+"Le neuf algérien, montré tel qu'il est.":{en:"New-build Algeria, shown as it really is.",de:"Neubauimmobilien in Algerien, wie sie wirklich sind.",ar:"العقارات الجديدة في الجزائر، كما هي فعلاً."},
+"Chercher un logement neuf en Algérie veut souvent dire courir après l'information : un prix qui change au téléphone, un chantier qu'on ne voit jamais avancer, un promoteur impossible à vérifier. yadra! est né pour changer cet ordre des choses — pour ceux qui vivent en Algérie comme pour la diaspora, parfois à des milliers de kilomètres du chantier.":{en:"Searching for a new-build home in Algeria often means chasing information: a price that changes over the phone, a construction site you never see progress, a developer you can't verify. yadra! was built to change that — for those living in Algeria and for the diaspora, sometimes thousands of kilometres from the site.",de:"Die Suche nach einer Neubauwohnung in Algerien bedeutet oft, Informationen hinterherzujagen: ein Preis, der sich am Telefon ändert, eine Baustelle, deren Fortschritt man nie sieht, ein Bauträger, den man nicht überprüfen kann. yadra! wurde gegründet, um das zu ändern — für alle, die in Algerien leben, wie für die Diaspora, manchmal tausende Kilometer von der Baustelle entfernt.",ar:"البحث عن سكن جديد في الجزائر يعني غالبًا مطاردة المعلومة: سعر يتغير في المكالمة، ورشة لا نرى تقدمها أبدًا، مطور يستحيل التحقق منه. وُلدت يادرا! لتغيير هذا الواقع — لمن يعيش في الجزائر كما للجالية، أحيانًا على بعد آلاف الكيلومترات من الورشة."},
+"L'équipe qbm construit yadra! depuis Alger, projet par projet. Pas d'ambition de tout référencer : on préfère dix fiches vérifiées à cent approximatives, et un promoteur qu'on a réellement rencontré à un logo ajouté en cinq minutes.":{en:"The qbm team builds yadra! from Algiers, project by project. No ambition to list everything: we'd rather have ten verified listings than a hundred approximate ones, and a developer we've actually met than a logo added in five minutes.",de:"Das qbm-Team baut yadra! von Algier aus auf, Projekt für Projekt. Kein Anspruch, alles zu erfassen: lieber zehn geprüfte Profile als hundert ungenaue, und ein Bauträger, den wir wirklich getroffen haben, statt ein in fünf Minuten hinzugefügtes Logo.",ar:"يبني فريق qbm يادرا! من الجزائر العاصمة، مشروعًا تلو الآخر. دون طموح لإدراج كل شيء: نفضل عشر صفحات موثّقة على مئة تقريبية، ومطورًا التقينا به فعلاً على شعار أُضيف في خمس دقائق."},
+"Notre métier n'est pas de vendre. C'est de vérifier avant vous — pour que la visite ne soit pas la première fois que vous découvrez la vérité sur un projet.":{en:"Our job isn't to sell. It's to verify before you do — so the site visit isn't the first time you learn the truth about a project.",de:"Unsere Aufgabe ist nicht der Verkauf. Es ist die Überprüfung — bevor Sie es tun —, damit die Besichtigung nicht der erste Moment ist, in dem Sie die Wahrheit über ein Projekt erfahren.",ar:"مهمتنا ليست البيع. بل التحقق قبلكم — حتى لا تكون الزيارة أول مرة تكتشفون فيها حقيقة المشروع."},
+"Villes suivies":{en:"Cities covered",de:"Erfasste Städte",ar:"مدن مغطاة"},
+"Projets recensés":{en:"Projects listed",de:"Erfasste Projekte",ar:"مشاريع مدرجة"},
+"Promoteurs vérifiés":{en:"Verified developers",de:"Geprüfte Bauträger",ar:"مطورون موثّقون"},
+"Trois principes, sans exception":{en:"Three principles, no exceptions",de:"Drei Grundsätze, ohne Ausnahme",ar:"ثلاثة مبادئ، دون استثناء"},
 "Exigence":{en:"Rigor",de:"Anspruch",ar:"الدقة"},
-"Chaque promoteur mis en avant est vérifié avant publication.":{en:"Every featured developer is verified before publication.",de:"Jeder vorgestellte Bauträger wird vor der Veröffentlichung geprüft.",ar:"يتم التحقق من كل مطور مميز قبل النشر."},
+"Aucun projet n'apparaît sur yadra! avant qu'on ait vérifié le promoteur : registre de commerce, références clients, avancement du chantier constaté sur place.":{en:"No project appears on yadra! before we've verified the developer: business registration, client references, construction progress checked on site.",de:"Kein Projekt erscheint auf yadra!, bevor wir den Bauträger geprüft haben: Handelsregister, Kundenreferenzen, vor Ort geprüfter Baufortschritt.",ar:"لا يظهر أي مشروع على يادرا! قبل التحقق من المطور: السجل التجاري، مراجع العملاء، تقدم الورشة المُعاين ميدانيًا."},
 "Transparence":{en:"Transparency",de:"Transparenz",ar:"الشفافية"},
-"Prix, plans, disponibilités : une information complète, sans surprise.":{en:"Price, floor plans, availability: complete information, no surprises.",de:"Preis, Grundrisse, Verfügbarkeit: vollständige Informationen, keine Überraschungen.",ar:"السعر، المخططات، التوفر: معلومات كاملة، دون مفاجآت."},
+"Le prix affiché est celui négocié avec le promoteur. Pas de marge cachée, pas de frais qui apparaissent au moment de signer.":{en:"The price shown is the one negotiated with the developer. No hidden margin, no fees that appear when you sign.",de:"Der angezeigte Preis ist der mit dem Bauträger ausgehandelte. Keine versteckte Marge, keine Gebühren, die erst bei der Unterschrift auftauchen.",ar:"السعر المعروض هو السعر المتفق عليه مع المطور. دون هامش خفي، ودون رسوم تظهر عند التوقيع."},
 "Sélection":{en:"Curation",de:"Auswahl",ar:"الانتقاء"},
-"Des projets choisis pour leur emplacement et la qualité de leur conception.":{en:"Projects chosen for their location and design quality.",de:"Projekte, ausgewählt nach Lage und Gestaltungsqualität.",ar:"مشاريع مختارة لموقعها وجودة تصميمها."},
-"Est-ce que yadra! vend directement des biens ?":{en:"Does yadra! sell properties directly?",de:"Verkauft yadra! Immobilien direkt?",ar:"هل تبيع يادرا! العقارات مباشرة؟"},
-"Non, yadra! met en relation les acquéreurs avec les promoteurs. La vente se fait toujours directement avec le promoteur du projet.":{en:"No, yadra! connects buyers with developers. The sale always takes place directly with the project's developer.",de:"Nein, yadra! verbindet Käufer mit Bauträgern. Der Verkauf erfolgt immer direkt mit dem Bauträger des Projekts.",ar:"لا، تربط يادرا! المشترين بالمطورين. تتم عملية البيع دائمًا مباشرة مع مطور المشروع."},
-"Comment un promoteur est-il vérifié ?":{en:"How is a developer verified?",de:"Wie wird ein Bauträger geprüft?",ar:"كيف يتم التحقق من المطور؟"},
-"Chaque promoteur transmet ses documents d'enregistrement et ses références avant publication de ses projets sur la plateforme.":{en:"Each developer submits their registration documents and references before their projects are published on the platform.",de:"Jeder Bauträger reicht seine Registrierungsunterlagen und Referenzen ein, bevor seine Projekte auf der Plattform veröffentlicht werden.",ar:"يقدم كل مطور وثائق تسجيله ومراجعه قبل نشر مشاريعه على المنصة."},
-"L'utilisation de yadra! est-elle gratuite pour les acquéreurs ?":{en:"Is yadra! free to use for buyers?",de:"Ist die Nutzung von yadra! für Käufer kostenlos?",ar:"هل استخدام يادرا! مجاني للمشترين؟"},
-"Oui, la recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits.":{en:"Yes, searching, browsing project pages and contacting developers are entirely free.",de:"Ja, die Suche, das Durchsuchen von Projektprofilen und die Kontaktaufnahme mit Bauträgern sind völlig kostenlos.",ar:"نعم، البحث وتصفح صفحات المشاريع والتواصل مع المطورين مجاني بالكامل."},
+"On refuse plus de projets qu'on n'en publie. Un bon emplacement ne suffit pas s'il n'est pas porté par un promoteur sérieux.":{en:"We turn down more projects than we publish. A good location isn't enough without a serious developer behind it.",de:"Wir lehnen mehr Projekte ab, als wir veröffentlichen. Eine gute Lage allein reicht nicht, wenn kein seriöser Bauträger dahintersteht.",ar:"نرفض مشاريع أكثر مما ننشر. الموقع الجيد وحده لا يكفي دون مطور جاد يقف خلفه."},
+"yadra! vend-il directement des biens ?":{en:"Does yadra! sell properties directly?",de:"Verkauft yadra! Immobilien direkt?",ar:"هل تبيع يادرا! العقارات مباشرة؟"},
+"Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet.":{en:"No. yadra! connects buyers with developers; the sale is always concluded directly with the project's developer.",de:"Nein. yadra! verbindet Käufer mit Bauträgern; der Verkauf erfolgt immer direkt mit dem Bauträger des Projekts.",ar:"لا. تربط يادرا! المشترين بالمطورين؛ تتم عملية البيع دائمًا مباشرة مع مطور المشروع."},
+"Comment un promoteur est-il vérifié avant publication ?":{en:"How is a developer verified before publication?",de:"Wie wird ein Bauträger vor der Veröffentlichung geprüft?",ar:"كيف يتم التحقق من المطور قبل النشر؟"},
+"Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.":{en:"Each developer submits their business registration and references before their projects are published on the platform.",de:"Jeder Bauträger reicht sein Handelsregister und seine Referenzen ein, bevor seine Projekte auf der Plattform veröffentlicht werden.",ar:"يقدم كل مطور سجله التجاري ومراجعه قبل نشر مشاريعه على المنصة."},
+"L'utilisation de yadra! est-elle payante ?":{en:"Is there a fee to use yadra!?",de:"Ist die Nutzung von yadra! kostenpflichtig?",ar:"هل استخدام يادرا! مدفوع؟"},
+"Non. La recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits pour les acquéreurs.":{en:"No. Searching, browsing project pages and contacting developers are entirely free for buyers.",de:"Nein. Die Suche, das Durchsuchen von Projektprofilen und die Kontaktaufnahme mit Bauträgern sind für Käufer völlig kostenlos.",ar:"لا. البحث وتصفح صفحات المشاريع والتواصل مع المطورين مجاني بالكامل للمشترين."},
+"Je vis à l'étranger, puis-je acheter depuis la diaspora ?":{en:"I live abroad — can I buy from the diaspora?",de:"Ich lebe im Ausland — kann ich aus der Diaspora heraus kaufen?",ar:"أعيش في الخارج، هل يمكنني الشراء من الجالية؟"},
+"Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu'à la remise des clés.":{en:"Yes. Many buyers follow their project remotely; we favour developers experienced in supporting diaspora buyers, from first contact through to the handover of the keys.",de:"Ja. Viele Käufer verfolgen ihr Projekt aus der Ferne; wir bevorzugen Bauträger, die es gewohnt sind, Diaspora-Käufer vom Erstkontakt bis zur Schlüsselübergabe zu begleiten.",ar:"نعم. يتابع العديد من المشترين مشروعهم عن بُعد؛ ونفضل المطورين المعتادين على مرافقة مشتري الجالية، من أول تواصل حتى تسليم المفاتيح."},
 "Nous contacter":{en:"Contact us",de:"Kontaktieren Sie uns",ar:"تواصل معنا"},
-"Une question, une suggestion ? Notre équipe vous répond directement.":{en:"A question, a suggestion? Our team replies directly.",de:"Eine Frage, ein Vorschlag? Unser Team antwortet Ihnen direkt.",ar:"سؤال أو اقتراح؟ يرد عليك فريقنا مباشرة."},
+"Une question, une remarque ? Notre équipe vous répond directement.":{en:"A question, a remark? Our team replies directly.",de:"Eine Frage, eine Anmerkung? Unser Team antwortet Ihnen direkt.",ar:"سؤال أو ملاحظة؟ يرد عليك فريقنا مباشرة."},
 "Écrire sur WhatsApp":{en:"Write on WhatsApp",de:"Auf WhatsApp schreiben",ar:"الكتابة عبر واتساب"},
 /* Invest */
 "Investir dans l'immobilier neuf en Algérie, depuis le pays ou depuis l'étranger.":{en:"Invest in new-build real estate in Algeria, from home or from abroad.",de:"In Neubauimmobilien in Algerien investieren — vom Land selbst oder aus dem Ausland.",ar:"استثمر في العقارات الجديدة في الجزائر، من داخل البلاد أو من الخارج."},
@@ -1819,7 +1855,7 @@ function render(){
   else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); var trackedPr = getPromoterBySlug(segs[1]); if(trackedPr){
     updateMeta({path:'/promoteurs/'+segs[1], title:trackedPr.name+' — Promoteur immobilier '+(WILAYAS[trackedPr.wilaya]?WILAYAS[trackedPr.wilaya].label:'')+' | yadra!', description:trackedPr.desc||DEFAULT_META.description}); } }
   else if(segs[0]==='a-propos'){ main.innerHTML = pageAbout(); afterAbout();
-    updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! met en relation directe les acquéreurs et les promoteurs immobiliers en Algérie, pour ceux qui y vivent comme pour la diaspora à l'étranger."}); }
+    updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! vérifie les promoteurs avant de publier leurs projets, pour les acquéreurs en Algérie comme pour la diaspora à l'étranger."}); }
   else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest();
     updateMeta({path:'/investir', title:"Investir dans l'immobilier neuf en Algérie, depuis le pays ou l'étranger | yadra!", description:"Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger."}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
@@ -3063,29 +3099,42 @@ function afterPromotersList(){}
 /* ================================================================
    PAGE: À PROPOS
    ================================================================ */
-function faqItem(q,a){ return '<div class="side-block" style="margin-bottom:14px;"><b style="display:block;color:var(--heading);font-size:14.5px;margin-bottom:8px;">'+q+'</b><p style="color:var(--text-dim);font-size:13.5px;line-height:1.7;">'+a+'</p></div>'; }
+function faqItem(q,a){ return '<details class="reveal"><summary>'+q+' '+ic('chevronDown')+'</summary><div class="faq-a">'+a+'</div></details>'; }
 function pageAbout(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">À propos</span></div></div>'
-  +'<div class="wrap" style="padding-bottom:20px;max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">L’immobilier neuf en Algérie, sans le flou habituel.</h1>'
-    +'<p class="prose" style="margin-top:18px;">yadra! met en relation directe les acquéreurs et les promoteurs immobiliers à travers l’Algérie, pour ceux qui y vivent comme pour la diaspora à l’étranger : fiches projets complètes, promoteurs vérifiés, contact direct.</p>'
-    +'<p class="prose">Fondée à Alger, l’équipe qbm construit yadra! projet par projet — on préfère dix fiches bien faites à cent approximatives.</p>'
+  +'<div class="wrap" style="padding-bottom:8px;max-width:760px;">'
+    +'<div class="eyebrow reveal">Notre démarche</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.3rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.22;">Le neuf algérien, montré tel qu’il est.</h1>'
+    +'<p class="prose reveal" style="margin-top:20px;">Chercher un logement neuf en Algérie veut souvent dire courir après l’information : un prix qui change au téléphone, un chantier qu’on ne voit jamais avancer, un promoteur impossible à vérifier. yadra! est né pour changer cet ordre des choses — pour ceux qui vivent en Algérie comme pour la diaspora, parfois à des milliers de kilomètres du chantier.</p>'
+    +'<p class="prose reveal">L’équipe qbm construit yadra! depuis Alger, projet par projet. Pas d’ambition de tout référencer : on préfère dix fiches vérifiées à cent approximatives, et un promoteur qu’on a réellement rencontré à un logo ajouté en cinq minutes.</p>'
+    +'<blockquote class="pull-quote reveal">Notre métier n’est pas de vendre. C’est de vérifier avant vous — pour que la visite ne soit pas la première fois que vous découvrez la vérité sur un projet.</blockquote>'
   +'</div>'
-  +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 60px;">'
-    +valueCard('shield','Exigence','Chaque promoteur mis en avant est vérifié avant publication.')
-    +valueCard('handshake','Transparence','Prix, plans, disponibilités : une information complète, sans surprise.')
-    +valueCard('sparkle','Sélection','Des projets choisis pour leur emplacement et la qualité de leur conception.')
+  +'<div class="wrap"><div class="grid grid-3 reveal-stagger" style="margin:8px 0 56px;">'
+    +'<div class="stat-tile reveal"><div class="k">Villes suivies</div><div class="v"><span class="count-up" data-target="'+WILAYA_ORDER.length+'">0</span></div></div>'
+    +'<div class="stat-tile reveal"><div class="k">Projets recensés</div><div class="v"><span class="count-up" data-target="'+getAllProjects().length+'">0</span>+</div></div>'
+    +'<div class="stat-tile reveal"><div class="k">Promoteurs vérifiés</div><div class="v"><span class="count-up" data-target="100">0</span>%</div></div>'
   +'</div></div>'
-  +'<div class="wrap" id="faq" style="padding-bottom:60px;max-width:820px;">'
-    +'<h2 style="font-size:22px;color:var(--heading);margin-bottom:18px;">Questions fréquentes</h2>'
-    +faqItem('Est-ce que yadra! vend directement des biens ?','Non, yadra! met en relation les acquéreurs avec les promoteurs. La vente se fait toujours directement avec le promoteur du projet.')
-    +faqItem('Comment un promoteur est-il vérifié ?','Chaque promoteur transmet ses documents d’enregistrement et ses références avant publication de ses projets sur la plateforme.')
-    +faqItem('L’utilisation de yadra! est-elle gratuite pour les acquéreurs ?','Oui, la recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits.')
+  +'<div class="wrap" style="padding-bottom:16px;">'
+    +'<div class="section-head reveal"><h2>Trois principes, sans exception</h2></div>'
+    +'<div class="grid grid-3 reveal-stagger" style="margin-bottom:60px;">'
+      +'<div class="reveal">'+valueCard('shield','Exigence','Aucun projet n’apparaît sur yadra! avant qu’on ait vérifié le promoteur : registre de commerce, références clients, avancement du chantier constaté sur place.')+'</div>'
+      +'<div class="reveal">'+valueCard('handshake','Transparence','Le prix affiché est celui négocié avec le promoteur. Pas de marge cachée, pas de frais qui apparaissent au moment de signer.')+'</div>'
+      +'<div class="reveal">'+valueCard('sparkle','Sélection','On refuse plus de projets qu’on n’en publie. Un bon emplacement ne suffit pas s’il n’est pas porté par un promoteur sérieux.')+'</div>'
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" id="faq" style="padding-bottom:60px;max-width:760px;">'
+    +'<div class="section-head reveal"><h2>Questions fréquentes</h2></div>'
+    +'<div class="faq-acc reveal-stagger">'
+      +faqItem('yadra! vend-il directement des biens ?','Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet.')
+      +faqItem('Comment un promoteur est-il vérifié avant publication ?','Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.')
+      +faqItem('L’utilisation de yadra! est-elle payante ?','Non. La recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits pour les acquéreurs.')
+      +faqItem('Je vis à l’étranger, puis-je acheter depuis la diaspora ?','Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu’à la remise des clés.')
+    +'</div>'
   +'</div>'
   +'<div class="wrap" id="contact" style="padding-bottom:80px;max-width:520px;">'
-    +'<div class="side-block"><h3 style="color:var(--heading);font-size:17px;margin-bottom:10px;">Nous contacter</h3>'
-      +'<p style="color:var(--text-dim);font-size:13.5px;margin-bottom:16px;">Une question, une suggestion ? Notre équipe vous répond directement.</p>'
+    +'<div class="side-block reveal"><h3 style="color:var(--heading);font-size:17px;margin-bottom:10px;">Nous contacter</h3>'
+      +'<p style="color:var(--text-dim);font-size:13.5px;margin-bottom:16px;">Une question, une remarque ? Notre équipe vous répond directement.</p>'
       +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a>'
     +'</div>'
   +'</div>';
