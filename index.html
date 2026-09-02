@@ -3533,13 +3533,21 @@ function mountBootSymbol3D(){
     });
     if(!group.children.length) return; // parsing failed: CSS fallback stays visible
 
-    var box = new THREE.Box3().setFromObject(group);
-    var size = box.getSize(new THREE.Vector3());
+    // Center each mesh's own geometry (raw SVG units, before scale) on the
+    // combined bounding-box center, so the group's local origin — which is
+    // what .rotation actually pivots around — coincides with the icon's
+    // visual center. Centering via group.position instead (as the oscillating
+    // hero symbol does) leaves that offset baked into the rotating pivot: a
+    // full continuous spin then swings the whole icon through a wide orbit
+    // instead of turning in place.
+    var rawBox = new THREE.Box3().setFromObject(group);
+    var rawCenter = rawBox.getCenter(new THREE.Vector3());
+    group.children.forEach(function(mesh){
+      mesh.geometry.translate(-rawCenter.x, -rawCenter.y, -rawCenter.z);
+    });
+    var size = rawBox.getSize(new THREE.Vector3());
     var scale = 9.4 / Math.max(size.x, size.y);
     group.scale.set(scale, -scale, scale);
-    box.setFromObject(group);
-    var center = box.getCenter(new THREE.Vector3());
-    group.position.sub(center);
     scene.add(group);
 
     var wrap = document.createElement('div');
@@ -3550,20 +3558,24 @@ function mountBootSymbol3D(){
     if(gemEl) gemEl.style.display = 'none';
     mount.appendChild(wrap);
 
+    // A full yaw (Y-axis) turn makes this flat extruded icon go edge-on/vanish
+    // at 90°/270°, and any fixed X/Y tilt combined with this asymmetric shape's
+    // off-mass-center silhouette makes a Z-spin wobble/drift on screen. Spinning
+    // dead-on the camera axis (Z, zero tilt) keeps the icon perfectly centered —
+    // the beveled edges still catch the fixed key/rim lights as they sweep round.
     var start = performance.now();
-    var PERIOD = 3200; // ms per full turn — brisk, continuous, premium
+    var PERIOD = 3600; // ms per full turn — brisk, continuous, premium
     function frame(now){
       if(!reduceMotion){
         var t = ((now - start) % PERIOD) / PERIOD;
-        group.rotation.y = t * Math.PI * 2;
-        group.rotation.x = 0.12;
+        group.rotation.z = t * Math.PI * 2;
         bootCurrent.raf = requestAnimationFrame(frame);
       }
       renderer.render(scene, camera);
     }
     bootCurrent = {renderer:renderer, camera:camera, raf:null};
     bootCurrent.raf = reduceMotion ? null : requestAnimationFrame(frame);
-    if(reduceMotion){ group.rotation.x = 0.12; renderer.render(scene, camera); }
+    if(reduceMotion){ renderer.render(scene, camera); }
   }, undefined, function(){
     /* network/CDN failure: CSS flip faces stay visible */
   });
