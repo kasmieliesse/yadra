@@ -588,6 +588,7 @@ body:has(.mobile-cta-bar) .wa-float{display:none;}
 .stat-tile .v{font-family:var(--font-display);font-size:19px;color:var(--heading);margin-top:6px;}
 .prose{color:var(--text);font-size:14.5px;line-height:1.85;max-width:66ch;}
 .prose + .prose{margin-top:10px;}
+.prose p + p{margin-top:10px;}
 .legal-doc{max-width:720px;}
 .legal-doc .legal-updated{font-size:12px;color:var(--text-dim);margin-bottom:26px;}
 .legal-doc .legal-toc{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border);}
@@ -926,7 +927,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <h4>Informations</h4>
         <a href="/investir">Investir en Algérie</a>
         <a href="/a-propos#faq">Questions fréquentes</a>
-        <a href="/a-propos#blog">Blog</a>
+        <a href="/guides/acheter-depuis-letranger">Guides</a>
         <a href="/a-propos#contact">Contact</a>
       </div>
       <div class="foot-col">
@@ -987,7 +988,7 @@ var I18N = {
 "Informations":{en:"Information",de:"Informationen",ar:"معلومات"},
 "Investir en Algérie":{en:"Invest in Algeria",de:"In Algerien investieren",ar:"الاستثمار في الجزائر"},
 "Questions fréquentes":{en:"FAQ",de:"Häufige Fragen",ar:"الأسئلة الشائعة"},
-"Blog":{en:"Blog",de:"Blog",ar:"المدونة"},
+"Guides":{en:"Guides",de:"Ratgeber",ar:"أدلة"},
 "Contact":{en:"Contact",de:"Kontakt",ar:"اتصل بنا"},
 "Légal":{en:"Legal",de:"Rechtliches",ar:"قانوني"},
 "Mentions légales":{en:"Legal notice",de:"Impressum",ar:"إشعار قانوني"},
@@ -1151,6 +1152,20 @@ var I18N = {
 "Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu'à la remise des clés.":{en:"Yes. Many buyers follow their project remotely; we favour developers experienced in supporting diaspora buyers, from first contact through to the handover of the keys.",de:"Ja. Viele Käufer verfolgen ihr Projekt aus der Ferne; wir bevorzugen Bauträger, die es gewohnt sind, Diaspora-Käufer vom Erstkontakt bis zur Schlüsselübergabe zu begleiten.",ar:"نعم. يتابع العديد من المشترين مشروعهم عن بُعد؛ ونفضل المطورين المعتادين على مرافقة مشتري الجالية، من أول تواصل حتى تسليم المفاتيح."},
 "Nous contacter":{en:"Contact us",de:"Kontaktieren Sie uns",ar:"تواصل معنا"},
 "Une question, une remarque ? Notre équipe vous répond directement.":{en:"A question, a remark? Our team replies directly.",de:"Eine Frage, eine Anmerkung? Unser Team antwortet Ihnen direkt.",ar:"سؤال أو ملاحظة؟ يرد عليك فريقنا مباشرة."},
+/* Guide diaspora */
+"Guide — Acheter depuis l'étranger":{en:"Guide — Buying from abroad",de:"Ratgeber — Kauf aus dem Ausland",ar:"دليل — الشراء من الخارج"},
+"Guide":{en:"Guide",de:"Ratgeber",ar:"دليل"},
+"Acheter un logement neuf en Algérie depuis l'étranger":{en:"Buying a new-build home in Algeria from abroad",de:"Kauf einer Neubauwohnung in Algerien aus dem Ausland",ar:"شراء سكن جديد في الجزائر من الخارج"},
+"Suivre un achat immobilier à des milliers de kilomètres du chantier change la manière de s'organiser. Voici les points de vigilance qui reviennent le plus souvent chez les acheteurs de la diaspora.":{en:"Following a property purchase thousands of kilometres from the site changes how you need to organise yourself. Here are the points of caution that come up most often for diaspora buyers.",de:"Einen Immobilienkauf tausende Kilometer von der Baustelle entfernt zu verfolgen, verändert die Art der Organisation. Hier sind die Punkte, auf die Käufer aus der Diaspora am häufigsten achten sollten.",ar:"متابعة شراء عقار على بعد آلاف الكيلومترات من الورشة يغيّر طريقة التنظيم. إليك أهم النقاط التي يجب الانتباه إليها لدى مشتري الجالية."},
+"Vérifier le promoteur avant tout":{en:"Verify the developer above all",de:"Zuerst den Bauträger prüfen",ar:"التحقق من المطور أولاً"},
+"Comprendre le calendrier de paiement":{en:"Understand the payment schedule",de:"Den Zahlungsplan verstehen",ar:"فهم جدول الدفع"},
+"Suivre le chantier à distance":{en:"Track the construction site remotely",de:"Die Baustelle aus der Ferne verfolgen",ar:"متابعة الورشة عن بُعد"},
+"Les documents à demander avant de signer":{en:"The documents to request before signing",de:"Die vor der Unterschrift anzufordernden Unterlagen",ar:"الوثائق المطلوبة قبل التوقيع"},
+"La procuration, quand on ne peut pas se déplacer":{en:"Power of attorney, when you can't travel",de:"Vollmacht, wenn eine Reise nicht möglich ist",ar:"التوكيل، عندما يتعذر التنقل"},
+"Où yadra! s'inscrit là-dedans":{en:"Where yadra! fits in",de:"Wo yadra! ins Spiel kommt",ar:"أين تندرج يادرا! في هذا"},
+"Avant de publier un promoteur, on vérifie déjà une partie de ce qui précède — registre de commerce, références, avancement du chantier constaté sur place. Un filtre de plus, pas un substitut aux vérifications ci-dessus.":{en:"Before publishing a developer, we already check part of the above — business registration, references, construction progress checked on site. One more filter, not a substitute for the checks above.",de:"Bevor wir einen Bauträger veröffentlichen, prüfen wir bereits einen Teil des oben Genannten — Handelsregister, Referenzen, vor Ort geprüfter Baufortschritt. Ein zusätzlicher Filter, kein Ersatz für die oben genannten Prüfungen.",ar:"قبل نشر أي مطور، نتحقق مسبقًا من جزء مما سبق — السجل التجاري، المراجع، تقدم الورشة المُعاين ميدانيًا. مرشّح إضافي، لا بديل عن التحققات المذكورة أعلاه."},
+"Voir les promoteurs vérifiés":{en:"See verified developers",de:"Geprüfte Bauträger ansehen",ar:"عرض المطورين الموثّقين"},
+"Ce guide donne des repères généraux et ne remplace pas les conseils d'un notaire ou d'un avocat spécialisé en droit immobilier algérien.":{en:"This guide gives general pointers and does not replace advice from a notary or a lawyer specialised in Algerian real-estate law.",de:"Dieser Ratgeber gibt allgemeine Hinweise und ersetzt nicht die Beratung durch einen Notar oder einen auf algerisches Immobilienrecht spezialisierten Anwalt.",ar:"يقدم هذا الدليل معلومات عامة ولا يغني عن استشارة موثّق أو محامٍ متخصص في القانون العقاري الجزائري."},
 "Écrire sur WhatsApp":{en:"Write on WhatsApp",de:"Auf WhatsApp schreiben",ar:"الكتابة عبر واتساب"},
 /* Invest */
 "Investir dans l'immobilier neuf en Algérie, depuis le pays ou depuis l'étranger.":{en:"Invest in new-build real estate in Algeria, from home or from abroad.",de:"In Neubauimmobilien in Algerien investieren — vom Land selbst oder aus dem Ausland.",ar:"استثمر في العقارات الجديدة في الجزائر، من داخل البلاد أو من الخارج."},
@@ -1862,6 +1877,9 @@ function render(){
     updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! vérifie les promoteurs avant de publier leurs projets, pour les acquéreurs en Algérie comme pour la diaspora à l'étranger."}); }
   else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest();
     updateMeta({path:'/investir', title:"Investir dans l'immobilier neuf en Algérie, depuis le pays ou l'étranger | yadra!", description:"Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger."}); }
+  else if(segs[0]==='guides' && segs[1]==='acheter-depuis-letranger'){ main.innerHTML = pageGuideDiaspora(); afterGuideDiaspora();
+    updateMeta({path:'/guides/acheter-depuis-letranger', title:"Acheter un logement neuf en Algérie depuis l'étranger : le guide complet | yadra!", description:"Vérifier un promoteur, comprendre l'échéancier de paiement, suivre le chantier à distance, la procuration : les repères pour acheter un logement neuf en Algérie depuis la diaspora."});
+    setStructuredData({'@context':'https://schema.org','@type':'Article',headline:"Acheter un logement neuf en Algérie depuis l'étranger",description:"Vérifier un promoteur, comprendre l'échéancier de paiement, suivre le chantier à distance, la procuration : les repères pour acheter un logement neuf en Algérie depuis la diaspora.",author:{'@type':'Organization',name:'yadra!'},publisher:{'@type':'Organization',name:'yadra! by qbm'},mainEntityOfPage:'https://yadra.fr/guides/acheter-depuis-letranger'}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
     updateMeta({path:'/legal/'+segs[1], title:(LEGAL_TITLES[segs[1]]||'Informations légales')+' | yadra!', description:'Informations légales de yadra!.'}); }
   else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); updateMeta({path:'/connexion', title:'Connexion | yadra!', noindex:true}); }
@@ -3211,6 +3229,46 @@ function pageInvest(){
   +'</div>';
 }
 function afterInvest(){}
+
+/* ================================================================
+   PAGE: GUIDE — ACHETER DEPUIS L'ÉTRANGER
+   ================================================================ */
+function guideSection(n,title,body){
+  return '<div class="reveal" style="margin-top:34px;">'
+    +'<h2 style="display:flex;align-items:baseline;gap:12px;font-size:19px;color:var(--heading);margin-bottom:12px;">'
+      +'<span style="font-family:ui-monospace,\'SF Mono\',Menlo,monospace;font-size:12px;color:var(--or-rose-light);">'+n+'</span>'+title
+    +'</h2>'
+    +'<div class="prose">'+body+'</div>'
+  +'</div>';
+}
+function pageGuideDiaspora(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Acheter depuis l’étranger</span></div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
+    +'<div class="eyebrow reveal">Guide</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Acheter un logement neuf en Algérie depuis l’étranger</h1>'
+    +'<p class="prose reveal" style="margin-top:18px;">Suivre un achat immobilier à des milliers de kilomètres du chantier change la manière de s’organiser. Voici les points de vigilance qui reviennent le plus souvent chez les acheteurs de la diaspora.</p>'
+
+    +guideSection('01','Vérifier le promoteur avant tout','<p>Avant de s’intéresser au logement lui-même, renseignez-vous sur le promoteur : depuis combien d’années il construit, quels projets il a déjà livrés, et si d’anciens acheteurs peuvent témoigner. Un registre de commerce à jour et des références vérifiables sont un minimum — un promoteur sérieux ne devrait jamais hésiter à les fournir.</p><p>Méfiez-vous d’un promoteur qui pousse à verser un acompte rapidement, avant d’avoir montré la moindre documentation sur le projet ou sur son historique.</p>')
+
+    +guideSection('02','Comprendre le calendrier de paiement','<p>Un achat sur plan se paie normalement en plusieurs tranches, liées à l’avancement réel des travaux (fondations, gros œuvre, finitions), pas seulement à des dates calendaires fixes. Demandez un échéancier écrit avant de vous engager, et comparez-le à l’avancement que vous pourrez constater vous-même par la suite.</p>')
+
+    +guideSection('03','Suivre le chantier à distance','<p>Demandez des photos ou vidéos datées à intervalles réguliers. Quand c’est possible, faites constater l’avancement par un proche ou un mandataire sur place plutôt que de vous fier uniquement aux visuels envoyés par le promoteur — un simple passage sur le chantier permet de vérifier que ce qui est montré correspond à la réalité.</p>')
+
+    +guideSection('04','Les documents à demander avant de signer','<p>Selon le projet, réunissez au minimum : le titre de propriété du terrain, le permis de construire, les plans détaillés du logement avec sa surface exacte, et un contrat de réservation ou de vente écrit incluant l’échéancier de paiement. La liste exacte peut varier — un notaire ou un avocat spécialisé confirmera ce qui est requis pour votre projet précis.</p>')
+
+    +guideSection('05','La procuration, quand on ne peut pas se déplacer','<p>Une procuration permet de mandater un proche ou un professionnel pour signer certains documents ou suivre des étapes en votre absence. Les modalités exactes (forme, légalisation) se vérifient auprès du consulat d’Algérie de votre lieu de résidence ou d’un notaire, avant d’en avoir besoin plutôt qu’au dernier moment.</p>')
+
+    +'<div class="reveal" style="margin-top:40px;padding:22px 24px;border-radius:var(--radius-l);background:var(--surface);border:1px solid var(--border);">'
+      +'<h3 style="color:var(--heading);font-size:16px;margin-bottom:8px;">Où yadra! s’inscrit là-dedans</h3>'
+      +'<p style="color:var(--text-dim);font-size:13.5px;line-height:1.7;margin-bottom:14px;">Avant de publier un promoteur, on vérifie déjà une partie de ce qui précède — registre de commerce, références, avancement du chantier constaté sur place. Un filtre de plus, pas un substitut aux vérifications ci-dessus.</p>'
+      +'<a class="btn btn-primary btn-sm" href="/promoteurs">Voir les promoteurs vérifiés '+ic('chevronRight')+'</a>'
+    +'</div>'
+
+    +'<p style="color:var(--text-dim);font-size:12px;margin-top:28px;line-height:1.6;">Ce guide donne des repères généraux et ne remplace pas les conseils d’un notaire ou d’un avocat spécialisé en droit immobilier algérien.</p>'
+  +'</div>';
+}
+function afterGuideDiaspora(){}
 
 /* ================================================================
    PAGE: LEGAL

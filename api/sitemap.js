@@ -7,6 +7,7 @@ const STATIC_PAGES = [
   { path: '/promoteurs', priority: '0.7', changefreq: 'weekly' },
   { path: '/a-propos', priority: '0.5', changefreq: 'monthly' },
   { path: '/investir', priority: '0.5', changefreq: 'monthly' },
+  { path: '/guides/acheter-depuis-letranger', priority: '0.6', changefreq: 'monthly' },
   { path: '/legal/mentions-legales', priority: '0.2', changefreq: 'yearly' },
   { path: '/legal/conditions', priority: '0.2', changefreq: 'yearly' },
   { path: '/legal/confidentialite', priority: '0.2', changefreq: 'yearly' }
