@@ -121,30 +121,32 @@ p{margin:0;}
 /* ---------------- Boot loader ---------------- */
 .boot-loader{
   position:fixed;inset:0;z-index:9999;overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  background:radial-gradient(120% 100% at 50% 0%,#1c1310 0%,var(--noir) 60%);
-  transition:opacity .5s cubic-bezier(.4,0,.2,1),visibility .5s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+  background:#000;
+  transition:opacity .6s cubic-bezier(.4,0,.2,1),visibility .6s;
 }
 .boot-loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-.boot-glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;}
-.boot-glow-1{width:420px;height:420px;background:radial-gradient(circle,rgba(183,110,77,.55),transparent 70%);top:-120px;right:-80px;animation:bootDrift1 7s ease-in-out infinite;}
-.boot-glow-2{width:340px;height:340px;background:radial-gradient(circle,rgba(216,154,120,.32),transparent 70%);bottom:-110px;left:-60px;animation:bootDrift2 9s ease-in-out infinite;}
-@keyframes bootDrift1{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,30px);}}
-@keyframes bootDrift2{0%,100%{transform:translate(0,0);}50%{transform:translate(30px,-20px);}}
-.boot-gem-wrap{position:relative;width:120px;height:120px;perspective:900px;}
+.boot-glow{position:absolute;border-radius:50%;pointer-events:none;}
+.boot-glow-1{width:640px;height:640px;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(183,110,77,.16) 0%,rgba(183,110,77,.05) 45%,transparent 72%);filter:blur(10px);animation:bootGlowPulse 3.4s ease-in-out infinite;}
+.boot-glow-2{width:280px;height:280px;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,255,255,.10) 0%,transparent 70%);filter:blur(4px);}
+@keyframes bootGlowPulse{0%,100%{opacity:.75;}50%{opacity:1;}}
+.boot-gem-wrap{position:relative;width:150px;height:150px;perspective:900px;}
+#bootSymbolMount{position:absolute;inset:0;}
+#bootSymbolMount canvas{display:block;width:100%!important;height:100%!important;}
 .boot-gem{position:absolute;inset:0;transform-style:preserve-3d;animation:bootGemSpin 2.6s linear infinite;}
 .boot-gem .face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;}
 .boot-gem .face img{width:82%;height:82%;object-fit:contain;filter:drop-shadow(0 18px 30px rgba(183,110,77,.6));}
 .boot-gem .face.back{transform:rotateY(180deg);}
 .boot-gem .face.back img.mirrored{transform:scaleX(-1);filter:brightness(.55) saturate(.7);}
 @keyframes bootGemSpin{from{transform:rotateY(0deg) rotateX(8deg);}to{transform:rotateY(360deg) rotateX(8deg);}}
-.boot-gem-shadow{position:absolute;left:50%;bottom:-22px;width:70px;height:14px;background:radial-gradient(ellipse,rgba(183,110,77,.45),transparent 70%);transform:translateX(-50%);animation:bootShadowPulse 2.6s ease-in-out infinite;}
-@keyframes bootShadowPulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.7;}50%{transform:translateX(-50%) scale(.7);opacity:.4;}}
-.boot-wordmark{position:relative;height:34px;width:auto;opacity:0;animation:bootWordmarkIn .7s ease-out .35s forwards;}
+.boot-gem-shadow{position:absolute;left:50%;bottom:-26px;width:86px;height:16px;background:radial-gradient(ellipse,rgba(0,0,0,.55),transparent 72%);transform:translateX(-50%);animation:bootShadowPulse 2.6s ease-in-out infinite;}
+@keyframes bootShadowPulse{0%,100%{transform:translateX(-50%) scale(1);opacity:.6;}50%{transform:translateX(-50%) scale(.7);opacity:.35;}}
+.boot-wordmark{position:relative;height:32px;width:auto;opacity:0;filter:drop-shadow(0 0 18px rgba(183,110,77,.25));animation:bootWordmarkIn .8s ease-out .5s forwards;}
 @keyframes bootWordmarkIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 @media (prefers-reduced-motion:reduce){
   .boot-gem{animation:none;transform:rotateX(8deg);}
-  .boot-glow-1,.boot-glow-2,.boot-gem-shadow{animation:none;}
+  .boot-glow-1{animation:none;}
+  .boot-gem-shadow{animation:none;}
   .boot-wordmark{animation:none;opacity:1;}
 }
 .i-def{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;flex-shrink:0;}
@@ -820,6 +822,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
       <div class="face front"><img src="/assets/symbol.svg" alt=""></div>
       <div class="face back"><img src="/assets/symbol.svg" alt="" class="mirrored"></div>
     </div>
+    <div id="bootSymbolMount"></div>
     <div class="boot-gem-shadow"></div>
   </div>
   <img src="/logo-lockup.png" alt="yadra!" class="boot-wordmark">
@@ -3298,7 +3301,10 @@ function hideBootLoader(){
   var el = document.getElementById('bootLoader');
   if(!el || el.classList.contains('hidden')) return;
   el.classList.add('hidden');
-  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 600);
+  setTimeout(function(){
+    if(el.parentNode) el.parentNode.removeChild(el);
+    if(window.disposeBootSymbol3D) window.disposeBootSymbol3D();
+  }, 600);
 }
 function startApp(){
   initLangSwitcher(); initUserMenu();
@@ -3452,6 +3458,116 @@ window.addEventListener('resize', function(){
   current.camera.updateProjectionMatrix();
 });
 mountHeroSymbol3D();
+
+/* ---- Boot-loader symbol: same PBR pipeline, continuous spin, all viewports ---- */
+var bootCurrent = null;
+
+function disposeBootSymbol3D(){
+  if(!bootCurrent) return;
+  if(bootCurrent.raf) cancelAnimationFrame(bootCurrent.raf);
+  bootCurrent.renderer.dispose();
+  bootCurrent = null;
+}
+window.disposeBootSymbol3D = disposeBootSymbol3D;
+
+function mountBootSymbol3D(){
+  var mount = document.getElementById('bootSymbolMount');
+  if(!mount || !window.WebGLRenderingContext) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var w = mount.clientWidth || 150, h = mount.clientHeight || 150;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(28, w/h, 0.1, 100);
+  camera.position.set(0, 0, 15);
+  camera.lookAt(0,0,0);
+
+  var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2.5));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
+
+  var pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  var key = new THREE.DirectionalLight(0xffd9b8, 3.6);
+  key.position.set(4,6,7);
+  scene.add(key);
+  var fill = new THREE.DirectionalLight(0xfff2e2, 2.0);
+  fill.position.set(-5,3,6);
+  scene.add(fill);
+  var rim = new THREE.DirectionalLight(0xbcd7ff, 2.6);
+  rim.position.set(-6,1,-4);
+  scene.add(rim);
+  var back = new THREE.DirectionalLight(0xffe4c8, 1.6);
+  back.position.set(2,-4,-6);
+  scene.add(back);
+  var glint = new THREE.PointLight(0xffffff, 8, 40);
+  glint.position.set(2,4,9);
+  scene.add(glint);
+  var glint2 = new THREE.PointLight(0xffe9d2, 6, 40);
+  glint2.position.set(-3,-2,8);
+  scene.add(glint2);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x1a1512, 0.5));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.16));
+
+  var silverMat = new THREE.MeshPhysicalMaterial({color:0xf0f0f1, metalness:1, roughness:0.14, clearcoat:0.75, clearcoatRoughness:0.08, envMapIntensity:2.4});
+  var copperMat = new THREE.MeshPhysicalMaterial({color:0xd4926a, metalness:1, roughness:0.16, clearcoat:0.7, clearcoatRoughness:0.1, envMapIntensity:2.4});
+  var group = new THREE.Group();
+
+  var loader = new SVGLoader();
+  loader.load('/assets/symbol.svg', function(data){
+    var extrudeSettings = {depth:48, bevelEnabled:true, bevelThickness:6, bevelSize:4.2, bevelSegments:6, curveSegments:48};
+    data.paths.forEach(function(path){
+      var id = (path.userData && path.userData.node && path.userData.node.getAttribute('id')) || '';
+      if(id.indexOf('Fold') !== -1) return;
+      var mat = id.indexOf('Rose') !== -1 ? copperMat : silverMat;
+      SVGLoader.createShapes(path).forEach(function(shape){
+        var geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        group.add(new THREE.Mesh(geo, mat));
+      });
+    });
+    if(!group.children.length) return; // parsing failed: CSS fallback stays visible
+
+    var box = new THREE.Box3().setFromObject(group);
+    var size = box.getSize(new THREE.Vector3());
+    var scale = 9.4 / Math.max(size.x, size.y);
+    group.scale.set(scale, -scale, scale);
+    box.setFromObject(group);
+    var center = box.getCenter(new THREE.Vector3());
+    group.position.sub(center);
+    scene.add(group);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'boot-symbol-canvas-wrap';
+    wrap.style.cssText = 'position:absolute;inset:0;';
+    wrap.appendChild(renderer.domElement);
+    var gemEl = document.querySelector('#bootLoader .boot-gem');
+    if(gemEl) gemEl.style.display = 'none';
+    mount.appendChild(wrap);
+
+    var start = performance.now();
+    var PERIOD = 3200; // ms per full turn — brisk, continuous, premium
+    function frame(now){
+      if(!reduceMotion){
+        var t = ((now - start) % PERIOD) / PERIOD;
+        group.rotation.y = t * Math.PI * 2;
+        group.rotation.x = 0.12;
+        bootCurrent.raf = requestAnimationFrame(frame);
+      }
+      renderer.render(scene, camera);
+    }
+    bootCurrent = {renderer:renderer, camera:camera, raf:null};
+    bootCurrent.raf = reduceMotion ? null : requestAnimationFrame(frame);
+    if(reduceMotion){ group.rotation.x = 0.12; renderer.render(scene, camera); }
+  }, undefined, function(){
+    /* network/CDN failure: CSS flip faces stay visible */
+  });
+}
+window.mountBootSymbol3D = mountBootSymbol3D;
+mountBootSymbol3D();
 </script>
 
 <script type="module">
