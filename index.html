@@ -3708,10 +3708,10 @@ function afterDonnees(){
     URL.revokeObjectURL(url);
   };
   // Historique : n'affiche une section "Évolution" que si au moins une
-  // wilaya a 2+ relevés mensuels (api/snapshot-prices.js, cron mensuel) —
-  // avant ça, la page reste un simple instantané, sans case vide ni promesse
-  // non tenue.
-  fetch('/api/price-history').then(function(r){ return r.json(); }).then(function(data){
+  // wilaya a 2+ relevés mensuels (api/prices.js, alimenté une fois par mois
+  // par une tâche planifiée) — avant ça, la page reste un simple instantané,
+  // sans case vide ni promesse non tenue.
+  fetch('/api/prices').then(function(r){ return r.json(); }).then(function(data){
     var box = document.getElementById('priceHistoryBox');
     if(!box) return;
     var snaps = (data && data.snapshots) || [];
