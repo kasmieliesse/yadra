@@ -266,6 +266,9 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 /* Hero visual: rotating 3D gem ornament */
 .hero-visual{position:relative;display:none;height:340px;align-items:center;justify-content:center;}
 @media (min-width:980px){.hero-visual{display:flex;}}
+.hero-visual::before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(10,7,6,.55) 0%,rgba(10,7,6,.28) 42%,transparent 72%);
+  filter:blur(2px);z-index:0;pointer-events:none;}
 .hero-emblem-inline{display:flex;justify-content:center;margin-bottom:14px;}
 @media (min-width:980px){.hero-emblem-inline{display:none;}}
 .hero-emblem-inline .hero-gem-wrap{width:118px;height:130px;}
@@ -3804,8 +3807,8 @@ function mountHeroSymbol3D(){
   scene.add(new THREE.HemisphereLight(0xffffff, 0x554236, 0.85));
   scene.add(new THREE.AmbientLight(0xffffff, 0.35));
 
-  var silverMat = new THREE.MeshPhysicalMaterial({color:0xf0f0f1, metalness:1, roughness:0.16, clearcoat:0.7, clearcoatRoughness:0.1, envMapIntensity:2.1});
-  var copperMat = new THREE.MeshPhysicalMaterial({color:0xd4926a, metalness:1, roughness:0.18, clearcoat:0.65, clearcoatRoughness:0.12, envMapIntensity:2.1});
+  var silverMat = new THREE.MeshPhysicalMaterial({color:0xf0f0f1, metalness:1, roughness:0.14, clearcoat:0.75, clearcoatRoughness:0.08, envMapIntensity:2.4});
+  var copperMat = new THREE.MeshPhysicalMaterial({color:0xd4926a, metalness:1, roughness:0.16, clearcoat:0.7, clearcoatRoughness:0.1, envMapIntensity:2.4});
   var group = new THREE.Group();
 
   var loader = new SVGLoader();
@@ -3822,13 +3825,18 @@ function mountHeroSymbol3D(){
     });
     if(!group.children.length) return; // parsing failed: leave CSS fallback untouched
 
-    var box = new THREE.Box3().setFromObject(group);
-    var size = box.getSize(new THREE.Vector3());
+    // Center each mesh's own geometry on the combined bounding-box center
+    // (not group.position) so the rotation pivot — the group's local origin —
+    // coincides with the icon's visual center. Otherwise the oscillation
+    // swings the whole icon through a wide orbit instead of turning in place.
+    var rawBox = new THREE.Box3().setFromObject(group);
+    var rawCenter = rawBox.getCenter(new THREE.Vector3());
+    group.children.forEach(function(mesh){
+      mesh.geometry.translate(-rawCenter.x, -rawCenter.y, -rawCenter.z);
+    });
+    var size = rawBox.getSize(new THREE.Vector3());
     var scale = 8.6 / Math.max(size.x, size.y);
     group.scale.set(scale, -scale, scale);
-    box.setFromObject(group);
-    var center = box.getCenter(new THREE.Vector3());
-    group.position.sub(center);
     scene.add(group);
 
     // swap in the canvas only once the geometry is actually ready
