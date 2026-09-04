@@ -3573,7 +3573,7 @@ function afterAbout(){
 function contactStep(n,title,body){
   return '<div class="reveal"><div class="pcard"><span class="pcard-num">'+n+'</span><h3>'+title+'</h3><p>'+body+'</p></div></div>';
 }
-function contactLinkCard(icon,label,title,href){
+function linkCard(icon,label,title,href){
   return '<a class="pcard reveal" href="'+href+'" style="display:block;text-decoration:none;">'
     +'<div class="pcard-badge">'+ic(icon)+'</div>'
     +'<span class="pcard-arrow">'+ic('chevronRight')+'</span>'
@@ -3627,8 +3627,8 @@ function pageContact(){
   +'<div class="wrap" style="padding-bottom:80px;">'
     +'<div class="section-head reveal"><h2>Cas particuliers</h2></div>'
     +'<div class="grid grid-2 reveal-stagger">'
-      +contactLinkCard('buildings','Vous êtes promoteur','Publier vos projets sur yadra!','/promoteur')
-      +contactLinkCard('sparkle','Une question fréquente ?','Voir la FAQ','/a-propos#faq')
+      +linkCard('buildings','Vous êtes promoteur','Publier vos projets sur yadra!','/promoteur')
+      +linkCard('sparkle','Une question fréquente ?','Voir la FAQ','/a-propos#faq')
     +'</div>'
   +'</div>';
 }
@@ -3654,44 +3654,54 @@ function afterContact(){
 /* ================================================================
    PAGE: INVESTIR
    ================================================================ */
+var TYPOLOGIE_ICON = {f2:'home', f3:'building', 'f4-f5':'buildings'};
 function pageInvest(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Investir</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Investir dans l’immobilier neuf en Algérie, depuis le pays ou depuis l’étranger.</h1>'
-    +'<p class="prose" style="margin-top:18px;">Les grandes villes algériennes construisent vite, et le neuf reste encore accessible face à l’ancien bien situé. Que vous viviez en Algérie ou dans la diaspora, yadra! vous donne une vue claire sur les projets en cours, avec une information fiable sur les promoteurs et les prix.</p>'
+    +'<div class="pg-eyebrow reveal">Investir</div>'
+    +'<h1 class="pg-h1 reveal">Investir dans le neuf en Algérie, <span class="dim">depuis le pays ou depuis l’étranger.</span></h1>'
+    +'<p class="pg-lede reveal">Les grandes villes algériennes construisent vite, et le neuf reste encore accessible face à l’ancien bien situé. Que vous viviez en Algérie ou dans la diaspora, yadra! vous donne une vue claire sur les projets en cours, avec une information fiable sur les promoteurs et les prix.</p>'
+    +'<div class="pg-cta-row reveal"><a class="btn btn-primary" href="#sim-invest">'+ic('gauge')+' Simuler la rentabilité</a><a class="btn btn-ghost" href="/projets">'+ic('search')+' Voir les projets</a></div>'
   +'</div>'
-  +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 50px;">'
-    +'<div class="stat-tile"><div class="k">Villes couvertes</div><div class="v">'+WILAYA_ORDER.length+'</div></div>'
-    +'<div class="stat-tile"><div class="k">Projets suivis</div><div class="v">'+getAllProjects().length+'+</div></div>'
-    +'<div class="stat-tile"><div class="k">Promoteurs vérifiés</div><div class="v">100%</div></div>'
+  +'<div class="wrap"><div class="grid grid-3 reveal-stagger" style="margin:40px 0 56px;">'
+    +'<div class="stat-tile reveal"><div class="k">Villes couvertes</div><div class="v"><span class="count-up" data-target="'+WILAYA_ORDER.length+'">0</span></div></div>'
+    +'<div class="stat-tile reveal"><div class="k">Projets suivis</div><div class="v"><span class="count-up" data-target="'+getAllProjects().length+'">0</span>+</div></div>'
+    +'<div class="stat-tile reveal"><div class="k">Promoteurs vérifiés</div><div class="v"><span class="count-up" data-target="100">0</span>%</div></div>'
   +'</div></div>'
-  +'<div class="wrap" style="padding-bottom:40px;">'
-    +'<div class="section-head"><div><h2>Par typologie</h2></div></div>'
-    +'<div class="grid grid-3">'
-      +Object.keys(TYPOLOGIE_DEFS).map(function(slug){ var d=TYPOLOGIE_DEFS[slug]; return '<a class="stat-tile" href="/typologies/'+slug+'" style="display:block;text-decoration:none;"><div class="k">Logement</div><div class="v">'+esc(d.title)+'</div></a>'; }).join('')
+  +'<div class="wrap" id="sim-invest" style="padding-bottom:20px;">'
+    +'<div class="section-head reveal"><div><h2>Simulez votre rentabilité</h2><p class="desc">Location courte durée, longue durée ou achat-revente — le résultat se recalcule sous vos yeux.</p></div><a class="btn btn-ghost btn-sm" href="/simulateur">'+ic('chevronRight')+' Page dédiée</a></div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:64px;">'
+    +simWidgetHTML()
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:56px;">'
+    +'<div class="section-head reveal"><h2>Par typologie</h2></div>'
+    +'<div class="grid grid-3 reveal-stagger">'
+      +Object.keys(TYPOLOGIE_DEFS).map(function(slug){ var d=TYPOLOGIE_DEFS[slug]; return linkCard(TYPOLOGIE_ICON[slug]||'home','Logement',d.title,'/typologies/'+slug); }).join('')
     +'</div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
-    +'<div class="section-head"><div><h2>Pour aller plus loin</h2></div></div>'
-    +'<div class="grid grid-3">'
-      +'<a class="stat-tile" href="/simulateur" style="display:block;text-decoration:none;"><div class="k">Outil</div><div class="v" style="font-size:16px;">Simulateur de rentabilité</div></a>'
-      +'<a class="stat-tile" href="/donnees/prix-immobilier" style="display:block;text-decoration:none;"><div class="k">Données</div><div class="v" style="font-size:16px;">Prix au m² par ville</div></a>'
-      +'<a class="stat-tile" href="/comparatifs/neuf-vs-ancien" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Neuf ou ancien</div></a>'
-      +'<a class="stat-tile" href="/guides/financement-credit-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Financer son achat</div></a>'
-      +'<a class="stat-tile" href="/guides/verifier-promoteur-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Vérifier un promoteur</div></a>'
-      +'<a class="stat-tile" href="/comparatifs/alger-vs-oran" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Alger vs Oran</div></a>'
+    +'<div class="section-head reveal"><h2>Pour aller plus loin</h2></div>'
+    +'<div class="grid grid-3 reveal-stagger">'
+      +linkCard('chart','Données','Prix au m² par ville','/donnees/prix-immobilier')
+      +linkCard('gauge','Comparatif','Neuf ou ancien','/comparatifs/neuf-vs-ancien')
+      +linkCard('doc','Guide','Financer son achat','/guides/financement-credit-immobilier-algerie')
+      +linkCard('shield','Guide','Vérifier un promoteur','/guides/verifier-promoteur-immobilier-algerie')
+      +linkCard('pin','Comparatif','Alger vs Oran','/comparatifs/alger-vs-oran')
+      +linkCard('sparkle','Lexique',"L'immobilier neuf expliqué",'/lexique')
     +'</div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
-    +'<div class="split-card spotlight accent theme-dark">'
+    +'<div class="split-card spotlight accent theme-dark reveal">'
+      +ic('whatsapp','ic')
       +'<span class="eyebrow">Investisseurs</span><h3>On vous met en relation</h3>'
       +'<p>Un ou plusieurs programmes en tête ? Dites-nous votre budget, on vous met en relation avec les promoteurs qui correspondent.</p>'
       +'<div><a class="btn btn-primary" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, je souhaite être accompagné(e) pour un projet d\'investissement immobilier.')+'">'+ic('whatsapp')+' Être accompagné(e)</a></div>'
     +'</div>'
   +'</div>';
 }
-function afterInvest(){}
+function afterInvest(){ initSimWidget(); }
 
 /* ================================================================
    PAGE: GUIDE — ACHETER DEPUIS L'ÉTRANGER
@@ -4050,6 +4060,35 @@ function simTweenNumber(el, from, to, fmt){
   }
   requestAnimationFrame(step);
 }
+function simWidgetHTML(){
+  return ''
+  +'<div class="sim-tabs reveal" id="simTabs" role="tablist">'
+    + SIM_MODES.map(function(m){ return '<button type="button" class="sim-tab" data-mode="'+m.key+'" role="tab">'+ic(m.icon)+esc(m.label)+'</button>'; }).join('')
+  +'</div>'
+  +'<div class="sim-grid reveal">'
+    +'<div class="sim-params" id="simParams"></div>'
+    +'<div class="sim-result" id="simResult"></div>'
+  +'</div>';
+}
+function initSimWidget(){
+  var prices = getAllProjects().map(function(p){ return p.prixMin; }).filter(function(n){ return n && n>0; }).sort(function(a,b){ return a-b; });
+  var medianBudget = prices.length ? prices[Math.floor(prices.length/2)] : 8000000;
+  medianBudget = Math.round(medianBudget/250000)*250000;
+  medianBudget = Math.min(35000000, Math.max(2000000, medianBudget));
+  simState.values = {}; simState.lastNum = {};
+  SIM_MODES.forEach(function(m){
+    m.params.forEach(function(p){
+      if(simState.values[p.key]===undefined){ simState.values[p.key] = (p.key==='budget') ? medianBudget : p.def; }
+    });
+  });
+  var tabs = document.getElementById('simTabs');
+  if(tabs){
+    Array.prototype.forEach.call(tabs.querySelectorAll('.sim-tab'), function(btn){
+      btn.onclick = function(){ simSwitchMode(btn.dataset.mode); };
+    });
+  }
+  simSwitchMode('courte');
+}
 function pageSimulateur(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Simulateur de rentabilité</span></div></div>'
@@ -4060,13 +4099,7 @@ function pageSimulateur(){
     +'<div class="pg-cta-row reveal"><a class="btn btn-primary" href="/projets">'+ic('search')+' Voir les projets disponibles</a><a class="btn btn-ghost" href="/guides/financement-credit-immobilier-algerie">Guide du financement</a></div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:64px;">'
-    +'<div class="sim-tabs reveal" id="simTabs" role="tablist">'
-      + SIM_MODES.map(function(m){ return '<button type="button" class="sim-tab" data-mode="'+m.key+'" role="tab">'+ic(m.icon)+esc(m.label)+'</button>'; }).join('')
-    +'</div>'
-    +'<div class="sim-grid reveal">'
-      +'<div class="sim-params" id="simParams"></div>'
-      +'<div class="sim-result" id="simResult"></div>'
-    +'</div>'
+    +simWidgetHTML()
   +'</div>';
 }
 function simRenderParams(mode){
@@ -4119,23 +4152,7 @@ function simSwitchMode(key){
   simRenderResult(mode, false);
 }
 function afterSimulateur(){
-  var prices = getAllProjects().map(function(p){ return p.prixMin; }).filter(function(n){ return n && n>0; }).sort(function(a,b){ return a-b; });
-  var medianBudget = prices.length ? prices[Math.floor(prices.length/2)] : 8000000;
-  medianBudget = Math.round(medianBudget/250000)*250000;
-  medianBudget = Math.min(35000000, Math.max(2000000, medianBudget));
-  simState.values = {}; simState.lastNum = {};
-  SIM_MODES.forEach(function(m){
-    m.params.forEach(function(p){
-      if(simState.values[p.key]===undefined){ simState.values[p.key] = (p.key==='budget') ? medianBudget : p.def; }
-    });
-  });
-  var tabs = document.getElementById('simTabs');
-  if(tabs){
-    Array.prototype.forEach.call(tabs.querySelectorAll('.sim-tab'), function(btn){
-      btn.onclick = function(){ simSwitchMode(btn.dataset.mode); };
-    });
-  }
-  simSwitchMode('courte');
+  initSimWidget();
   setStructuredData({'@context':'https://schema.org','@graph':[
     ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Simulateur de rentabilité',path:'/simulateur'}]),
     {'@type':'WebApplication', name:'Simulateur de rentabilité — yadra!', applicationCategory:'FinanceApplication', url:'https://yadra.fr/simulateur', description:"Simulateur indicatif de rentabilité locative (courte durée, longue durée, achat-revente) pour l'immobilier neuf en Algérie.", offers:{'@type':'Offer', price:'0', priceCurrency:'DZD'}}

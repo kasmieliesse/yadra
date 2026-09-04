@@ -252,11 +252,15 @@ module.exports = async function (req, res) {
       var bodyI = '<h1>Investir dans l\'immobilier neuf en Algérie, depuis le pays ou depuis l\'étranger.</h1>'
         + '<p>Les grandes villes algériennes construisent vite, et le neuf reste encore accessible face à l\'ancien bien situé. Que vous viviez en Algérie ou dans la diaspora, yadra! vous donne une vue claire sur les projets en cours, avec une information fiable sur les promoteurs et les prix.</p>'
         + '<p>' + WILAYA_ORDER.length + ' villes couvertes, ' + allInv.length + '+ projets suivis, promoteurs vérifiés à 100%.</p>'
+        + '<h2>Simulez votre rentabilité</h2><p>Location courte durée, longue durée ou achat-revente : le <a href="' + SITE + '/simulateur">simulateur de rentabilité</a> recalcule le résultat en direct selon votre budget, le loyer ou le prix nuitée, l’horizon de revente et l’hypothèse de valorisation.</p>'
         + '<h2>Par typologie</h2><ul>' + Object.keys(TYPOLOGIE_DEFS).map(function (slug) { return '<li><a href="' + SITE + '/typologies/' + slug + '">Logement ' + esc(TYPOLOGIE_DEFS[slug].title) + '</a></li>'; }).join('') + '</ul>'
         + '<h2>Pour aller plus loin</h2><ul>'
         + '<li><a href="' + SITE + '/donnees/prix-immobilier">Prix au m² par ville</a></li>'
         + '<li><a href="' + SITE + '/comparatifs/neuf-vs-ancien">Neuf ou ancien</a></li>'
-        + '<li><a href="' + SITE + '/guides/financement-credit-immobilier-algerie">Financer son achat</a></li></ul>';
+        + '<li><a href="' + SITE + '/guides/financement-credit-immobilier-algerie">Financer son achat</a></li>'
+        + '<li><a href="' + SITE + '/guides/verifier-promoteur-immobilier-algerie">Vérifier un promoteur</a></li>'
+        + '<li><a href="' + SITE + '/comparatifs/alger-vs-oran">Alger vs Oran</a></li>'
+        + '<li><a href="' + SITE + '/lexique">Lexique de l’immobilier neuf</a></li></ul>';
       res.status(200).send(page({
         path: '/investir', title: "Investir dans l'immobilier neuf en Algérie | yadra!", description: "Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger.", body: bodyI,
         ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Investir', path: '/investir' }])] }
