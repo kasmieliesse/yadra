@@ -218,10 +218,15 @@ body.is-home .site-header:not(.is-scrolled) .nav-links a{text-shadow:0 1px 10px 
 body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-filter:blur(14px) saturate(140%);border-bottom-color:var(--border);margin-bottom:0;}
 .nav-row{position:relative;display:flex;align-items:center;justify-content:space-between;height:76px;gap:20px;}
 .eyebrow{display:flex;align-items:center;gap:9px;}
-.dz-flag-float{flex:none;display:inline-block;width:19px;pointer-events:none;
-  filter:drop-shadow(0 3px 8px rgba(0,0,0,.5));animation:dzFlagFloat 5.5s ease-in-out infinite;}
+.dz-flag-float{flex:none;display:inline-block;width:19px;pointer-events:none;transform-style:preserve-3d;
+  transform-origin:0% 50%;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5));animation:dzFlagWave 2.6s ease-in-out infinite;}
 .dz-flag-float svg{display:block;width:100%;height:auto;border-radius:2px;}
-@keyframes dzFlagFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-2deg);}}
+@keyframes dzFlagWave{
+  0%,100%{transform:perspective(46px) rotateY(0deg) skewY(0deg);}
+  22%{transform:perspective(46px) rotateY(-16deg) skewY(1.5deg);}
+  50%{transform:perspective(46px) rotateY(9deg) skewY(-1.5deg);}
+  78%{transform:perspective(46px) rotateY(-7deg) skewY(1deg);}
+}
 .nav-links{display:none;align-items:center;gap:30px;font-size:13px;font-weight:600;color:var(--text-dim);}
 .nav-links a{padding:6px 2px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s;}
 .nav-links a:hover,.nav-links a.is-active{color:#fff;border-color:var(--or-rose);}
@@ -342,25 +347,34 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 
 
 .search-card{
-  margin-top:36px;background:#fff;
-  border:1px solid rgba(20,16,12,.08);border-radius:var(--radius-l);
-  padding:14px;display:grid;gap:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.4);
+  margin-top:36px;background:linear-gradient(180deg,#ffffff,#faf8f5);
+  border:1px solid rgba(20,16,12,.07);border-radius:var(--radius-l);
+  padding:14px;display:grid;gap:10px;
+  box-shadow:0 30px 60px -28px rgba(20,16,12,.35),0 1px 0 rgba(255,255,255,.6) inset;
 }
 @media (min-width:760px){
   .search-card{grid-template-columns:1.2fr 1fr 1fr auto;align-items:center;padding:8px 8px 8px 10px;border-radius:999px;}
 }
-.search-field{display:flex;flex-direction:column;gap:4px;padding:10px 16px;border-radius:var(--radius-m);}
+.search-field{display:flex;flex-direction:column;gap:4px;padding:10px 16px;border-radius:var(--radius-m);transition:background .2s ease;}
+.search-field:hover{background:rgba(183,110,77,.05);}
 @media (min-width:760px){.search-field{border-right:1px solid rgba(20,16,12,.08);}}
 .search-field label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#8a8378;font-weight:700;}
 .search-field select,.search-field input{
-  background:transparent;border:0;color:#18140f;font-size:14px;font-weight:600;padding:2px 0;font-family:inherit;
+  width:100%;background:transparent;border:0;color:#18140f;font-size:14px;font-weight:600;padding:2px 0;font-family:inherit;
 }
+.search-field select{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer;padding-right:20px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8378' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right center;background-size:13px;
+}
+[dir="rtl"] .search-field select{background-position:left center;padding-right:0;padding-left:20px;}
 .search-field select:focus,.search-field input:focus{outline:0;}
 .search-field select:focus-visible,.search-field input:focus-visible{outline:2px solid var(--or-rose);outline-offset:3px;border-radius:4px;}
-.search-field:has(select:focus-visible),.search-field:has(input:focus-visible){background:rgba(183,110,77,.07);}
+.search-field:has(select:focus-visible),.search-field:has(input:focus-visible){background:rgba(183,110,77,.08);}
 .search-card .search-submit{
   margin:4px;width:52px;height:52px;min-width:52px;border-radius:50%;padding:0;
   display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  box-shadow:0 10px 24px -10px rgba(183,110,77,.6);
 }
 .search-card .search-submit svg{width:19px;height:19px;}
 
