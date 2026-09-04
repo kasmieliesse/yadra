@@ -161,7 +161,7 @@ module.exports = async function (req, res) {
     }
     if (kind === 'villes') {
       var body4 = '<h1>Explorer par ville</h1><ul>' + WILAYA_ORDER.map(function (w) { return '<li><a href="' + SITE + '/villes/' + w + '">' + WILAYAS[w].label + '</a></li>'; }).join('') + '</ul>';
-      res.status(200).send(page({ path: '/villes', title: 'Explorer par ville — Programmes immobiliers en Algérie | yadra!', body: body4 }));
+      res.status(200).send(page({ path: '/villes', title: 'Explorer par ville — Programmes immobiliers en Algérie | yadra!', description: 'Parcourez nos programmes immobiliers wilaya par wilaya : Alger, Oran, Blida, Constantine et les prochaines villes couvertes.', body: body4 }));
       return;
     }
     if (kind === 'ville') {
@@ -208,7 +208,7 @@ module.exports = async function (req, res) {
     if (kind === 'promoteurs') {
       var proms = await sql`SELECT slug, name FROM promoters ORDER BY name`;
       var body7 = '<h1>Nos promoteurs immobiliers vérifiés en Algérie</h1><ul>' + proms.map(function (p) { return '<li><a href="' + SITE + '/promoteurs/' + p.slug + '">' + esc(p.name) + '</a></li>'; }).join('') + '</ul>';
-      res.status(200).send(page({ path: '/promoteurs', title: 'Nos promoteurs immobiliers vérifiés en Algérie | yadra!', body: body7 }));
+      res.status(200).send(page({ path: '/promoteurs', title: 'Nos promoteurs immobiliers vérifiés en Algérie | yadra!', description: 'Découvrez les promoteurs immobiliers vérifiés partenaires de yadra!, présents dans toute l\'Algérie.', body: body7 }));
       return;
     }
     if (kind === 'promoteur') {
