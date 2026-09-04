@@ -978,6 +978,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <h4>Ressources</h4>
         <a href="/donnees/prix-immobilier">Prix au m² par ville</a>
         <a href="/comparatifs/neuf-vs-ancien">Neuf ou ancien</a>
+        <a href="/comparatifs/alger-vs-oran">Alger vs Oran</a>
         <a href="/lexique">Lexique de l’immobilier neuf</a>
         <a href="/guides/verifier-promoteur-immobilier-algerie">Vérifier un promoteur</a>
         <a href="/guides/financement-credit-immobilier-algerie">Financer son achat</a>
@@ -2023,6 +2024,8 @@ function render(){
     updateMeta({path:'/donnees/prix-immobilier', title:"Prix moyen au m² de l'immobilier neuf en Algérie | yadra!", description:"Prix moyen au m² par ville, calculé à partir du catalogue de programmes immobiliers neufs publiés sur yadra!."}); }
   else if(segs[0]==='comparatifs' && segs[1]==='neuf-vs-ancien'){ main.innerHTML = pageComparatifNeufAncien(); afterComparatif();
     updateMeta({path:'/comparatifs/neuf-vs-ancien', title:'Immobilier neuf ou ancien en Algérie ? | yadra!', description:'Garanties, calendrier, négociation : les repères pour comparer un achat dans le neuf et dans l\'ancien en Algérie.'}); }
+  else if(segs[0]==='comparatifs' && segs[1]==='alger-vs-oran'){ main.innerHTML = pageComparatifAlgerOran(); afterComparatifAlgerOran();
+    updateMeta({path:'/comparatifs/alger-vs-oran', title:'Alger ou Oran : où investir dans le neuf ? | yadra!', description:'Prix moyen au m², nombre de programmes, profil de chaque marché : le comparatif Alger vs Oran pour l\'immobilier neuf, à partir du catalogue yadra!.'}); }
   else if(segs[0]==='promoteurs' && segs.length===1){ main.innerHTML = pagePromotersList(); afterPromotersList();
     updateMeta({path:'/promoteurs', title:'Nos promoteurs immobiliers vérifiés en Algérie | yadra!', description:'Découvrez les promoteurs immobiliers vérifiés partenaires de yadra!, présents dans toute l\'Algérie.'}); }
   else if(segs[0]==='promoteurs' && segs.length===2){ main.innerHTML = pagePromoter(segs[1]); afterPromoter(segs[1]); var trackedPr = getPromoterBySlug(segs[1]); if(trackedPr){
@@ -3466,6 +3469,7 @@ function pageInvest(){
       +'<a class="stat-tile" href="/comparatifs/neuf-vs-ancien" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Neuf ou ancien</div></a>'
       +'<a class="stat-tile" href="/guides/financement-credit-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Financer son achat</div></a>'
       +'<a class="stat-tile" href="/guides/verifier-promoteur-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Vérifier un promoteur</div></a>'
+      +'<a class="stat-tile" href="/comparatifs/alger-vs-oran" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Alger vs Oran</div></a>'
     +'</div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
@@ -3893,6 +3897,39 @@ function pageComparatifNeufAncien(){
 function afterComparatif(){
   setStructuredData({'@context':'https://schema.org','@graph':[
     ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Neuf vs ancien',path:'/comparatifs/neuf-vs-ancien'}])
+  ]});
+}
+
+/* ================================================================
+   COMPARATIF — Alger vs Oran (§G du dossier SEO)
+   Données réelles (marketStats()), pas un texte générique recopié.
+   ================================================================ */
+function pageComparatifAlgerOran(){
+  var stats = marketStats();
+  var alger = stats.filter(function(s){return s.wilaya==='alger';})[0];
+  var oran = stats.filter(function(s){return s.wilaya==='oran';})[0];
+  var rows = [
+    ['Programmes suivis sur yadra!', alger?alger.projects:0, oran?oran.projects:0],
+    ['Prix moyen / m² constaté', (alger&&alger.avgM2)?money(alger.avgM2)+'/m²':'Données insuffisantes', (oran&&oran.avgM2)?money(oran.avgM2)+'/m²':'Données insuffisantes'],
+    ['Profil', 'Capitale, plus forte densité de programmes et de sièges d\'entreprises', 'Deuxième ville du pays, grande façade méditerranéenne'],
+    ['Dynamique du neuf', 'Nouveaux pôles urbains en expansion continue (périphérie comprise)', 'Développement resserré entre centre-ville et communes côtières']
+  ];
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Alger vs Oran</span></div></div>'
+  +'<div class="wrap" style="max-width:820px;">'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Alger ou Oran : où investir dans le neuf ?</h1>'
+    +'<p class="prose" style="margin-top:18px;">Alger et Oran sont les deux marchés du neuf les plus actifs suivis par yadra!. Les chiffres ci-dessous viennent directement de notre catalogue publié — pas d\'estimation externe.</p>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:60px;">'
+    +'<div class="table-wrap"><table class="data"><thead><tr><th>Critère</th><th>Alger</th><th>Oran</th></tr></thead><tbody>'
+      +rows.map(function(r){ return '<tr><td style="font-weight:600;color:var(--heading);">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'; }).join('')
+      +'</tbody></table></div>'
+    +'<p class="prose" style="margin-top:24px;">Aucune des deux villes n\'est objectivement "meilleure" pour investir : Alger concentre davantage de programmes et une demande plus large, tandis qu\'Oran offre un cadre différent (façade maritime, marché plus resserré). Le choix dépend surtout du budget, de la typologie recherchée et du lien personnel avec la ville — <a href="/villes/alger">voir les programmes à Alger</a> ou <a href="/villes/oran">à Oran</a>.</p>'
+  +'</div>';
+}
+function afterComparatifAlgerOran(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Comparatifs',path:'/investir'},{name:'Alger vs Oran',path:'/comparatifs/alger-vs-oran'}])
   ]});
 }
 

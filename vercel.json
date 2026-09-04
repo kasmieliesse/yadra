@@ -28,6 +28,8 @@
 
     { "source": "/comparatifs/neuf-vs-ancien", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=comparatif" },
 
+    { "source": "/comparatifs/alger-vs-oran", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=comparatif-alger-oran" },
+
     { "source": "/guides/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=guide&slug=:slug" },
 
     { "source": "/lexique", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=lexique" }

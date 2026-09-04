@@ -290,6 +290,33 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'comparatif-alger-oran') {
+      var allAO = await loadPublishedProjects();
+      function statsFor(w) {
+        var projs = allAO.filter(function (p) { return p.wilaya === w; });
+        var perM2 = [];
+        projs.forEach(function (p) { (p.typologies || []).forEach(function (t) { if (t.prix && t.surface) perM2.push(t.prix / t.surface); }); });
+        var avg = perM2.length ? Math.round(perM2.reduce(function (a, b) { return a + b; }, 0) / perM2.length) : null;
+        return { projects: projs.length, avg: avg };
+      }
+      var algerS = statsFor('alger'), oranS = statsFor('oran');
+      var rowsAO = [
+        ['Programmes suivis sur yadra!', String(algerS.projects), String(oranS.projects)],
+        ['Prix moyen / m² constaté', algerS.avg ? money(algerS.avg) + '/m²' : 'Données insuffisantes', oranS.avg ? money(oranS.avg) + '/m²' : 'Données insuffisantes'],
+        ['Profil', "Capitale, plus forte densité de programmes et de sièges d'entreprises", 'Deuxième ville du pays, grande façade méditerranéenne'],
+        ['Dynamique du neuf', 'Nouveaux pôles urbains en expansion continue (périphérie comprise)', 'Développement resserré entre centre-ville et communes côtières']
+      ];
+      var bodyAO = '<h1>Alger ou Oran : où investir dans le neuf ?</h1>'
+        + "<p>Alger et Oran sont les deux marchés du neuf les plus actifs suivis par yadra!. Les chiffres ci-dessous viennent directement de notre catalogue publié — pas d'estimation externe.</p>"
+        + '<table><thead><tr><th>Critère</th><th>Alger</th><th>Oran</th></tr></thead><tbody>'
+        + rowsAO.map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('')
+        + '</tbody></table>';
+      res.status(200).send(page({
+        path: '/comparatifs/alger-vs-oran', title: 'Alger ou Oran : où investir dans le neuf ? | yadra!', description: "Prix moyen au m², nombre de programmes, profil de chaque marché : le comparatif Alger vs Oran pour l'immobilier neuf, à partir du catalogue yadra!.", body: bodyAO,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Alger vs Oran', path: '/comparatifs/alger-vs-oran' }])] }
+      }));
+      return;
+    }
     if (kind === 'guide') {
       var gslug = String(req.query.slug || '');
       var GUIDES = {
