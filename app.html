@@ -897,6 +897,44 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 [dir="rtl"] .city-marquee,[dir="rtl"] .city-marquee-track,[dir="rtl"] .promoter-marquee,[dir="rtl"] .promoter-marquee-track{direction:ltr;}
 [dir="rtl"] .skip-link{left:auto;right:-999px;}
 [dir="rtl"] .skip-link:focus{left:auto;right:10px;}
+[dir="rtl"] .sim-tabs,[dir="rtl"] .sim-field-head,[dir="rtl"] .sim-cta{flex-direction:row-reverse;}
+[dir="rtl"] .sim-field-minmax{flex-direction:row-reverse;}
+[dir="rtl"] .sim-note,[dir="rtl"] .sim-headline-sub{text-align:right;}
+
+/* ---------------- Simulateur de rentabilité ---------------- */
+.sim-tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:24px;padding-bottom:2px;}
+.sim-tab{display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease;}
+.sim-tab svg{width:15px;height:15px;flex:0 0 auto;}
+.sim-tab:hover{border-color:var(--or-rose-dim);color:var(--text);}
+.sim-tab.active{background:var(--or-rose);border-color:var(--or-rose);color:#1a0f0a;}
+.sim-grid{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;}
+@media (min-width:900px){.sim-grid{grid-template-columns:1.05fr .95fr;}}
+.sim-params{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:26px;}
+.sim-field{margin-bottom:26px;}
+.sim-field:last-of-type{margin-bottom:0;}
+.sim-field-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.sim-field-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);}
+.sim-field-value{font-family:var(--font-display);font-size:19px;color:var(--heading);white-space:nowrap;letter-spacing:.02em;}
+.sim-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;background:var(--border);accent-color:var(--or-rose);cursor:pointer;outline:none;display:block;}
+.sim-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--or-rose-light);border:3px solid var(--noir);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;margin-top:-7px;}
+.sim-range::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:var(--border);}
+.sim-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--or-rose-light);border:3px solid var(--noir);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;}
+.sim-range::-moz-range-track{height:6px;border-radius:999px;background:var(--border);}
+.sim-field-minmax{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text-dim);}
+.sim-note{font-size:11.5px;line-height:1.6;color:var(--text-dim);margin-top:22px;padding-top:18px;border-top:1px solid var(--border);}
+.sim-result{background:linear-gradient(160deg,var(--anthracite-2),var(--noir));border:1px solid var(--or-rose-dim);border-radius:var(--radius-l);padding:28px;position:relative;overflow:hidden;}
+.sim-result::before{content:'';position:absolute;top:-40%;right:-20%;width:70%;height:70%;background:radial-gradient(circle,rgba(183,110,77,.24),transparent 70%);pointer-events:none;}
+[dir="rtl"] .sim-result::before{right:auto;left:-20%;}
+.sim-result-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--or-rose-light);position:relative;}
+.sim-result-tag svg{width:14px;height:14px;}
+.sim-headline-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--argent-dim);margin-top:18px;position:relative;}
+.sim-headline-value{font-family:var(--font-display);font-size:clamp(2.4rem,6vw,3.4rem);color:var(--argent);line-height:1;margin-top:8px;position:relative;letter-spacing:.01em;}
+.sim-headline-sub{font-size:12.5px;color:var(--text-dim);margin-top:10px;position:relative;max-width:34ch;line-height:1.6;}
+.sim-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;position:relative;}
+.sim-tile{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-m);padding:14px;}
+.sim-tile .k{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--argent-dim);}
+.sim-tile .v{font-family:var(--font-display);font-size:16.5px;color:var(--argent);margin-top:6px;letter-spacing:.01em;}
+.sim-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;}
 </style>
 <!-- Search Console : une fois la propriété créée sur https://search.google.com/search-console,
      coller ici la balise meta fournie (méthode "balise HTML"), ex :
@@ -1002,6 +1040,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
       <div class="foot-col">
         <h4>Ressources</h4>
         <a href="/donnees/prix-immobilier">Prix au m² par ville</a>
+        <a href="/simulateur">Simulateur de rentabilité</a>
         <a href="/comparatifs/neuf-vs-ancien">Neuf ou ancien</a>
         <a href="/comparatifs/alger-vs-oran">Alger vs Oran</a>
         <a href="/lexique">Lexique de l’immobilier neuf</a>
@@ -2058,6 +2097,8 @@ function render(){
     updateMeta({path:'/typologies/'+segs[1], title: td ? ('Logement '+td.title+' neuf en Algérie | yadra!') : 'Typologie introuvable | yadra!', description: td ? td.desc : DEFAULT_META.description, noindex: !td || tdCount<3 }); }
   else if(segs[0]==='donnees' && segs[1]==='prix-immobilier'){ main.innerHTML = pageDonnees(); afterDonnees();
     updateMeta({path:'/donnees/prix-immobilier', title:"Prix moyen au m² de l'immobilier neuf en Algérie | yadra!", description:"Prix moyen au m² par ville, calculé à partir du catalogue de programmes immobiliers neufs publiés sur yadra!."}); }
+  else if(segs[0]==='simulateur' && segs.length===1){ main.innerHTML = pageSimulateur(); afterSimulateur();
+    updateMeta({path:'/simulateur', title:'Simulateur de rentabilité — investir dans le neuf en Algérie | yadra!', description:"Location courte durée, longue durée ou achat-revente : simulez la rentabilité indicative d'un investissement dans l'immobilier neuf en Algérie."}); }
   else if(segs[0]==='comparatifs' && segs[1]==='neuf-vs-ancien'){ main.innerHTML = pageComparatifNeufAncien(); afterComparatif();
     updateMeta({path:'/comparatifs/neuf-vs-ancien', title:'Immobilier neuf ou ancien en Algérie ? | yadra!', description:'Garanties, calendrier, négociation : les repères pour comparer un achat dans le neuf et dans l\'ancien en Algérie.'}); }
   else if(segs[0]==='comparatifs' && segs[1]==='alger-vs-oran'){ main.innerHTML = pageComparatifAlgerOran(); afterComparatifAlgerOran();
@@ -3518,6 +3559,7 @@ function pageInvest(){
   +'<div class="wrap" style="padding-bottom:70px;">'
     +'<div class="section-head"><div><h2>Pour aller plus loin</h2></div></div>'
     +'<div class="grid grid-3">'
+      +'<a class="stat-tile" href="/simulateur" style="display:block;text-decoration:none;"><div class="k">Outil</div><div class="v" style="font-size:16px;">Simulateur de rentabilité</div></a>'
       +'<a class="stat-tile" href="/donnees/prix-immobilier" style="display:block;text-decoration:none;"><div class="k">Données</div><div class="v" style="font-size:16px;">Prix au m² par ville</div></a>'
       +'<a class="stat-tile" href="/comparatifs/neuf-vs-ancien" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Neuf ou ancien</div></a>'
       +'<a class="stat-tile" href="/guides/financement-credit-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Financer son achat</div></a>'
@@ -3783,6 +3825,180 @@ function afterDonnees(){
   setStructuredData({'@context':'https://schema.org','@graph':[
     ldBreadcrumb([{name:'Accueil',path:'/'},{name:"Prix de l'immobilier neuf",path:'/donnees/prix-immobilier'}]),
     {'@type':'Dataset', name:"Prix moyen au m² de l'immobilier neuf en Algérie par ville — catalogue yadra!", description:"Prix moyen au m² calculé à partir des programmes immobiliers neufs publiés sur yadra!, par wilaya.", url:'https://yadra.fr/donnees/prix-immobilier', creator:{'@type':'Organization', name:'yadra!'}}
+  ]});
+}
+
+/* ================================================================
+   PAGE: Simulateur de rentabilité
+   Trois modes (location courte durée / longue durée / achat-revente),
+   curseurs recalculant le résultat en direct. Les hypothèses de calcul
+   (occupation, charges, fiscalité) sont volontairement prudentes et
+   affichées en clair — c'est un outil indicatif, pas un conseil en
+   investissement personnalisé.
+   ================================================================ */
+var SIM_MODES = [
+  {
+    key:'courte', label:'Location courte durée', icon:'sparkle',
+    params:[
+      {key:'budget', label:"Budget d'acquisition", min:2000000, max:35000000, step:250000, def:8000000, fmt:function(v){ return money(v); }},
+      {key:'nuitee', label:'Prix nuitée moyen', min:2500, max:15000, step:250, def:6000, fmt:function(v){ return money(v)+' / nuit'; }},
+      {key:'semaines', label:"Semaines d'usage personnel", min:0, max:20, step:1, def:4, fmt:function(v){ return Math.round(v)+' semaine'+(v>1?'s':'')+' / an'; }}
+    ],
+    compute:function(v){
+      var occupation = 0.55;
+      var joursDispo = Math.max(0, 365 - v.semaines*7);
+      var nuitees = Math.round(joursDispo*occupation);
+      var brut = nuitees*v.nuitee;
+      var commission = brut*0.15, charges = brut*0.12, fiscalite = brut*0.10;
+      var net = Math.max(0, brut-commission-charges-fiscalite);
+      var rendement = v.budget ? (net/v.budget*100) : 0;
+      return {
+        headlineLabel:'Rendement net annuel estimé', headlineValue: rendement.toFixed(1).replace('.',',')+' %',
+        headlineSub:"Après commission de plateforme, charges d'exploitation et fiscalité — hypothèses détaillées ci-contre.",
+        tiles:[
+          {k:'Revenu brut / an', v:money(brut)},
+          {k:'Revenu net / an', v:money(net)},
+          {k:'Nuitées louées estimées', v:nuitees+' / an'},
+          {k:"Taux d'occupation retenu", v:'55 %'}
+        ]
+      };
+    }
+  },
+  {
+    key:'longue', label:'Location longue durée', icon:'building',
+    params:[
+      {key:'budget', label:"Budget d'acquisition", min:2000000, max:35000000, step:250000, def:8000000, fmt:function(v){ return money(v); }},
+      {key:'loyer', label:'Loyer mensuel estimé', min:25000, max:200000, step:2500, def:45000, fmt:function(v){ return money(v)+' / mois'; }}
+    ],
+    compute:function(v){
+      var vacance = 1;
+      var brutPlein = v.loyer*12;
+      var brutEffectif = v.loyer*(12-vacance);
+      var charges = brutEffectif*0.08, fiscalite = brutEffectif*0.10;
+      var net = Math.max(0, brutEffectif-charges-fiscalite);
+      var rendement = v.budget ? (net/v.budget*100) : 0;
+      return {
+        headlineLabel:'Rendement net annuel estimé', headlineValue: rendement.toFixed(1).replace('.',',')+' %',
+        headlineSub:'Après vacance locative, charges et fiscalité — hypothèses détaillées ci-contre.',
+        tiles:[
+          {k:'Loyer brut / an (plein)', v:money(brutPlein)},
+          {k:'Loyer net / an estimé', v:money(net)},
+          {k:'Vacance locative retenue', v:vacance+' mois / an'},
+          {k:'Charges + fiscalité retenues', v:'18 %'}
+        ]
+      };
+    }
+  },
+  {
+    key:'revente', label:'Achat-revente', icon:'chart',
+    params:[
+      {key:'budget', label:"Budget d'acquisition", min:2000000, max:35000000, step:250000, def:8000000, fmt:function(v){ return money(v); }},
+      {key:'horizon', label:'Horizon de revente', min:2, max:15, step:1, def:5, fmt:function(v){ var n=Math.round(v); return n+' an'+(n>1?'s':''); }},
+      {key:'valorisation', label:'Hypothèse de valorisation annuelle', min:2, max:12, step:0.5, def:6, fmt:function(v){ return v.toFixed(1).replace(/\.0$/,'').replace('.',',')+' % / an'; }}
+    ],
+    compute:function(v){
+      var valeurSortie = v.budget*Math.pow(1+v.valorisation/100, v.horizon);
+      var plusValueBrute = Math.max(0, valeurSortie-v.budget);
+      var taux = 0.05;
+      var plusValueNette = plusValueBrute*(1-taux);
+      var rendementAnnualise = (v.budget && v.horizon) ? (Math.pow(valeurSortie/v.budget, 1/v.horizon)-1)*100 : 0;
+      return {
+        headlineLabel:'Plus-value nette estimée', headlineValue: moneyShort(plusValueNette),
+        headlineSub:'Rendement annualisé ≈ '+rendementAnnualise.toFixed(1).replace('.',',')+' % — après fiscalité retenue ci-contre.',
+        tiles:[
+          {k:'Valeur estimée à la sortie', v:money(valeurSortie)},
+          {k:'Plus-value brute', v:money(plusValueBrute)},
+          {k:'Horizon retenu', v:v.horizon+' ans'},
+          {k:'Fiscalité retenue (indicative)', v:'5 %'}
+        ]
+      };
+    }
+  }
+];
+var simState = {mode:'courte', values:{}};
+function simGetMode(key){ return SIM_MODES.filter(function(m){ return m.key===key; })[0]; }
+function pageSimulateur(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Simulateur de rentabilité</span></div></div>'
+  +'<div class="wrap" style="max-width:760px;">'
+    +'<div class="eyebrow reveal">Simulateur de rentabilité</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.4rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.22;">Avant d\'investir, calculez ce que ça peut rapporter.</h1>'
+    +'<p class="prose reveal" style="margin-top:16px;">Location courte durée, location longue durée ou achat-revente : ajustez les curseurs, le résultat se recalcule instantanément. Ce sont des hypothèses de travail à affiner avec votre propre projet — pas une promesse de rendement ni un conseil en investissement.</p>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:64px;">'
+    +'<div class="sim-tabs reveal" id="simTabs" role="tablist">'
+      + SIM_MODES.map(function(m){ return '<button type="button" class="sim-tab" data-mode="'+m.key+'" role="tab">'+ic(m.icon)+esc(m.label)+'</button>'; }).join('')
+    +'</div>'
+    +'<div class="sim-grid reveal">'
+      +'<div class="sim-params" id="simParams"></div>'
+      +'<div class="sim-result" id="simResult"></div>'
+    +'</div>'
+    +'<div class="sim-cta"><a class="btn btn-primary" href="/projets">'+ic('search')+' Voir les projets disponibles</a><a class="btn btn-ghost" href="/guides/financement-credit-immobilier-algerie">Guide du financement</a></div>'
+  +'</div>';
+}
+function simRenderParams(mode){
+  var box = document.getElementById('simParams');
+  if(!box) return;
+  var body = mode.params.map(function(p){
+    var val = simState.values[p.key];
+    return '<div class="sim-field">'
+      +'<div class="sim-field-head"><span class="sim-field-label">'+esc(p.label)+'</span><span class="sim-field-value" id="simVal_'+p.key+'">'+p.fmt(val)+'</span></div>'
+      +'<input type="range" class="sim-range" aria-label="'+esc(p.label)+'" data-key="'+p.key+'" min="'+p.min+'" max="'+p.max+'" step="'+p.step+'" value="'+val+'">'
+      +'<div class="sim-field-minmax"><span>'+p.fmt(p.min)+'</span><span>'+p.fmt(p.max)+'</span></div>'
+    +'</div>';
+  }).join('') + '<p class="sim-note">Hypothèses retenues par yadra! pour ce calcul (taux d\'occupation, charges, fiscalité) : indicatives et volontairement prudentes, à affiner selon votre projet réel. Ce simulateur ne constitue pas un conseil en investissement ni une offre.</p>';
+  box.innerHTML = body;
+  Array.prototype.forEach.call(box.querySelectorAll('.sim-range'), function(input){
+    input.oninput = function(){
+      var key = input.dataset.key;
+      simState.values[key] = parseFloat(input.value);
+      var valEl = document.getElementById('simVal_'+key);
+      var param = mode.params.filter(function(p){ return p.key===key; })[0];
+      if(valEl && param) valEl.textContent = param.fmt(simState.values[key]);
+      simRenderResult(mode);
+    };
+  });
+}
+function simRenderResult(mode){
+  var box = document.getElementById('simResult');
+  if(!box) return;
+  var r = mode.compute(simState.values);
+  box.innerHTML = ''
+    +'<span class="sim-result-tag">'+ic('gauge')+'Résultat — '+esc(mode.label)+'</span>'
+    +'<div class="sim-headline-label">'+esc(r.headlineLabel)+'</div>'
+    +'<div class="sim-headline-value">'+r.headlineValue+'</div>'
+    +'<div class="sim-headline-sub">'+esc(r.headlineSub)+'</div>'
+    +'<div class="sim-tiles">'+r.tiles.map(function(t){ return '<div class="sim-tile"><div class="k">'+esc(t.k)+'</div><div class="v">'+t.v+'</div></div>'; }).join('')+'</div>';
+}
+function simSwitchMode(key){
+  var mode = simGetMode(key);
+  if(!mode) return;
+  simState.mode = key;
+  Array.prototype.forEach.call(document.querySelectorAll('#simTabs .sim-tab'), function(btn){ btn.classList.toggle('active', btn.dataset.mode===key); });
+  simRenderParams(mode);
+  simRenderResult(mode);
+}
+function afterSimulateur(){
+  var prices = getAllProjects().map(function(p){ return p.prixMin; }).filter(function(n){ return n && n>0; }).sort(function(a,b){ return a-b; });
+  var medianBudget = prices.length ? prices[Math.floor(prices.length/2)] : 8000000;
+  medianBudget = Math.round(medianBudget/250000)*250000;
+  medianBudget = Math.min(35000000, Math.max(2000000, medianBudget));
+  simState.values = {};
+  SIM_MODES.forEach(function(m){
+    m.params.forEach(function(p){
+      if(simState.values[p.key]===undefined){ simState.values[p.key] = (p.key==='budget') ? medianBudget : p.def; }
+    });
+  });
+  var tabs = document.getElementById('simTabs');
+  if(tabs){
+    Array.prototype.forEach.call(tabs.querySelectorAll('.sim-tab'), function(btn){
+      btn.onclick = function(){ simSwitchMode(btn.dataset.mode); };
+    });
+  }
+  simSwitchMode('courte');
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Simulateur de rentabilité',path:'/simulateur'}]),
+    {'@type':'WebApplication', name:'Simulateur de rentabilité — yadra!', applicationCategory:'FinanceApplication', url:'https://yadra.fr/simulateur', description:"Simulateur indicatif de rentabilité locative (courte durée, longue durée, achat-revente) pour l'immobilier neuf en Algérie.", offers:{'@type':'Offer', price:'0', priceCurrency:'DZD'}}
   ]});
 }
 
