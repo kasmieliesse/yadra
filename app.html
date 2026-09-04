@@ -935,6 +935,30 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .sim-tile .k{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--argent-dim);}
 .sim-tile .v{font-family:var(--font-display);font-size:16.5px;color:var(--argent);margin-top:6px;letter-spacing:.01em;}
 .sim-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;}
+.sim-fade{animation:simFadeIn .38s cubic-bezier(.2,.8,.2,1);}
+@keyframes simFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.sim-tab{position:relative;}
+.sim-tab.active{box-shadow:0 10px 26px -12px rgba(183,110,77,.55);}
+
+/* ---------------- Premium page kit (outils, contact...) ---------------- */
+.pg-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--or-rose-light);}
+.pg-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--or-rose);box-shadow:0 0 0 4px rgba(183,110,77,.16);flex:0 0 auto;}
+.pg-h1{font-family:var(--font-body);font-weight:800;font-size:clamp(2.05rem,4.4vw,3.3rem);line-height:1.09;letter-spacing:-.015em;color:var(--heading);text-wrap:balance;margin-top:16px;}
+.pg-h1 .dim{font-weight:500;color:var(--text-dim);}
+.pg-lede{font-family:var(--font-body);font-size:15.5px;line-height:1.75;color:var(--text-dim);max-width:54ch;margin-top:18px;}
+.pg-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;}
+.pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
+.pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
+.pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+.pcard-badge svg{width:19px;height:19px;color:var(--or-rose-light);}
+.pcard-num{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12px;color:var(--or-rose-light);letter-spacing:.06em;display:block;margin-bottom:20px;}
+.pcard-arrow{position:absolute;top:24px;right:24px;width:32px;height:32px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-dim);transition:all .35s cubic-bezier(.2,.8,.2,1);}
+.pcard-arrow svg{width:13px;height:13px;transition:transform .35s ease;}
+.pcard:hover .pcard-arrow{border-color:var(--or-rose);color:var(--or-rose-light);background:rgba(183,110,77,.1);}
+.pcard:hover .pcard-arrow svg{transform:rotate(45deg);}
+[dir="rtl"] .pcard-arrow{right:auto;left:24px;}
+.pcard h3{color:var(--heading);font-size:17.5px;font-weight:700;margin-bottom:9px;}
+.pcard p{color:var(--text-dim);font-size:13.5px;line-height:1.65;}
 </style>
 <!-- Search Console : une fois la propriété créée sur https://search.google.com/search-console,
      coller ici la balise meta fournie (méthode "balise HTML"), ex :
@@ -3545,16 +3569,24 @@ function afterAbout(){
    ce qui se passe réellement à l'envoi.
    ================================================================ */
 function contactStep(n,title,body){
-  return '<div class="reveal"><div class="value-card"><span style="display:block;font-family:ui-monospace,\'SF Mono\',Menlo,monospace;font-size:12px;color:var(--or-rose-light);margin-bottom:14px;">'+n+'</span><h3>'+title+'</h3><p>'+body+'</p></div></div>';
+  return '<div class="reveal"><div class="pcard"><span class="pcard-num">'+n+'</span><h3>'+title+'</h3><p>'+body+'</p></div></div>';
+}
+function contactLinkCard(icon,label,title,href){
+  return '<a class="pcard reveal" href="'+href+'" style="display:block;text-decoration:none;">'
+    +'<div class="pcard-badge">'+ic(icon)+'</div>'
+    +'<span class="pcard-arrow">'+ic('chevronRight')+'</span>'
+    +'<span class="pg-eyebrow" style="margin-bottom:8px;">'+esc(label)+'</span>'
+    +'<h3>'+esc(title)+'</h3>'
+  +'</a>';
 }
 function pageContact(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Contact</span></div></div>'
   +'<div class="wrap" style="max-width:720px;">'
-    +'<div class="eyebrow reveal">Contact</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.7rem,3.4vw,2.5rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.2;">Une question ? On vous répond, vraiment.</h1>'
-    +'<p class="prose reveal" style="margin-top:16px;">Pas de standard téléphonique, pas de bot : votre message arrive directement à l’équipe yadra!. Décrivez votre besoin, on vous oriente ou on vous répond.</p>'
-    +'<div class="reveal" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;">'
+    +'<div class="pg-eyebrow reveal">Contact</div>'
+    +'<h1 class="pg-h1 reveal">Une question ? <span class="dim">On vous répond, vraiment.</span></h1>'
+    +'<p class="pg-lede reveal">Pas de standard téléphonique, pas de bot : votre message arrive directement à l’équipe yadra!. Décrivez votre besoin, on vous oriente ou on vous répond.</p>'
+    +'<div class="pg-cta-row reveal">'
       +'<a class="btn btn-wa" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a>'
       +'<a class="btn btn-ghost" href="#contactForm">'+ic('mail')+' Laisser un message</a>'
     +'</div>'
@@ -3593,8 +3625,8 @@ function pageContact(){
   +'<div class="wrap" style="padding-bottom:80px;">'
     +'<div class="section-head reveal"><h2>Cas particuliers</h2></div>'
     +'<div class="grid grid-2 reveal-stagger">'
-      +'<a class="stat-tile" href="/promoteur" style="display:block;text-decoration:none;"><div class="k">Vous êtes promoteur</div><div class="v" style="font-size:16px;">Publier vos projets sur yadra!</div></a>'
-      +'<a class="stat-tile" href="/a-propos#faq" style="display:block;text-decoration:none;"><div class="k">Une question fréquente ?</div><div class="v" style="font-size:16px;">Voir la FAQ</div></a>'
+      +contactLinkCard('buildings','Vous êtes promoteur','Publier vos projets sur yadra!','/promoteur')
+      +contactLinkCard('sparkle','Une question fréquente ?','Voir la FAQ','/a-propos#faq')
     +'</div>'
   +'</div>';
 }
@@ -3935,7 +3967,7 @@ var SIM_MODES = [
       var net = Math.max(0, brut-commission-charges-fiscalite);
       var rendement = v.budget ? (net/v.budget*100) : 0;
       return {
-        headlineLabel:'Rendement net annuel estimé', headlineValue: rendement.toFixed(1).replace('.',',')+' %',
+        headlineLabel:'Rendement net annuel estimé', headlineNum: rendement, headlineFmt:function(n){ return n.toFixed(1).replace('.',',')+' %'; },
         headlineSub:"Après commission de plateforme, charges d'exploitation et fiscalité — hypothèses détaillées ci-contre.",
         tiles:[
           {k:'Revenu brut / an', v:money(brut)},
@@ -3960,7 +3992,7 @@ var SIM_MODES = [
       var net = Math.max(0, brutEffectif-charges-fiscalite);
       var rendement = v.budget ? (net/v.budget*100) : 0;
       return {
-        headlineLabel:'Rendement net annuel estimé', headlineValue: rendement.toFixed(1).replace('.',',')+' %',
+        headlineLabel:'Rendement net annuel estimé', headlineNum: rendement, headlineFmt:function(n){ return n.toFixed(1).replace('.',',')+' %'; },
         headlineSub:'Après vacance locative, charges et fiscalité — hypothèses détaillées ci-contre.',
         tiles:[
           {k:'Loyer brut / an (plein)', v:money(brutPlein)},
@@ -3985,7 +4017,7 @@ var SIM_MODES = [
       var plusValueNette = plusValueBrute*(1-taux);
       var rendementAnnualise = (v.budget && v.horizon) ? (Math.pow(valeurSortie/v.budget, 1/v.horizon)-1)*100 : 0;
       return {
-        headlineLabel:'Plus-value nette estimée', headlineValue: moneyShort(plusValueNette),
+        headlineLabel:'Plus-value nette estimée', headlineNum: plusValueNette, headlineFmt:function(n){ return moneyShort(n); },
         headlineSub:'Rendement annualisé ≈ '+rendementAnnualise.toFixed(1).replace('.',',')+' % — après fiscalité retenue ci-contre.',
         tiles:[
           {k:'Valeur estimée à la sortie', v:money(valeurSortie)},
@@ -3997,15 +4029,33 @@ var SIM_MODES = [
     }
   }
 ];
-var simState = {mode:'courte', values:{}};
+var simState = {mode:'courte', values:{}, lastNum:{}};
 function simGetMode(key){ return SIM_MODES.filter(function(m){ return m.key===key; })[0]; }
+function simFillTrack(input){
+  var min = parseFloat(input.min), max = parseFloat(input.max), val = parseFloat(input.value);
+  var pct = max>min ? ((val-min)/(max-min))*100 : 0;
+  input.style.background = 'linear-gradient(90deg, var(--or-rose) 0%, var(--or-rose-light) '+pct+'%, var(--border) '+pct+'%, var(--border) 100%)';
+}
+function simTweenNumber(el, from, to, fmt){
+  if(REDUCE_MOTION){ el.textContent = fmt(to); return; }
+  var start = null, dur = 480;
+  function step(ts){
+    if(!start) start = ts;
+    var p = Math.min(1, (ts-start)/dur);
+    var eased = 1-Math.pow(1-p,3);
+    el.textContent = fmt(from + (to-from)*eased);
+    if(p<1) requestAnimationFrame(step); else el.textContent = fmt(to);
+  }
+  requestAnimationFrame(step);
+}
 function pageSimulateur(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Simulateur de rentabilité</span></div></div>'
   +'<div class="wrap" style="max-width:760px;">'
-    +'<div class="eyebrow reveal">Simulateur de rentabilité</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.4rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.22;">Avant d\'investir, calculez ce que ça peut rapporter.</h1>'
-    +'<p class="prose reveal" style="margin-top:16px;">Location courte durée, location longue durée ou achat-revente : ajustez les curseurs, le résultat se recalcule instantanément. Ce sont des hypothèses de travail à affiner avec votre propre projet — pas une promesse de rendement ni un conseil en investissement.</p>'
+    +'<div class="pg-eyebrow reveal">Simulateur de rentabilité</div>'
+    +'<h1 class="pg-h1 reveal">Avant d\'investir, <span class="dim">calculez ce que ça peut rapporter.</span></h1>'
+    +'<p class="pg-lede reveal">Location courte durée, location longue durée ou achat-revente : ajustez les curseurs, le résultat se recalcule sous vos yeux. Ce sont des hypothèses de travail à affiner avec votre propre projet — pas une promesse de rendement ni un conseil en investissement.</p>'
+    +'<div class="pg-cta-row reveal"><a class="btn btn-primary" href="/projets">'+ic('search')+' Voir les projets disponibles</a><a class="btn btn-ghost" href="/guides/financement-credit-immobilier-algerie">Guide du financement</a></div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:64px;">'
     +'<div class="sim-tabs reveal" id="simTabs" role="tablist">'
@@ -4015,7 +4065,6 @@ function pageSimulateur(){
       +'<div class="sim-params" id="simParams"></div>'
       +'<div class="sim-result" id="simResult"></div>'
     +'</div>'
-    +'<div class="sim-cta"><a class="btn btn-primary" href="/projets">'+ic('search')+' Voir les projets disponibles</a><a class="btn btn-ghost" href="/guides/financement-credit-immobilier-algerie">Guide du financement</a></div>'
   +'</div>';
 }
 function simRenderParams(mode){
@@ -4031,26 +4080,33 @@ function simRenderParams(mode){
   }).join('') + '<p class="sim-note">Hypothèses retenues par yadra! pour ce calcul (taux d\'occupation, charges, fiscalité) : indicatives et volontairement prudentes, à affiner selon votre projet réel. Ce simulateur ne constitue pas un conseil en investissement ni une offre.</p>';
   box.innerHTML = body;
   Array.prototype.forEach.call(box.querySelectorAll('.sim-range'), function(input){
+    simFillTrack(input);
     input.oninput = function(){
       var key = input.dataset.key;
       simState.values[key] = parseFloat(input.value);
+      simFillTrack(input);
       var valEl = document.getElementById('simVal_'+key);
       var param = mode.params.filter(function(p){ return p.key===key; })[0];
       if(valEl && param) valEl.textContent = param.fmt(simState.values[key]);
-      simRenderResult(mode);
+      simRenderResult(mode, true);
     };
   });
 }
-function simRenderResult(mode){
+function simRenderResult(mode, animate){
   var box = document.getElementById('simResult');
   if(!box) return;
   var r = mode.compute(simState.values);
+  var prevNum = simState.lastNum[mode.key];
+  simState.lastNum[mode.key] = r.headlineNum;
+  var startNum = animate && prevNum!==undefined ? prevNum : 0;
+  box.className = 'sim-result sim-fade';
   box.innerHTML = ''
     +'<span class="sim-result-tag">'+ic('gauge')+'Résultat — '+esc(mode.label)+'</span>'
     +'<div class="sim-headline-label">'+esc(r.headlineLabel)+'</div>'
-    +'<div class="sim-headline-value">'+r.headlineValue+'</div>'
+    +'<div class="sim-headline-value" id="simHeadlineVal">'+r.headlineFmt(animate ? startNum : r.headlineNum)+'</div>'
     +'<div class="sim-headline-sub">'+esc(r.headlineSub)+'</div>'
     +'<div class="sim-tiles">'+r.tiles.map(function(t){ return '<div class="sim-tile"><div class="k">'+esc(t.k)+'</div><div class="v">'+t.v+'</div></div>'; }).join('')+'</div>';
+  simTweenNumber(document.getElementById('simHeadlineVal'), startNum, r.headlineNum, r.headlineFmt);
 }
 function simSwitchMode(key){
   var mode = simGetMode(key);
@@ -4058,14 +4114,14 @@ function simSwitchMode(key){
   simState.mode = key;
   Array.prototype.forEach.call(document.querySelectorAll('#simTabs .sim-tab'), function(btn){ btn.classList.toggle('active', btn.dataset.mode===key); });
   simRenderParams(mode);
-  simRenderResult(mode);
+  simRenderResult(mode, false);
 }
 function afterSimulateur(){
   var prices = getAllProjects().map(function(p){ return p.prixMin; }).filter(function(n){ return n && n>0; }).sort(function(a,b){ return a-b; });
   var medianBudget = prices.length ? prices[Math.floor(prices.length/2)] : 8000000;
   medianBudget = Math.round(medianBudget/250000)*250000;
   medianBudget = Math.min(35000000, Math.max(2000000, medianBudget));
-  simState.values = {};
+  simState.values = {}; simState.lastNum = {};
   SIM_MODES.forEach(function(m){
     m.params.forEach(function(p){
       if(simState.values[p.key]===undefined){ simState.values[p.key] = (p.key==='budget') ? medianBudget : p.def; }
