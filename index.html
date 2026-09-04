@@ -2027,6 +2027,8 @@ function render(){
     setStructuredData({'@context':'https://schema.org','@type':'Article',headline:"Acheter un logement neuf en Algérie depuis l'étranger",description:"Vérifier un promoteur, comprendre l'échéancier de paiement, suivre le chantier à distance, la procuration : les repères pour acheter un logement neuf en Algérie depuis la diaspora.",author:{'@type':'Organization',name:'yadra!'},publisher:{'@type':'Organization',name:'yadra! by qbm'},mainEntityOfPage:'https://yadra.fr/guides/acheter-depuis-letranger'}); }
   else if(segs[0]==='guides' && segs[1]==='financement-credit-immobilier-algerie'){ main.innerHTML = pageFinancement(); afterFinancement();
     updateMeta({path:'/guides/financement-credit-immobilier-algerie', title:"Financer l'achat d'un logement neuf en Algérie | yadra!", description:"Crédit bancaire, apport, échéancier promoteur, cas de la diaspora : un aperçu des options pour financer un achat immobilier neuf en Algérie."}); }
+  else if(segs[0]==='guides' && segs[1]==='verifier-promoteur-immobilier-algerie'){ main.innerHTML = pageGuideVerifierPromoteur(); afterGuideVerifierPromoteur();
+    updateMeta({path:'/guides/verifier-promoteur-immobilier-algerie', title:"Comment vérifier un promoteur immobilier en Algérie | yadra!", description:"Registre de commerce, références clients, avancement du chantier : la méthode pour vérifier un promoteur immobilier en Algérie avant de s'engager."}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
     updateMeta({path:'/legal/'+segs[1], title:(LEGAL_TITLES[segs[1]]||'Informations légales')+' | yadra!', description:'Informations légales de yadra!.'}); }
   else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); updateMeta({path:'/connexion', title:'Connexion | yadra!', noindex:true}); }
@@ -2362,6 +2364,10 @@ function pageMarketplace(params){
       +'<div class="grid grid-cards" id="resultsGrid" style="display:'+(marketViewMode==='map'?'none':'')+';"></div>'
       +'<div class="market-map" id="marketMap" style="display:'+(marketViewMode==='map'?'':'none')+';"></div>'
   +'</div>'
+  +'<div class="wrap" style="padding-bottom:70px;max-width:760px;">'
+    +'<div class="section-head"><h2>Questions fréquentes</h2></div>'
+    +'<div class="faq-acc">'+MARKETPLACE_FAQ.map(function(qa){ return faqItem(qa[0],qa[1]); }).join('')+'</div>'
+  +'</div>'
   +'</div>';
 }
 function moreFiltersModalHTML(){
@@ -2391,7 +2397,16 @@ function wireMoreFiltersModal(){
   });
   document.getElementById('moreFiltersApply').addEventListener('click', closeModal);
 }
+var MARKETPLACE_FAQ = [
+  ['Combien coûte un appartement neuf en Algérie ?', 'Le prix varie fortement selon la ville, la typologie et le promoteur. Voir notre page <a href="/donnees/prix-immobilier">prix moyen au m² par ville</a>, calculée à partir des programmes publiés sur yadra!.'],
+  ['Qu’est-ce qu’un achat "sur plan" (VEFA) ?', 'C’est un achat d’un logement avant ou pendant sa construction, payé par tranches liées à l’avancement des travaux — voir notre <a href="/comparatifs/neuf-vs-ancien">comparatif neuf vs ancien</a>.'],
+  ['Comment contacter un promoteur sur yadra! ?', 'Chaque fiche projet propose un contact WhatsApp direct avec le promoteur — aucun intermédiaire, aucune commission pour l’acquéreur.'],
+  ['Les prix affichés sont-ils négociables ?', 'Le prix affiché est celui négocié avec le promoteur au moment de la publication ; une marge de négociation ponctuelle reste possible et se discute directement avec lui.']
+];
 function afterMarketplace(params){
+  if(!location.search){
+    setStructuredData({'@context':'https://schema.org','@type':'FAQPage', mainEntity: MARKETPLACE_FAQ.map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1].replace(/<[^>]+>/g,'')}}; })});
+  }
   var els = { q: document.getElementById('fQ'), ville: document.getElementById('fVille'), type: document.getElementById('fType'), budget: document.getElementById('fBudget') };
   els.ville.value = marketState.ville;
   els.type.value = marketState.type;
@@ -3331,7 +3346,7 @@ function pagePromotersList(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Promoteurs</span></div></div>'
   +'<div class="wrap" style="padding-bottom:0;">'
-    +'<div class="section-head reveal"><div><h2>Nos promoteurs</h2><p class="desc">Chaque promoteur affiché ici a été vérifié avant sa mise en ligne — registre de commerce, références, chantier constaté sur place.</p></div></div>'
+    +'<div class="section-head reveal"><div><h2>Nos promoteurs</h2><p class="desc">Chaque promoteur affiché ici a été vérifié avant sa mise en ligne — registre de commerce, références, chantier constaté sur place. <a href="/guides/verifier-promoteur-immobilier-algerie">Voir notre méthode de vérification '+ic('chevronRight')+'</a></p></div></div>'
   +'</div>'
   +'<div class="promoter-marquee reveal"><div class="promoter-marquee-track">'
     +promoters.map(promoterLogoItemHTML).join('')
@@ -3439,6 +3454,7 @@ function pageInvest(){
       +'<a class="stat-tile" href="/donnees/prix-immobilier" style="display:block;text-decoration:none;"><div class="k">Données</div><div class="v" style="font-size:16px;">Prix au m² par ville</div></a>'
       +'<a class="stat-tile" href="/comparatifs/neuf-vs-ancien" style="display:block;text-decoration:none;"><div class="k">Comparatif</div><div class="v" style="font-size:16px;">Neuf ou ancien</div></a>'
       +'<a class="stat-tile" href="/guides/financement-credit-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Financer son achat</div></a>'
+      +'<a class="stat-tile" href="/guides/verifier-promoteur-immobilier-algerie" style="display:block;text-decoration:none;"><div class="k">Guide</div><div class="v" style="font-size:16px;">Vérifier un promoteur</div></a>'
     +'</div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
@@ -3469,6 +3485,7 @@ function pageGuideDiaspora(){
     +'<div class="eyebrow reveal">Guide</div>'
     +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Acheter un logement neuf en Algérie depuis l’étranger</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Suivre un achat immobilier à des milliers de kilomètres du chantier change la manière de s’organiser. Voici les points de vigilance qui reviennent le plus souvent chez les acheteurs de la diaspora.</p>'
+    +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
     +guideSection('01','Vérifier le promoteur avant tout','<p>Avant de s’intéresser au logement lui-même, renseignez-vous sur le promoteur : depuis combien d’années il construit, quels projets il a déjà livrés, et si d’anciens acheteurs peuvent témoigner. Un registre de commerce à jour et des références vérifiables sont un minimum — un promoteur sérieux ne devrait jamais hésiter à les fournir.</p><p>Méfiez-vous d’un promoteur qui pousse à verser un acompte rapidement, avant d’avoir montré la moindre documentation sur le projet ou sur son historique.</p>')
 
@@ -3640,6 +3657,7 @@ function pageFinancement(){
     +'<div class="eyebrow reveal">Guide</div>'
     +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Financer l\'achat d\'un logement neuf en Algérie</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Un aperçu des grandes options de financement du neuf en Algérie, pour préparer vos questions avant de contacter votre banque ou le promoteur — ce guide ne remplace pas un conseil bancaire personnalisé.</p>'
+    +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
     +guideSection('01','Le crédit immobilier bancaire','<p>Plusieurs banques publiques et privées proposent des crédits immobiliers en Algérie, dont la CNEP-Banque, historiquement spécialisée sur ce segment. Les conditions (taux, durée, apport minimum, pièces demandées) varient selon la banque, le profil de l\'emprunteur et le type de bien — elles évoluent aussi dans le temps. Renseignez-vous directement auprès de plusieurs banques pour comparer une offre actuelle et chiffrée.</p>')
 
@@ -3654,6 +3672,61 @@ function afterFinancement(){
   setStructuredData({'@context':'https://schema.org','@graph':[
     ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Financer un achat neuf',path:'/guides/financement-credit-immobilier-algerie'}]),
     {'@type':'Article', headline:"Financer l'achat d'un logement neuf en Algérie", author:{'@type':'Organization', name:'yadra!'}, publisher:{'@type':'Organization', name:'yadra! by qbm'}, mainEntityOfPage:'https://yadra.fr/guides/financement-credit-immobilier-algerie'}
+  ]});
+}
+
+/* ================================================================
+   PAGE: GUIDE — vérifier un promoteur (§G/§L du dossier SEO)
+   ================================================================ */
+function pageGuideVerifierPromoteur(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Vérifier un promoteur</span></div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
+    +'<div class="eyebrow reveal">Guide</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Comment vérifier un promoteur immobilier en Algérie</h1>'
+    +'<p class="prose reveal" style="margin-top:18px;">Un bon emplacement ou un rendu 3D convaincant ne disent rien de la capacité d’un promoteur à livrer. Avant tout engagement, quelques vérifications concrètes permettent d’écarter la plupart des mauvaises surprises.</p>'
+    +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement à mesure que nos vérifications de promoteurs évoluent.</p>'
+
+    +guideSection('01','Le registre de commerce, la première vérification','<p>En Algérie, toute société de promotion immobilière doit être inscrite au registre de commerce avec une activité correspondante. Demandez à voir ce document avant tout versement : un promoteur sérieux le transmet sans difficulté. L’absence de registre, un registre expiré, ou une activité déclarée qui ne correspond pas à la promotion immobilière sont des signaux à prendre au sérieux.</p>')
+
+    +guideSection('02','Demander et recouper des références clients','<p>Un promoteur qui a déjà livré des projets peut mettre en relation avec d’anciens acquéreurs, ou au minimum citer des programmes livrés et vérifiables sur place. Recoupez ces références vous-même plutôt que de vous fier uniquement à ce que le promoteur en dit : un appel à un acheteur d’un projet précédent renseigne souvent plus qu’une brochure commerciale.</p>')
+
+    +guideSection('03','Constater l’avancement réel du chantier','<p>Le meilleur indicateur reste le chantier lui-même. Si vous ne pouvez pas vous déplacer, demandez des photos ou vidéos datées, prises sous plusieurs angles, à intervalles réguliers — et comparez-les dans le temps plutôt que de juger sur une seule image. Un chantier qui n’avance pas depuis plusieurs mois sans explication est un signal d’alerte, même si le discours commercial reste rassurant.</p>')
+
+    +guideSection('04','Les signaux d’alerte à ne pas ignorer','<ul style="margin:8px 0 0;padding-left:20px;line-height:1.8;">'
+      +'<li>Un acompte important demandé avant toute documentation sur le projet ou le promoteur.</li>'
+      +'<li>Un prix nettement inférieur au marché sans justification claire.</li>'
+      +'<li>Une réticence à fournir un contrat écrit détaillant l’échéancier de paiement.</li>'
+      +'<li>Aucune référence vérifiable de projet précédemment livré.</li>'
+      +'<li>Une pression pour signer rapidement, sans laisser le temps de vérifier.</li>'
+      +'</ul><p style="margin-top:12px;">Aucun de ces signaux, pris isolément, ne prouve une fraude — mais plusieurs signaux cumulés justifient de ralentir et de vérifier davantage avant de s’engager.</p>')
+
+    +guideSection('05','Comment yadra! vérifie chaque promoteur avant publication','<p>Avant qu’un projet apparaisse sur yadra!, nous demandons au promoteur son registre de commerce et des références, que nous contrôlons avant publication — c’est ce qui distingue un promoteur « vérifié » sur la plateforme. Cette vérification réduit le risque mais ne le supprime pas entièrement : elle s’ajoute aux vérifications de ce guide, elle ne les remplace pas.</p>'
+      +'<div style="margin-top:18px;padding:22px 24px;border-radius:var(--radius-l);background:var(--surface);border:1px solid var(--border);">'
+        +'<a class="btn btn-primary btn-sm" href="/promoteurs">Voir les promoteurs vérifiés '+ic('chevronRight')+'</a>'
+      +'</div>')
+
+    +'<div class="reveal" style="margin-top:40px;">'
+      +'<h2 style="font-size:19px;color:var(--heading);margin-bottom:14px;">Questions fréquentes</h2>'
+      +'<div class="faq-acc">'
+        +faqItem('Le registre de commerce suffit-il à garantir un promoteur sérieux ?','Non. C’est une vérification nécessaire mais pas suffisante — à combiner avec des références clients et un suivi réel du chantier.')
+        +faqItem('Que faire si le promoteur refuse de montrer son registre de commerce ?','C’est en soi un signal d’alerte fort. Un promoteur en règle n’a aucune raison de refuser ce document avant un engagement financier.')
+        +faqItem('Un promoteur "vérifié" sur yadra! est-il sans risque ?','La vérification yadra! réduit le risque (registre de commerce et références contrôlés avant publication) mais ne le supprime pas : les vérifications de ce guide restent utiles même pour un promoteur déjà vérifié.')
+      +'</div>'
+    +'</div>'
+
+    +'<p style="color:var(--text-dim);font-size:12px;margin-top:28px;line-height:1.6;">Ce guide donne des repères généraux et ne remplace pas les conseils d’un notaire ou d’un avocat spécialisé en droit immobilier algérien.</p>'
+  +'</div>';
+}
+function afterGuideVerifierPromoteur(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Vérifier un promoteur',path:'/guides/verifier-promoteur-immobilier-algerie'}]),
+    {'@type':'Article', headline:'Comment vérifier un promoteur immobilier en Algérie', author:{'@type':'Organization', name:'yadra!'}, publisher:{'@type':'Organization', name:'yadra! by qbm'}, mainEntityOfPage:'https://yadra.fr/guides/verifier-promoteur-immobilier-algerie'},
+    {'@type':'FAQPage', mainEntity:[
+      ['Le registre de commerce suffit-il à garantir un promoteur sérieux ?','Non. C’est une vérification nécessaire mais pas suffisante — à combiner avec des références clients et un suivi réel du chantier.'],
+      ['Que faire si le promoteur refuse de montrer son registre de commerce ?','C’est en soi un signal d’alerte fort. Un promoteur en règle n’a aucune raison de refuser ce document avant un engagement financier.'],
+      ['Un promoteur "vérifié" sur yadra! est-il sans risque ?','La vérification yadra! réduit le risque (registre de commerce et références contrôlés avant publication) mais ne le supprime pas : les vérifications de ce guide restent utiles même pour un promoteur déjà vérifié.']
+    ].map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1]}}; })}
   ]});
 }
 
