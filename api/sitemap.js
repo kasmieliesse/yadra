@@ -16,6 +16,7 @@ const STATIC_PAGES = [
   { path: '/comparatifs/neuf-vs-ancien', priority: '0.4', changefreq: 'monthly' },
   { path: '/guides/acheter-depuis-letranger', priority: '0.6', changefreq: 'monthly' },
   { path: '/guides/financement-credit-immobilier-algerie', priority: '0.6', changefreq: 'monthly' },
+  { path: '/guides/verifier-promoteur-immobilier-algerie', priority: '0.6', changefreq: 'monthly' },
   { path: '/legal/mentions-legales', priority: '0.2', changefreq: 'yearly' },
   { path: '/legal/conditions', priority: '0.2', changefreq: 'yearly' },
   { path: '/legal/confidentialite', priority: '0.2', changefreq: 'yearly' }

@@ -276,6 +276,17 @@ module.exports = async function (req, res) {
             ["L'apport personnel et l'échéancier promoteur", "Au-delà du crédit bancaire, la plupart des promoteurs proposent un paiement échelonné directement lié à l'avancement du chantier. Combiner un apport personnel avec un crédit partiel, ou payer selon l'échéancier du promoteur, sont deux approches courantes."],
             ['Le cas particulier de la diaspora', "Un acquéreur résidant à l'étranger peut mobiliser une épargne en devises ou un financement dans son pays de résidence. Les modalités de transfert de fonds pour un achat immobilier sont encadrées par la réglementation algérienne des changes — à vérifier en amont auprès d'une banque."]
           ]
+        },
+        'verifier-promoteur-immobilier-algerie': {
+          title: 'Comment vérifier un promoteur immobilier en Algérie',
+          intro: "Registre de commerce, références clients, avancement du chantier : la méthode pour vérifier un promoteur immobilier en Algérie avant de s'engager.",
+          sections: [
+            ['Le registre de commerce, la première vérification', "En Algérie, toute société de promotion immobilière doit être inscrite au registre de commerce avec une activité correspondante. Demandez à voir ce document avant tout versement : un promoteur sérieux le transmet sans difficulté."],
+            ['Demander et recouper des références clients', "Un promoteur qui a déjà livré des projets peut mettre en relation avec d'anciens acquéreurs, ou au minimum citer des programmes livrés et vérifiables sur place. Recoupez ces références vous-même plutôt que de vous fier uniquement à ce que le promoteur en dit."],
+            ["Constater l'avancement réel du chantier", "Le meilleur indicateur reste le chantier lui-même. Si vous ne pouvez pas vous déplacer, demandez des photos ou vidéos datées, prises sous plusieurs angles, à intervalles réguliers, et comparez-les dans le temps."],
+            ['Les signaux d\'alerte à ne pas ignorer', "Un acompte important demandé avant toute documentation, un prix nettement inférieur au marché sans justification, une réticence à fournir un contrat écrit détaillant l'échéancier de paiement, aucune référence vérifiable, ou une pression pour signer rapidement."],
+            ['Comment yadra! vérifie chaque promoteur avant publication', "Avant qu'un projet apparaisse sur yadra!, nous demandons au promoteur son registre de commerce et des références, que nous contrôlons avant publication. Cette vérification réduit le risque mais ne le supprime pas entièrement : elle s'ajoute aux vérifications de ce guide, elle ne les remplace pas."]
+          ]
         }
       };
       var g = GUIDES[gslug];
