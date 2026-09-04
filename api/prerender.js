@@ -452,6 +452,40 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'simulateur') {
+      // Hypothèses identiques (par défaut) au simulateur interactif côté client
+      // — voir SIM_MODES dans app.html. À garder synchronisé si les hypothèses
+      // par défaut changent.
+      var simBudget = 8000000;
+      var occ = 0.55, nuitee = 6000, semaines = 4;
+      var joursDispo = 365 - semaines * 7;
+      var nuitees = Math.round(joursDispo * occ);
+      var brutCourte = nuitees * nuitee;
+      var netCourte = brutCourte - brutCourte * 0.15 - brutCourte * 0.12 - brutCourte * 0.10;
+      var rendCourte = (netCourte / simBudget * 100).toFixed(1);
+      var loyer = 45000;
+      var brutLongueEff = loyer * 11;
+      var netLongue = brutLongueEff - brutLongueEff * 0.08 - brutLongueEff * 0.10;
+      var rendLongue = (netLongue / simBudget * 100).toFixed(1);
+      var horizon = 5, valorisation = 6;
+      var valeurSortie = simBudget * Math.pow(1 + valorisation / 100, horizon);
+      var plusValueBrute = valeurSortie - simBudget;
+      var plusValueNette = plusValueBrute * 0.95;
+      var rendRevente = ((Math.pow(valeurSortie / simBudget, 1 / horizon) - 1) * 100).toFixed(1);
+      var bodySim = '<h1>Simulateur de rentabilité — investir dans le neuf en Algérie</h1>'
+        + '<p>Trois façons de simuler la rentabilité indicative d’un investissement immobilier neuf en Algérie : location courte durée, location longue durée, ou achat-revente. Le simulateur interactif permet d’ajuster le budget, le loyer ou le prix nuitée, l’horizon de revente et l’hypothèse de valorisation — le résultat se recalcule en direct.</p>'
+        + '<h2>Exemple — Location courte durée</h2><p>Pour un budget de ' + money(simBudget) + ', un prix nuitée moyen de ' + money(nuitee) + ' et 4 semaines d’usage personnel par an : rendement net annuel estimé ≈ ' + rendCourte + ' %, après commission de plateforme, charges d’exploitation et fiscalité.</p>'
+        + '<h2>Exemple — Location longue durée</h2><p>Pour un budget de ' + money(simBudget) + ' et un loyer mensuel de ' + money(loyer) + ' : rendement net annuel estimé ≈ ' + rendLongue + ' %, après vacance locative, charges et fiscalité.</p>'
+        + '<h2>Exemple — Achat-revente</h2><p>Pour un budget de ' + money(simBudget) + ', un horizon de ' + horizon + ' ans et une hypothèse de valorisation de ' + valorisation + ' % par an : plus-value nette estimée ≈ ' + money(plusValueNette) + ', rendement annualisé ≈ ' + rendRevente + ' %, après fiscalité.</p>'
+        + '<p>Ces chiffres sont des hypothèses de travail, pas une promesse de rendement ni un conseil en investissement personnalisé. <a href="' + SITE + '/simulateur">Utiliser le simulateur interactif</a> pour ajuster ces paramètres à votre propre projet.</p>';
+      res.status(200).send(page({
+        path: '/simulateur', title: 'Simulateur de rentabilité — investir dans le neuf en Algérie | yadra!',
+        description: "Location courte durée, longue durée ou achat-revente : simulez la rentabilité indicative d'un investissement dans l'immobilier neuf en Algérie.",
+        body: bodySim,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Simulateur de rentabilité', path: '/simulateur' }]), { '@type': 'WebApplication', name: 'Simulateur de rentabilité — yadra!', applicationCategory: 'FinanceApplication', url: SITE + '/simulateur', offers: { '@type': 'Offer', price: '0', priceCurrency: 'DZD' } }] }
+      }));
+      return;
+    }
     res.status(404).send(page({ path: '/', noindex: true, body: '<h1>Page introuvable</h1>' }));
   } catch (err) {
     // Ne jamais laisser un bot sur une erreur brute : page minimale valide,

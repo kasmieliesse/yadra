@@ -38,6 +38,8 @@
 
     { "source": "/lexique", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=lexique" },
 
-    { "source": "/legal/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=legal&slug=:slug" }
+    { "source": "/legal/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=legal&slug=:slug" },
+
+    { "source": "/simulateur", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=simulateur" }
   ]
 }

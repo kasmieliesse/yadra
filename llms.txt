@@ -10,6 +10,7 @@
 - [Explorer par ville](https://yadra.fr/villes): programmes par wilaya (Alger, Oran, Blida, Constantine).
 - [Promoteurs vérifiés](https://yadra.fr/promoteurs): liste des promoteurs partenaires vérifiés.
 - [Investir](https://yadra.fr/investir): vue d'ensemble pour investir dans le neuf en Algérie.
+- [Simulateur de rentabilité](https://yadra.fr/simulateur): simulateur indicatif de rentabilité locative (location courte durée, longue durée, achat-revente) pour l'immobilier neuf en Algérie.
 - [Prix de l'immobilier neuf](https://yadra.fr/donnees/prix-immobilier): prix moyen au m² par ville, calculé depuis le catalogue publié.
 - [Neuf ou ancien](https://yadra.fr/comparatifs/neuf-vs-ancien): comparatif pour aider à choisir.
 

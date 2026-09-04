@@ -19,6 +19,7 @@ const STATIC_PAGES = [
   { path: '/promoteurs', priority: '0.7', changefreq: 'weekly' },
   { path: '/a-propos', priority: '0.5', changefreq: 'monthly' },
   { path: '/investir', priority: '0.5', changefreq: 'monthly' },
+  { path: '/simulateur', priority: '0.6', changefreq: 'monthly' },
   { path: '/donnees/prix-immobilier', priority: '0.6', changefreq: 'weekly' },
   { path: '/comparatifs/neuf-vs-ancien', priority: '0.4', changefreq: 'monthly' },
   { path: '/comparatifs/alger-vs-oran', priority: '0.4', changefreq: 'monthly' },
