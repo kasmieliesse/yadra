@@ -898,6 +898,27 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 [dir="rtl"] .skip-link{left:auto;right:-999px;}
 [dir="rtl"] .skip-link:focus{left:auto;right:10px;}
 </style>
+<!-- Search Console : une fois la propriété créée sur https://search.google.com/search-console,
+     coller ici la balise meta fournie (méthode "balise HTML"), ex :
+     <meta name="google-site-verification" content="COLLER_LE_CODE_ICI"> -->
+<script>
+(function(){
+  // GA4 : remplacer GA_MEASUREMENT_ID par l'ID réel (format G-XXXXXXXXXX) une fois
+  // le compte créé sur https://analytics.google.com — tant que la valeur reste
+  // le placeholder ci-dessous, ce bloc ne charge rien et n'envoie aucune donnée.
+  var GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+  if(!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID.indexOf('XXXXXXXXXX') !== -1) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ window.dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('js', new Date());
+  gtag('config', GA_MEASUREMENT_ID);
+})();
+</script>
 </head>
 <body>
 
