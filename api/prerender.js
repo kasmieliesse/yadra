@@ -350,6 +350,26 @@ module.exports = async function (req, res) {
             ['Les signaux d\'alerte à ne pas ignorer', "Un acompte important demandé avant toute documentation, un prix nettement inférieur au marché sans justification, une réticence à fournir un contrat écrit détaillant l'échéancier de paiement, aucune référence vérifiable, ou une pression pour signer rapidement."],
             ['Comment yadra! vérifie chaque promoteur avant publication', "Avant qu'un projet apparaisse sur yadra!, nous demandons au promoteur son registre de commerce et des références, que nous contrôlons avant publication. Cette vérification réduit le risque mais ne le supprime pas entièrement : elle s'ajoute aux vérifications de ce guide, elle ne les remplace pas."]
           ]
+        },
+        'procuration-immobiliere-algerie': {
+          title: 'La procuration immobilière en Algérie : le guide complet',
+          intro: "Procuration spéciale ou générale, démarches depuis l'étranger, points à vérifier avant de signer : le guide complet de la procuration immobilière en Algérie.",
+          sections: [
+            ['À quoi sert une procuration', "Une procuration autorise une personne de confiance à accomplir en votre nom certains actes précis liés à l'achat — particulièrement utile pour les acquéreurs de la diaspora qui ne peuvent pas être présents à chaque étape."],
+            ['Procuration générale ou spéciale', "Une procuration \"spéciale\" limite le mandataire à des actes précisément énumérés (recommandé pour un achat immobilier). Une procuration \"générale\" donne des pouvoirs beaucoup plus larges, à réserver à une confiance totale."],
+            ["Où et comment l'établir depuis l'étranger", "Elle s'établit généralement auprès du consulat d'Algérie du lieu de résidence, ou devant un notaire local puis légalisée. Les démarches exactes varient selon le pays — contactez le consulat compétent."],
+            ["Ce qu'il faut vérifier avant de signer", "Que les pouvoirs donnés correspondent exactement au nécessaire, la durée de validité, et la fiabilité du mandataire choisi."]
+          ]
+        },
+        'echeancier-paiement-promoteur-algerie': {
+          title: 'Calendrier de paiement promoteur : ce qui est normal',
+          intro: "À quoi ressemble un échéancier de paiement sain pour un achat sur plan en Algérie, et les écarts qui doivent alerter.",
+          sections: [
+            ['Le principe : payer au rythme du chantier', "Un échéancier sain lie chaque versement à un jalon de construction constatable plutôt qu'à des dates calendaires fixes déconnectées de l'avancement réel."],
+            ['Un exemple d\'échéancier courant', "Acompte à la réservation, tranches au fil du gros œuvre, tranche aux finitions, solde à la livraison. Demandez toujours le détail écrit et chiffré avant de vous engager."],
+            ['Les écarts qui doivent alerter', "Un acompte très supérieur à l'usage, un échéancier sans lien avec l'avancement réel, une demande de paiement hors circuit bancaire, un refus de formaliser l'échéancier par écrit."],
+            ['Que faire en cas de retard de chantier', "Un retard ponctuel n'est pas automatiquement anormal. Ce qui compte, c'est la transparence du promoteur : un retard communiqué diffère nettement d'un chantier à l'arrêt sans explication."]
+          ]
         }
       };
       var g = GUIDES[gslug];

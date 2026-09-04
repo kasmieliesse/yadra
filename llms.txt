@@ -18,6 +18,8 @@
 - [Financer un achat neuf](https://yadra.fr/guides/financement-credit-immobilier-algerie): aperçu des options de financement (crédit bancaire, apport, échéancier promoteur, cas de la diaspora).
 - [Vérifier un promoteur immobilier](https://yadra.fr/guides/verifier-promoteur-immobilier-algerie): méthode pour vérifier un promoteur avant d'acheter (registre de commerce, références, avancement du chantier, signaux d'alerte).
 - [Lexique de l'immobilier neuf](https://yadra.fr/lexique): définitions des termes courants (VEFA, échéancier, garantie décennale, réception des travaux, etc.).
+- [Procuration immobilière](https://yadra.fr/guides/procuration-immobiliere-algerie): procuration spéciale ou générale, démarches depuis l'étranger, points à vérifier avant de signer.
+- [Calendrier de paiement promoteur](https://yadra.fr/guides/echeancier-paiement-promoteur-algerie): à quoi ressemble un échéancier de paiement sain pour un achat sur plan, et les écarts qui doivent alerter.
 
 ## Notes
 

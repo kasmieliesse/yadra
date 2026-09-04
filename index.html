@@ -981,7 +981,9 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <a href="/comparatifs/alger-vs-oran">Alger vs Oran</a>
         <a href="/lexique">Lexique de l’immobilier neuf</a>
         <a href="/guides/verifier-promoteur-immobilier-algerie">Vérifier un promoteur</a>
+        <a href="/guides/echeancier-paiement-promoteur-algerie">Calendrier de paiement</a>
         <a href="/guides/financement-credit-immobilier-algerie">Financer son achat</a>
+        <a href="/guides/procuration-immobiliere-algerie">Procuration immobilière</a>
         <a href="/guides/acheter-depuis-letranger">Acheter depuis l’étranger</a>
         <a href="/a-propos#faq">Questions fréquentes</a>
         <a href="/a-propos#contact">Contact</a>
@@ -2041,6 +2043,10 @@ function render(){
     updateMeta({path:'/guides/financement-credit-immobilier-algerie', title:"Financer l'achat d'un logement neuf en Algérie | yadra!", description:"Crédit bancaire, apport, échéancier promoteur, cas de la diaspora : un aperçu des options pour financer un achat immobilier neuf en Algérie."}); }
   else if(segs[0]==='guides' && segs[1]==='verifier-promoteur-immobilier-algerie'){ main.innerHTML = pageGuideVerifierPromoteur(); afterGuideVerifierPromoteur();
     updateMeta({path:'/guides/verifier-promoteur-immobilier-algerie', title:"Comment vérifier un promoteur immobilier en Algérie | yadra!", description:"Registre de commerce, références clients, avancement du chantier : la méthode pour vérifier un promoteur immobilier en Algérie avant de s'engager."}); }
+  else if(segs[0]==='guides' && segs[1]==='procuration-immobiliere-algerie'){ main.innerHTML = pageGuideProcuration(); afterGuideProcuration();
+    updateMeta({path:'/guides/procuration-immobiliere-algerie', title:"La procuration immobilière en Algérie | yadra!", description:"Procuration spéciale ou générale, démarches depuis l'étranger, points à vérifier avant de signer : le guide complet de la procuration immobilière en Algérie."}); }
+  else if(segs[0]==='guides' && segs[1]==='echeancier-paiement-promoteur-algerie'){ main.innerHTML = pageGuideEcheancier(); afterGuideEcheancier();
+    updateMeta({path:'/guides/echeancier-paiement-promoteur-algerie', title:"Calendrier de paiement promoteur : ce qui est normal | yadra!", description:"À quoi ressemble un échéancier de paiement sain pour un achat sur plan en Algérie, et les écarts qui doivent alerter."}); }
   else if(segs[0]==='lexique' && segs.length===1){ main.innerHTML = pageLexique(); afterLexique();
     updateMeta({path:'/lexique', title:"Lexique de l'immobilier neuf en Algérie | yadra!", description:"VEFA, livraison, garantie décennale, échéancier de paiement... les termes de l'immobilier neuf en Algérie expliqués simplement."}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
@@ -3510,7 +3516,7 @@ function pageGuideDiaspora(){
 
     +guideSection('04','Les documents à demander avant de signer','<p>Selon le projet, réunissez au minimum : le titre de propriété du terrain, le permis de construire, les plans détaillés du logement avec sa surface exacte, et un contrat de réservation ou de vente écrit incluant l’échéancier de paiement. La liste exacte peut varier — un notaire ou un avocat spécialisé confirmera ce qui est requis pour votre projet précis.</p>')
 
-    +guideSection('05','La procuration, quand on ne peut pas se déplacer','<p>Une procuration permet de mandater un proche ou un professionnel pour signer certains documents ou suivre des étapes en votre absence. Les modalités exactes (forme, légalisation) se vérifient auprès du consulat d’Algérie de votre lieu de résidence ou d’un notaire, avant d’en avoir besoin plutôt qu’au dernier moment.</p>')
+    +guideSection('05','La procuration, quand on ne peut pas se déplacer','<p>Une procuration permet de mandater un proche ou un professionnel pour signer certains documents ou suivre des étapes en votre absence. Les modalités exactes (forme, légalisation) se vérifient auprès du consulat d’Algérie de votre lieu de résidence ou d’un notaire, avant d’en avoir besoin plutôt qu’au dernier moment. Le détail des démarches et des précautions à prendre est couvert dans notre <a href="/guides/procuration-immobiliere-algerie">guide dédié à la procuration</a>.</p>')
 
     +'<div class="reveal" style="margin-top:40px;padding:22px 24px;border-radius:var(--radius-l);background:var(--surface);border:1px solid var(--border);">'
       +'<h3 style="color:var(--heading);font-size:16px;margin-bottom:8px;">Où yadra! s’inscrit là-dedans</h3>'
@@ -3817,6 +3823,75 @@ function afterGuideVerifierPromoteur(){
 }
 
 /* ================================================================
+   PAGE: GUIDE — la procuration immobilière (§G du dossier SEO)
+   ================================================================ */
+function pageGuideProcuration(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Procuration</span></div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
+    +'<div class="eyebrow reveal">Guide</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">La procuration immobilière en Algérie : le guide complet</h1>'
+    +'<p class="prose reveal" style="margin-top:18px;">Impossible de se déplacer pour signer un document ou suivre une étape de l’achat ? La procuration permet de mandater un proche ou un professionnel pour agir à votre place — à condition de respecter certaines formes.</p>'
+    +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
+
+    +guideSection('01','À quoi sert une procuration','<p>Une procuration (ou "pouvoir") autorise une personne de confiance — un proche, un notaire, un avocat — à accomplir en votre nom certains actes précis : signer un contrat de réservation, réceptionner des documents, parfois signer l’acte final selon l’étendue donnée. Elle est particulièrement utile pour les acquéreurs de la diaspora qui ne peuvent pas être présents à chaque étape.</p>')
+
+    +guideSection('02','Procuration générale ou spéciale','<p>Une procuration "spéciale" limite le mandataire à des actes précisément énumérés (recommandé pour un achat immobilier, afin d’éviter toute ambiguïté sur ce qui est autorisé). Une procuration "générale" donne des pouvoirs beaucoup plus larges — à réserver à une personne en qui vous avez une confiance totale, et généralement déconseillée pour ce type de transaction.</p>')
+
+    +guideSection('03','Où et comment l’établir depuis l’étranger','<p>Pour un acquéreur résidant hors d’Algérie, la procuration s’établit généralement auprès du consulat d’Algérie du lieu de résidence, ou devant un notaire local puis légalisée pour être reconnue en Algérie. Les démarches exactes (documents à fournir, délais, coût) varient selon le pays et évoluent dans le temps — contactez directement le consulat compétent plutôt que de vous fier à une procédure trouvée en ligne.</p>')
+
+    +guideSection('04','Ce qu’il faut vérifier avant de signer','<ul style="margin:8px 0 0;padding-left:20px;line-height:1.8;">'
+      +'<li>Que les pouvoirs donnés correspondent exactement à ce qui est nécessaire — ni plus, ni moins.</li>'
+      +'<li>La durée de validité de la procuration, et si elle couvre bien toute la durée prévisible de la transaction.</li>'
+      +'<li>L’identité et la fiabilité du mandataire choisi — la procuration lui donne un pouvoir réel d’engagement en votre nom.</li>'
+      +'</ul>')
+
+    +'<p style="color:var(--text-dim);font-size:12px;margin-top:28px;line-height:1.6;">Ce guide donne des repères généraux et ne remplace pas les conseils d’un notaire, d’un avocat ou du consulat compétent — les formes exactes d’une procuration valable varient selon les situations.</p>'
+  +'</div>';
+}
+function afterGuideProcuration(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Procuration immobilière',path:'/guides/procuration-immobiliere-algerie'}]),
+    {'@type':'Article', headline:'La procuration immobilière en Algérie : le guide complet', author:{'@type':'Organization', name:'yadra!'}, publisher:{'@type':'Organization', name:'yadra! by qbm'}, mainEntityOfPage:'https://yadra.fr/guides/procuration-immobiliere-algerie'}
+  ]});
+}
+
+/* ================================================================
+   PAGE: GUIDE — calendrier de paiement promoteur (§G du dossier SEO)
+   ================================================================ */
+function pageGuideEcheancier(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Calendrier de paiement</span></div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
+    +'<div class="eyebrow reveal">Guide</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Calendrier de paiement promoteur : ce qui est normal</h1>'
+    +'<p class="prose reveal" style="margin-top:18px;">Un achat sur plan se paie en plusieurs tranches, pas en une fois. Voici à quoi ressemble un échéancier normal — et les écarts qui doivent alerter.</p>'
+    +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
+
+    +guideSection('01','Le principe : payer au rythme du chantier','<p>Un échéancier sain lie chaque versement à un jalon de construction constatable — signature du contrat, fondations achevées, gros œuvre terminé, finitions, livraison — plutôt qu’à des dates calendaires fixes déconnectées de l’avancement réel. Cette logique protège l’acquéreur : si le chantier prend du retard, les paiements suivants attendent aussi.</p>')
+
+    +guideSection('02','Un exemple d’échéancier courant','<p>Les pourcentages varient selon le promoteur et le projet, mais une structure fréquente ressemble à : un acompte à la réservation, une tranche aux fondations, une ou plusieurs tranches au fil du gros œuvre, une tranche aux finitions, et le solde à la livraison contre remise des clés. Demandez toujours le détail écrit et chiffré avant de vous engager, pas seulement une description orale.</p>')
+
+    +guideSection('03','Les écarts qui doivent alerter','<ul style="margin:8px 0 0;padding-left:20px;line-height:1.8;">'
+      +'<li>Un acompte très supérieur à ce qui se pratique habituellement, avant tout début de chantier visible.</li>'
+      +'<li>Un échéancier basé uniquement sur des dates, sans lien avec l’avancement réel des travaux.</li>'
+      +'<li>Une demande de paiement en espèces ou hors du circuit bancaire habituel.</li>'
+      +'<li>Un refus de formaliser l’échéancier par écrit dans le contrat de réservation.</li>'
+      +'</ul>')
+
+    +guideSection('04','Que faire en cas de retard de chantier','<p>Un retard ponctuel n’est pas automatiquement anormal — la construction a ses aléas. Ce qui compte, c’est la transparence du promoteur : un retard communiqué, expliqué et visible sur place diffère nettement d’une absence de nouvelles ou d’un chantier à l’arrêt sans explication. Dans ce dernier cas, les vérifications de notre <a href="/guides/verifier-promoteur-immobilier-algerie">guide sur la vérification d’un promoteur</a> s’appliquent particulièrement.</p>')
+
+    +'<p style="color:var(--text-dim);font-size:12px;margin-top:28px;line-height:1.6;">Ce guide donne des repères généraux et ne remplace pas la lecture attentive de votre propre contrat, idéalement avec l’aide d’un notaire ou d’un avocat spécialisé.</p>'
+  +'</div>';
+}
+function afterGuideEcheancier(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Calendrier de paiement',path:'/guides/echeancier-paiement-promoteur-algerie'}]),
+    {'@type':'Article', headline:'Calendrier de paiement promoteur : ce qui est normal', author:{'@type':'Organization', name:'yadra!'}, publisher:{'@type':'Organization', name:'yadra! by qbm'}, mainEntityOfPage:'https://yadra.fr/guides/echeancier-paiement-promoteur-algerie'}
+  ]});
+}
+
+/* ================================================================
    PAGE: LEXIQUE de l'immobilier neuf (§B/§G du dossier SEO)
    Hub de maillage interne, requêtes définitionnelles à faible concurrence.
    ================================================================ */
@@ -3856,7 +3931,9 @@ function pageLexique(){
       +'<p style="color:var(--text-dim);font-size:13.5px;line-height:1.7;margin-bottom:14px;">Ces repères généraux sont détaillés dans nos guides pratiques.</p>'
       +'<div style="display:flex;gap:10px;flex-wrap:wrap;">'
         +'<a class="btn btn-ghost btn-sm" href="/guides/verifier-promoteur-immobilier-algerie">Vérifier un promoteur</a>'
+        +'<a class="btn btn-ghost btn-sm" href="/guides/echeancier-paiement-promoteur-algerie">Calendrier de paiement</a>'
         +'<a class="btn btn-ghost btn-sm" href="/guides/financement-credit-immobilier-algerie">Financer son achat</a>'
+        +'<a class="btn btn-ghost btn-sm" href="/guides/procuration-immobiliere-algerie">Procuration immobilière</a>'
         +'<a class="btn btn-ghost btn-sm" href="/guides/acheter-depuis-letranger">Acheter depuis l’étranger</a>'
       +'</div>'
     +'</div>'
