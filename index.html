@@ -635,6 +635,29 @@ body:has(.mobile-cta-bar) .wa-float{display:none;}
 .map-popup .mp-title{font-family:var(--font-display);font-size:15px;color:#fff;margin:4px 0;}
 .map-popup .mp-price{font-size:12.5px;color:var(--or-rose-light);font-weight:700;margin-bottom:8px;}
 .map-popup a{display:block;text-align:center;background:var(--argent);color:var(--noir);border-radius:999px;padding:7px;font-size:11.5px;font-weight:800;}
+.home-map-stats{display:flex;gap:32px;flex-wrap:wrap;margin:-6px 0 20px;}
+.hms-item{display:flex;flex-direction:column;}
+.hms-item strong{font-family:var(--font-display);font-size:30px;font-weight:400;color:var(--heading);line-height:1;}
+.hms-item span{font-size:11.5px;color:var(--text-dim);margin-top:5px;text-transform:uppercase;letter-spacing:.06em;}
+.home-map-box{border-radius:var(--radius-l);overflow:hidden;border:1px solid var(--border);position:relative;height:460px;background:var(--noir);}
+@media (max-width:700px){.home-map-box{height:360px;}}
+.home-map-box .leaflet-container{width:100%;height:100%;font-family:inherit;background:var(--noir);}
+.home-map-box::after{content:'';position:absolute;inset:0;z-index:420;pointer-events:none;
+  background:linear-gradient(180deg,rgba(10,8,6,.42),rgba(10,8,6,.28) 40%,rgba(10,8,6,.42));}
+.home-map-box .leaflet-control-attribution{background:rgba(10,10,10,.6);color:var(--text-dim);}
+.home-map-box .leaflet-control-attribution a{color:var(--argent);}
+.map-pill{position:absolute;left:0;top:0;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:8px 14px 9px;border-radius:14px;background:linear-gradient(145deg,rgba(24,19,15,.94),rgba(10,10,10,.94));
+  border:1px solid rgba(216,154,120,.4);box-shadow:0 12px 28px -12px rgba(0,0,0,.7);cursor:pointer;
+  transition:transform .2s cubic-bezier(.2,.7,.2,1),border-color .2s ease;white-space:nowrap;}
+.map-pill:hover{transform:translate(-50%,-100%) translateY(-3px);border-color:var(--or-rose-light);}
+.map-pill.big{padding:10px 17px 11px;}
+.map-pill .mp-top{font-family:var(--font-display);font-size:14px;color:#fff;font-weight:400;letter-spacing:.01em;}
+.map-pill.big .mp-top{font-size:16.5px;}
+.map-pill .mp-bottom{font-size:10px;color:var(--or-rose-light);text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+.map-pill::after{content:'';position:absolute;left:50%;bottom:-5px;width:9px;height:9px;
+  background:rgb(15,12,10);border-right:1px solid rgba(216,154,120,.4);border-bottom:1px solid rgba(216,154,120,.4);
+  transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0;}
 .market-view-toggle{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px;}
 .market-view-toggle button{border:0;background:transparent;color:var(--text-dim);padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
 .market-view-toggle button.active{background:var(--or-rose);color:#fff;}
@@ -1710,6 +1733,71 @@ function renderProjectsMap(containerId, projects, opts){
     return map;
   }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
 }
+
+/* ---------------- Carte d'accueil : projets groupés par wilaya ----------------
+   Purement dérivée de getAllProjects() (donc de /api/bootstrap) : dès qu'un
+   projet passe au statut "publié", il apparaît ici au chargement suivant de
+   la page, sans aucune étape manuelle. Regroupée par wilaya plutôt que par
+   projet individuel, car c'est le seul niveau de précision qu'on garantit
+   pour tous les programmes (lat/lng précis quand on les a, centre de wilaya
+   sinon) — voir WILAYA_COORDS. */
+function wilayaProjectStats(projects){
+  var byW = {};
+  projects.forEach(function(p){
+    if(!WILAYAS[p.wilaya]) return;
+    if(!byW[p.wilaya]) byW[p.wilaya] = {wilaya:p.wilaya, label:WILAYAS[p.wilaya].label, count:0, prixMin:Infinity, latSum:0, lngSum:0, geoCount:0};
+    var g = byW[p.wilaya];
+    g.count++;
+    if(p.prixMin>0) g.prixMin = Math.min(g.prixMin, p.prixMin);
+    if(p.lat && p.lng){ g.latSum += p.lat; g.lngSum += p.lng; g.geoCount++; }
+  });
+  return Object.keys(byW).map(function(w){
+    var g = byW[w];
+    var center = g.geoCount ? [g.latSum/g.geoCount, g.lngSum/g.geoCount] : (WILAYA_COORDS[w] || [28.0,2.6]);
+    return {wilaya:g.wilaya, label:g.label, count:g.count, prixMin:g.prixMin===Infinity?null:g.prixMin, lat:center[0], lng:center[1]};
+  });
+}
+function yadraPillIcon(L, stat){
+  var big = stat.count>=8;
+  return L.divIcon({
+    className:'',
+    html:'<div class="map-pill'+(big?' big':'')+'">'
+      +(stat.prixMin?'<span class="mp-top">dès '+moneyShort(stat.prixMin)+'</span>':'<span class="mp-top">'+stat.count+' projet'+(stat.count>1?'s':'')+'</span>')
+      +'<span class="mp-bottom">'+esc(stat.label)+(stat.prixMin?' · '+stat.count:'')+'</span>'
+    +'</div>',
+    iconSize:[1,1], iconAnchor:[0,0]
+  });
+}
+function renderHomeProjectsMap(containerId){
+  var host = document.getElementById(containerId);
+  if(!host) return;
+  var stats = wilayaProjectStats(getAllProjects());
+  loadLeaflet().then(function(L){
+    host = document.getElementById(containerId);
+    if(!host) return;
+    if(host._yadraMap){ host._yadraMap.remove(); host._yadraMap = null; }
+    var map = L.map(host, {scrollWheelZoom:false, zoomControl:true, attributionControl:true});
+    host._yadraMap = map;
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:19,
+      attribution:'Imagery &copy; Esri, Maxar, Earthstar Geographics'
+    }).addTo(map);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:19, opacity:0.85
+    }).addTo(map);
+    if(!stats.length){ map.setView([28.0,2.6],5); return map; }
+    var bounds = [];
+    stats.sort(function(a,b){return b.count-a.count;}).forEach(function(s){
+      var marker = L.marker([s.lat,s.lng], {icon:yadraPillIcon(L,s), riseOnHover:true}).addTo(map);
+      marker.on('click', function(){ go('/villes/'+s.wilaya); });
+      bounds.push([s.lat,s.lng]);
+    });
+    if(stats.length===1){ map.setView(bounds[0], 7); }
+    else { map.fitBounds(bounds, {padding:[46,46], maxZoom:7}); }
+    return map;
+  }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
+}
+
 function zelligePattern(id,opacity,color){
   color = color || '#B76E4D';
   return '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;opacity:'+(opacity||0.08)+'">'
@@ -1729,6 +1817,15 @@ var WILAYAS = {
   'tizi-ouzou': {label:'Tizi Ouzou', communes:['Tizi Ouzou Centre','Draâ Ben Khedda','Boukhalfa']}
 };
 var WILAYA_ORDER = ['alger','oran','blida','constantine'];
+/* Centre approximatif de chaque wilaya (chef-lieu). Sert de repli pour la
+   carte des projets quand un programme n'a pas de lat/lng précis — ce qui
+   est le cas de tout projet déposé via le formulaire promoteur aujourd'hui,
+   celui-ci ne demande qu'une wilaya/commune, pas de coordonnées GPS. */
+var WILAYA_COORDS = {
+  'alger':[36.7538,3.0588], 'oran':[35.6969,-0.6331], 'blida':[36.4700,2.8300],
+  'constantine':[36.3650,6.6147], 'setif':[36.1898,5.4108], 'annaba':[36.9000,7.7667],
+  'tizi-ouzou':[36.7169,4.0497]
+};
 
 var PRESTATIONS_POOL = ['Ascenseur panoramique','Parking sous-sol sécurisé','Espaces verts paysagers','Sécurité 24h/24','Salle de sport','Piscine résidentielle','Aire de jeux enfants','Mosquée de proximité','Commerces en rez-de-chaussée','Fibre optique','Vidéosurveillance','Groupe électrogène','Conciergerie','Terrasses aménagées'];
 var PRESTATION_ICON = {'Ascenseur panoramique':'building','Parking sous-sol sécurisé':'shield','Espaces verts paysagers':'sparkle','Sécurité 24h/24':'shield','Salle de sport':'gauge','Piscine résidentielle':'sparkle','Aire de jeux enfants':'sparkle','Mosquée de proximité':'building','Commerces en rez-de-chaussée':'buildings','Fibre optique':'sparkle','Vidéosurveillance':'shield','Groupe électrogène':'gauge','Conciergerie':'users','Terrasses aménagées':'home'};
@@ -2018,6 +2115,7 @@ function updateHeader(){
 function pageHome(){
   var featured = PROJECTS.filter(function(p){return p.featured;}).slice(0,6);
   var latest = PROJECTS.slice().reverse().slice(0,6);
+  var mapStats = wilayaProjectStats(getAllProjects());
   return ''
   +'<section class="hero theme-dark">'
     +'<div class="hero-bg" aria-hidden="true"><div class="hero-bg-photo"></div><div class="sky-grad"></div>'+zelligePattern('zHero',0.05)+'</div>'
@@ -2064,6 +2162,18 @@ function pageHome(){
       +'<div class="section-head reveal"><div><h2>Projets à la une</h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div>'
         +'<a class="see-all" href="/projets">Voir tous les projets '+ic('chevronRight')+'</a></div>'
       +'<div class="grid grid-cards reveal-stagger">'+featured.map(function(p){return '<div class="reveal">'+projectCardHTML(p)+'</div>';}).join('')+'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section home-map-section">'
+    +'<div class="wrap">'
+      +'<div class="section-head reveal"><div><h2>Les projets, sur la carte</h2><p class="desc">Chaque programme publié y apparaît automatiquement, wilaya par wilaya.</p></div>'
+        +'<a class="see-all" href="/projets?view=map">Carte plein écran '+ic('chevronRight')+'</a></div>'
+      +'<div class="home-map-stats reveal">'
+        +'<div class="hms-item"><strong>'+mapStats.reduce(function(s,w){return s+w.count;},0)+'</strong><span>projets en ligne</span></div>'
+        +'<div class="hms-item"><strong>'+mapStats.length+'</strong><span>wilayas couvertes</span></div>'
+      +'</div>'
+      +'<div class="home-map-box reveal" id="homeProjectsMap" role="region" aria-label="Carte des projets immobiliers yadra! en Algérie"></div>'
     +'</div>'
   +'</section>'
 
@@ -2151,6 +2261,7 @@ function afterHome(){
   });
   if(window.mountHeroSymbol3D) window.mountHeroSymbol3D();
   mountCityCarousel('cfHome');
+  renderHomeProjectsMap('homeProjectsMap');
 }
 
 /* ---------------- Project card (shared) ---------------- */
