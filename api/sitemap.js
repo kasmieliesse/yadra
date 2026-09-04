@@ -13,6 +13,7 @@ const WILAYA_COMMUNES = {
 
 const STATIC_PAGES = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
+  { path: '/ar', priority: '0.7', changefreq: 'daily' },
   { path: '/projets', priority: '0.9', changefreq: 'daily' },
   { path: '/villes', priority: '0.7', changefreq: 'weekly' },
   { path: '/promoteurs', priority: '0.7', changefreq: 'weekly' },

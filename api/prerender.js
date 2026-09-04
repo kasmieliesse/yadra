@@ -56,12 +56,16 @@ function page(opts) {
   var description = esc((opts.description || DEFAULT_DESC).slice(0, 300));
   var canonical = SITE + opts.path;
   var robots = opts.noindex ? 'noindex, follow' : 'index, follow';
+  var lang = opts.lang || 'fr';
+  var dir = opts.dir || 'ltr';
   var ld = opts.ld ? '<script type="application/ld+json">' + JSON.stringify(opts.ld) + '</script>' : '';
-  return '<!doctype html><html lang="fr"><head><meta charset="utf-8">'
+  var hreflang = opts.hreflang ? opts.hreflang.map(function (h) { return '<link rel="alternate" hreflang="' + h.code + '" href="' + h.href + '">'; }).join('') : '';
+  return '<!doctype html><html lang="' + lang + '" dir="' + dir + '"><head><meta charset="utf-8">'
     + '<title>' + title + '</title>'
     + '<meta name="description" content="' + description + '">'
     + '<link rel="canonical" href="' + canonical + '">'
     + '<meta name="robots" content="' + robots + '">'
+    + hreflang
     + '<meta property="og:title" content="' + title + '"><meta property="og:description" content="' + description + '"><meta property="og:url" content="' + canonical + '">'
     + ld
     + '</head><body>'
@@ -69,12 +73,13 @@ function page(opts) {
     + '<p><a href="' + canonical + '">Voir la version complète du site</a></p>'
     + '</body></html>';
 }
-function projectListHTML(projects) {
-  if (!projects.length) return '<p>Aucun programme publié pour le moment.</p>';
+function projectListHTML(projects, lang) {
+  if (!projects.length) return lang === 'ar' ? '<p>لا توجد برامج منشورة حاليًا.</p>' : '<p>Aucun programme publié pour le moment.</p>';
+  var priceLabel = lang === 'ar' ? ' — ابتداءً من ' : ' — à partir de ';
   return '<ul>' + projects.map(function (p) {
     var w = WILAYAS[p.wilaya] ? WILAYAS[p.wilaya].label : p.wilaya;
     return '<li><a href="' + SITE + '/projets/' + p.wilaya + '/' + p.slug + '">' + esc(p.nom) + '</a> — ' + esc(p.commune) + ', ' + esc(w)
-      + (p.prixMin ? ' — à partir de ' + money(p.prixMin) : '') + '</li>';
+      + (p.prixMin ? priceLabel + money(p.prixMin) : '') + '</li>';
   }).join('') + '</ul>';
 }
 
@@ -100,8 +105,29 @@ module.exports = async function (req, res) {
       var body = '<h1>yadra! — Marketplace immobilier premium en Algérie</h1>'
         + '<p>' + esc(DEFAULT_DESC) + '</p>'
         + '<h2>Villes couvertes</h2><ul>' + WILAYA_ORDER.map(function (w) { return '<li><a href="' + SITE + '/villes/' + w + '">' + WILAYAS[w].label + '</a></li>'; }).join('') + '</ul>'
-        + '<h2>Derniers programmes</h2>' + projectListHTML(all.slice(0, 20));
-      res.status(200).send(page({ path: '/', body: body, ld: { '@context': 'https://schema.org', '@graph': [{ '@type': 'Organization', name: 'yadra!', url: SITE + '/' }, { '@type': 'WebSite', name: 'yadra!', url: SITE + '/' }] } }));
+        + '<h2>Derniers programmes</h2>' + projectListHTML(all.slice(0, 20))
+        + '<p><a href="' + SITE + '/ar" hreflang="ar">بالعربية</a></p>';
+      res.status(200).send(page({
+        path: '/', body: body,
+        hreflang: [{ code: 'fr', href: SITE + '/' }, { code: 'ar', href: SITE + '/ar' }, { code: 'x-default', href: SITE + '/' }],
+        ld: { '@context': 'https://schema.org', '@graph': [{ '@type': 'Organization', name: 'yadra!', url: SITE + '/' }, { '@type': 'WebSite', name: 'yadra!', url: SITE + '/' }] }
+      }));
+      return;
+    }
+    if (kind === 'home-ar') {
+      var allAr = await loadPublishedProjects();
+      var descAr = 'يادرا! يربط المشترين بالمروجين العقاريين المعتمدين في الجزائر، حول برامج عقارية جديدة (على المخطط، قيد الإنجاز، جاهزة للتسليم). ابحثوا حسب المدينة، الميزانية والنوع، وتواصلوا مباشرة مع المروج.';
+      var bodyAr = '<h1>يادرا! — سوق العقارات الجديدة في الجزائر</h1>'
+        + '<p>' + esc(descAr) + '</p>'
+        + '<h2>المدن المغطاة</h2><ul>' + WILAYA_ORDER.map(function (w) { return '<li><a href="' + SITE + '/villes/' + w + '">' + WILAYAS[w].label + '</a></li>'; }).join('') + '</ul>'
+        + '<h2>أحدث البرامج</h2>' + projectListHTML(allAr.slice(0, 20), 'ar')
+        + '<p><a href="' + SITE + '/" hreflang="fr">Français</a></p>';
+      res.status(200).send(page({
+        path: '/ar', title: 'يادرا! — سوق العقارات الجديدة في الجزائر', description: descAr,
+        body: bodyAr, lang: 'ar', dir: 'rtl',
+        hreflang: [{ code: 'fr', href: SITE + '/' }, { code: 'ar', href: SITE + '/ar' }, { code: 'x-default', href: SITE + '/' }],
+        ld: { '@context': 'https://schema.org', '@graph': [{ '@type': 'Organization', name: 'yadra!', url: SITE + '/' }, { '@type': 'WebSite', name: 'yadra!', url: SITE + '/', inLanguage: 'ar' }] }
+      }));
       return;
     }
     if (kind === 'marketplace') {

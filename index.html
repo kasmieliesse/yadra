@@ -7,6 +7,9 @@
 <meta name="description" content="yadra! met en relation acquéreurs et promoteurs immobiliers en Algérie et dans le monde, pour la diaspora comme pour ceux qui vivent sur place. Recherchez un projet par ville, budget et typologie, consultez les fiches détaillées et contactez directement le promoteur.">
 <link rel="canonical" href="https://yadra.fr/">
 <meta name="robots" content="index, follow">
+<link rel="alternate" hreflang="fr" href="https://yadra.fr/">
+<link rel="alternate" hreflang="ar" href="https://yadra.fr/ar">
+<link rel="alternate" hreflang="x-default" href="https://yadra.fr/">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <meta name="theme-color" content="#0A0A0A">
@@ -973,6 +976,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <a href="/promoteurs">Promoteurs</a>
         <a href="/a-propos">À propos</a>
         <a href="/investir">Investir</a>
+        <a href="/ar" hreflang="ar">بالعربية</a>
       </div>
       <div class="foot-col">
         <h4>Ressources</h4>
@@ -2007,6 +2011,15 @@ function render(){
   var trackedProjectId = null;
   var LEGAL_TITLES = {'mentions-legales':'Mentions légales','conditions':"Conditions d'utilisation",'confidentialite':'Politique de confidentialité'};
   if(segs.length===0){ main.innerHTML = pageHome(); afterHome(); updateMeta({path:'/'}); }
+  else if(segs.length===1 && segs[0]==='ar'){
+    LANG = 'ar';
+    try{ localStorage.setItem('yadra_lang','ar'); }catch(e){}
+    document.documentElement.setAttribute('lang','ar');
+    document.documentElement.setAttribute('dir','rtl');
+    updateLangSwitcherUI();
+    main.innerHTML = pageHome(); afterHome();
+    updateMeta({path:'/ar', title:'yadra! — العقارات الجديدة في الجزائر بطريقة مختلفة.', description:'يادرا! يربط المشترين بالمروجين العقاريين المعتمدين في الجزائر، حول برامج عقارية جديدة. ابحثوا حسب المدينة، الميزانية والنوع، وتواصلوا مباشرة مع المروج.'});
+  }
   else if(segs[0]==='projets' && segs.length===1){ main.innerHTML = pageMarketplace(r.params); afterMarketplace(r.params);
     var isFilteredView = !!location.search;
     updateMeta({path:'/projets', title:'Tous les projets immobiliers en Algérie | yadra!', description:"Programmes immobiliers neufs en Algérie — Alger, Oran, Blida, Constantine et plus. Filtrez par ville, budget et typologie, en Algérie comme depuis la diaspora.", noindex:isFilteredView}); }
@@ -2616,6 +2629,19 @@ function updateMeta(opts){
   setMetaAttr('meta[name="twitter:description"]', 'content', description);
   setMetaAttr('meta[name="twitter:image"]', 'content', image);
   setMetaAttr('meta[name="robots"]', 'content', opts.noindex ? 'noindex, follow' : 'index, follow');
+  setMetaAttr('meta[property="og:locale"]', 'content', opts.path==='/ar' ? 'ar_DZ' : 'fr_FR');
+  updateHreflang(opts.path);
+}
+function updateHreflang(path){
+  var want = (path==='/' || path==='/ar');
+  [['fr','https://yadra.fr/'],['ar','https://yadra.fr/ar'],['x-default','https://yadra.fr/']].forEach(function(pair){
+    var code = pair[0], href = pair[1];
+    var el = document.querySelector('link[hreflang="'+code+'"]');
+    if(want){
+      if(!el){ el = document.createElement('link'); el.setAttribute('rel','alternate'); el.setAttribute('hreflang',code); document.head.appendChild(el); }
+      el.setAttribute('href', href);
+    } else if(el){ el.parentNode.removeChild(el); }
+  });
 }
 function afterDetail(wilaya,slug){
   var p = getProjectBySlug(wilaya,slug);
