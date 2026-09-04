@@ -433,6 +433,25 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'legal') {
+      var legalSlug = String(req.query.slug || '');
+      var LEGAL_PAGES = {
+        'mentions-legales': { title: 'Mentions légales', intro: "Éditeur du site, hébergement, propriété intellectuelle et coordonnées de contact de yadra!." },
+        'conditions': { title: "Conditions d'utilisation", intro: "Les règles d'utilisation de la plateforme yadra!, pour les acquéreurs comme pour les promoteurs immobiliers partenaires." },
+        'confidentialite': { title: 'Politique de confidentialité', intro: 'Comment yadra! collecte, utilise et protège les données personnelles des utilisateurs de la plateforme.' }
+      };
+      var legalPage = LEGAL_PAGES[legalSlug];
+      if (!legalPage) {
+        res.status(404).send(page({ path: '/legal/' + legalSlug, noindex: true, body: '<h1>Page introuvable</h1>' }));
+        return;
+      }
+      var bodyLeg = '<h1>' + esc(legalPage.title) + '</h1><p>' + esc(legalPage.intro) + '</p><p><a href="' + SITE + '/legal/' + legalSlug + '">Lire le document complet</a></p>';
+      res.status(200).send(page({
+        path: '/legal/' + legalSlug, title: legalPage.title + ' | yadra!', description: legalPage.intro, body: bodyLeg,
+        ld: breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: legalPage.title, path: '/legal/' + legalSlug }])
+      }));
+      return;
+    }
     res.status(404).send(page({ path: '/', noindex: true, body: '<h1>Page introuvable</h1>' }));
   } catch (err) {
     // Ne jamais laisser un bot sur une erreur brute : page minimale valide,
