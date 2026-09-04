@@ -1,4 +1,27 @@
 User-agent: *
 Allow: /
 
+# Crawlers des moteurs de réponse IA — listés explicitement pour documenter
+# l'intention (le wildcard ci-dessus les autorisait déjà implicitement).
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://yadra.fr/sitemap.xml
