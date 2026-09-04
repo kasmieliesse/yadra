@@ -299,6 +299,31 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'lexique') {
+      var terms = [
+        ['vefa', 'VEFA (Vente en l’État Futur d’Achèvement)', 'Achat d’un logement avant ou pendant sa construction, payé par tranches liées à l’avancement réel des travaux plutôt qu’en une fois. C’est le mode d’achat le plus courant pour un programme neuf en Algérie.'],
+        ['sur-plan', 'Achat sur plan', 'Autre nom courant de la VEFA : on achète sur la base de plans et d’un logement témoin, avant que le bien ne soit physiquement visitable.'],
+        ['echeancier', 'Échéancier de paiement', 'Calendrier des tranches à verser au promoteur, normalement indexé sur l’avancement du chantier plutôt que sur de simples dates fixes.'],
+        ['livraison', 'Livraison', 'Moment où le promoteur remet les clés du logement à l’acquéreur, une fois les travaux achevés et la réception des travaux effectuée.'],
+        ['reception-travaux', 'Réception des travaux', 'Constat contradictoire entre le promoteur et l’acquéreur de l’état du logement à la livraison.'],
+        ['garantie-decennale', 'Garantie décennale', 'Garantie légale qui couvre pendant dix ans les dommages compromettant la solidité du gros œuvre d’un logement neuf.'],
+        ['gros-oeuvre', 'Gros œuvre', 'Ensemble des travaux structurels d’un bâtiment (fondations, murs porteurs, charpente, toiture), par opposition au second œuvre.'],
+        ['promesse-vente', 'Contrat de réservation', 'Document écrit qui engage le promoteur et l’acquéreur avant la signature définitive, précisant le bien, son prix et l’échéancier de paiement.'],
+        ['permis-construire', 'Permis de construire', 'Autorisation administrative obligatoire avant le début des travaux.'],
+        ['titre-propriete', 'Titre de propriété', 'Document attestant que le promoteur est bien propriétaire du terrain ou du bien concerné.'],
+        ['acte-authentique', 'Acte authentique', 'Acte de vente définitif signé devant notaire, qui transfère officiellement la propriété du bien à l’acquéreur.'],
+        ['procuration', 'Procuration', 'Mandat donné à un proche ou un professionnel pour signer certains documents en l’absence de l’acquéreur.'],
+        ['f2-f3-f4', 'F2, F3, F4, F5', 'Nomenclature algérienne désignant le nombre de pièces principales d’un logement : F2 = 2 pièces, F3 = 3 pièces, etc.'],
+        ['promoteur-immobilier', 'Promoteur immobilier', 'Société qui conçoit, finance et fait construire un programme immobilier, puis le commercialise.']
+      ];
+      var bodyL = '<h1>Lexique de l’immobilier neuf en Algérie</h1><p>Les termes qui reviennent le plus souvent dans un achat immobilier neuf en Algérie, expliqués simplement.</p>'
+        + '<dl>' + terms.map(function (t) { return '<dt>' + esc(t[1]) + '</dt><dd>' + esc(t[2]) + '</dd>'; }).join('') + '</dl>';
+      res.status(200).send(page({
+        path: '/lexique', title: "Lexique de l'immobilier neuf en Algérie | yadra!", description: "VEFA, livraison, garantie décennale, échéancier de paiement... les termes de l'immobilier neuf en Algérie expliqués simplement.", body: bodyL,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Lexique', path: '/lexique' }]), { '@type': 'DefinedTermSet', name: 'Lexique de l’immobilier neuf en Algérie', url: SITE + '/lexique', hasDefinedTerm: terms.map(function (t) { return { '@type': 'DefinedTerm', '@id': SITE + '/lexique#' + t[0], name: t[1], description: t[2], inDefinedTermSet: SITE + '/lexique' }; }) }] }
+      }));
+      return;
+    }
     res.status(404).send(page({ path: '/', noindex: true, body: '<h1>Page introuvable</h1>' }));
   } catch (err) {
     // Ne jamais laisser un bot sur une erreur brute : page minimale valide,

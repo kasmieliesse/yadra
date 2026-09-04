@@ -17,6 +17,7 @@
 - [Acheter depuis l'étranger](https://yadra.fr/guides/acheter-depuis-letranger): repères pour les acheteurs de la diaspora (vérification du promoteur, échéancier, suivi de chantier, procuration).
 - [Financer un achat neuf](https://yadra.fr/guides/financement-credit-immobilier-algerie): aperçu des options de financement (crédit bancaire, apport, échéancier promoteur, cas de la diaspora).
 - [Vérifier un promoteur immobilier](https://yadra.fr/guides/verifier-promoteur-immobilier-algerie): méthode pour vérifier un promoteur avant d'acheter (registre de commerce, références, avancement du chantier, signaux d'alerte).
+- [Lexique de l'immobilier neuf](https://yadra.fr/lexique): définitions des termes courants (VEFA, échéancier, garantie décennale, réception des travaux, etc.).
 
 ## Notes
 
