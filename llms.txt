@@ -5,6 +5,7 @@
 ## Pages principales
 
 - [Accueil](https://yadra.fr/): présentation de la plateforme et recherche de programmes.
+- [الصفحة الرئيسية بالعربية](https://yadra.fr/ar): version arabe de la page d'accueil (RTL), destinée aux utilisateurs arabophones.
 - [Tous les projets](https://yadra.fr/projets): catalogue complet des programmes immobiliers neufs publiés.
 - [Explorer par ville](https://yadra.fr/villes): programmes par wilaya (Alger, Oran, Blida, Constantine).
 - [Promoteurs vérifiés](https://yadra.fr/promoteurs): liste des promoteurs partenaires vérifiés.
