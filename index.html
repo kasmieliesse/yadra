@@ -975,10 +975,14 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <a href="/investir">Investir</a>
       </div>
       <div class="foot-col">
-        <h4>Informations</h4>
-        <a href="/investir">Investir en Algérie</a>
+        <h4>Ressources</h4>
+        <a href="/donnees/prix-immobilier">Prix au m² par ville</a>
+        <a href="/comparatifs/neuf-vs-ancien">Neuf ou ancien</a>
+        <a href="/lexique">Lexique de l’immobilier neuf</a>
+        <a href="/guides/verifier-promoteur-immobilier-algerie">Vérifier un promoteur</a>
+        <a href="/guides/financement-credit-immobilier-algerie">Financer son achat</a>
+        <a href="/guides/acheter-depuis-letranger">Acheter depuis l’étranger</a>
         <a href="/a-propos#faq">Questions fréquentes</a>
-        <a href="/guides/acheter-depuis-letranger">Guides</a>
         <a href="/a-propos#contact">Contact</a>
       </div>
       <div class="foot-col">
@@ -2029,6 +2033,8 @@ function render(){
     updateMeta({path:'/guides/financement-credit-immobilier-algerie', title:"Financer l'achat d'un logement neuf en Algérie | yadra!", description:"Crédit bancaire, apport, échéancier promoteur, cas de la diaspora : un aperçu des options pour financer un achat immobilier neuf en Algérie."}); }
   else if(segs[0]==='guides' && segs[1]==='verifier-promoteur-immobilier-algerie'){ main.innerHTML = pageGuideVerifierPromoteur(); afterGuideVerifierPromoteur();
     updateMeta({path:'/guides/verifier-promoteur-immobilier-algerie', title:"Comment vérifier un promoteur immobilier en Algérie | yadra!", description:"Registre de commerce, références clients, avancement du chantier : la méthode pour vérifier un promoteur immobilier en Algérie avant de s'engager."}); }
+  else if(segs[0]==='lexique' && segs.length===1){ main.innerHTML = pageLexique(); afterLexique();
+    updateMeta({path:'/lexique', title:"Lexique de l'immobilier neuf en Algérie | yadra!", description:"VEFA, livraison, garantie décennale, échéancier de paiement... les termes de l'immobilier neuf en Algérie expliqués simplement."}); }
   else if(segs[0]==='legal' && segs.length===2){ main.innerHTML = pageLegal(segs[1]); afterLegal();
     updateMeta({path:'/legal/'+segs[1], title:(LEGAL_TITLES[segs[1]]||'Informations légales')+' | yadra!', description:'Informations légales de yadra!.'}); }
   else if(segs[0]==='connexion'){ main.innerHTML = pageLogin(); afterAuth(); updateMeta({path:'/connexion', title:'Connexion | yadra!', noindex:true}); }
@@ -3727,6 +3733,61 @@ function afterGuideVerifierPromoteur(){
       ['Que faire si le promoteur refuse de montrer son registre de commerce ?','C’est en soi un signal d’alerte fort. Un promoteur en règle n’a aucune raison de refuser ce document avant un engagement financier.'],
       ['Un promoteur "vérifié" sur yadra! est-il sans risque ?','La vérification yadra! réduit le risque (registre de commerce et références contrôlés avant publication) mais ne le supprime pas : les vérifications de ce guide restent utiles même pour un promoteur déjà vérifié.']
     ].map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1]}}; })}
+  ]});
+}
+
+/* ================================================================
+   PAGE: LEXIQUE de l'immobilier neuf (§B/§G du dossier SEO)
+   Hub de maillage interne, requêtes définitionnelles à faible concurrence.
+   ================================================================ */
+var LEXIQUE_TERMS = [
+  ['vefa', 'VEFA (Vente en l’État Futur d’Achèvement)', 'Achat d’un logement avant ou pendant sa construction, payé par tranches liées à l’avancement réel des travaux plutôt qu’en une fois. C’est le mode d’achat le plus courant pour un programme neuf en Algérie.'],
+  ['sur-plan', 'Achat sur plan', 'Autre nom courant de la VEFA : on achète sur la base de plans et d’un logement témoin, avant que le bien ne soit physiquement visitable.'],
+  ['echeancier', 'Échéancier de paiement', 'Calendrier des tranches à verser au promoteur, normalement indexé sur l’avancement du chantier (fondations, gros œuvre, finitions) plutôt que sur de simples dates fixes.'],
+  ['livraison', 'Livraison', 'Moment où le promoteur remet les clés du logement à l’acquéreur, une fois les travaux achevés et la réception des travaux effectuée.'],
+  ['reception-travaux', 'Réception des travaux', 'Constat contradictoire entre le promoteur et l’acquéreur de l’état du logement à la livraison — c’est à ce moment que les réserves (défauts constatés) doivent être formellement notées.'],
+  ['garantie-decennale', 'Garantie décennale', 'Garantie légale qui couvre pendant dix ans les dommages compromettant la solidité du gros œuvre d’un logement neuf.'],
+  ['gros-oeuvre', 'Gros œuvre', 'Ensemble des travaux structurels d’un bâtiment (fondations, murs porteurs, charpente, toiture), par opposition au second œuvre (finitions, cloisons, revêtements).'],
+  ['promesse-vente', 'Contrat de réservation', 'Document écrit qui engage le promoteur et l’acquéreur avant la signature définitive, précisant le bien, son prix et l’échéancier de paiement.'],
+  ['permis-construire', 'Permis de construire', 'Autorisation administrative obligatoire avant le début des travaux — un des documents à vérifier avant de s’engager sur un projet (voir notre guide de vérification d’un promoteur).'],
+  ['titre-propriete', 'Titre de propriété', 'Document attestant que le promoteur (ou le vendeur) est bien propriétaire du terrain ou du bien concerné — une vérification de base avant tout achat.'],
+  ['acte-authentique', 'Acte authentique', 'Acte de vente définitif signé devant notaire, qui transfère officiellement la propriété du bien à l’acquéreur.'],
+  ['procuration', 'Procuration', 'Mandat donné à un proche ou un professionnel pour signer certains documents ou suivre des étapes de l’achat en l’absence de l’acquéreur — utile pour la diaspora (voir notre guide diaspora).'],
+  ['f2-f3-f4', 'F2, F3, F4, F5', 'Nomenclature algérienne désignant le nombre de pièces principales d’un logement (hors cuisine et salle de bain) : F2 = 2 pièces, F3 = 3 pièces, etc.'],
+  ['promoteur-immobilier', 'Promoteur immobilier', 'Société qui conçoit, finance et fait construire un programme immobilier, puis le commercialise — à distinguer d’une agence, qui ne fait qu’intermédier des biens existants.']
+];
+function pageLexique(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Lexique</span></div></div>'
+  +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
+    +'<div class="eyebrow reveal">Lexique</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Lexique de l’immobilier neuf en Algérie</h1>'
+    +'<p class="prose reveal" style="margin-top:18px;">Les termes qui reviennent le plus souvent dans un achat immobilier neuf en Algérie, expliqués simplement.</p>'
+    +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
+    +'<dl class="reveal" style="margin-top:32px;">'
+      +LEXIQUE_TERMS.map(function(t){
+        return '<div id="'+t[0]+'" style="margin-bottom:26px;padding-bottom:26px;border-bottom:1px solid var(--border);">'
+          +'<dt style="font-family:var(--font-display);font-size:17px;color:var(--heading);margin-bottom:6px;">'+esc(t[1])+'</dt>'
+          +'<dd class="prose" style="margin:0;">'+t[2]+'</dd></div>';
+      }).join('')
+    +'</dl>'
+    +'<div class="reveal" style="margin-top:12px;padding:22px 24px;border-radius:var(--radius-l);background:var(--surface);border:1px solid var(--border);">'
+      +'<h3 style="color:var(--heading);font-size:16px;margin-bottom:8px;">Pour aller plus loin</h3>'
+      +'<p style="color:var(--text-dim);font-size:13.5px;line-height:1.7;margin-bottom:14px;">Ces repères généraux sont détaillés dans nos guides pratiques.</p>'
+      +'<div style="display:flex;gap:10px;flex-wrap:wrap;">'
+        +'<a class="btn btn-ghost btn-sm" href="/guides/verifier-promoteur-immobilier-algerie">Vérifier un promoteur</a>'
+        +'<a class="btn btn-ghost btn-sm" href="/guides/financement-credit-immobilier-algerie">Financer son achat</a>'
+        +'<a class="btn btn-ghost btn-sm" href="/guides/acheter-depuis-letranger">Acheter depuis l’étranger</a>'
+      +'</div>'
+    +'</div>'
+  +'</div>';
+}
+function afterLexique(){
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Lexique',path:'/lexique'}]),
+    {'@type':'DefinedTermSet', name:'Lexique de l’immobilier neuf en Algérie', url:'https://yadra.fr/lexique', hasDefinedTerm: LEXIQUE_TERMS.map(function(t){
+      return {'@type':'DefinedTerm', '@id':'https://yadra.fr/lexique#'+t[0], name:t[1], description:t[2], inDefinedTermSet:'https://yadra.fr/lexique'};
+    })}
   ]});
 }
 
