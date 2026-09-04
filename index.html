@@ -646,18 +646,20 @@ body:has(.mobile-cta-bar) .wa-float{display:none;}
   background:linear-gradient(180deg,rgba(10,8,6,.42),rgba(10,8,6,.28) 40%,rgba(10,8,6,.42));}
 .home-map-box .leaflet-control-attribution{background:rgba(10,10,10,.6);color:var(--text-dim);}
 .home-map-box .leaflet-control-attribution a{color:var(--argent);}
-.map-pill{position:absolute;left:0;top:0;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:8px 14px 9px;border-radius:14px;background:linear-gradient(145deg,rgba(24,19,15,.94),rgba(10,10,10,.94));
-  border:1px solid rgba(216,154,120,.4);box-shadow:0 12px 28px -12px rgba(0,0,0,.7);cursor:pointer;
-  transition:transform .2s cubic-bezier(.2,.7,.2,1),border-color .2s ease;white-space:nowrap;}
-.map-pill:hover{transform:translate(-50%,-100%) translateY(-3px);border-color:var(--or-rose-light);}
-.map-pill.big{padding:10px 17px 11px;}
-.map-pill .mp-top{font-family:var(--font-display);font-size:14px;color:#fff;font-weight:400;letter-spacing:.01em;}
-.map-pill.big .mp-top{font-size:16.5px;}
-.map-pill .mp-bottom{font-size:10px;color:var(--or-rose-light);text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
-.map-pill::after{content:'';position:absolute;left:50%;bottom:-5px;width:9px;height:9px;
-  background:rgb(15,12,10);border-right:1px solid rgba(216,154,120,.4);border-bottom:1px solid rgba(216,154,120,.4);
-  transform:translateX(-50%) rotate(45deg);border-radius:0 0 3px 0;}
+.map-pill{position:absolute;left:0;top:0;transform:translate(-50%,-100%) scale(1);transform-origin:50% 100%;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  padding:8px 16px 7px;border-radius:999px;background:linear-gradient(145deg,#221b15,#0c0a08);
+  border:1px solid rgba(216,154,120,.55);box-shadow:0 14px 30px -12px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.2);
+  cursor:pointer;white-space:nowrap;animation:pillIn .4s cubic-bezier(.2,.8,.2,1) backwards;
+  transition:transform .2s cubic-bezier(.2,.8,.2,1),border-color .2s ease,box-shadow .2s ease;}
+@keyframes pillIn{from{opacity:0;transform:translate(-50%,-100%) scale(.6);}to{opacity:1;transform:translate(-50%,-100%) scale(1);}}
+.map-pill:hover{transform:translate(-50%,-100%) scale(1.08) translateY(-2px);border-color:var(--or-rose-light);
+  box-shadow:0 18px 36px -12px rgba(0,0,0,.8),0 0 0 1px rgba(216,154,120,.25);z-index:1000!important;}
+.map-pill .mp-price{font-family:var(--font-display);font-size:15px;color:#fff;font-weight:400;letter-spacing:.01em;line-height:1.25;}
+.map-pill .mp-loc{font-size:9.5px;color:var(--or-rose-light);text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.map-pill::after{content:'';position:absolute;left:50%;bottom:-4px;width:8px;height:8px;
+  background:#0c0a08;border-right:1px solid rgba(216,154,120,.55);border-bottom:1px solid rgba(216,154,120,.55);
+  transform:translateX(-50%) rotate(45deg);border-radius:0 0 2px 0;}
 .market-view-toggle{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px;}
 .market-view-toggle button{border:0;background:transparent;color:var(--text-dim);padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
 .market-view-toggle button.active{background:var(--or-rose);color:#fff;}
@@ -1734,13 +1736,12 @@ function renderProjectsMap(containerId, projects, opts){
   }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
 }
 
-/* ---------------- Carte d'accueil : projets groupés par wilaya ----------------
+/* ---------------- Carte d'accueil : un pin prix par projet ----------------
    Purement dérivée de getAllProjects() (donc de /api/bootstrap) : dès qu'un
    projet passe au statut "publié", il apparaît ici au chargement suivant de
-   la page, sans aucune étape manuelle. Regroupée par wilaya plutôt que par
-   projet individuel, car c'est le seul niveau de précision qu'on garantit
-   pour tous les programmes (lat/lng précis quand on les a, centre de wilaya
-   sinon) — voir WILAYA_COORDS. */
+   la page, sans aucune étape manuelle. Un clic sur un prix ouvre directement
+   la fiche du projet — voir projectMapCoord() pour le repli utilisé quand un
+   projet n'a pas de lat/lng précis. */
 function wilayaProjectStats(projects){
   var byW = {};
   projects.forEach(function(p){
@@ -1757,13 +1758,24 @@ function wilayaProjectStats(projects){
     return {wilaya:g.wilaya, label:g.label, count:g.count, prixMin:g.prixMin===Infinity?null:g.prixMin, lat:center[0], lng:center[1]};
   });
 }
-function yadraPillIcon(L, stat){
-  var big = stat.count>=8;
+/* Repli déterministe quand un projet n'a pas de lat/lng précis : centre de sa
+   wilaya, légèrement décalé (à partir d'un hash de son id) pour que plusieurs
+   projets sans GPS dans la même wilaya ne se superposent pas exactement. */
+function projectMapCoord(p){
+  if(p.lat && p.lng) return [p.lat, p.lng];
+  var base = WILAYA_COORDS[p.wilaya] || [28.0, 2.6];
+  var s = p.id || p.slug || '', h = 0;
+  for(var i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; }
+  var jx = ((h % 1000)/1000 - 0.5) * 0.14;
+  var jy = ((Math.floor(h/1000) % 1000)/1000 - 0.5) * 0.14;
+  return [base[0]+jy, base[1]+jx];
+}
+function yadraPriceIcon(L, p){
   return L.divIcon({
     className:'',
-    html:'<div class="map-pill'+(big?' big':'')+'">'
-      +(stat.prixMin?'<span class="mp-top">dès '+moneyShort(stat.prixMin)+'</span>':'<span class="mp-top">'+stat.count+' projet'+(stat.count>1?'s':'')+'</span>')
-      +'<span class="mp-bottom">'+esc(stat.label)+(stat.prixMin?' · '+stat.count:'')+'</span>'
+    html:'<div class="map-pill">'
+      +'<span class="mp-price">'+moneyShort(p.prixMin)+'</span>'
+      +'<span class="mp-loc">'+esc(p.commune)+'</span>'
     +'</div>',
     iconSize:[1,1], iconAnchor:[0,0]
   });
@@ -1771,7 +1783,7 @@ function yadraPillIcon(L, stat){
 function renderHomeProjectsMap(containerId){
   var host = document.getElementById(containerId);
   if(!host) return;
-  var stats = wilayaProjectStats(getAllProjects());
+  var projects = getAllProjects().filter(function(p){return p.prixMin>0;});
   loadLeaflet().then(function(L){
     host = document.getElementById(containerId);
     if(!host) return;
@@ -1785,15 +1797,16 @@ function renderHomeProjectsMap(containerId){
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
       maxZoom:19, opacity:0.85
     }).addTo(map);
-    if(!stats.length){ map.setView([28.0,2.6],5); return map; }
+    if(!projects.length){ map.setView([28.0,2.6],5); return map; }
     var bounds = [];
-    stats.sort(function(a,b){return b.count-a.count;}).forEach(function(s){
-      var marker = L.marker([s.lat,s.lng], {icon:yadraPillIcon(L,s), riseOnHover:true}).addTo(map);
-      marker.on('click', function(){ go('/villes/'+s.wilaya); });
-      bounds.push([s.lat,s.lng]);
+    projects.forEach(function(p){
+      var coord = projectMapCoord(p);
+      var marker = L.marker(coord, {icon:yadraPriceIcon(L,p), riseOnHover:true}).addTo(map);
+      marker.on('click', function(){ go('/projets/'+p.wilaya+'/'+p.slug); });
+      bounds.push(coord);
     });
-    if(stats.length===1){ map.setView(bounds[0], 7); }
-    else { map.fitBounds(bounds, {padding:[46,46], maxZoom:7}); }
+    if(projects.length===1){ map.setView(bounds[0], 13); }
+    else { map.fitBounds(bounds, {padding:[50,50], maxZoom:12}); }
     return map;
   }).catch(function(){ /* CDN indisponible : la carte reste vide, le reste du site continue de fonctionner */ });
 }
