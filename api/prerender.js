@@ -14,15 +14,20 @@
 // d'accès à DATABASE_URL ici). À vérifier sur un déploiement preview Vercel
 // avant de merger sur main : voir la checklist dans la description de la PR.
 
-const { sql, shapeProject, shapePromoter } = require('./_lib');
+const { sql, shapeProject, shapePromoter, slugify } = require('./_lib');
 
 const SITE = 'https://yadra.fr';
 const DEFAULT_DESC = "yadra! met en relation acquéreurs et promoteurs immobiliers en Algérie. Recherchez un projet par ville, budget et typologie, consultez les fiches détaillées et contactez directement le promoteur.";
 
 // Doit rester synchronisé avec WILAYAS / WILAYA_ORDER dans index.html.
 const WILAYAS = {
-  alger: { label: 'Alger' }, oran: { label: 'Oran' }, blida: { label: 'Blida' }, constantine: { label: 'Constantine' },
-  setif: { label: 'Sétif' }, annaba: { label: 'Annaba' }, 'tizi-ouzou': { label: 'Tizi Ouzou' }
+  alger: { label: 'Alger', communes: ['Hydra', 'Bab Ezzouar', 'Dely Ibrahim', 'Bir Mourad Raïs', 'El Achour', 'Ouled Fayet'] },
+  oran: { label: 'Oran', communes: ['Bir El Djir', 'Es Sénia', 'Canastel', 'Oran Centre'] },
+  blida: { label: 'Blida', communes: ['Blida Centre', 'Boufarik', 'Ouled Yaïch'] },
+  constantine: { label: 'Constantine', communes: ['Ali Mendjeli', 'Constantine Centre', 'El Khroub'] },
+  setif: { label: 'Sétif', communes: ['Sétif Centre', 'El Eulma'] },
+  annaba: { label: 'Annaba', communes: ['Annaba Centre', 'Seraïdi', 'El Bouni'] },
+  'tizi-ouzou': { label: 'Tizi Ouzou', communes: ['Tizi Ouzou Centre', 'Draâ Ben Khedda', 'Boukhalfa'] }
 };
 const WILAYA_ORDER = ['alger', 'oran', 'blida', 'constantine'];
 
@@ -147,6 +152,23 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'commune') {
+      var wvc = String(req.query.wilaya || '');
+      var cslug = String(req.query.commune || '');
+      if (WILAYA_ORDER.indexOf(wvc) === -1 || !WILAYAS[wvc]) { res.status(404).send(page({ path: '/villes/' + wvc + '/' + cslug, noindex: true, body: '<h1>Ville introuvable</h1>' })); return; }
+      var communeLabel = (WILAYAS[wvc].communes || []).filter(function (c) { return slugify(c) === cslug; })[0];
+      if (!communeLabel) { res.status(404).send(page({ path: '/villes/' + wvc + '/' + cslug, noindex: true, body: '<h1>Commune introuvable</h1>' })); return; }
+      var allC = await loadPublishedProjects();
+      var localC = allC.filter(function (p) { return p.wilaya === wvc && p.commune === communeLabel; });
+      var body5c = '<h1>Immobilier neuf à ' + esc(communeLabel) + ', ' + esc(WILAYAS[wvc].label) + '</h1>' + projectListHTML(localC);
+      res.status(200).send(page({
+        path: '/villes/' + wvc + '/' + cslug, title: 'Immobilier neuf à ' + communeLabel + ', ' + WILAYAS[wvc].label + ' | yadra!',
+        description: 'Programmes immobiliers neufs à ' + communeLabel + ', ' + WILAYAS[wvc].label + '.',
+        noindex: localC.length < 3, body: body5c,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Villes', path: '/villes' }, { name: WILAYAS[wvc].label, path: '/villes/' + wvc }, { name: communeLabel, path: '/villes/' + wvc + '/' + cslug }])] }
+      }));
+      return;
+    }
     if (kind === 'typologie') {
       var ts = String(req.query.slug || '');
       var def = TYPOLOGIE_DEFS[ts];
@@ -229,6 +251,20 @@ module.exports = async function (req, res) {
         + '<table><thead><tr><th>Ville</th><th>Prix moyen / m² constaté</th><th>Programmes</th></tr></thead><tbody>'
         + statsD.map(function (s) { return '<tr><td>' + esc(s.label) + '</td><td>' + (s.avg ? money(s.avg) + '/m²' : 'Données insuffisantes') + '</td><td>' + s.projects + '</td></tr>'; }).join('')
         + '</tbody></table>';
+      try {
+        var snapRows = await sql`SELECT wilaya, period, avg_price_m2 FROM price_snapshots ORDER BY wilaya, period`;
+        var byW = {};
+        snapRows.forEach(function (s) { (byW[s.wilaya] = byW[s.wilaya] || []).push(s); });
+        var withHistory = Object.keys(byW).filter(function (w) { return byW[w].length >= 2; });
+        if (withHistory.length) {
+          bodyD += '<h2>Évolution</h2><table><thead><tr><th>Ville</th><th>Période</th><th>Prix moyen / m²</th></tr></thead><tbody>'
+            + withHistory.map(function (w) {
+              var label = WILAYAS[w] ? WILAYAS[w].label : w;
+              return byW[w].map(function (s) { return '<tr><td>' + esc(label) + '</td><td>' + esc(s.period) + '</td><td>' + (s.avg_price_m2 ? money(s.avg_price_m2) + '/m²' : '—') + '</td></tr>'; }).join('');
+            }).join('')
+            + '</tbody></table>';
+        }
+      } catch (e) { /* table pas encore créée (premier cron pas encore passé) : instantané seul, rien ne casse */ }
       res.status(200).send(page({
         path: '/donnees/prix-immobilier', title: "Prix moyen au m² de l'immobilier neuf en Algérie | yadra!", description: "Prix moyen au m² par ville, calculé à partir du catalogue de programmes immobiliers neufs publiés sur yadra!.", body: bodyD,
         ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: "Prix de l'immobilier neuf", path: '/donnees/prix-immobilier' }]), { '@type': 'Dataset', name: "Prix moyen au m² de l'immobilier neuf en Algérie par ville — catalogue yadra!", description: "Prix moyen au m² calculé à partir des programmes immobiliers neufs publiés sur yadra!, par wilaya.", url: SITE + '/donnees/prix-immobilier', creator: { '@type': 'Organization', name: 'yadra!' } }] }

@@ -12,6 +12,8 @@
 
     { "source": "/villes/:wilaya", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=ville&wilaya=:wilaya" },
 
+    { "source": "/villes/:wilaya/:commune", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=commune&wilaya=:wilaya&commune=:commune" },
+
     { "source": "/typologies/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=typologie&slug=:slug" },
 
     { "source": "/promoteurs", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=promoteurs" },
@@ -29,5 +31,8 @@
     { "source": "/guides/:slug", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=guide&slug=:slug" },
 
     { "source": "/lexique", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=lexique" }
+  ],
+  "crons": [
+    { "path": "/api/snapshot-prices", "schedule": "0 3 1 * *" }
   ]
 }

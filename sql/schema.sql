@@ -83,3 +83,19 @@ CREATE TABLE IF NOT EXISTS page_views (
 );
 CREATE INDEX IF NOT EXISTS idx_page_views_created ON page_views(created_at);
 CREATE INDEX IF NOT EXISTS idx_page_views_project ON page_views(project_id);
+
+-- Historique des prix moyens au m² par wilaya (audit SEO §J/§L : transforme
+-- /donnees/prix-immobilier d'un instantané en série temporelle citable).
+-- Alimentée par api/snapshot-prices.js, appelée une fois par mois par un
+-- Vercel Cron (voir vercel.json) ; ON CONFLICT rend l'appel idempotent si
+-- le cron se déclenche plusieurs fois dans la même période.
+CREATE TABLE IF NOT EXISTS price_snapshots (
+  id TEXT PRIMARY KEY,
+  wilaya TEXT NOT NULL,
+  period TEXT NOT NULL, -- 'AAAA-MM'
+  avg_price_m2 INT,
+  projects_count INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(wilaya, period)
+);
+CREATE INDEX IF NOT EXISTS idx_price_snapshots_wilaya ON price_snapshots(wilaya, period);
