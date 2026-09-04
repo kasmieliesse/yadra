@@ -177,12 +177,117 @@ module.exports = async function (req, res) {
       }));
       return;
     }
-    // NB : /investir, /a-propos, /donnees/*, /comparatifs/*, /guides/* ne
-    // sont volontairement PAS routées vers cette fonction (voir vercel.json)
-    // — leur contenu est éditorial et déjà écrit en dur dans index.html ; le
-    // dupliquer ici créerait un risque de désynchronisation, et Googlebot
-    // sait déjà exécuter leur JavaScript. Seules les pages entièrement
-    // pilotées par la base (catalogue, villes, promoteurs) sont concernées.
+    if (kind === 'apropos') {
+      var faqA = [
+        ['yadra! vend-il directement des biens ?', 'Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet.'],
+        ['Comment un promoteur est-il vérifié avant publication ?', 'Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.'],
+        ["L'utilisation de yadra! est-elle payante ?", 'Non. La recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits pour les acquéreurs.'],
+        ["Je vis à l'étranger, puis-je acheter depuis la diaspora ?", "Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu'à la remise des clés."]
+      ];
+      var bodyA = '<h1>Le neuf algérien, montré tel qu\'il est.</h1>'
+        + '<p>Chercher un logement neuf en Algérie veut souvent dire courir après l\'information : un prix qui change au téléphone, un chantier qu\'on ne voit jamais avancer, un promoteur impossible à vérifier. yadra! est né pour changer cet ordre des choses — pour ceux qui vivent en Algérie comme pour la diaspora, parfois à des milliers de kilomètres du chantier.</p>'
+        + '<p>L\'équipe qbm construit yadra! depuis Alger, projet par projet. Pas d\'ambition de tout référencer : on préfère dix fiches vérifiées à cent approximatives, et un promoteur qu\'on a réellement rencontré à un logo ajouté en cinq minutes.</p>'
+        + '<blockquote>Notre métier n\'est pas de vendre. C\'est de vérifier avant vous — pour que la visite ne soit pas la première fois que vous découvrez la vérité sur un projet.</blockquote>'
+        + '<h2>Trois principes, sans exception</h2><ul>'
+        + '<li><strong>Exigence</strong> — Aucun projet n\'apparaît sur yadra! avant qu\'on ait vérifié le promoteur : registre de commerce, références clients, avancement du chantier constaté sur place.</li>'
+        + '<li><strong>Transparence</strong> — Le prix affiché est celui négocié avec le promoteur. Pas de marge cachée, pas de frais qui apparaissent au moment de signer.</li>'
+        + '<li><strong>Sélection</strong> — On refuse plus de projets qu\'on n\'en publie. Un bon emplacement ne suffit pas s\'il n\'est pas porté par un promoteur sérieux.</li></ul>'
+        + '<h2>Questions fréquentes</h2><dl>' + faqA.map(function (qa) { return '<dt>' + esc(qa[0]) + '</dt><dd>' + esc(qa[1]) + '</dd>'; }).join('') + '</dl>';
+      res.status(200).send(page({
+        path: '/a-propos', title: 'À propos — yadra!', description: "yadra! vérifie les promoteurs avant de publier leurs projets, pour les acquéreurs en Algérie comme pour la diaspora à l'étranger.", body: bodyA,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'À propos', path: '/a-propos' }]), { '@type': 'FAQPage', mainEntity: faqA.map(function (qa) { return { '@type': 'Question', name: qa[0], acceptedAnswer: { '@type': 'Answer', text: qa[1] } }; }) }] }
+      }));
+      return;
+    }
+    if (kind === 'investir') {
+      var allInv = await loadPublishedProjects();
+      var bodyI = '<h1>Investir dans l\'immobilier neuf en Algérie, depuis le pays ou depuis l\'étranger.</h1>'
+        + '<p>Les grandes villes algériennes construisent vite, et le neuf reste encore accessible face à l\'ancien bien situé. Que vous viviez en Algérie ou dans la diaspora, yadra! vous donne une vue claire sur les projets en cours, avec une information fiable sur les promoteurs et les prix.</p>'
+        + '<p>' + WILAYA_ORDER.length + ' villes couvertes, ' + allInv.length + '+ projets suivis, promoteurs vérifiés à 100%.</p>'
+        + '<h2>Par typologie</h2><ul>' + Object.keys(TYPOLOGIE_DEFS).map(function (slug) { return '<li><a href="' + SITE + '/typologies/' + slug + '">Logement ' + esc(TYPOLOGIE_DEFS[slug].title) + '</a></li>'; }).join('') + '</ul>'
+        + '<h2>Pour aller plus loin</h2><ul>'
+        + '<li><a href="' + SITE + '/donnees/prix-immobilier">Prix au m² par ville</a></li>'
+        + '<li><a href="' + SITE + '/comparatifs/neuf-vs-ancien">Neuf ou ancien</a></li>'
+        + '<li><a href="' + SITE + '/guides/financement-credit-immobilier-algerie">Financer son achat</a></li></ul>';
+      res.status(200).send(page({
+        path: '/investir', title: "Investir dans l'immobilier neuf en Algérie | yadra!", description: "Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger.", body: bodyI,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Investir', path: '/investir' }])] }
+      }));
+      return;
+    }
+    if (kind === 'donnees') {
+      var allD = await loadPublishedProjects();
+      var statsD = WILAYA_ORDER.map(function (w) {
+        var projs = allD.filter(function (p) { return p.wilaya === w; });
+        var perM2 = [];
+        projs.forEach(function (p) { (p.typologies || []).forEach(function (t) { if (t.prix && t.surface) perM2.push(t.prix / t.surface); }); });
+        var avg = perM2.length ? Math.round(perM2.reduce(function (a, b) { return a + b; }, 0) / perM2.length) : null;
+        return { label: WILAYAS[w].label, projects: projs.length, avg: avg };
+      });
+      var bodyD = '<h1>Prix moyen au m² de l\'immobilier neuf, par ville</h1>'
+        + '<p>Ces chiffres sont calculés automatiquement à partir des prix affichés par les promoteurs sur les programmes actuellement publiés sur yadra! — pas une statistique officielle ou exhaustive du marché, mais un instantané réel et vérifiable de notre catalogue, mis à jour à chaque nouvelle publication.</p>'
+        + '<table><thead><tr><th>Ville</th><th>Prix moyen / m² constaté</th><th>Programmes</th></tr></thead><tbody>'
+        + statsD.map(function (s) { return '<tr><td>' + esc(s.label) + '</td><td>' + (s.avg ? money(s.avg) + '/m²' : 'Données insuffisantes') + '</td><td>' + s.projects + '</td></tr>'; }).join('')
+        + '</tbody></table>';
+      res.status(200).send(page({
+        path: '/donnees/prix-immobilier', title: "Prix moyen au m² de l'immobilier neuf en Algérie | yadra!", description: "Prix moyen au m² par ville, calculé à partir du catalogue de programmes immobiliers neufs publiés sur yadra!.", body: bodyD,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: "Prix de l'immobilier neuf", path: '/donnees/prix-immobilier' }]), { '@type': 'Dataset', name: "Prix moyen au m² de l'immobilier neuf en Algérie par ville — catalogue yadra!", description: "Prix moyen au m² calculé à partir des programmes immobiliers neufs publiés sur yadra!, par wilaya.", url: SITE + '/donnees/prix-immobilier', creator: { '@type': 'Organization', name: 'yadra!' } }] }
+      }));
+      return;
+    }
+    if (kind === 'comparatif') {
+      var rowsC = [
+        ['Garantie légale', 'Garantie décennale sur le gros œuvre, garantie de parfait achèvement', "Aucune garantie constructeur ; l'état dépend de l'entretien passé"],
+        ['Normes et finitions', 'Aux normes en vigueur au moment de la construction, finitions au choix selon le promoteur', "Normes de l'époque de construction, finitions existantes à rénover ou non"],
+        ['Calendrier', 'Livraison différée si achat sur plan, avec un échéancier de paiement', 'Disponible immédiatement après la transaction'],
+        ['Négociation du prix', 'Généralement fixé par le promoteur, peu de marge de négociation', 'Marge de négociation souvent plus importante selon le vendeur'],
+        ['Visibilité avant achat', "Visite d'un logement témoin ou de plans, projection à faire sur le résultat final", 'Visite du bien réel, état constatable immédiatement']
+      ];
+      var bodyC = '<h1>Immobilier neuf ou ancien en Algérie : les repères pour comparer</h1>'
+        + "<p>Il n'y a pas de réponse universelle entre neuf et ancien — ça dépend du budget, du calendrier et de ce que vous recherchez. Voici les points de comparaison qui reviennent le plus souvent.</p>"
+        + '<table><thead><tr><th>Critère</th><th>Neuf</th><th>Ancien</th></tr></thead><tbody>'
+        + rowsC.map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('')
+        + '</tbody></table>';
+      res.status(200).send(page({
+        path: '/comparatifs/neuf-vs-ancien', title: 'Immobilier neuf ou ancien en Algérie ? | yadra!', description: "Garanties, calendrier, négociation : les repères pour comparer un achat dans le neuf et dans l'ancien en Algérie.", body: bodyC,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Neuf vs ancien', path: '/comparatifs/neuf-vs-ancien' }])] }
+      }));
+      return;
+    }
+    if (kind === 'guide') {
+      var gslug = String(req.query.slug || '');
+      var GUIDES = {
+        'acheter-depuis-letranger': {
+          title: "Acheter un logement neuf en Algérie depuis l'étranger",
+          intro: "Suivre un achat immobilier à des milliers de kilomètres du chantier change la manière de s'organiser. Voici les points de vigilance qui reviennent le plus souvent chez les acheteurs de la diaspora.",
+          sections: [
+            ['Vérifier le promoteur avant tout', "Avant de s'intéresser au logement lui-même, renseignez-vous sur le promoteur : depuis combien d'années il construit, quels projets il a déjà livrés, et si d'anciens acheteurs peuvent témoigner. Un registre de commerce à jour et des références vérifiables sont un minimum. Méfiez-vous d'un promoteur qui pousse à verser un acompte rapidement, avant d'avoir montré la moindre documentation."],
+            ['Comprendre le calendrier de paiement', "Un achat sur plan se paie normalement en plusieurs tranches, liées à l'avancement réel des travaux, pas seulement à des dates calendaires fixes. Demandez un échéancier écrit avant de vous engager."],
+            ['Suivre le chantier à distance', "Demandez des photos ou vidéos datées à intervalles réguliers. Quand c'est possible, faites constater l'avancement par un proche ou un mandataire sur place plutôt que de vous fier uniquement aux visuels envoyés par le promoteur."],
+            ['Les documents à demander avant de signer', "Réunissez au minimum : le titre de propriété du terrain, le permis de construire, les plans détaillés du logement avec sa surface exacte, et un contrat de réservation ou de vente écrit incluant l'échéancier de paiement."],
+            ['La procuration, quand on ne peut pas se déplacer', "Une procuration permet de mandater un proche ou un professionnel pour signer certains documents en votre absence. Les modalités exactes se vérifient auprès du consulat d'Algérie de votre lieu de résidence ou d'un notaire."]
+          ]
+        },
+        'financement-credit-immobilier-algerie': {
+          title: "Financer l'achat d'un logement neuf en Algérie",
+          intro: "Un aperçu des grandes options de financement du neuf en Algérie, pour préparer vos questions avant de contacter votre banque ou le promoteur — ce guide ne remplace pas un conseil bancaire personnalisé.",
+          sections: [
+            ['Le crédit immobilier bancaire', 'Plusieurs banques publiques et privées proposent des crédits immobiliers en Algérie, dont la CNEP-Banque, historiquement spécialisée sur ce segment. Les conditions varient selon la banque et le profil de l\'emprunteur — comparez plusieurs offres actuelles et chiffrées.'],
+            ["L'apport personnel et l'échéancier promoteur", "Au-delà du crédit bancaire, la plupart des promoteurs proposent un paiement échelonné directement lié à l'avancement du chantier. Combiner un apport personnel avec un crédit partiel, ou payer selon l'échéancier du promoteur, sont deux approches courantes."],
+            ['Le cas particulier de la diaspora', "Un acquéreur résidant à l'étranger peut mobiliser une épargne en devises ou un financement dans son pays de résidence. Les modalités de transfert de fonds pour un achat immobilier sont encadrées par la réglementation algérienne des changes — à vérifier en amont auprès d'une banque."]
+          ]
+        }
+      };
+      var g = GUIDES[gslug];
+      if (!g) { res.status(404).send(page({ path: '/guides/' + gslug, noindex: true, body: '<h1>Guide introuvable</h1>' })); return; }
+      var bodyG = '<h1>' + esc(g.title) + '</h1><p>' + esc(g.intro) + '</p>'
+        + g.sections.map(function (s) { return '<h2>' + esc(s[0]) + '</h2><p>' + esc(s[1]) + '</p>'; }).join('');
+      res.status(200).send(page({
+        path: '/guides/' + gslug, title: g.title + ' | yadra!', description: g.intro, body: bodyG,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: g.title, path: '/guides/' + gslug }]), { '@type': 'Article', headline: g.title, author: { '@type': 'Organization', name: 'yadra!' }, publisher: { '@type': 'Organization', name: 'yadra! by qbm' }, mainEntityOfPage: SITE + '/guides/' + gslug }] }
+      }));
+      return;
+    }
     res.status(404).send(page({ path: '/', noindex: true, body: '<h1>Page introuvable</h1>' }));
   } catch (err) {
     // Ne jamais laisser un bot sur une erreur brute : page minimale valide,
