@@ -1,9 +1,15 @@
-const { sql } = require('./_lib');
+const { sql, slugify } = require('./_lib');
 
 // Wilayas et typologies réellement couvertes (§F du dossier SEO : garde-fou
 // anti-thin-content — on ne référence dans le sitemap que des pages ville/
 // typologie qui existent réellement côté front, pas une combinatoire).
 const WILAYA_ORDER = ['alger', 'oran', 'blida', 'constantine'];
+const WILAYA_COMMUNES = {
+  alger: ['Hydra', 'Bab Ezzouar', 'Dely Ibrahim', 'Bir Mourad Raïs', 'El Achour', 'Ouled Fayet'],
+  oran: ['Bir El Djir', 'Es Sénia', 'Canastel', 'Oran Centre'],
+  blida: ['Blida Centre', 'Boufarik', 'Ouled Yaïch'],
+  constantine: ['Ali Mendjeli', 'Constantine Centre', 'El Khroub']
+};
 
 const STATIC_PAGES = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
@@ -29,7 +35,7 @@ function xmlEscape(s) {
 
 module.exports = async function (req, res) {
   try {
-    const projects = await sql`SELECT wilaya, slug, created_at FROM projects WHERE status = 'publie' ORDER BY created_at DESC`;
+    const projects = await sql`SELECT wilaya, commune, slug, created_at FROM projects WHERE status = 'publie' ORDER BY created_at DESC`;
     const promoters = await sql`SELECT slug, created_at FROM promoters ORDER BY created_at DESC`;
     const today = new Date().toISOString().slice(0, 10);
 
@@ -39,8 +45,11 @@ module.exports = async function (req, res) {
     // sont pas incluses ici : elles restent atteignables par maillage interne
     // (/investir) et passent sous le même garde-fou noindex côté front.
     const countByWilaya = {};
+    const countByCommune = {};
     projects.forEach(function (p) {
       countByWilaya[p.wilaya] = (countByWilaya[p.wilaya] || 0) + 1;
+      var ck = p.wilaya + '|' + p.commune;
+      countByCommune[ck] = (countByCommune[ck] || 0) + 1;
     });
 
     const urls = [];
@@ -50,6 +59,13 @@ module.exports = async function (req, res) {
     WILAYA_ORDER.forEach(function (w) {
       if ((countByWilaya[w] || 0) < 3) return;
       urls.push('<url><loc>https://yadra.fr/villes/' + w + '</loc><lastmod>' + today + '</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>');
+      // Garde-fou identique, au niveau commune : même seuil de 3 programmes
+      // réels, appliqué à chaque commune officiellement listée pour cette
+      // wilaya (voir noindex équivalent côté front dans render()).
+      (WILAYA_COMMUNES[w] || []).forEach(function (c) {
+        if ((countByCommune[w + '|' + c] || 0) < 3) return;
+        urls.push('<url><loc>https://yadra.fr/villes/' + w + '/' + slugify(c) + '</loc><lastmod>' + today + '</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>');
+      });
     });
     projects.forEach(function (p) {
       const loc = 'https://yadra.fr/projets/' + xmlEscape(p.wilaya) + '/' + xmlEscape(p.slug);

@@ -1943,6 +1943,7 @@ function moneyShort(n){
   return money(n);
 }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function slugify(s){ return String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
 function surfRange(p){ return p.surfaceMin===p.surfaceMax ? (p.surfaceMin+' m²') : (p.surfaceMin+'–'+p.surfaceMax+' m²'); }
 function qs(obj){
   var p = new URLSearchParams();
@@ -2012,6 +2013,10 @@ function render(){
     updateMeta({path:'/villes', title:'Explorer par ville — Programmes immobiliers en Algérie | yadra!', description:'Parcourez nos programmes immobiliers wilaya par wilaya : Alger, Oran, Blida, Constantine et les prochaines villes couvertes.'}); }
   else if(segs[0]==='villes' && segs.length===2){ main.innerHTML = pageVilleDetail(segs[1]); afterVilleDetail(segs[1]); var wv = WILAYAS[segs[1]]; var wvCount = getAllProjects().filter(function(p){return p.wilaya===segs[1];}).length;
     updateMeta({path:'/villes/'+segs[1], title: wv ? ('Immobilier neuf à '+wv.label+' | yadra!') : 'Ville introuvable | yadra!', description: wv ? ('Programmes immobiliers neufs à '+wv.label+' : prix, typologies et promoteurs vérifiés.') : DEFAULT_META.description, noindex: !wv || wvCount<3 }); }
+  else if(segs[0]==='villes' && segs.length===3){ main.innerHTML = pageCommuneDetail(segs[1],segs[2]); afterCommuneDetail(segs[1],segs[2]);
+    var wc = WILAYAS[segs[1]]; var cLabel = wc ? (wc.communes||[]).filter(function(c){return slugify(c)===segs[2];})[0] : null;
+    var cCount = cLabel ? getAllProjects().filter(function(p){return p.wilaya===segs[1] && p.commune===cLabel;}).length : 0;
+    updateMeta({path:'/villes/'+segs[1]+'/'+segs[2], title: cLabel ? ('Immobilier neuf à '+cLabel+', '+wc.label+' | yadra!') : 'Commune introuvable | yadra!', description: cLabel ? ('Programmes immobiliers neufs à '+cLabel+', '+wc.label+'.') : DEFAULT_META.description, noindex: !cLabel || cCount<3 }); }
   else if(segs[0]==='typologies' && segs.length===2){ main.innerHTML = pageTypologie(segs[1]); afterTypologie(segs[1]); var td = TYPOLOGIE_DEFS[segs[1]]; var tdCount = td ? getAllProjects().filter(function(p){ return p.typologies.some(function(t){return td.labels.indexOf(t.label)!==-1;}); }).length : 0;
     updateMeta({path:'/typologies/'+segs[1], title: td ? ('Logement '+td.title+' neuf en Algérie | yadra!') : 'Typologie introuvable | yadra!', description: td ? td.desc : DEFAULT_META.description, noindex: !td || tdCount<3 }); }
   else if(segs[0]==='donnees' && segs[1]==='prix-immobilier'){ main.innerHTML = pageDonnees(); afterDonnees();
@@ -3546,7 +3551,7 @@ function pageVilleDetail(wilaya){
   +'</div></div>'
   +'<div class="wrap" style="padding-bottom:20px;">'
     +'<div class="section-head"><div><h2>Communes couvertes</h2></div></div>'
-    +'<p class="prose">'+(w.communes||[]).map(esc).join(' · ')+'</p>'
+    +'<p class="prose">'+(w.communes||[]).map(function(c){ return '<a href="/villes/'+wilaya+'/'+slugify(c)+'">'+esc(c)+'</a>'; }).join(' · ')+'</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
     +'<div class="section-head"><div><h2>Programmes à '+esc(w.label)+'</h2></div></div>'
@@ -3563,6 +3568,56 @@ function afterVilleDetail(wilaya){
     '@graph':[
       ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Villes',path:'/villes'},{name:w.label,path:'/villes/'+wilaya}]),
       {'@type':'ItemList', name:'Programmes immobiliers neufs à '+w.label, itemListElement: projects.map(function(p,i){
+        return {'@type':'ListItem', position:i+1, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug, name:p.nom};
+      })}
+    ]
+  });
+}
+
+/* ================================================================
+   PAGE: COMMUNE (niveau géographique fin — §E/§F du dossier SEO)
+   Garde-fou identique à la page ville : noindex automatique si moins de
+   3 projets réels dans cette commune précise. Avec le catalogue actuel,
+   la quasi-totalité des communes sont sous ce seuil — la page existe et
+   fonctionne dès aujourd'hui, mais reste invisible des moteurs tant que
+   l'inventaire réel n'a pas rattrapé le seuil, exactement comme pour les
+   pages ville/typologie.
+   ================================================================ */
+function pageCommuneDetail(wilaya, communeSlug){
+  if(WILAYA_ORDER.indexOf(wilaya)===-1 || !WILAYAS[wilaya]) return page404();
+  var w = WILAYAS[wilaya];
+  var commune = (w.communes||[]).filter(function(c){ return slugify(c)===communeSlug; })[0];
+  if(!commune) return page404();
+  var projects = getAllProjects().filter(function(p){return p.wilaya===wilaya && p.commune===commune;});
+  var prices = projects.map(function(p){return p.prixMin;}).filter(function(n){return n>0;});
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/villes">Villes</a> '+ic('chevronRight')+' <a href="/villes/'+wilaya+'">'+esc(w.label)+'</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(commune)+'</span></div></div>'
+  +'<div class="wrap" style="max-width:820px;">'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Immobilier neuf à '+esc(commune)+', '+esc(w.label)+'</h1>'
+    +'<p class="prose" style="margin-top:18px;">'+esc(commune)+' fait partie des communes suivies par yadra! à '+esc(w.label)+'. Retrouvez ici les programmes immobiliers neufs publiés dans cette commune.</p>'
+  +'</div>'
+  +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
+    +'<div class="stat-tile"><div class="k">Programmes suivis à '+esc(commune)+'</div><div class="v">'+projects.length+'</div></div>'
+    +'<div class="stat-tile"><div class="k">Prix d\'entrée constaté</div><div class="v">'+(prices.length?moneyShort(Math.min.apply(null,prices)):'—')+'</div></div>'
+    +'<div class="stat-tile"><div class="k">Wilaya</div><div class="v" style="font-size:16px;"><a href="/villes/'+wilaya+'">'+esc(w.label)+'</a></div></div>'
+  +'</div></div>'
+  +'<div class="wrap" style="padding-bottom:70px;">'
+    +'<div class="section-head"><div><h2>Programmes à '+esc(commune)+'</h2></div></div>'
+    +(projects.length? '<div class="grid grid-cards">'+projects.map(projectCardHTML).join('')+'</div>'
+      : '<div class="empty-state">'+ic('buildings','ic')+'<h3>Aucun programme publié pour le moment à '+esc(commune)+'</h3><p>Voir les autres communes de <a href="/villes/'+wilaya+'">'+esc(w.label)+'</a>.</p></div>')
+  +'</div>';
+}
+function afterCommuneDetail(wilaya, communeSlug){
+  var w = WILAYAS[wilaya];
+  if(!w) return;
+  var commune = (w.communes||[]).filter(function(c){ return slugify(c)===communeSlug; })[0];
+  if(!commune) return;
+  var projects = getAllProjects().filter(function(p){return p.wilaya===wilaya && p.commune===commune;});
+  setStructuredData({
+    '@context':'https://schema.org',
+    '@graph':[
+      ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Villes',path:'/villes'},{name:w.label,path:'/villes/'+wilaya},{name:commune,path:'/villes/'+wilaya+'/'+communeSlug}]),
+      {'@type':'ItemList', name:'Programmes immobiliers neufs à '+commune+', '+w.label, itemListElement: projects.map(function(p,i){
         return {'@type':'ListItem', position:i+1, url:'https://yadra.fr/projets/'+p.wilaya+'/'+p.slug, name:p.nom};
       })}
     ]
@@ -3634,6 +3689,7 @@ function pageDonnees(){
       +stats.map(function(s){ return '<tr><td>'+esc(s.label)+'</td><td class="tabular">'+(s.avgM2?money(s.avgM2)+'/m²':'Données insuffisantes')+'</td><td>'+s.projects+'</td></tr>'; }).join('')
       +'</tbody></table></div>'
     +'<button class="btn btn-ghost btn-sm" id="btnCsvExport" style="margin-top:16px;">'+ic('doc')+' Exporter en CSV</button>'
+    +'<div id="priceHistoryBox"></div>'
   +'</div>';
 }
 function afterDonnees(){
@@ -3647,6 +3703,26 @@ function afterDonnees(){
     var a = document.createElement('a'); a.href = url; a.download = 'yadra-prix-immobilier-algerie.csv'; a.click();
     URL.revokeObjectURL(url);
   };
+  // Historique : n'affiche une section "Évolution" que si au moins une
+  // wilaya a 2+ relevés mensuels (api/snapshot-prices.js, cron mensuel) —
+  // avant ça, la page reste un simple instantané, sans case vide ni promesse
+  // non tenue.
+  fetch('/api/price-history').then(function(r){ return r.json(); }).then(function(data){
+    var box = document.getElementById('priceHistoryBox');
+    if(!box) return;
+    var snaps = (data && data.snapshots) || [];
+    var byWilaya = {};
+    snaps.forEach(function(s){ (byWilaya[s.wilaya] = byWilaya[s.wilaya]||[]).push(s); });
+    var wilayasWithHistory = Object.keys(byWilaya).filter(function(w){ return byWilaya[w].length>=2; });
+    if(!wilayasWithHistory.length) return;
+    box.innerHTML = '<div class="section-head" style="margin-top:44px;"><h2>Évolution</h2><p class="desc">Relevé automatique, un point par mois.</p></div>'
+      + '<div class="table-wrap"><table class="data"><thead><tr><th>Ville</th><th>Période</th><th>Prix moyen / m²</th></tr></thead><tbody>'
+      + wilayasWithHistory.map(function(w){
+          var label = WILAYAS[w] ? WILAYAS[w].label : w;
+          return byWilaya[w].map(function(s){ return '<tr><td>'+esc(label)+'</td><td>'+esc(s.period)+'</td><td class="tabular">'+(s.avg_price_m2?money(s.avg_price_m2)+'/m²':'—')+'</td></tr>'; }).join('');
+        }).join('')
+      + '</tbody></table></div>';
+  }).catch(function(){ /* pas d'historique disponible : la page reste un instantané, rien ne casse */ });
   setStructuredData({'@context':'https://schema.org','@graph':[
     ldBreadcrumb([{name:'Accueil',path:'/'},{name:"Prix de l'immobilier neuf",path:'/donnees/prix-immobilier'}]),
     {'@type':'Dataset', name:"Prix moyen au m² de l'immobilier neuf en Algérie par ville — catalogue yadra!", description:"Prix moyen au m² calculé à partir des programmes immobiliers neufs publiés sur yadra!, par wilaya.", url:'https://yadra.fr/donnees/prix-immobilier', creator:{'@type':'Organization', name:'yadra!'}}
