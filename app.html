@@ -1050,7 +1050,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <a href="/guides/procuration-immobiliere-algerie">Procuration immobilière</a>
         <a href="/guides/acheter-depuis-letranger">Acheter depuis l’étranger</a>
         <a href="/a-propos#faq">Questions fréquentes</a>
-        <a href="/a-propos#contact">Contact</a>
+        <a href="/contact">Contact</a>
       </div>
       <div class="foot-col">
         <h4>Légal</h4>
@@ -2109,6 +2109,8 @@ function render(){
     updateMeta({path:'/promoteurs/'+segs[1], title:trackedPr.name+' — Promoteur immobilier '+(WILAYAS[trackedPr.wilaya]?WILAYAS[trackedPr.wilaya].label:'')+' | yadra!', description:trackedPr.desc||DEFAULT_META.description}); } }
   else if(segs[0]==='a-propos'){ main.innerHTML = pageAbout(); afterAbout();
     updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! vérifie les promoteurs avant de publier leurs projets, pour les acquéreurs en Algérie comme pour la diaspora à l'étranger."}); }
+  else if(segs[0]==='contact' && segs.length===1){ main.innerHTML = pageContact(); afterContact();
+    updateMeta({path:'/contact', title:'Contact — yadra!', description:"Une question sur un projet, un promoteur ou la plateforme ? L'équipe yadra! vous répond directement sur WhatsApp."}); }
   else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest();
     updateMeta({path:'/investir', title:"Investir dans l'immobilier neuf en Algérie | yadra!", description:"Une vue claire sur les projets immobiliers en cours en Algérie, pour investir depuis le pays ou depuis la diaspora à l'étranger."}); }
   else if(segs[0]==='guides' && segs[1]==='acheter-depuis-letranger'){ main.innerHTML = pageGuideDiaspora(); afterGuideDiaspora();
@@ -3518,7 +3520,7 @@ function pageAbout(){
   +'<div class="wrap" id="contact" style="padding-bottom:80px;max-width:520px;">'
     +'<div class="side-block reveal"><h3 style="color:var(--heading);font-size:17px;margin-bottom:10px;">Nous contacter</h3>'
       +'<p style="color:var(--text-dim);font-size:13.5px;margin-bottom:16px;">Une question, une remarque ? Notre équipe vous répond directement.</p>'
-      +'<a class="btn btn-wa btn-block" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a>'
+      +'<a class="btn btn-wa btn-block" href="/contact">'+ic('whatsapp')+' Nous écrire</a>'
     +'</div>'
   +'</div>';
 }
@@ -3533,6 +3535,86 @@ function afterAbout(){
       ["Je vis à l'étranger, puis-je acheter depuis la diaspora ?","Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu'à la remise des clés."]
     ].map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1]}}; })
   });
+}
+
+/* ================================================================
+   PAGE: CONTACT
+   Un seul canal réel aujourd'hui : WhatsApp (voir mentions légales).
+   Le "formulaire" ci-dessous n'appelle aucune API inexistante — il
+   construit un message WhatsApp pré-rempli, pour rester honnête sur
+   ce qui se passe réellement à l'envoi.
+   ================================================================ */
+function contactStep(n,title,body){
+  return '<div class="reveal"><div class="value-card"><span style="display:block;font-family:ui-monospace,\'SF Mono\',Menlo,monospace;font-size:12px;color:var(--or-rose-light);margin-bottom:14px;">'+n+'</span><h3>'+title+'</h3><p>'+body+'</p></div></div>';
+}
+function pageContact(){
+  return ''
+  +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Contact</span></div></div>'
+  +'<div class="wrap" style="max-width:720px;">'
+    +'<div class="eyebrow reveal">Contact</div>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.7rem,3.4vw,2.5rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.2;">Une question ? On vous répond, vraiment.</h1>'
+    +'<p class="prose reveal" style="margin-top:16px;">Pas de standard téléphonique, pas de bot : votre message arrive directement à l’équipe yadra!. Décrivez votre besoin, on vous oriente ou on vous répond.</p>'
+    +'<div class="reveal" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;">'
+      +'<a class="btn btn-wa" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a>'
+      +'<a class="btn btn-ghost" href="#contactForm">'+ic('mail')+' Laisser un message</a>'
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:20px;">'
+    +'<div class="grid grid-3 reveal-stagger" style="margin:40px 0 56px;">'
+      +contactStep('01','Vous écrivez','En un message WhatsApp, ou via le formulaire plus bas — dites-nous simplement ce qu’il vous faut.')
+      +contactStep('02','On vous lit, vraiment','Une personne de l’équipe yadra! lit chaque message — pas de bot, pas de file d’attente automatisée.')
+      +contactStep('03','On vous oriente','Question sur un projet précis, un promoteur, ou la plateforme : on vous répond ou on vous met en relation avec la bonne personne.')
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:56px;">'
+    +'<div class="split-card spotlight accent theme-dark reveal">'
+      +ic('whatsapp','ic')
+      +'<span class="eyebrow">Le plus rapide</span><h3>Écrivez-nous sur WhatsApp</h3>'
+      +'<p>+33 6 70 13 15 01 — notre équipe vous répond directement, sans détour.</p>'
+      +'<div><a class="btn btn-primary" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Ouvrir WhatsApp</a></div>'
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" id="contactForm" style="padding-bottom:70px;max-width:560px;">'
+    +'<div class="section-head reveal"><div><h2>Vous préférez écrire ici ?</h2><p class="desc">On l’envoie sur WhatsApp pré-rempli — vous gardez la main avant l’envoi.</p></div></div>'
+    +'<form id="contactMsgForm" class="reveal">'
+      +'<div class="field"><label>Nom</label><input required name="name" placeholder="Votre nom"/></div>'
+      +'<div class="field"><label>Sujet</label><select name="sujet">'
+        +'<option>Question générale</option>'
+        +'<option>Question sur un projet</option>'
+        +'<option>Devenir promoteur partenaire</option>'
+        +'<option>Presse / partenariat</option>'
+        +'<option>Signaler un problème</option>'
+      +'</select></div>'
+      +'<div class="field"><label>Message</label><textarea name="message" placeholder="Votre message"></textarea></div>'
+      +'<button class="btn btn-wa btn-block" type="submit" style="margin-top:6px;">'+ic('whatsapp')+' Envoyer sur WhatsApp</button>'
+      +'<p class="form-note">Le message s’ouvre dans WhatsApp, pré-rempli avec vos réponses — vous choisissez de l’envoyer ou de le modifier avant.</p>'
+    +'</form>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:80px;">'
+    +'<div class="section-head reveal"><h2>Cas particuliers</h2></div>'
+    +'<div class="grid grid-2 reveal-stagger">'
+      +'<a class="stat-tile" href="/promoteur" style="display:block;text-decoration:none;"><div class="k">Vous êtes promoteur</div><div class="v" style="font-size:16px;">Publier vos projets sur yadra!</div></a>'
+      +'<a class="stat-tile" href="/a-propos#faq" style="display:block;text-decoration:none;"><div class="k">Une question fréquente ?</div><div class="v" style="font-size:16px;">Voir la FAQ</div></a>'
+    +'</div>'
+  +'</div>';
+}
+function afterContact(){
+  var form = document.getElementById('contactMsgForm');
+  if(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var f = new FormData(e.target);
+      var name = String(f.get('name')||'').trim();
+      var sujet = String(f.get('sujet')||'Question générale');
+      var message = String(f.get('message')||'').trim();
+      var text = 'Bonjour YADRA!,\nNom : '+name+'\nSujet : '+sujet+(message ? '\nMessage : '+message : '');
+      window.open(waLink(text), '_blank', 'noopener');
+    });
+  }
+  setStructuredData({'@context':'https://schema.org','@graph':[
+    ldBreadcrumb([{name:'Accueil',path:'/'},{name:'Contact',path:'/contact'}]),
+    {'@type':'ContactPage', name:'Contact — yadra!', url:'https://yadra.fr/contact'}
+  ]});
 }
 
 /* ================================================================
