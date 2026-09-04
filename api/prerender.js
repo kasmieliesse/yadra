@@ -486,6 +486,19 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'contact') {
+      var bodyContact = '<h1>Contact — yadra!</h1>'
+        + '<p>Une question sur un projet, un promoteur ou la plateforme ? L’équipe yadra! répond directement, sans bot ni standard téléphonique.</p>'
+        + '<h2>WhatsApp</h2><p><a href="https://wa.me/33670131501">+33 6 70 13 15 01</a> — notre équipe vous répond directement, sans détour.</p>'
+        + '<h2>Vous êtes promoteur</h2><p>Pour publier vos projets sur yadra!, voir <a href="' + SITE + '/promoteur">l’espace promoteur</a>.</p>';
+      res.status(200).send(page({
+        path: '/contact', title: 'Contact — yadra!',
+        description: "Une question sur un projet, un promoteur ou la plateforme ? L'équipe yadra! vous répond directement sur WhatsApp.",
+        body: bodyContact,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Contact', path: '/contact' }]), { '@type': 'ContactPage', name: 'Contact — yadra!', url: SITE + '/contact' }] }
+      }));
+      return;
+    }
     res.status(404).send(page({ path: '/', noindex: true, body: '<h1>Page introuvable</h1>' }));
   } catch (err) {
     // Ne jamais laisser un bot sur une erreur brute : page minimale valide,
