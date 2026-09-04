@@ -217,9 +217,9 @@ body.is-home .site-header:not(.is-scrolled) .logo,
 body.is-home .site-header:not(.is-scrolled) .nav-links a{text-shadow:0 1px 10px rgba(0,0,0,.55);}
 body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-filter:blur(14px) saturate(140%);border-bottom-color:var(--border);margin-bottom:0;}
 .nav-row{position:relative;display:flex;align-items:center;justify-content:space-between;height:76px;gap:20px;}
-.dz-flag-float{position:absolute;top:10px;right:2px;width:22px;pointer-events:none;opacity:.9;
+.dz-flag-float{flex:none;display:block;width:34px;pointer-events:none;
   filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));animation:dzFlagFloat 5.5s ease-in-out infinite;}
-.dz-flag-float svg{display:block;width:100%;height:auto;border-radius:2px;}
+.dz-flag-float svg{display:block;width:100%;height:auto;border-radius:3px;}
 @keyframes dzFlagFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-2deg);}}
 .nav-links{display:none;align-items:center;gap:30px;font-size:13px;font-weight:600;color:var(--text-dim);}
 .nav-links a{padding:6px 2px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s;}
@@ -927,14 +927,14 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <div class="user-dropdown" id="userDropdown" role="menu"></div>
       </div>
       <button class="burger" id="burgerBtn" aria-label="Menu"></button>
-    </div>
-    <div class="dz-flag-float" aria-hidden="true" title="Algérie">
-      <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-        <rect width="150" height="200" fill="#006233"/>
-        <rect x="150" width="150" height="200" fill="#fff"/>
-        <path fill="#D21034" fill-rule="evenodd" d="M105,100 A60,60 0 1,0 225,100 A60,60 0 1,0 105,100 Z M133,100 A45,45 0 1,0 223,100 A45,45 0 1,0 133,100 Z"/>
-        <path fill="#D21034" d="M195,86 199,97 210,97 201,104 204,115 195,109 186,115 189,104 180,97 191,97 Z"/>
-      </svg>
+      <div class="dz-flag-float" aria-hidden="true" title="Algérie">
+        <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="150" height="200" fill="#006233"/>
+          <rect x="150" width="150" height="200" fill="#fff"/>
+          <path fill="#D21034" fill-rule="evenodd" d="M105,100 A60,60 0 1,0 225,100 A60,60 0 1,0 105,100 Z M133,100 A45,45 0 1,0 223,100 A45,45 0 1,0 133,100 Z"/>
+          <path fill="#D21034" d="M195,86 199,97 210,97 201,104 204,115 195,109 186,115 189,104 180,97 191,97 Z"/>
+        </svg>
+      </div>
     </div>
   </div>
 </header>
