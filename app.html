@@ -115,7 +115,7 @@ body{
 img{max-width:100%;display:block;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;}
-h1,h2,h3,h4{font-family:var(--font-display);font-weight:400;letter-spacing:.02em;margin:0;text-wrap:balance;}
+h1,h2,h3,h4{font-family:var(--font-body);font-weight:400;letter-spacing:-.01em;margin:0;text-wrap:balance;}
 p{margin:0;}
 :focus-visible{outline:2px solid var(--or-rose-light);outline-offset:2px;border-radius:4px;}
 ::selection{background:var(--or-rose);color:#fff;}
@@ -385,7 +385,7 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .section{padding:64px 0;}
 .section.tight{padding:44px 0;}
 .section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;}
-.section-head h2{position:relative;padding-left:24px;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--heading);}
+.section-head h2{position:relative;padding-left:24px;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:800;letter-spacing:-.015em;color:var(--heading);}
 .section-head h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:14px;height:2px;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));}
 .section-head .desc{color:var(--text-dim);max-width:520px;margin-top:8px;font-size:14px;}
 
@@ -1044,8 +1044,8 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .mindmap-svg{position:absolute;inset:0;width:100%;height:100%;}
 .mindmap-line{stroke:var(--border);stroke-width:1;opacity:0;transition:opacity .7s ease;}
 .mindmap-card.is-in .mindmap-line{opacity:1;}
-.mindmap-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:linear-gradient(150deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;box-shadow:0 14px 32px -12px rgba(183,110,77,.6);z-index:2;}
-.mindmap-center svg{width:24px;height:24px;color:#fff;}
+.mindmap-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:linear-gradient(150deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;box-shadow:0 14px 32px -12px rgba(183,110,77,.6);z-index:2;}
+.mindmap-center-word{font-family:var(--font-body);font-weight:800;font-size:15px;letter-spacing:-.02em;color:#fff;}
 .mindmap-pill{position:absolute;transform:translate(-50%,-50%) scale(.85);display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 24px -14px rgba(20,16,12,.3);white-space:nowrap;font-size:12.5px;font-weight:700;color:var(--heading);text-decoration:none;z-index:1;opacity:0;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1);}
 .mindmap-card.is-in .mindmap-pill{opacity:1;transform:translate(-50%,-50%) scale(1);}
 .mindmap-pill svg{width:15px;height:15px;color:var(--or-rose);flex:0 0 auto;}
@@ -2620,7 +2620,7 @@ function mindmapHTML(){
   }).join('');
   return '<div class="mindmap-card reveal">'
     +'<svg class="mindmap-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+lines+'</svg>'
-    +'<div class="mindmap-center">'+ic('sparkle')+'</div>'
+    +'<div class="mindmap-center"><span class="mindmap-center-word">yadra!</span></div>'
     +pills
   +'</div>';
 }
@@ -3811,7 +3811,7 @@ function pageAbout(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">À propos</span></div></div>'
   +'<div class="wrap" style="padding-bottom:8px;max-width:760px;">'
     +'<div class="eyebrow reveal">Notre démarche</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.3rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.22;">Le neuf algérien, montré tel qu’il est.</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.3rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.22;">Le neuf algérien, montré tel qu’il est.</h1>'
     +'<p class="prose reveal" style="margin-top:20px;">Chercher un logement neuf en Algérie veut souvent dire courir après l’information : un prix qui change au téléphone, un chantier qu’on ne voit jamais avancer, un promoteur impossible à vérifier. yadra! est né pour changer cet ordre des choses — pour ceux qui vivent en Algérie comme pour la diaspora, parfois à des milliers de kilomètres du chantier.</p>'
     +'<p class="prose reveal">L’équipe qbm construit yadra! depuis Alger, projet par projet. Pas d’ambition de tout référencer : on préfère dix fiches vérifiées à cent approximatives, et un promoteur qu’on a réellement rencontré à un logo ajouté en cinq minutes.</p>'
     +'<blockquote class="pull-quote reveal">Notre métier n’est pas de vendre. C’est de vérifier avant vous — pour que la visite ne soit pas la première fois que vous découvrez la vérité sur un projet.</blockquote>'
@@ -4015,7 +4015,7 @@ function pageGuideDiaspora(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Acheter depuis l’étranger</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Acheter un logement neuf en Algérie depuis l’étranger</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Acheter un logement neuf en Algérie depuis l’étranger</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Suivre un achat immobilier à des milliers de kilomètres du chantier change la manière de s’organiser. Voici les points de vigilance qui reviennent le plus souvent chez les acheteurs de la diaspora.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4062,7 +4062,7 @@ function pageVilleDetail(wilaya){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/villes">Villes</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(w.label)+'</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Immobilier neuf à '+esc(w.label)+'</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf à '+esc(w.label)+'</h1>'
     +'<p class="prose" style="margin-top:18px;">'+(WILAYA_INTRO[wilaya]||'')+'</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
@@ -4114,7 +4114,7 @@ function pageCommuneDetail(wilaya, communeSlug){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/villes">Villes</a> '+ic('chevronRight')+' <a href="/villes/'+wilaya+'">'+esc(w.label)+'</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(commune)+'</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Immobilier neuf à '+esc(commune)+', '+esc(w.label)+'</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf à '+esc(commune)+', '+esc(w.label)+'</h1>'
     +'<p class="prose" style="margin-top:18px;">'+esc(commune)+' fait partie des communes suivies par yadra! à '+esc(w.label)+'. Retrouvez ici les programmes immobiliers neufs publiés dans cette commune.</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
@@ -4162,7 +4162,7 @@ function pageTypologie(slug){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(def.title)+'</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Logement '+esc(def.title)+' neuf en Algérie</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Logement '+esc(def.title)+' neuf en Algérie</h1>'
     +'<p class="prose" style="margin-top:18px;">'+def.desc+'</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
@@ -4202,7 +4202,7 @@ function pageDonnees(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Prix de l\'immobilier neuf</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Prix moyen au m² de l\'immobilier neuf, par ville</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Prix moyen au m² de l\'immobilier neuf, par ville</h1>'
     +'<p class="prose" style="margin-top:18px;">Ces chiffres sont calculés automatiquement à partir des prix affichés par les promoteurs sur les programmes actuellement publiés sur yadra! — pas une statistique officielle ou exhaustive du marché, mais un instantané réel et vérifiable de notre catalogue, mis à jour à chaque nouvelle publication.</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:40px;">'
@@ -4464,7 +4464,7 @@ function pageFinancement(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Financer un achat immobilier neuf</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Financer l\'achat d\'un logement neuf en Algérie</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Financer l\'achat d\'un logement neuf en Algérie</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Un aperçu des grandes options de financement du neuf en Algérie, pour préparer vos questions avant de contacter votre banque ou le promoteur — ce guide ne remplace pas un conseil bancaire personnalisé.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4492,7 +4492,7 @@ function pageGuideVerifierPromoteur(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Vérifier un promoteur</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Comment vérifier un promoteur immobilier en Algérie</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Comment vérifier un promoteur immobilier en Algérie</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Un bon emplacement ou un rendu 3D convaincant ne disent rien de la capacité d’un promoteur à livrer. Avant tout engagement, quelques vérifications concrètes permettent d’écarter la plupart des mauvaises surprises.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement à mesure que nos vérifications de promoteurs évoluent.</p>'
 
@@ -4547,7 +4547,7 @@ function pageGuideProcuration(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Procuration</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">La procuration immobilière en Algérie : le guide complet</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">La procuration immobilière en Algérie : le guide complet</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Impossible de se déplacer pour signer un document ou suivre une étape de l’achat ? La procuration permet de mandater un proche ou un professionnel pour agir à votre place — à condition de respecter certaines formes.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4581,7 +4581,7 @@ function pageGuideEcheancier(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Calendrier de paiement</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Calendrier de paiement promoteur : ce qui est normal</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Calendrier de paiement promoteur : ce qui est normal</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Un achat sur plan se paie en plusieurs tranches, pas en une fois. Voici à quoi ressemble un échéancier normal — et les écarts qui doivent alerter.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4633,7 +4633,7 @@ function pageLexique(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Lexique</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Lexique</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.24;">Lexique de l’immobilier neuf en Algérie</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Lexique de l’immobilier neuf en Algérie</h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Les termes qui reviennent le plus souvent dans un achat immobilier neuf en Algérie, expliqués simplement.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
     +'<dl class="reveal" style="margin-top:32px;">'
@@ -4679,7 +4679,7 @@ function pageComparatifNeufAncien(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Neuf vs ancien</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Immobilier neuf ou ancien en Algérie : les repères pour comparer</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf ou ancien en Algérie : les repères pour comparer</h1>'
     +'<p class="prose" style="margin-top:18px;">Il n\'y a pas de réponse universelle entre neuf et ancien — ça dépend du budget, du calendrier et de ce que vous recherchez. Voici les points de comparaison qui reviennent le plus souvent.</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:60px;">'
@@ -4711,7 +4711,7 @@ function pageComparatifAlgerOran(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Alger vs Oran</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;">Alger ou Oran : où investir dans le neuf ?</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Alger ou Oran : où investir dans le neuf ?</h1>'
     +'<p class="prose" style="margin-top:18px;">Alger et Oran sont les deux marchés du neuf les plus actifs suivis par yadra!. Les chiffres ci-dessous viennent directement de notre catalogue publié — pas d\'estimation externe.</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:60px;">'
@@ -4836,7 +4836,7 @@ function pageLegal(kind){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+title+'</span></div></div>'
   +'<div class="wrap legal-doc" style="padding-bottom:80px;">'
-    +'<h1 style="font-size:clamp(1.6rem,3vw,2.2rem);color:var(--heading);text-transform:uppercase;letter-spacing:.02em;font-weight:800;margin-bottom:10px;">'+title+'</h1>'
+    +'<h1 style="font-size:clamp(1.6rem,3vw,2.2rem);color:var(--heading);letter-spacing:-.015em;font-weight:800;margin-bottom:10px;">'+title+'</h1>'
     +'<p class="legal-updated">Dernière mise à jour : 1er septembre 2026.</p>'
     +'<nav class="legal-toc" aria-label="Sommaire">'+sections.map(function(s){return '<a href="#'+s.id+'">'+s.h.replace(/^\d+\.\s*/,'')+'</a>';}).join('')+'</nav>'
     +sections.map(function(s){return '<section id="'+s.id+'"><h2>'+s.h+'</h2>'+s.body+'</section>';}).join('')
