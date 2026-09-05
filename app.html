@@ -1002,6 +1002,11 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .howstep-line{position:absolute;top:22px;left:calc(100% + 12px);width:calc(100% - 24px);height:1px;background:var(--border);display:none;}
 @media (min-width:900px){.howstep-line{display:block;}}
 [dir="rtl"] .howstep-line{left:auto;right:calc(100% + 12px);}
+.lifestyle-carousel{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 14px;margin:0 -4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.lifestyle-carousel::-webkit-scrollbar{display:none;}
+.lifestyle-slide{flex:0 0 auto;width:250px;aspect-ratio:4/5;border-radius:var(--radius-l);overflow:hidden;scroll-snap-align:start;box-shadow:0 14px 34px -18px rgba(20,16,12,.28);}
+.lifestyle-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+@media (min-width:640px){.lifestyle-slide{width:300px;}}
 .pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
 .pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
 .pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
@@ -2496,6 +2501,13 @@ function pageHome(){
     +'</div>'
   +'</section>'
 
+  +'<section class="section">'
+    +'<div class="wrap">'
+      +'<div class="section-head reveal"><div><h2>L’art de vivre</h2><p class="desc">Un aperçu de ce que le neuf peut offrir, projet après projet.</p></div></div>'
+      +'<div class="lifestyle-carousel reveal">'+LIFESTYLE_PHOTOS.map(function(alt,i){ return '<div class="lifestyle-slide"><img src="/assets/lifestyle/'+(i+1)+'.jpg" alt="'+esc(alt)+'" loading="lazy"></div>'; }).join('')+'</div>'
+    +'</div>'
+  +'</section>'
+
   +'<section class="section tight">'
     +'<div class="wrap">'
       +'<div class="split-card spotlight accent theme-dark reveal" style="text-align:center;max-width:640px;margin:0 auto;">'
@@ -2507,6 +2519,15 @@ function pageHome(){
     +'</div>'
   +'</section>';
 }
+var LIFESTYLE_PHOTOS = [
+  "Entrée lumineuse avec vue sur la mer",
+  "Salle à manger ouverte, vue sur la ville au coucher du soleil",
+  "Chambre chaleureuse aux tons naturels",
+  "Salle de bain en pierre naturelle, finitions soignées",
+  "Terrasse et piscine à débordement, vue dégagée au coucher du soleil",
+  "Salon soigné, ambiance chaleureuse",
+  "Entrée extérieure éclairée, à la tombée du jour"
+];
 var HOME_FAQ = [
   ['yadra! vend-il directement des biens ?','Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet.'],
   ['Comment un promoteur est-il vérifié avant publication ?','Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.'],
