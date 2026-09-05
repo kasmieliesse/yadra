@@ -382,8 +382,12 @@ body.is-home .site-header.is-scrolled{background:rgba(10,10,10,.82);backdrop-fil
 .search-card .search-submit svg{width:19px;height:19px;}
 
 /* ---------------- Sections / layout ---------------- */
-.section{padding:64px 0;}
-.section.tight{padding:44px 0;}
+.section{padding:48px 0;}
+.section.tight{padding:32px 0;}
+@media (max-width:640px){
+  .section{padding:38px 0;}
+  .section.tight{padding:26px 0;}
+}
 .section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;}
 .section-head h2{position:relative;padding-left:24px;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:800;letter-spacing:-.015em;color:var(--heading);}
 .section-head h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:14px;height:2px;background:linear-gradient(90deg,var(--or-rose),var(--or-rose-light));}
@@ -1131,6 +1135,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
       <a href="/promoteurs" data-route="/promoteurs">Promoteurs</a>
       <a href="/investir" data-route="/investir">Investir</a>
       <a href="/a-propos" data-route="/a-propos">À propos</a>
+      <a href="/carrieres" data-route="/carrieres">Carrières</a>
       <a href="/contact" data-route="/contact">Contact</a>
     </nav>
     <div class="nav-actions">
@@ -1159,6 +1164,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
   <a href="/promoteurs">Promoteurs</a>
   <a href="/investir">Investir</a>
   <a href="/a-propos">À propos</a>
+  <a href="/carrieres">Carrières</a>
   <a href="/contact">Contact</a>
   <a href="/favoris">Favoris</a>
   <div class="mm-actions">
@@ -1181,6 +1187,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
         <a href="/villes">Villes</a>
         <a href="/promoteurs">Promoteurs</a>
         <a href="/a-propos">À propos</a>
+        <a href="/carrieres">Carrières</a>
         <a href="/investir">Investir</a>
         <a href="/ar" hreflang="ar">بالعربية</a>
       </div>
@@ -1244,6 +1251,7 @@ var I18N = {
 "Promoteurs":{en:"Developers",de:"Bauträger",ar:"المطورون"},
 "Investir":{en:"Invest",de:"Investieren",ar:"استثمر"},
 "À propos":{en:"About",de:"Über uns",ar:"من نحن"},
+"Carrières":{en:"Careers",de:"Karriere",ar:"وظائف"},
 "Favoris":{en:"Favorites",de:"Favoriten",ar:"المفضلة"},
 "Connexion":{en:"Log in",de:"Anmelden",ar:"تسجيل الدخول"},
 "Déconnexion":{en:"Log out",de:"Abmelden",ar:"تسجيل الخروج"},
@@ -2256,6 +2264,8 @@ function render(){
     updateMeta({path:'/promoteurs/'+segs[1], title:trackedPr.name+' — Promoteur immobilier '+(WILAYAS[trackedPr.wilaya]?WILAYAS[trackedPr.wilaya].label:'')+' | yadra!', description:trackedPr.desc||DEFAULT_META.description}); } }
   else if(segs[0]==='a-propos'){ main.innerHTML = pageAbout(); afterAbout();
     updateMeta({path:'/a-propos', title:'À propos — yadra!', description:"yadra! vérifie les promoteurs avant de publier leurs projets, pour les acquéreurs en Algérie comme pour la diaspora à l'étranger."}); }
+  else if(segs[0]==='carrieres'){ main.innerHTML = pageCareers(); afterCareers();
+    updateMeta({path:'/carrieres', title:'Carrières — yadra!', description:"yadra! est en phase de lancement : pas de poste ouvert affiché en continu, mais une candidature spontanée toujours lue."}); }
   else if(segs[0]==='contact' && segs.length===1){ main.innerHTML = pageContact(); afterContact();
     updateMeta({path:'/contact', title:'Contact — yadra!', description:"Une question sur un projet, un promoteur ou la plateforme ? L'équipe yadra! vous répond directement sur WhatsApp."}); }
   else if(segs[0]==='investir'){ main.innerHTML = pageInvest(); afterInvest();
@@ -3885,6 +3895,91 @@ function afterAbout(){
       ['Comment un promoteur est-il vérifié avant publication ?','Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.'],
       ["L'utilisation de yadra! est-elle payante ?",'Non. La recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits pour les acquéreurs.'],
       ["Je vis à l'étranger, puis-je acheter depuis la diaspora ?","Oui. De nombreux acquéreurs suivent leur projet à distance ; nous privilégions les promoteurs habitués à accompagner les acheteurs de la diaspora, du premier contact jusqu'à la remise des clés."]
+    ].map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1]}}; })
+  });
+}
+
+/* ================================================================
+   PAGE: CARRIÈRES
+   yadra! est en phase de lancement : pas de postes ouverts affichés
+   en permanence, pas d'équipe RH, pas de process de recrutement
+   formalisé à décrire. Cette page reste honnête là-dessus — c'est
+   une page de candidature spontanée, pas une liste de faux postes.
+   ================================================================ */
+var CAREERS_LIFE_PHOTOS = [
+  ['/assets/why/bureau-plans-alger.jpg','Étude d’un plan de projet'],
+  ['/assets/why/salon-vue-baie-alger-full.jpg','Vue sur la baie d’Alger'],
+  ['/assets/why/rdv-plans-alger.jpg','Échange autour d’un plan de projet'],
+  ['/assets/why/chantier-skyline-alger.jpg','Chantier suivi, vue sur Alger'],
+  ['/assets/why/accompagnement-reception.jpg','Présentation d’un projet yadra!']
+];
+function pageCareers(){
+  return '<div class="theme-light">'
+  +'<div class="wrap" style="padding-top:18px;">'
+    +'<div class="breadcrumb reveal"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Carrières</span></div>'
+    +'<div class="pg-hero theme-dark reveal" style="margin-top:14px;">'
+      +'<div class="pg-hero-bg" style="background-image:url(\'/assets/why/rdv-plans-alger.jpg\')"></div>'
+      +'<div class="pg-hero-scrim"></div>'
+      +'<div class="pg-hero-content">'
+        +'<div class="pg-eyebrow">Carrières · yadra!</div>'
+        +'<h1 class="pg-h1">Construire yadra! avec nous. <span class="dim">Dès le début.</span></h1>'
+        +'<p class="pg-lede">yadra! est en phase de lancement : l’équipe s’agrandit au fil des besoins, pas selon un plan de recrutement figé. Aucun poste n’est affiché en permanence — mais on lit chaque message.</p>'
+        +'<div class="pg-cta-row"><a class="btn btn-primary" href="'+waLink('Bonjour yadra!, je souhaite envoyer une candidature spontanée.')+'" target="_blank" rel="noopener">'+ic('whatsapp')+' Candidature spontanée</a></div>'
+      +'</div>'
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-top:40px;max-width:760px;">'
+    +'<div class="pg-eyebrow reveal">Ce qu’on cherche</div>'
+    +'<h2 class="pg-h1 reveal" style="margin-top:12px;font-size:clamp(1.6rem,3.2vw,2.3rem);">Un profil rigoureux, <span class="dim">pas un CV type.</span></h2>'
+    +'<p class="prose reveal" style="margin-top:20px;">On cherche des gens qui aiment vérifier avant d’affirmer, qui préfèrent dix dossiers solides à cent approximatifs, et qui ont envie de construire quelque chose dès le début plutôt que de rejoindre une machine déjà rodée.</p>'
+    +'<p class="prose reveal">Il n’y a pas de poste ouvert affiché en continu : on préfère prendre le temps de trouver la bonne personne pour la bonne mission, et garder le contact jusqu’au jour où ça correspond.</p>'
+  +'</div>'
+  +'<div class="wrap" style="padding-bottom:8px;">'
+    +'<div class="section-head reveal"><h2>Nos valeurs, <span class="dim">sans exception.</span></h2></div>'
+    +'<div class="grid grid-3 reveal-stagger" style="margin-bottom:8px;">'
+      +'<div class="reveal">'+valueCard('shield','Exigence','Aucun projet n’apparaît sur yadra! avant qu’on ait vérifié le promoteur — la même rigueur s’applique en interne.')+'</div>'
+      +'<div class="reveal">'+valueCard('handshake','Transparence','Pas de marge cachée pour nos utilisateurs, pas de promesse qu’on ne peut pas tenir en interne.')+'</div>'
+      +'<div class="reveal">'+valueCard('sparkle','Sélection','On préfère avancer lentement avec les bonnes personnes que vite avec les mauvaises.')+'</div>'
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-top:24px;">'
+    +'<div class="section-head reveal"><div><h2>La vie chez yadra!, <span class="dim">en images.</span></h2></div></div>'
+    +'<div class="lifestyle-carousel reveal">'+CAREERS_LIFE_PHOTOS.map(function(p){ return '<div class="lifestyle-slide"><img src="'+p[0]+'" alt="'+esc(p[1])+'" loading="lazy"></div>'; }).join('')+'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding-top:24px;">'
+    +'<div class="section-head reveal"><h2>Pourquoi nous rejoindre, <span class="dim">maintenant.</span></h2></div>'
+    +'<div class="grid grid-3 reveal-stagger" style="margin-bottom:8px;">'
+      +'<div class="reveal">'+valueCard('sparkle','Un produit qui démarre','Vous arrivez pendant que tout est encore à construire — votre travail se voit tout de suite.')+'</div>'
+      +'<div class="reveal">'+valueCard('whatsapp','Contact direct','Pas de hiérarchie à rallonge : vous parlez directement aux personnes qui décident.')+'</div>'
+      +'<div class="reveal">'+valueCard('heart','Une mission claire','Aider les acquéreurs, en Algérie comme dans la diaspora, à investir en toute confiance.')+'</div>'
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" id="faq" style="padding-top:16px;padding-bottom:12px;max-width:760px;">'
+    +'<div class="section-head reveal"><h2>Questions fréquentes, <span class="dim">avant de postuler.</span></h2></div>'
+    +'<div class="faq-acc reveal-stagger">'
+      +faqItem('Aucun poste n’est affiché, puis-je quand même postuler ?','Oui — c’est aujourd’hui la seule façon de nous rejoindre. yadra! est en phase de lancement, les besoins évoluent vite.')
+      +faqItem('Comment se passe la suite après ma candidature ?','On vous répond directement sur WhatsApp pour échanger sur votre profil et voir si ça peut correspondre.')
+      +faqItem('Quels profils vous intéressent le plus ?','Ceux qui correspondent aux valeurs ci-dessus : rigueur, transparence, sens du service.')
+    +'</div>'
+  +'</div>'
+  +'<div class="wrap" style="padding:24px 0 60px;">'
+    +bigCtaHTML({
+      photo:'/assets/why/chantier-skyline-alger.jpg', photoAlt:'Chantier avec vue sur Alger',
+      eyebrow:'Candidature spontanée', title:'Aucun poste ouvert pour le moment.', titleDim:'Écrivez-nous quand même.',
+      lede:'Dites-nous ce que vous savez faire et ce qui vous intéresse chez yadra! — on garde le contact.',
+      buttons:[{label:'Nous écrire sur WhatsApp', icon:'whatsapp', href:waLink('Bonjour yadra!, je souhaite envoyer une candidature spontanée.'), primary:true, target:'_blank'}]
+    })
+  +'</div>'
+  +'</div>';
+}
+function afterCareers(){
+  setStructuredData({
+    '@context':'https://schema.org',
+    '@type':'FAQPage',
+    mainEntity:[
+      ['Aucun poste n’est affiché, puis-je quand même postuler ?','Oui — c’est aujourd’hui la seule façon de nous rejoindre. yadra! est en phase de lancement, les besoins évoluent vite.'],
+      ['Comment se passe la suite après ma candidature ?','On vous répond directement sur WhatsApp pour échanger sur votre profil et voir si ça peut correspondre.'],
+      ['Quels profils vous intéressent le plus ?','Ceux qui correspondent aux valeurs de la page : rigueur, transparence, sens du service.']
     ].map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1]}}; })
   });
 }

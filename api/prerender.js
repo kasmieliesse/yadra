@@ -290,6 +290,29 @@ module.exports = async function (req, res) {
       }));
       return;
     }
+    if (kind === 'carrieres') {
+      var faqC = [
+        ['Aucun poste n\'est affiché, puis-je quand même postuler ?', 'Oui — c\'est aujourd\'hui la seule façon de nous rejoindre. yadra! est en phase de lancement, les besoins évoluent vite.'],
+        ['Comment se passe la suite après ma candidature ?', 'On vous répond directement sur WhatsApp pour échanger sur votre profil et voir si ça peut correspondre.'],
+        ['Quels profils vous intéressent le plus ?', 'Ceux qui correspondent aux valeurs de la page : rigueur, transparence, sens du service.']
+      ];
+      var bodyC = '<h1>Construire yadra! avec nous. Dès le début.</h1>'
+        + '<p>yadra! est en phase de lancement : l\'équipe s\'agrandit au fil des besoins, pas selon un plan de recrutement figé. Aucun poste n\'est affiché en permanence — mais on lit chaque message.</p>'
+        + '<h2>Ce qu\'on cherche</h2>'
+        + '<p>On cherche des gens qui aiment vérifier avant d\'affirmer, qui préfèrent dix dossiers solides à cent approximatifs, et qui ont envie de construire quelque chose dès le début plutôt que de rejoindre une machine déjà rodée.</p>'
+        + '<p>Il n\'y a pas de poste ouvert affiché en continu : on préfère prendre le temps de trouver la bonne personne pour la bonne mission, et garder le contact jusqu\'au jour où ça correspond.</p>'
+        + '<h2>Nos valeurs</h2><ul>'
+        + '<li><strong>Exigence</strong> — Aucun projet n\'apparaît sur yadra! avant qu\'on ait vérifié le promoteur — la même rigueur s\'applique en interne.</li>'
+        + '<li><strong>Transparence</strong> — Pas de marge cachée pour nos utilisateurs, pas de promesse qu\'on ne peut pas tenir en interne.</li>'
+        + '<li><strong>Sélection</strong> — On préfère avancer lentement avec les bonnes personnes que vite avec les mauvaises.</li></ul>'
+        + '<h2>Questions fréquentes</h2><dl>' + faqC.map(function (qa) { return '<dt>' + esc(qa[0]) + '</dt><dd>' + esc(qa[1]) + '</dd>'; }).join('') + '</dl>'
+        + '<h2>Candidature spontanée</h2><p>Aucun poste ouvert pour le moment, écrivez-nous quand même sur <a href="https://wa.me/33670131501">WhatsApp</a>.</p>';
+      res.status(200).send(page({
+        path: '/carrieres', title: 'Carrières — yadra!', description: "yadra! est en phase de lancement : pas de poste ouvert affiché en continu, mais une candidature spontanée toujours lue.", body: bodyC,
+        ld: { '@context': 'https://schema.org', '@graph': [breadcrumbLd([{ name: 'Accueil', path: '/' }, { name: 'Carrières', path: '/carrieres' }]), { '@type': 'FAQPage', mainEntity: faqC.map(function (qa) { return { '@type': 'Question', name: qa[0], acceptedAnswer: { '@type': 'Answer', text: qa[1] } }; }) }] }
+      }));
+      return;
+    }
     if (kind === 'investir') {
       var allInv = await loadPublishedProjects();
       var bodyI = '<h1>Investir dans l\'immobilier neuf en Algérie, depuis le pays ou depuis l\'étranger.</h1>'

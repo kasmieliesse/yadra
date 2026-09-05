@@ -18,6 +18,7 @@ const STATIC_PAGES = [
   { path: '/villes', priority: '0.7', changefreq: 'weekly' },
   { path: '/promoteurs', priority: '0.7', changefreq: 'weekly' },
   { path: '/a-propos', priority: '0.5', changefreq: 'monthly' },
+  { path: '/carrieres', priority: '0.3', changefreq: 'monthly' },
   { path: '/investir', priority: '0.5', changefreq: 'monthly' },
   { path: '/simulateur', priority: '0.6', changefreq: 'monthly' },
   { path: '/contact', priority: '0.4', changefreq: 'yearly' },

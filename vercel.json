@@ -26,6 +26,8 @@
 
     { "source": "/a-propos", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=apropos" },
 
+    { "source": "/carrieres", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=carrieres" },
+
     { "source": "/investir", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=investir" },
 
     { "source": "/donnees/prix-immobilier", "has": [{ "type": "header", "key": "user-agent", "value": ".*(Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Applebot|GPTBot|ChatGPT-User|PerplexityBot|ClaudeBot|Claude-User|Discordbot).*" }], "destination": "/api/prerender?kind=donnees" },
