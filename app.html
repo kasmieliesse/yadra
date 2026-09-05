@@ -1024,8 +1024,11 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .big-cta-content .pg-lede{margin-left:auto;margin-right:auto;}
 .big-cta-btns{display:flex;flex-direction:column;gap:12px;margin-top:30px;align-items:stretch;max-width:340px;margin-left:auto;margin-right:auto;}
 @media (min-width:600px){.big-cta-btns{flex-direction:row;max-width:none;justify-content:center;}}
+.accomp-layout{display:block;}
+@media (min-width:1024px){.accomp-layout{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:center;}}
 .accomp-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:36px;max-width:640px;}
 @media (min-width:600px){.accomp-grid{grid-template-columns:1fr 1fr;gap:14px;}}
+@media (min-width:1024px){.accomp-grid{display:none;}}
 .accomp-pill{display:flex;align-items:center;gap:13px;padding:18px 24px;border-radius:999px;border:1px solid var(--border);background:var(--surface);text-decoration:none;transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s ease,box-shadow .3s ease;}
 .accomp-pill:hover{transform:translateY(-3px);border-color:var(--or-rose-dim);box-shadow:0 16px 32px -20px rgba(20,16,12,.3);}
 .accomp-pill svg{width:19px;height:19px;color:var(--or-rose);flex:0 0 auto;}
@@ -1034,6 +1037,20 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .accomp-pill.dark:hover{border-color:var(--or-rose-light);}
 .accomp-pill.dark svg{color:var(--or-rose-light);}
 .accomp-pill.dark span{color:#fff;}
+.mindmap-card{display:none;}
+@media (min-width:1024px){
+  .mindmap-card{display:block;position:relative;width:100%;aspect-ratio:16/11;border-radius:var(--radius-l);background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--border);}
+}
+.mindmap-svg{position:absolute;inset:0;width:100%;height:100%;}
+.mindmap-line{stroke:var(--border);stroke-width:1;opacity:0;transition:opacity .7s ease;}
+.mindmap-card.is-in .mindmap-line{opacity:1;}
+.mindmap-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:linear-gradient(150deg,var(--or-rose-light),var(--or-rose));display:flex;align-items:center;justify-content:center;box-shadow:0 14px 32px -12px rgba(183,110,77,.6);z-index:2;}
+.mindmap-center svg{width:24px;height:24px;color:#fff;}
+.mindmap-pill{position:absolute;transform:translate(-50%,-50%) scale(.85);display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 24px -14px rgba(20,16,12,.3);white-space:nowrap;font-size:12.5px;font-weight:700;color:var(--heading);text-decoration:none;z-index:1;opacity:0;transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1);}
+.mindmap-card.is-in .mindmap-pill{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.mindmap-pill svg{width:15px;height:15px;color:var(--or-rose);flex:0 0 auto;}
+.mindmap-pill.dark{background:var(--noir);border-color:rgba(255,255,255,.12);color:#fff;}
+.mindmap-pill.dark svg{color:var(--or-rose-light);}
 .pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
 .pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
 .pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
@@ -2420,25 +2437,6 @@ function pageHome(){
     +'</div>'
   +'</section>'
 
-  +'<section class="section">'
-    +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>L’art de vivre</h2><p class="desc">Un aperçu de ce que le neuf peut offrir, projet après projet.</p></div></div>'
-      +'<div class="lifestyle-carousel reveal">'+LIFESTYLE_PHOTOS.map(function(alt,i){ return '<div class="lifestyle-slide"><img src="/assets/lifestyle/'+(i+1)+'.jpg" alt="'+esc(alt)+'" loading="lazy"></div>'; }).join('')+'</div>'
-    +'</div>'
-  +'</section>'
-
-  +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
-    +'<div class="wrap">'
-      +'<div class="pg-eyebrow reveal">Notre accompagnement</div>'
-      +'<h2 class="pg-h1 reveal" style="margin-top:12px;font-size:clamp(1.6rem,3.2vw,2.3rem);">Tout ce qu’il faut, <span class="dim">à chaque étape.</span></h2>'
-      +'<p class="pg-lede reveal">yadra! ne s’arrête pas à la fiche projet : vérification des promoteurs, simulateur de rentabilité, guides pratiques et données de marché — tout est pensé pour avancer en confiance, du premier clic à la prise de contact.</p>'
-      +'<div class="pg-cta-row reveal"><a class="btn btn-primary" href="/simulateur">'+ic('gauge')+' Simuler la rentabilité</a><a class="btn btn-ghost" href="/contact">'+ic('whatsapp')+' Nous contacter</a></div>'
-      +'<div class="accomp-grid reveal-stagger">'+ACCOMPAGNEMENT_ITEMS.map(function(it,i){
-          return '<a class="accomp-pill reveal'+(Math.floor(i/2)===1?' dark':'')+'" href="'+it[2]+'">'+ic(it[0])+'<span>'+esc(it[1])+'</span></a>';
-        }).join('')+'</div>'
-    +'</div>'
-  +'</section>'
-
   +'<section class="section home-map-section">'
     +'<div class="wrap">'
       +'<div class="section-head reveal"><div><h2>Les projets, sur la carte</h2><p class="desc">Chaque programme publié y apparaît automatiquement, wilaya par wilaya.</p></div>'
@@ -2456,6 +2454,30 @@ function pageHome(){
       +'<div class="section-head reveal"><div><h2>Derniers projets</h2><p class="desc">Publiés récemment sur yadra!.</p></div>'
         +'<a class="see-all" href="/projets">Tout voir '+ic('chevronRight')+'</a></div>'
       +'<div class="plist-grid plist-carousel-mobile reveal-stagger">'+latest.map(function(p){return '<div class="reveal">'+projectListCardHTML(p)+'</div>';}).join('')+'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section">'
+    +'<div class="wrap">'
+      +'<div class="section-head reveal"><div><h2>L’art de vivre</h2><p class="desc">Un aperçu de ce que le neuf peut offrir, projet après projet.</p></div></div>'
+      +'<div class="lifestyle-carousel reveal">'+LIFESTYLE_PHOTOS.map(function(alt,i){ return '<div class="lifestyle-slide"><img src="/assets/lifestyle/'+(i+1)+'.jpg" alt="'+esc(alt)+'" loading="lazy"></div>'; }).join('')+'</div>'
+    +'</div>'
+  +'</section>'
+
+  +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
+    +'<div class="wrap">'
+      +'<div class="accomp-layout">'
+        +'<div class="accomp-left">'
+          +'<div class="pg-eyebrow reveal">Notre accompagnement</div>'
+          +'<h2 class="pg-h1 reveal" style="margin-top:12px;font-size:clamp(1.6rem,3.2vw,2.3rem);">Tout ce qu’il faut, <span class="dim">à chaque étape.</span></h2>'
+          +'<p class="pg-lede reveal">yadra! ne s’arrête pas à la fiche projet : vérification des promoteurs, simulateur de rentabilité, guides pratiques et données de marché — tout est pensé pour avancer en confiance, du premier clic à la prise de contact.</p>'
+          +'<div class="pg-cta-row reveal"><a class="btn btn-primary" href="/simulateur">'+ic('gauge')+' Simuler la rentabilité</a><a class="btn btn-ghost" href="/contact">'+ic('whatsapp')+' Nous contacter</a></div>'
+          +'<div class="accomp-grid reveal-stagger">'+ACCOMPAGNEMENT_ITEMS.map(function(it,i){
+              return '<a class="accomp-pill reveal'+(Math.floor(i/2)===1?' dark':'')+'" href="'+it[2]+'">'+ic(it[0])+'<span>'+esc(it[1])+'</span></a>';
+            }).join('')+'</div>'
+        +'</div>'
+        +'<div class="accomp-right">'+mindmapHTML()+'</div>'
+      +'</div>'
     +'</div>'
   +'</section>'
 
@@ -2583,6 +2605,25 @@ var ACCOMPAGNEMENT_ITEMS = [
   ["heart", "Favoris et comparaison", "/favoris"],
   ["chart", "Prix du marché", "/donnees/prix-immobilier"]
 ];
+var MINDMAP_POSITIONS = [
+  {top:14, left:22}, {top:12, left:78}, {top:50, left:12}, {top:50, left:88}, {top:86, left:26}, {top:86, left:74}
+];
+function mindmapHTML(){
+  var lines = ACCOMPAGNEMENT_ITEMS.map(function(it,i){
+    var p = MINDMAP_POSITIONS[i];
+    return '<line x1="'+p.left+'" y1="'+p.top+'" x2="50" y2="50" class="mindmap-line" style="transition-delay:'+(i*90)+'ms"></line>';
+  }).join('');
+  var pills = ACCOMPAGNEMENT_ITEMS.map(function(it,i){
+    var p = MINDMAP_POSITIONS[i];
+    var dark = Math.floor(i/2)===1;
+    return '<a class="mindmap-pill'+(dark?' dark':'')+'" style="top:'+p.top+'%;left:'+p.left+'%;transition-delay:'+(i*90+80)+'ms" href="'+it[2]+'">'+ic(it[0])+'<span>'+esc(it[1])+'</span></a>';
+  }).join('');
+  return '<div class="mindmap-card reveal">'
+    +'<svg class="mindmap-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+lines+'</svg>'
+    +'<div class="mindmap-center">'+ic('sparkle')+'</div>'
+    +pills
+  +'</div>';
+}
 var MARKET_CONTEXT_STATS = [
   ["446 832", "logements livrés en 2024, toutes formules confondues", "Ministère de l’Habitat, 2024"],
   ["≈ 1,4 M", "logements programmés dans le cadre du plan AADL 3, le plus vaste programme en cours", "Agence AADL, lancement juillet 2024"],
