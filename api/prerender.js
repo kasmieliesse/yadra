@@ -124,6 +124,12 @@ module.exports = async function (req, res) {
         + '<h2>Villes couvertes</h2><ul>' + WILAYA_ORDER.map(function (w) { return '<li><a href="' + SITE + '/villes/' + w + '">' + WILAYAS[w].label + '</a></li>'; }).join('') + '</ul>'
         + '<h2>Derniers programmes</h2>' + projectListHTML(all.slice(0, 20))
         + (marketLines ? '<h2>Le marché du neuf, en direct</h2><p>Prix moyen au m², calculé à partir des programmes publiés sur yadra! :</p><ul>' + marketLines + '</ul>' : '')
+        + '<h2>Pourquoi investir en Algérie, maintenant</h2><ul>'
+        + '<li>446 832 logements livrés en 2024, toutes formules confondues (Ministère de l’Habitat, 2024).</li>'
+        + '<li>Environ 1,4 million de logements programmés dans le cadre du plan AADL 3 (Agence AADL, lancement juillet 2024).</li>'
+        + '<li>+3,8 % de croissance du secteur bâtiment et travaux publics en 2024, soit 14 % du PIB (ONS, Comptes économiques 2021–2024).</li>'
+        + '<li>1,94 milliard de dollars transférés par la diaspora algérienne en 2024, en hausse de 4 % sur un an (Banque mondiale, 2024).</li>'
+        + '</ul><p>Chiffres publics, cités à titre indicatif — yadra! ne les produit pas et ne peut en garantir l’évolution future.</p>'
         + '<h2>Comment ça marche</h2><ol>'
         + '<li>Vous cherchez : ville, budget, typologie, sans créer de compte.</li>'
         + '<li>Vous comparez : chaque fiche est vérifiée avant publication.</li>'

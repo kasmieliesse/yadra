@@ -1007,6 +1007,14 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .lifestyle-slide{flex:0 0 auto;width:250px;aspect-ratio:4/5;border-radius:var(--radius-l);overflow:hidden;scroll-snap-align:start;box-shadow:0 14px 34px -18px rgba(20,16,12,.28);}
 .lifestyle-slide img{width:100%;height:100%;object-fit:cover;display:block;}
 @media (min-width:640px){.lifestyle-slide{width:300px;}}
+.market-context-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:center;}
+@media (min-width:860px){.market-context-grid{grid-template-columns:.85fr 1.15fr;gap:44px;}}
+.market-context-photo{border-radius:var(--radius-l);overflow:hidden;aspect-ratio:4/5;box-shadow:0 24px 54px -26px rgba(20,16,12,.4);}
+.market-context-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.market-context-stats{display:grid;grid-template-columns:1fr 1fr;gap:26px 30px;}
+.mstat-num{font-family:var(--font-display);font-size:clamp(1.7rem,3.1vw,2.3rem);color:var(--or-rose);line-height:1;letter-spacing:.01em;}
+.mstat-label{font-size:13px;color:var(--heading);margin-top:9px;line-height:1.5;font-weight:600;}
+.mstat-src{font-size:10.5px;color:var(--text-dim);margin-top:7px;text-transform:uppercase;letter-spacing:.04em;}
 .pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
 .pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
 .pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
@@ -2444,6 +2452,19 @@ function pageHome(){
   +'</section>';
   })()
 
+  +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
+    +'<div class="wrap">'
+      +'<div class="section-head reveal"><div><h2>Pourquoi investir en Algérie, maintenant</h2><p class="desc">Les chiffres qui situent la dynamique du marché — sources publiques, vérifiables.</p></div></div>'
+      +'<div class="market-context-grid">'
+        +'<div class="market-context-photo reveal"><img src="/assets/market/alger-salon-vue-baie.jpg" alt="Salon avec vue sur la baie d’Alger et le Sanctuaire du Martyr, au coucher du soleil" loading="lazy"></div>'
+        +'<div class="market-context-stats reveal-stagger">'
+          +MARKET_CONTEXT_STATS.map(function(s){ return '<div class="reveal"><div class="mstat-num">'+s[0]+'</div><div class="mstat-label">'+s[1]+'</div><div class="mstat-src">'+s[2]+'</div></div>'; }).join('')
+        +'</div>'
+      +'</div>'
+      +'<p class="reveal" style="font-size:11px;color:var(--text-dim);margin-top:24px;line-height:1.7;">Sources : Ministère de l’Habitat, de l’Urbanisme et de la Ville · Office National des Statistiques (ONS), Comptes économiques 2021–2024 · Banque mondiale, données sur les transferts de fonds 2024. Chiffres publics, cités à titre indicatif — yadra! ne les produit pas et ne peut en garantir l’évolution future.</p>'
+    +'</div>'
+  +'</section>'
+
   +'<section class="section">'
     +'<div class="wrap">'
       +'<div class="section-head reveal"><div><h2>Pourquoi yadra!</h2><p class="desc">Pas d’agence, pas de commission cachée : vous parlez directement au promoteur, en Algérie comme depuis l’étranger.</p></div></div>'
@@ -2519,6 +2540,12 @@ function pageHome(){
     +'</div>'
   +'</section>';
 }
+var MARKET_CONTEXT_STATS = [
+  ["446 832", "logements livrés en 2024, toutes formules confondues", "Ministère de l’Habitat, 2024"],
+  ["≈ 1,4 M", "logements programmés dans le cadre du plan AADL 3, le plus vaste programme en cours", "Agence AADL, lancement juillet 2024"],
+  ["+3,8 %", "croissance du secteur bâtiment &amp; travaux publics en 2024 — 14 % du PIB", "ONS, Comptes économiques 2021–2024"],
+  ["1,94 Md $", "transférés par la diaspora algérienne en 2024, en hausse de 4 % sur un an", "Banque mondiale, 2024"]
+];
 var LIFESTYLE_PHOTOS = [
   "Entrée lumineuse avec vue sur la mer",
   "Salle à manger ouverte, vue sur la ville au coucher du soleil",
