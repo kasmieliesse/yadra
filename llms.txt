@@ -13,6 +13,7 @@
 - [Simulateur de rentabilité](https://yadra.fr/simulateur): simulateur indicatif de rentabilité locative (location courte durée, longue durée, achat-revente) pour l'immobilier neuf en Algérie.
 - [Prix de l'immobilier neuf](https://yadra.fr/donnees/prix-immobilier): prix moyen au m² par ville, calculé depuis le catalogue publié.
 - [Contact](https://yadra.fr/contact): WhatsApp, seul canal de contact officiel de yadra! (+33 6 70 13 15 01).
+- [Carrières](https://yadra.fr/carrieres): yadra! est en phase de lancement, sans poste ouvert affiché en continu ; page de candidature spontanée.
 - [Neuf ou ancien](https://yadra.fr/comparatifs/neuf-vs-ancien): comparatif pour aider à choisir.
 
 ## Guides
