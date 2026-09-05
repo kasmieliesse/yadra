@@ -952,7 +952,7 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .pg-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--or-rose-light);}
 .pg-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--or-rose);box-shadow:0 0 0 4px rgba(183,110,77,.16);flex:0 0 auto;}
 .pg-h1{font-family:var(--font-body);font-weight:800;font-size:clamp(2.05rem,4.4vw,3.3rem);line-height:1.09;letter-spacing:-.015em;color:var(--heading);text-wrap:balance;margin-top:16px;}
-.pg-h1 .dim{font-weight:500;color:var(--text-dim);}
+.dim{font-weight:500;color:var(--text-dim);}
 .pg-lede{font-family:var(--font-body);font-size:15.5px;line-height:1.75;color:var(--text-dim);max-width:54ch;margin-top:18px;}
 .pg-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;}
 .pg-hero{position:relative;overflow:hidden;border-radius:var(--radius-l);min-height:440px;display:flex;align-items:flex-end;background:var(--noir);isolation:isolate;}
@@ -1051,6 +1051,21 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .mindmap-pill svg{width:15px;height:15px;color:var(--or-rose);flex:0 0 auto;}
 .mindmap-pill.dark{background:var(--noir);border-color:rgba(255,255,255,.12);color:#fff;}
 .mindmap-pill.dark svg{color:var(--or-rose-light);}
+.why-scroll{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.why-scroll::-webkit-scrollbar{display:none;}
+.why-card{position:relative;flex:0 0 auto;width:78vw;max-width:310px;height:420px;border-radius:20px;overflow:hidden;background:var(--noir);scroll-snap-align:start;}
+@media (min-width:760px){.why-card{width:330px;height:440px;}}
+.why-card-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .8s ease;}
+.why-card:hover .why-card-bg{transform:scale(1.06);}
+.why-card-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.5) 0%,rgba(10,10,10,.28) 38%,rgba(10,10,10,.92) 100%);}
+.why-card-num{position:absolute;top:-20px;right:-8px;font-family:var(--font-body);font-size:150px;font-weight:800;line-height:.8;letter-spacing:-.04em;color:rgba(255,255,255,.14);pointer-events:none;user-select:none;}
+.why-card-body{position:relative;height:100%;display:flex;flex-direction:column;padding:26px;color:#fff;}
+.why-card-tag{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.65);}
+.why-card-tag::before{content:'';width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.55);flex:0 0 auto;}
+.why-card-foot{margin-top:auto;}
+.why-card-line{width:34px;height:1px;background:rgba(255,255,255,.32);margin-bottom:16px;}
+.why-card-title{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.18;margin-bottom:10px;color:#fff;}
+.why-card-desc{font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.82);}
 .pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
 .pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
 .pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
@@ -2431,7 +2446,7 @@ function pageHome(){
   +'<section class="section">'
     +'<div class="wrap">'
       +launchNoticeHTML()
-      +'<div class="section-head reveal"><div><h2>Projets à la une</h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div>'
+      +'<div class="section-head reveal"><div><h2>Projets à la une <span class="dim">en ce moment.</span></h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div>'
         +'<a class="see-all" href="/projets">Voir tous les projets '+ic('chevronRight')+'</a></div>'
       +'<div class="plist-grid plist-carousel-mobile reveal-stagger">'+featured.map(function(p){return '<div class="reveal">'+projectListCardHTML(p)+'</div>';}).join('')+'</div>'
     +'</div>'
@@ -2439,7 +2454,7 @@ function pageHome(){
 
   +'<section class="section home-map-section">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Les projets, sur la carte</h2><p class="desc">Chaque programme publié y apparaît automatiquement, wilaya par wilaya.</p></div>'
+      +'<div class="section-head reveal"><div><h2>Les projets, <span class="dim">sur la carte.</span></h2><p class="desc">Chaque programme publié y apparaît automatiquement, wilaya par wilaya.</p></div>'
         +'<a class="see-all" href="/projets?view=map">Carte plein écran '+ic('chevronRight')+'</a></div>'
       +'<div class="home-map-stats reveal">'
         +'<div class="hms-item"><strong>'+mapStats.reduce(function(s,w){return s+w.count;},0)+'</strong><span>projets en ligne</span></div>'
@@ -2451,7 +2466,7 @@ function pageHome(){
 
   +'<section class="section">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Derniers projets</h2><p class="desc">Publiés récemment sur yadra!.</p></div>'
+      +'<div class="section-head reveal"><div><h2>Derniers projets, <span class="dim">publiés récemment.</span></h2><p class="desc">Publiés récemment sur yadra!.</p></div>'
         +'<a class="see-all" href="/projets">Tout voir '+ic('chevronRight')+'</a></div>'
       +'<div class="plist-grid plist-carousel-mobile reveal-stagger">'+latest.map(function(p){return '<div class="reveal">'+projectListCardHTML(p)+'</div>';}).join('')+'</div>'
     +'</div>'
@@ -2459,7 +2474,7 @@ function pageHome(){
 
   +'<section class="section">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>L’art de vivre</h2><p class="desc">Un aperçu de ce que le neuf peut offrir, projet après projet.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>L’art de vivre, <span class="dim">projet après projet.</span></h2><p class="desc">Un aperçu de ce que le neuf peut offrir, projet après projet.</p></div></div>'
       +'<div class="lifestyle-carousel reveal">'+LIFESTYLE_PHOTOS.map(function(alt,i){ return '<div class="lifestyle-slide"><img src="/assets/lifestyle/'+(i+1)+'.jpg" alt="'+esc(alt)+'" loading="lazy"></div>'; }).join('')+'</div>'
     +'</div>'
   +'</section>'
@@ -2483,7 +2498,7 @@ function pageHome(){
 
   +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Explorer par ville</h2><p class="desc">Alger, Oran, Blida et Constantine, pour l’instant. D’autres wilayas arrivent.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>Explorer <span class="dim">par ville.</span></h2><p class="desc">Alger, Oran, Blida et Constantine, pour l’instant. D’autres wilayas arrivent.</p></div></div>'
       +'<div class="reveal">'+cityCarouselHTML('cfHome', WILAYA_ORDER.map(function(w){
           var count = PROJECTS.filter(function(p){return p.wilaya===w;}).length;
           return citySlideData(w,count);
@@ -2499,7 +2514,7 @@ function pageHome(){
     var totalProjects = getAllProjects().length;
     return '<section class="section">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Le marché du neuf, en direct</h2><p class="desc">Calculé automatiquement à partir des programmes publiés sur yadra! — pas une estimation, un instantané réel du catalogue.</p></div>'
+      +'<div class="section-head reveal"><div><h2>Le marché du neuf, <span class="dim">en direct.</span></h2><p class="desc">Calculé automatiquement à partir des programmes publiés sur yadra! — pas une estimation, un instantané réel du catalogue.</p></div>'
         +'<a class="see-all" href="/donnees/prix-immobilier">Voir le détail '+ic('chevronRight')+'</a></div>'
       +'<div class="market-stat-row reveal-stagger">'
         +'<div class="stat-tile reveal"><div class="k">Programmes suivis</div><div class="v"><span class="count-up" data-target="'+totalProjects+'">0</span>+</div></div>'
@@ -2516,7 +2531,7 @@ function pageHome(){
 
   +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Pourquoi investir en Algérie, maintenant</h2><p class="desc">Les chiffres qui situent la dynamique du marché — sources publiques, vérifiables.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>Pourquoi investir en Algérie, <span class="dim">maintenant.</span></h2><p class="desc">Les chiffres qui situent la dynamique du marché — sources publiques, vérifiables.</p></div></div>'
       +'<div class="market-context-grid">'
         +'<div class="market-context-photo reveal"><img src="/assets/market/alger-salon-vue-baie.jpg" alt="Salon avec vue sur la baie d’Alger et le Sanctuaire du Martyr, au coucher du soleil" loading="lazy"></div>'
         +'<div class="market-context-stats reveal-stagger">'
@@ -2529,18 +2544,22 @@ function pageHome(){
 
   +'<section class="section">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Pourquoi yadra!</h2><p class="desc">Pas d’agence, pas de commission cachée : vous parlez directement au promoteur, en Algérie comme depuis l’étranger.</p></div></div>'
-      +'<div class="grid grid-3 reveal-stagger">'
-        +'<div class="reveal">'+valueCard('shield','Promoteurs vérifiés','On vérifie chaque promoteur avant de le publier — pas après.')+'</div>'
-        +'<div class="reveal">'+valueCard('search','Recherche directe','Ville, budget, type de bien : trois filtres, et c’est tout.')+'</div>'
-        +'<div class="reveal">'+valueCard('handshake','Contact immédiat','Un clic, un message WhatsApp, et vous parlez au promoteur — pas à un intermédiaire.')+'</div>'
+      +'<div class="reveal" style="max-width:820px;">'
+        +'<div class="pg-eyebrow">Pourquoi yadra!</div>'
+        +'<h2 class="pg-h1" style="margin-top:12px;font-size:clamp(1.8rem,3.6vw,2.7rem);">Pas d’agence, pas de commission cachée. <span class="dim">Vous parlez directement au promoteur, en Algérie comme depuis l’étranger.</span></h2>'
+      +'</div>'
+      +'<div class="why-scroll" style="margin-top:32px;">'
+        +whyCardHTML('01','Promoteurs vérifiés','Registre de commerce, références, avancement du chantier : on vérifie chaque promoteur avant de le publier — pas après.','/assets/market/terrasse-alger-nuit.jpg','Terrasse avec vue sur Alger au coucher du soleil')
+        +whyCardHTML('02','Recherche sans agence','Ville, budget, typologie : filtrez le catalogue en quelques clics, sans créer de compte ni passer par une agence.','/assets/why/salon-vue-baie-alger.jpg','Salon avec vue sur la baie d’Alger')
+        +whyCardHTML('03','Contact direct, sans commission','Un message WhatsApp, et vous parlez au promoteur — pas à un intermédiaire, pas de commission pour vous.','/assets/market/alger-salon-coucher-soleil.jpg','Salon avec vue sur Alger au coucher du soleil')
+        +whyCardHTML('04','Plusieurs wilayas couvertes','Alger, Oran, Blida, Constantine aujourd’hui — d’autres wilayas arrivent au fil des programmes publiés.','/assets/why/alger-skyline-drapeaux.jpg','Vue d’Alger avec le Sanctuaire du Martyr et des drapeaux algériens')
       +'</div>'
     +'</div>'
   +'</section>'
 
   +'<section class="section tight" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">'
     +'<div class="wrap">'
-      +'<div class="section-head reveal"><div><h2>Comment ça marche</h2><p class="desc">De la recherche à la prise de contact, sans détour.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>Comment ça marche, <span class="dim">en quatre étapes.</span></h2><p class="desc">De la recherche à la prise de contact, sans détour.</p></div></div>'
       +'<div class="howsteps reveal-stagger">'
         +'<div class="reveal howstep"><span class="howstep-num">01</span><h3>Vous cherchez</h3><p>Ville, budget, typologie : filtrez le catalogue en quelques clics, sans créer de compte.</p><span class="howstep-line"></span></div>'
         +'<div class="reveal howstep"><span class="howstep-num">02</span><h3>Vous comparez</h3><p>Chaque fiche est vérifiée avant publication — promoteur, prix, typologies, avancement du chantier.</p><span class="howstep-line"></span></div>'
@@ -2579,7 +2598,7 @@ function pageHome(){
 
   +'<section class="section">'
     +'<div class="wrap" style="max-width:760px;">'
-      +'<div class="section-head reveal"><div><h2>Questions fréquentes</h2><p class="desc">Avant de vous lancer, les réponses aux questions qu’on nous pose le plus.</p></div></div>'
+      +'<div class="section-head reveal"><div><h2>Questions fréquentes, <span class="dim">avant de signer.</span></h2><p class="desc">Avant de vous lancer, les réponses aux questions qu’on nous pose le plus.</p></div></div>'
       +'<div class="faq-acc reveal-stagger">'+HOME_FAQ.map(function(qa){ return faqItem(qa[0],qa[1]); }).join('')+'</div>'
     +'</div>'
   +'</section>'
@@ -2647,6 +2666,17 @@ var HOME_FAQ = [
   ['Comment sont calculés les prix moyens au m² ?','Automatiquement, à partir des prix affichés par les promoteurs sur les programmes publiés — voir le <a href="/donnees/prix-immobilier">détail par ville</a>.']
 ];
 function valueCard(icon,title,desc){ return '<div class="value-card spotlight">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+function whyCardHTML(n,title,desc,photo,alt){
+  return '<article class="why-card reveal">'
+    +'<div class="why-card-bg" style="background-image:url(\''+photo+'\')" role="img" aria-label="'+esc(alt)+'"></div>'
+    +'<div class="why-card-scrim"></div>'
+    +'<span class="why-card-num" aria-hidden="true">'+n+'</span>'
+    +'<div class="why-card-body">'
+      +'<div class="why-card-tag">'+n+'</div>'
+      +'<div class="why-card-foot"><div class="why-card-line"></div><h3 class="why-card-title">'+esc(title)+'</h3><p class="why-card-desc">'+esc(desc)+'</p></div>'
+    +'</div>'
+  +'</article>';
+}
 /* CTA plein format : photo de fond + texte centré + boutons, façon "Parlons-en" */
 function bigCtaHTML(opts){
   return '<div class="big-cta theme-dark reveal">'
@@ -2752,11 +2782,11 @@ function pageMarketplace(params){
     +'</div>'
   +'</div>'
   +(featuredForList.length ? '<div class="wrap" style="padding-top:34px;">'
-    +'<div class="section-head reveal"><div><h2>Projets à la une</h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div></div>'
+    +'<div class="section-head reveal"><div><h2>Projets à la une <span class="dim">en ce moment.</span></h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div></div>'
     +'<div class="plist-grid plist-carousel-mobile reveal-stagger">'+featuredForList.map(function(p){ return '<div class="reveal">'+projectListCardHTML(p)+'</div>'; }).join('')+'</div>'
   +'</div>' : '')
   +'<div class="market-head wrap" style="padding-top:36px;">'
-    +'<div class="section-head" style="margin-top:0;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
+    +'<div class="section-head" style="margin-top:0;margin-bottom:0;"><div><h2>Tous les projets, <span class="dim">wilaya par wilaya.</span></h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
   +'</div>'
   +'<div class="wrap">'+launchNoticeHTML()+'</div>'
   +'<div class="wrap"><div class="filter-bar">'
@@ -2783,7 +2813,7 @@ function pageMarketplace(params){
       +'<div class="market-map" id="marketMap" style="display:'+(marketViewMode==='map'?'':'none')+';"></div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:70px;max-width:760px;">'
-    +'<div class="section-head"><h2>Questions fréquentes</h2></div>'
+    +'<div class="section-head"><h2>Questions fréquentes, <span class="dim">avant de signer.</span></h2></div>'
     +'<div class="faq-acc">'+MARKETPLACE_FAQ.map(function(qa){ return faqItem(qa[0],qa[1]); }).join('')+'</div>'
   +'</div>'
   +'</div>';
@@ -3720,7 +3750,7 @@ function pageVilles(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Villes</span></div></div>'
   +'<div class="wrap" style="padding-bottom:70px;">'
-    +'<div class="section-head"><div><h2>Explorer par ville</h2><p class="desc">Parcourez nos programmes immobiliers wilaya par wilaya, et découvrez les prochaines villes couvertes.</p></div></div>'
+    +'<div class="section-head"><div><h2>Explorer <span class="dim">par ville.</span></h2><p class="desc">Parcourez nos programmes immobiliers wilaya par wilaya, et découvrez les prochaines villes couvertes.</p></div></div>'
     +cityCarouselHTML('cfVilles', WILAYA_ORDER.map(function(w){
         var count = getAllProjects().filter(function(p){return p.wilaya===w;}).length;
         return citySlideData(w,count);
@@ -3777,7 +3807,7 @@ function pagePromotersList(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Promoteurs</span></div></div>'
   +'<div class="wrap" style="padding-bottom:0;">'
-    +'<div class="section-head reveal"><div><h2>Nos promoteurs</h2><p class="desc">Chaque promoteur affiché ici a été vérifié avant sa mise en ligne — registre de commerce, références, chantier constaté sur place. <a href="/guides/verifier-promoteur-immobilier-algerie">Voir notre méthode de vérification '+ic('chevronRight')+'</a></p></div></div>'
+    +'<div class="section-head reveal"><div><h2>Nos promoteurs, <span class="dim">tous vérifiés.</span></h2><p class="desc">Chaque promoteur affiché ici a été vérifié avant sa mise en ligne — registre de commerce, références, chantier constaté sur place. <a href="/guides/verifier-promoteur-immobilier-algerie">Voir notre méthode de vérification '+ic('chevronRight')+'</a></p></div></div>'
   +'</div>'
   +'<div class="promoter-marquee reveal"><div class="promoter-marquee-track">'
     +promoters.map(promoterLogoItemHTML).join('')
@@ -3811,7 +3841,7 @@ function pageAbout(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">À propos</span></div></div>'
   +'<div class="wrap" style="padding-bottom:8px;max-width:760px;">'
     +'<div class="eyebrow reveal">Notre démarche</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.3rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.22;">Le neuf algérien, montré tel qu’il est.</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.6rem,3.2vw,2.3rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.22;">Le neuf algérien, <span class="dim">montré tel qu’il est.</span></h1>'
     +'<p class="prose reveal" style="margin-top:20px;">Chercher un logement neuf en Algérie veut souvent dire courir après l’information : un prix qui change au téléphone, un chantier qu’on ne voit jamais avancer, un promoteur impossible à vérifier. yadra! est né pour changer cet ordre des choses — pour ceux qui vivent en Algérie comme pour la diaspora, parfois à des milliers de kilomètres du chantier.</p>'
     +'<p class="prose reveal">L’équipe qbm construit yadra! depuis Alger, projet par projet. Pas d’ambition de tout référencer : on préfère dix fiches vérifiées à cent approximatives, et un promoteur qu’on a réellement rencontré à un logo ajouté en cinq minutes.</p>'
     +'<blockquote class="pull-quote reveal">Notre métier n’est pas de vendre. C’est de vérifier avant vous — pour que la visite ne soit pas la première fois que vous découvrez la vérité sur un projet.</blockquote>'
@@ -3822,7 +3852,7 @@ function pageAbout(){
     +'<div class="stat-tile reveal"><div class="k">Promoteurs vérifiés</div><div class="v"><span class="count-up" data-target="100">0</span>%</div></div>'
   +'</div></div>'
   +'<div class="wrap" style="padding-bottom:16px;">'
-    +'<div class="section-head reveal"><h2>Trois principes, sans exception</h2></div>'
+    +'<div class="section-head reveal"><h2>Trois principes, <span class="dim">sans exception.</span></h2></div>'
     +'<div class="grid grid-3 reveal-stagger" style="margin-bottom:60px;">'
       +'<div class="reveal">'+valueCard('shield','Exigence','Aucun projet n’apparaît sur yadra! avant qu’on ait vérifié le promoteur : registre de commerce, références clients, avancement du chantier constaté sur place.')+'</div>'
       +'<div class="reveal">'+valueCard('handshake','Transparence','Le prix affiché est celui négocié avec le promoteur. Pas de marge cachée, pas de frais qui apparaissent au moment de signer.')+'</div>'
@@ -3830,7 +3860,7 @@ function pageAbout(){
     +'</div>'
   +'</div>'
   +'<div class="wrap" id="faq" style="padding-bottom:60px;max-width:760px;">'
-    +'<div class="section-head reveal"><h2>Questions fréquentes</h2></div>'
+    +'<div class="section-head reveal"><h2>Questions fréquentes, <span class="dim">avant de signer.</span></h2></div>'
     +'<div class="faq-acc reveal-stagger">'
       +faqItem('yadra! vend-il directement des biens ?','Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet.')
       +faqItem('Comment un promoteur est-il vérifié avant publication ?','Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme.')
@@ -3903,7 +3933,7 @@ function pageContact(){
     })
   +'</div>'
   +'<div class="wrap" id="contactForm" style="padding-bottom:70px;max-width:560px;">'
-    +'<div class="section-head reveal"><div><h2>Vous préférez écrire ici ?</h2><p class="desc">On l’envoie sur WhatsApp pré-rempli — vous gardez la main avant l’envoi.</p></div></div>'
+    +'<div class="section-head reveal"><div><h2>Vous préférez <span class="dim">écrire ici ?</span></h2><p class="desc">On l’envoie sur WhatsApp pré-rempli — vous gardez la main avant l’envoi.</p></div></div>'
     +'<form id="contactMsgForm" class="reveal">'
       +'<div class="field"><label>Nom</label><input required name="name" placeholder="Votre nom"/></div>'
       +'<div class="field"><label>Sujet</label><select name="sujet">'
@@ -3919,7 +3949,7 @@ function pageContact(){
     +'</form>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:80px;">'
-    +'<div class="section-head reveal"><h2>Cas particuliers</h2></div>'
+    +'<div class="section-head reveal"><h2>Cas particuliers <span class="dim">à connaître.</span></h2></div>'
     +'<div class="grid grid-2 reveal-stagger">'
       +linkCard('buildings','Vous êtes promoteur','Publier vos projets sur yadra!','/promoteur')
       +linkCard('sparkle','Une question fréquente ?','Voir la FAQ','/a-propos#faq')
@@ -3964,7 +3994,7 @@ function pageInvest(){
     +'<div class="stat-tile reveal"><div class="k">Promoteurs vérifiés</div><div class="v"><span class="count-up" data-target="100">0</span>%</div></div>'
   +'</div></div>'
   +'<div class="wrap" id="sim-invest" style="padding-bottom:20px;">'
-    +'<div class="section-head reveal"><div><h2>Simulez votre rentabilité</h2><p class="desc">Location courte durée, longue durée ou achat-revente — le résultat se recalcule sous vos yeux.</p></div><a class="btn btn-ghost btn-sm" href="/simulateur">'+ic('chevronRight')+' Page dédiée</a></div>'
+    +'<div class="section-head reveal"><div><h2>Simulez <span class="dim">votre rentabilité.</span></h2><p class="desc">Location courte durée, longue durée ou achat-revente — le résultat se recalcule sous vos yeux.</p></div><a class="btn btn-ghost btn-sm" href="/simulateur">'+ic('chevronRight')+' Page dédiée</a></div>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:64px;">'
     +simWidgetHTML()
@@ -4015,7 +4045,7 @@ function pageGuideDiaspora(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Acheter depuis l’étranger</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Acheter un logement neuf en Algérie depuis l’étranger</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Acheter un logement neuf en Algérie <span class="dim">depuis l’étranger.</span></h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Suivre un achat immobilier à des milliers de kilomètres du chantier change la manière de s’organiser. Voici les points de vigilance qui reviennent le plus souvent chez les acheteurs de la diaspora.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4062,7 +4092,7 @@ function pageVilleDetail(wilaya){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/villes">Villes</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(w.label)+'</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf à '+esc(w.label)+'</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf <span class="dim">à '+esc(w.label)+'</span></h1>'
     +'<p class="prose" style="margin-top:18px;">'+(WILAYA_INTRO[wilaya]||'')+'</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
@@ -4114,7 +4144,7 @@ function pageCommuneDetail(wilaya, communeSlug){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <a href="/villes">Villes</a> '+ic('chevronRight')+' <a href="/villes/'+wilaya+'">'+esc(w.label)+'</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(commune)+'</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf à '+esc(commune)+', '+esc(w.label)+'</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf à '+esc(commune)+', <span class="dim">'+esc(w.label)+'</span></h1>'
     +'<p class="prose" style="margin-top:18px;">'+esc(commune)+' fait partie des communes suivies par yadra! à '+esc(w.label)+'. Retrouvez ici les programmes immobiliers neufs publiés dans cette commune.</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
@@ -4162,7 +4192,7 @@ function pageTypologie(slug){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">'+esc(def.title)+'</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Logement '+esc(def.title)+' neuf en Algérie</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Logement '+esc(def.title)+' <span class="dim">neuf en Algérie</span></h1>'
     +'<p class="prose" style="margin-top:18px;">'+def.desc+'</p>'
   +'</div>'
   +'<div class="wrap"><div class="grid grid-3" style="margin:36px 0 44px;">'
@@ -4202,7 +4232,7 @@ function pageDonnees(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Prix de l\'immobilier neuf</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Prix moyen au m² de l\'immobilier neuf, par ville</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Prix moyen au m² de l\'immobilier neuf, <span class="dim">par ville.</span></h1>'
     +'<p class="prose" style="margin-top:18px;">Ces chiffres sont calculés automatiquement à partir des prix affichés par les promoteurs sur les programmes actuellement publiés sur yadra! — pas une statistique officielle ou exhaustive du marché, mais un instantané réel et vérifiable de notre catalogue, mis à jour à chaque nouvelle publication.</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:40px;">'
@@ -4492,7 +4522,7 @@ function pageGuideVerifierPromoteur(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Vérifier un promoteur</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Comment vérifier un promoteur immobilier en Algérie</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Comment vérifier un promoteur immobilier <span class="dim">en Algérie.</span></h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Un bon emplacement ou un rendu 3D convaincant ne disent rien de la capacité d’un promoteur à livrer. Avant tout engagement, quelques vérifications concrètes permettent d’écarter la plupart des mauvaises surprises.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement à mesure que nos vérifications de promoteurs évoluent.</p>'
 
@@ -4547,7 +4577,7 @@ function pageGuideProcuration(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Procuration</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">La procuration immobilière en Algérie : le guide complet</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">La procuration immobilière en Algérie : <span class="dim">le guide complet.</span></h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Impossible de se déplacer pour signer un document ou suivre une étape de l’achat ? La procuration permet de mandater un proche ou un professionnel pour agir à votre place — à condition de respecter certaines formes.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4581,7 +4611,7 @@ function pageGuideEcheancier(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Guide — Calendrier de paiement</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Guide</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Calendrier de paiement promoteur : ce qui est normal</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Calendrier de paiement promoteur : <span class="dim">ce qui est normal.</span></h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Un achat sur plan se paie en plusieurs tranches, pas en une fois. Voici à quoi ressemble un échéancier normal — et les écarts qui doivent alerter.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
 
@@ -4633,7 +4663,7 @@ function pageLexique(){
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Lexique</span></div></div>'
   +'<div class="wrap" style="padding-bottom:20px;max-width:720px;">'
     +'<div class="eyebrow reveal">Lexique</div>'
-    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Lexique de l’immobilier neuf en Algérie</h1>'
+    +'<h1 class="reveal" style="margin-top:10px;font-size:clamp(1.5rem,2.9vw,2.2rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.24;">Lexique de l’immobilier neuf <span class="dim">en Algérie.</span></h1>'
     +'<p class="prose reveal" style="margin-top:18px;">Les termes qui reviennent le plus souvent dans un achat immobilier neuf en Algérie, expliqués simplement.</p>'
     +'<p class="reveal" style="margin-top:10px;font-size:12px;color:var(--text-dim);">Rédaction yadra! — mis à jour régulièrement.</p>'
     +'<dl class="reveal" style="margin-top:32px;">'
@@ -4679,7 +4709,7 @@ function pageComparatifNeufAncien(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Neuf vs ancien</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf ou ancien en Algérie : les repères pour comparer</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Immobilier neuf ou ancien en Algérie : <span class="dim">les repères pour comparer.</span></h1>'
     +'<p class="prose" style="margin-top:18px;">Il n\'y a pas de réponse universelle entre neuf et ancien — ça dépend du budget, du calendrier et de ce que vous recherchez. Voici les points de comparaison qui reviennent le plus souvent.</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:60px;">'
@@ -4711,7 +4741,7 @@ function pageComparatifAlgerOran(){
   return ''
   +'<div class="wrap pagebar"><div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Alger vs Oran</span></div></div>'
   +'<div class="wrap" style="max-width:820px;">'
-    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Alger ou Oran : où investir dans le neuf ?</h1>'
+    +'<h1 style="font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--heading);font-weight:800;letter-spacing:-.015em;line-height:1.25;">Alger ou Oran : où investir <span class="dim">dans le neuf ?</span></h1>'
     +'<p class="prose" style="margin-top:18px;">Alger et Oran sont les deux marchés du neuf les plus actifs suivis par yadra!. Les chiffres ci-dessous viennent directement de notre catalogue publié — pas d\'estimation externe.</p>'
   +'</div>'
   +'<div class="wrap" style="padding-bottom:60px;">'
