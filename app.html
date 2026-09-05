@@ -953,6 +953,11 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .pg-h1 .dim{font-weight:500;color:var(--text-dim);}
 .pg-lede{font-family:var(--font-body);font-size:15.5px;line-height:1.75;color:var(--text-dim);max-width:54ch;margin-top:18px;}
 .pg-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;}
+.pg-hero{position:relative;overflow:hidden;border-radius:var(--radius-l);min-height:440px;display:flex;align-items:flex-end;background:var(--noir);isolation:isolate;}
+.pg-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 42%;z-index:0;}
+.pg-hero-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(10,10,10,.12) 0%,rgba(10,10,10,.5) 55%,rgba(6,6,6,.92) 100%);}
+.pg-hero-content{position:relative;z-index:1;padding:44px 26px 34px;max-width:640px;}
+@media (min-width:760px){.pg-hero{min-height:560px;}.pg-hero-content{padding:64px 48px 48px;}}
 .pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
 .pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
 .pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
@@ -2456,6 +2461,9 @@ function projectCardHTML(p){
 /* ================================================================
    PAGE: MARKETPLACE
    ================================================================ */
+function projectSlideData(p){
+  return {slug:p.slug, label:p.nom, photo:p.photo||('/assets/projects/'+p.slug+'.jpg'), href:'/projets/'+p.wilaya+'/'+p.slug, meta:p.commune+', '+WILAYAS[p.wilaya].label};
+}
 var marketState = null;
 var marketViewMode = 'grid';
 function pageMarketplace(params){
@@ -2464,10 +2472,28 @@ function pageMarketplace(params){
     surfaceMin:'', pieces:'', livraison:'', statut:'', verifie: params.get('verifie')==='1', sort:'pertinence', q: params.get('q')||''
   };
   marketViewMode = params.get('view')==='map' ? 'map' : 'grid';
+  var featuredForCarousel = getAllProjects().filter(function(p){return p.featured;}).slice(0,8);
+  if(!featuredForCarousel.length) featuredForCarousel = getAllProjects().slice(0,8);
   return '<div class="theme-light">'
-  +'<div class="market-head wrap">'
-    +'<div class="breadcrumb"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Projets</span></div>'
-    +'<div class="section-head" style="margin-top:10px;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
+  +'<div class="wrap" style="padding-top:18px;">'
+    +'<div class="breadcrumb reveal"><a href="/">Accueil</a> '+ic('chevronRight')+' <span style="color:var(--heading);">Projets</span></div>'
+    +'<div class="pg-hero theme-dark reveal" style="margin-top:14px;">'
+      +'<div class="pg-hero-bg" style="background-image:url(\'/assets/hero-projets.jpg\')"></div>'
+      +'<div class="pg-hero-scrim"></div>'
+      +'<div class="pg-hero-content">'
+        +'<div class="pg-eyebrow">Nos projets</div>'
+        +'<h1 class="pg-h1">Des lieux qui vous ressemblent, <span class="dim">partout en Algérie.</span></h1>'
+        +'<p class="pg-lede">Chaque projet répond à une façon d’habiter : une résidence en centre-ville, un programme familial, un investissement pensé pour la diaspora. Vérifiés avant publication, sans exception.</p>'
+        +'<div class="pg-cta-row"><a class="btn btn-primary" href="/simulateur">'+ic('gauge')+' Simuler la rentabilité</a><a class="btn btn-ghost" href="'+waLink('Bonjour YADRA!, je souhaite être accompagné(e) pour un projet d\'investissement immobilier.')+'" target="_blank" rel="noopener">'+ic('whatsapp')+' Être accompagné(e)</a></div>'
+      +'</div>'
+    +'</div>'
+  +'</div>'
+  +(featuredForCarousel.length ? '<div class="wrap" style="padding-top:34px;">'
+    +'<div class="section-head reveal"><div><h2>Projets à la une</h2><p class="desc">Des programmes qu’on suit de près, pour l’emplacement ou la qualité de la construction.</p></div></div>'
+    +'<div class="reveal">'+cityCarouselHTML('cfProjects', featuredForCarousel.map(projectSlideData))+'</div>'
+  +'</div>' : '')
+  +'<div class="market-head wrap" style="padding-top:36px;">'
+    +'<div class="section-head" style="margin-top:0;margin-bottom:0;"><div><h2>Tous les projets</h2><p class="desc">Découvrez notre sélection des meilleurs projets immobiliers à travers l’Algérie.</p></div></div>'
   +'</div>'
   +'<div class="wrap">'+launchNoticeHTML()+'</div>'
   +'<div class="wrap"><div class="filter-bar">'
@@ -2536,6 +2562,7 @@ function afterMarketplace(params){
   if(!location.search){
     setStructuredData({'@context':'https://schema.org','@type':'FAQPage', mainEntity: MARKETPLACE_FAQ.map(function(qa){ return {'@type':'Question', name:qa[0], acceptedAnswer:{'@type':'Answer', text:qa[1].replace(/<[^>]+>/g,'')}}; })});
   }
+  if(document.getElementById('cfProjects')) mountCityCarousel('cfProjects');
   var els = { q: document.getElementById('fQ'), ville: document.getElementById('fVille'), type: document.getElementById('fType'), budget: document.getElementById('fBudget') };
   els.ville.value = marketState.ville;
   els.type.value = marketState.type;
