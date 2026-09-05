@@ -1015,6 +1015,15 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .mstat-num{font-family:var(--font-display);font-size:clamp(1.7rem,3.1vw,2.3rem);color:var(--or-rose);line-height:1;letter-spacing:.01em;}
 .mstat-label{font-size:13px;color:var(--heading);margin-top:9px;line-height:1.5;font-weight:600;}
 .mstat-src{font-size:10.5px;color:var(--text-dim);margin-top:7px;text-transform:uppercase;letter-spacing:.04em;}
+.big-cta{position:relative;overflow:hidden;border-radius:var(--radius-l);min-height:440px;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 24px;isolation:isolate;}
+.big-cta-bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0;}
+.big-cta-scrim{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(8,8,10,.74) 0%,rgba(8,8,10,.52) 45%,rgba(8,8,10,.84) 100%);}
+.big-cta-content{position:relative;z-index:1;max-width:560px;text-align:center;}
+.big-cta-content .pg-eyebrow{justify-content:center;}
+.big-cta-content .pg-h1{margin-left:auto;margin-right:auto;}
+.big-cta-content .pg-lede{margin-left:auto;margin-right:auto;}
+.big-cta-btns{display:flex;flex-direction:column;gap:12px;margin-top:30px;align-items:stretch;max-width:340px;margin-left:auto;margin-right:auto;}
+@media (min-width:600px){.big-cta-btns{flex-direction:row;max-width:none;justify-content:center;}}
 .pcard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-l);padding:28px 26px;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .4s ease;}
 .pcard:hover{transform:translateY(-5px);border-color:rgba(183,110,77,.38);box-shadow:0 26px 54px -26px rgba(0,0,0,.55);}
 .pcard-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,rgba(183,110,77,.24),rgba(183,110,77,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
@@ -2530,13 +2539,15 @@ function pageHome(){
   +'</section>'
 
   +'<section class="section tight">'
-    +'<div class="wrap">'
-      +'<div class="split-card spotlight accent theme-dark reveal" style="text-align:center;max-width:640px;margin:0 auto;">'
-        +ic('whatsapp','ic')
-        +'<span class="eyebrow">Une question ?</span><h3>Parlons-en, directement.</h3>'
-        +'<p>Pas de bot, pas de standard : l’équipe yadra! vous répond sur WhatsApp.</p>'
-        +'<div style="display:flex;justify-content:center;"><a class="btn btn-primary" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Écrire sur WhatsApp</a></div>'
-      +'</div>'
+    +'<div class="wrap">'+bigCtaHTML({
+        photo:'/assets/cta-bg.jpg', photoAlt:'Résidence contemporaine au coucher du soleil',
+        eyebrow:'Une question ?', title:'Parlons-en,', titleDim:'directement.',
+        lede:"Pas de bot, pas de standard : l'équipe yadra! vous répond sur WhatsApp.",
+        buttons:[
+          {label:'Écrire sur WhatsApp', icon:'whatsapp', primary:true, target:'_blank', href:waLink("Bonjour YADRA!, j'ai une question.")},
+          {label:'Simuler la rentabilité', icon:'gauge', href:'/simulateur'}
+        ]
+      })
     +'</div>'
   +'</section>';
 }
@@ -2563,6 +2574,21 @@ var HOME_FAQ = [
   ['Comment sont calculés les prix moyens au m² ?','Automatiquement, à partir des prix affichés par les promoteurs sur les programmes publiés — voir le <a href="/donnees/prix-immobilier">détail par ville</a>.']
 ];
 function valueCard(icon,title,desc){ return '<div class="value-card spotlight">'+ic(icon,'ic')+'<h3>'+title+'</h3><p>'+desc+'</p></div>'; }
+/* CTA plein format : photo de fond + texte centré + boutons, façon "Parlons-en" */
+function bigCtaHTML(opts){
+  return '<div class="big-cta theme-dark reveal">'
+    +'<div class="big-cta-bg" style="background-image:url(\''+opts.photo+'\')" role="img" aria-label="'+esc(opts.photoAlt||'')+'"></div>'
+    +'<div class="big-cta-scrim"></div>'
+    +'<div class="big-cta-content">'
+      +'<div class="pg-eyebrow">'+esc(opts.eyebrow)+'</div>'
+      +'<h2 class="pg-h1" style="font-size:clamp(1.7rem,3.6vw,2.5rem);">'+esc(opts.title)+(opts.titleDim?' <span class="dim">'+esc(opts.titleDim)+'</span>':'')+'</h2>'
+      +'<p class="pg-lede">'+esc(opts.lede)+'</p>'
+      +'<div class="big-cta-btns">'+opts.buttons.map(function(b){
+        return '<a class="btn '+(b.primary?'btn-primary':'btn-ghost')+'"'+(b.target?' target="'+b.target+'" rel="noopener"':'')+' href="'+b.href+'">'+(b.icon?ic(b.icon):'')+' '+esc(b.label)+'</a>';
+      }).join('')+'</div>'
+    +'</div>'
+  +'</div>';
+}
 function launchNoticeHTML(){ return '<div class="launch-note reveal">'+ic('sparkle')+'<span>yadra! est en phase de lancement : les projets ci-dessous illustrent la plateforme, en attendant les premières publications de nos promoteurs partenaires.</span></div>'; }
 var MARQUEE_EXTRA_CITIES = ['Tlemcen','Béjaïa','Batna','Mostaganem','Skikda','Ghardaïa','Tipaza','Boumerdès'];
 function cityMarqueeItems(hidden){
@@ -3796,13 +3822,12 @@ function pageContact(){
       +contactStep('03','On vous oriente','Question sur un projet précis, un promoteur, ou la plateforme : on vous répond ou on vous met en relation avec la bonne personne.')
     +'</div>'
   +'</div>'
-  +'<div class="wrap" style="padding-bottom:56px;">'
-    +'<div class="split-card spotlight accent theme-dark reveal">'
-      +ic('whatsapp','ic')
-      +'<span class="eyebrow">Le plus rapide</span><h3>Écrivez-nous sur WhatsApp</h3>'
-      +'<p>+33 6 70 13 15 01 — notre équipe vous répond directement, sans détour.</p>'
-      +'<div><a class="btn btn-primary" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, j\'ai une question.')+'">'+ic('whatsapp')+' Ouvrir WhatsApp</a></div>'
-    +'</div>'
+  +'<div class="wrap" style="padding-bottom:56px;">'+bigCtaHTML({
+      photo:'/assets/cta-bg.jpg', photoAlt:'Résidence contemporaine au coucher du soleil',
+      eyebrow:'Le plus rapide', title:'Écrivez-nous sur', titleDim:'WhatsApp.',
+      lede:'+33 6 70 13 15 01 — notre équipe vous répond directement, sans détour.',
+      buttons:[{label:'Ouvrir WhatsApp', icon:'whatsapp', primary:true, target:'_blank', href:waLink("Bonjour YADRA!, j'ai une question.")}]
+    })
   +'</div>'
   +'<div class="wrap" id="contactForm" style="padding-bottom:70px;max-width:560px;">'
     +'<div class="section-head reveal"><div><h2>Vous préférez écrire ici ?</h2><p class="desc">On l’envoie sur WhatsApp pré-rempli — vous gardez la main avant l’envoi.</p></div></div>'
@@ -3888,13 +3913,15 @@ function pageInvest(){
       +linkCard('sparkle','Lexique',"L'immobilier neuf expliqué",'/lexique')
     +'</div>'
   +'</div>'
-  +'<div class="wrap" style="padding-bottom:70px;">'
-    +'<div class="split-card spotlight accent theme-dark reveal">'
-      +ic('whatsapp','ic')
-      +'<span class="eyebrow">Investisseurs</span><h3>On vous met en relation</h3>'
-      +'<p>Un ou plusieurs programmes en tête ? Dites-nous votre budget, on vous met en relation avec les promoteurs qui correspondent.</p>'
-      +'<div><a class="btn btn-primary" target="_blank" rel="noopener" href="'+waLink('Bonjour YADRA!, je souhaite être accompagné(e) pour un projet d\'investissement immobilier.')+'">'+ic('whatsapp')+' Être accompagné(e)</a></div>'
-    +'</div>'
+  +'<div class="wrap" style="padding-bottom:70px;">'+bigCtaHTML({
+      photo:'/assets/cta-bg.jpg', photoAlt:'Résidence contemporaine au coucher du soleil',
+      eyebrow:'Investisseurs', title:'On vous met en relation,', titleDim:'directement.',
+      lede:'Un ou plusieurs programmes en tête ? Dites-nous votre budget, on vous met en relation avec les promoteurs qui correspondent.',
+      buttons:[
+        {label:'Être accompagné(e)', icon:'whatsapp', primary:true, target:'_blank', href:waLink("Bonjour YADRA!, je souhaite être accompagné(e) pour un projet d'investissement immobilier.")},
+        {label:'Voir les projets', icon:'search', href:'/projets'}
+      ]
+    })
   +'</div>';
 }
 function afterInvest(){ initSimWidget(); }
