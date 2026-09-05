@@ -903,6 +903,10 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 
 /* ---------------- Simulateur de rentabilité ---------------- */
 .sim-tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:24px;padding-bottom:2px;}
+@media (max-width:640px){
+  .sim-tabs{flex-wrap:wrap;overflow-x:visible;}
+  .sim-tab{flex:0 1 auto;padding:11px 16px;font-size:12.5px;}
+}
 .sim-tab{display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease;}
 .sim-tab svg{width:15px;height:15px;flex:0 0 auto;}
 .sim-tab:hover{border-color:var(--or-rose-dim);color:var(--text);}
@@ -929,6 +933,8 @@ table.data tr:hover td{background:rgba(255,255,255,.02);}
 .sim-result-tag svg{width:14px;height:14px;}
 .sim-headline-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--argent-dim);margin-top:18px;position:relative;}
 .sim-headline-value{font-family:var(--font-display);font-size:clamp(2.4rem,6vw,3.4rem);color:var(--argent);line-height:1;margin-top:8px;position:relative;letter-spacing:.01em;}
+.sim-headline-value.is-positive{color:var(--ok);}
+.sim-headline-value.is-negative{color:var(--danger);}
 .sim-headline-sub{font-size:12.5px;color:var(--text-dim);margin-top:10px;position:relative;max-width:34ch;line-height:1.6;}
 .sim-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;position:relative;}
 .sim-tile{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-m);padding:14px;}
@@ -4134,11 +4140,12 @@ function simRenderResult(mode, animate){
   var prevNum = simState.lastNum[mode.key];
   simState.lastNum[mode.key] = r.headlineNum;
   var startNum = animate && prevNum!==undefined ? prevNum : 0;
+  var signCls = r.headlineNum > 0 ? ' is-positive' : (r.headlineNum < 0 ? ' is-negative' : '');
   box.className = 'sim-result sim-fade';
   box.innerHTML = ''
     +'<span class="sim-result-tag">'+ic('gauge')+'Résultat — '+esc(mode.label)+'</span>'
     +'<div class="sim-headline-label">'+esc(r.headlineLabel)+'</div>'
-    +'<div class="sim-headline-value" id="simHeadlineVal">'+r.headlineFmt(animate ? startNum : r.headlineNum)+'</div>'
+    +'<div class="sim-headline-value'+signCls+'" id="simHeadlineVal">'+r.headlineFmt(animate ? startNum : r.headlineNum)+'</div>'
     +'<div class="sim-headline-sub">'+esc(r.headlineSub)+'</div>'
     +'<div class="sim-tiles">'+r.tiles.map(function(t){ return '<div class="sim-tile"><div class="k">'+esc(t.k)+'</div><div class="v">'+t.v+'</div></div>'; }).join('')+'</div>';
   simTweenNumber(document.getElementById('simHeadlineVal'), startNum, r.headlineNum, r.headlineFmt);
