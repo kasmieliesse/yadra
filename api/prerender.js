@@ -102,15 +102,45 @@ module.exports = async function (req, res) {
   try {
     if (kind === 'home') {
       var all = await loadPublishedProjects();
+      var m2ByWilaya = {};
+      WILAYA_ORDER.forEach(function (w) {
+        var vals = [];
+        all.filter(function (p) { return p.wilaya === w; }).forEach(function (p) {
+          (p.typologies || []).forEach(function (t) { if (t.prix && t.surface) vals.push(t.prix / t.surface); });
+        });
+        if (vals.length) m2ByWilaya[w] = Math.round(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length);
+      });
+      var marketLines = Object.keys(m2ByWilaya).sort(function (a, b) { return m2ByWilaya[b] - m2ByWilaya[a]; })
+        .map(function (w) { return '<li>' + WILAYAS[w].label + ' — ' + money(m2ByWilaya[w]) + '/m²</li>'; }).join('');
+      var homeFaq = [
+        ["yadra! vend-il directement des biens ?", "Non. yadra! met en relation les acquéreurs avec les promoteurs ; la vente se conclut toujours directement avec le promoteur du projet."],
+        ["Comment un promoteur est-il vérifié avant publication ?", "Chaque promoteur transmet son registre de commerce et ses références avant que ses projets soient publiés sur la plateforme."],
+        ["L'utilisation de yadra! est-elle payante ?", "Non. La recherche, la consultation des fiches projets et le contact des promoteurs sont entièrement gratuits pour les acquéreurs."],
+        ["Je vis à l'étranger, puis-je acheter depuis la diaspora ?", "Oui. De nombreux acquéreurs suivent leur projet à distance."],
+        ["Comment sont calculés les prix moyens au m² ?", "Automatiquement, à partir des prix affichés par les promoteurs sur les programmes publiés."]
+      ];
       var body = '<h1>yadra! — Marketplace immobilier premium en Algérie</h1>'
         + '<p>' + esc(DEFAULT_DESC) + '</p>'
         + '<h2>Villes couvertes</h2><ul>' + WILAYA_ORDER.map(function (w) { return '<li><a href="' + SITE + '/villes/' + w + '">' + WILAYAS[w].label + '</a></li>'; }).join('') + '</ul>'
         + '<h2>Derniers programmes</h2>' + projectListHTML(all.slice(0, 20))
+        + (marketLines ? '<h2>Le marché du neuf, en direct</h2><p>Prix moyen au m², calculé à partir des programmes publiés sur yadra! :</p><ul>' + marketLines + '</ul>' : '')
+        + '<h2>Comment ça marche</h2><ol>'
+        + '<li>Vous cherchez : ville, budget, typologie, sans créer de compte.</li>'
+        + '<li>Vous comparez : chaque fiche est vérifiée avant publication.</li>'
+        + '<li>Vous contactez : un message WhatsApp direct au promoteur.</li>'
+        + '<li>Vous visitez, vous achetez : directement avec le promoteur.</li></ol>'
+        + '<h2>Questions fréquentes</h2>' + homeFaq.map(function (qa) { return '<h3>' + esc(qa[0]) + '</h3><p>' + esc(qa[1]) + '</p>'; }).join('')
         + '<p><a href="' + SITE + '/ar" hreflang="ar">بالعربية</a></p>';
       res.status(200).send(page({
         path: '/', body: body,
         hreflang: [{ code: 'fr', href: SITE + '/' }, { code: 'ar', href: SITE + '/ar' }, { code: 'x-default', href: SITE + '/' }],
-        ld: { '@context': 'https://schema.org', '@graph': [{ '@type': 'Organization', name: 'yadra!', url: SITE + '/' }, { '@type': 'WebSite', name: 'yadra!', url: SITE + '/' }] }
+        ld: {
+          '@context': 'https://schema.org', '@graph': [
+            { '@type': 'Organization', name: 'yadra!', url: SITE + '/' },
+            { '@type': 'WebSite', name: 'yadra!', url: SITE + '/' },
+            { '@type': 'FAQPage', mainEntity: homeFaq.map(function (qa) { return { '@type': 'Question', name: qa[0], acceptedAnswer: { '@type': 'Answer', text: qa[1] } }; }) }
+          ]
+        }
       }));
       return;
     }
